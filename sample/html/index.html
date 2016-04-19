@@ -1,0 +1,168 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home Page</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;"/>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
+        <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <meta charset="utf-8">
+            
+            
+            <!-- iPad/iPhone specific css below, add after your main css >
+             <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
+             <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+             -->
+            <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+            <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+            <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script>
+            <script type="text/javascript">
+                
+                
+                // If you want to prevent dragging, uncomment this section
+                /*
+                 function preventBehavior(e)
+                 {
+                 e.preventDefault();
+                 };
+                 document.addEventListener("touchmove", preventBehavior, false);
+                 */
+            
+            /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+             see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+             for more details -jm */
+            /*
+             function handleOpenURL(url)
+             {
+             // TODO: do something with the url passed in.
+             }
+             */
+            
+            function onBodyLoad()
+            {
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
+            
+            function onDeviceReady() {
+                
+                var MASObj=new MASPlugin.MAS();
+                
+                MASObj.deviceRegistrationType(deviceRegistrationTypeSuccessHandler,deviceRegistrationTypeErrorHandler,'0');
+                function deviceRegistrationTypeSuccessHandler(result)
+                {
+                    alert("deviceRegistrationType: \r\n" +result);
+                }
+                
+                function deviceRegistrationTypeErrorHandler(error)
+                {
+                    alert("deviceRegistrationType Error: \r\n" +error);
+                }
+                
+                MASObj.configFileName(configFileNameSuccessHandler,configFileNameErrorHandler,"msso_config");
+                function configFileNameSuccessHandler(result)
+                {
+                    alert("configFileNameResultHandler: \r\n"+result);
+                }
+                function configFileNameErrorHandler(error)
+                {
+                    alert("configFileNameErrorHandler: \r\n"+error);
+                }
+                
+                
+            }
+            
+                </script>
+            
+            <script type="text/javascript">
+                
+                
+                $(document).ready(function () {
+                                  alert("ready: \r\n" );
+                                  
+                                  
+                                  
+                                  $("#startButton").bind("click", function (event, ui) {
+                                                         var MAS= new MASPlugin.MAS();
+                                                         var MASUserObj=new MASPlugin.MASUser();
+                                                         
+                                                         MAS.start(startSuccessHandler,errorHandler);
+                                                         
+                                                         function startSuccessHandler(result)
+                                                         {
+                                                         alert("Start: \r\n"+result);
+                                                         
+                                                         MASUserObj.loginWithUsernameAndPassword(loginSuccessHandler,loginErrorHandler,"admin","7layer");
+                                                         function loginSuccessHandler(result)
+                                                         {
+                                                         alert("loginSuccessHandler \r\n"+result);
+                                                         
+                                                         }
+                                                         function loginErrorHandler(error)
+                                                         {
+                                                         alert("login Error \r\n"+error);
+                                                         
+                                                         }
+                                                         }
+                                                         function errorHandler(error)
+                                                         {
+                                                         alert("Start Error: \r\n"+error);
+                                                         }
+                                                         });
+                                  
+                                  $("#deRegisterButton").bind("click", function (event, ui) {
+                                                              //alert("deRegister");
+                                                              var MASDeviceObj=new MASPlugin.MASDevice();
+                                                              MASDeviceObj.deregister(successHandler,errorHandler);
+                                                              function successHandler(result){
+                                                              alert("Deregister \r\n"+result);
+                                                              }
+                                                              function errorHandler(error){
+                                                              alert("Deregister Error \r\n"+error);
+                                                              }
+                                                              });
+                                  $("#logoffButton").bind("click", function (event, ui) {
+                                                          
+                                                          });
+                                  })
+                                  
+                </script>
+            </head>
+    
+    
+    <body onload="onBodyLoad();">
+        
+        
+        <div data-role="page">
+            
+            <div style="margin-top:20px" data-theme="b" data-role="header">
+                <h1>Demo App</h1>
+            </div>
+            <!-- /header -->
+            
+            
+            <div data-role="content">
+                <div align="center">
+                    <img src="img/logo@2x.png" alt="Layer7 Logo" width="86" height="72">
+                        </div>
+                <!--                <ul data-role="listview" data-inset="true" data-filter="false">-->
+                <!--                    <li><a href="warehouse.html">Warehouse Demo</a></li>-->
+                <!--                </ul>-->
+                
+                <a id="startButton" href="#" data-role="button">Start</a>
+                
+                <a id="logoffButton" href="#" data-role="button">Logoff App</a>
+                
+                <a id="deRegisterButton" href="#" data-role="button">De-Register</a>
+                
+                
+            </div>
+            
+            <!-- /content -->
+            
+        </div>
+        <!-- /page -->
+    </body>
+</html>

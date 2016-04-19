@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+xmlns:android="http://schemas.android.com/apk/res/android"
+           id="com.ca.apim"
+      version="0.1.0">
+    <name>MAS</name>
+    <description>Cordova MAS Plugin</description>
+    <license>CA Technologies Ltd.</license>
+    <keywords>cordova, MAS, CA Technologies</keywords>
+
+    <js-module src="www/MASPlugin.js" name="MASPlugin">
+        <clobbers target="MASPlugin" />
+    </js-module>
+
+    <!-- iOS -->
+    <platform name="ios" >
+        <config-file target="config.xml" parent="/*" >
+            <feature name="com.ca.apim.MASPlugin" >
+                <param name="ios-package" value="MASPlugin"/>
+            </feature>
+        </config-file>
+        
+        <header-file src="src/ios/MASPlugin.h" />
+        <source-file src="src/ios/MASPlugin.m" />
+        
+    </platform>
+
+
+</plugin>
+
