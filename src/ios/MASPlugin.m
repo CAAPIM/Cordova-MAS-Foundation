@@ -89,6 +89,416 @@
     }];
 }
 
+- (void)getFromPath:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSDictionary *parametersInfo = @{};
+    NSDictionary *headersInfo = @{};
+    MASRequestResponseType requestType = MASRequestResponseTypeJson;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+    
+    
+    
+//    if (command.arguments.count>0 && command.arguments.count==3) {
+//        path = [command.arguments objectAtIndex:0];
+//        parametersInfo = [command.arguments objectAtIndex:1];
+//        headersInfo = [command.arguments objectAtIndex:2];
+//        
+//        [MAS getFrom:path
+//      withParameters:parametersInfo
+//          andHeaders:headersInfo
+//          completion:^(NSDictionary *responseInfo, NSError *error) {
+//              if (error) {
+//                  
+//                  NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+//                                              @"errorMessage":[error localizedDescription],
+//                                              @"errorInfo":[error userInfo]};
+//                  
+//                  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+//                  
+//                  return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//              }
+//              
+//              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+//              
+//              return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//            
+//        }];
+//    }
+//    else
+    if (command.arguments.count>0 && command.arguments.count==5)
+    {
+        path = [command.arguments objectAtIndex:0];
+        parametersInfo = [command.arguments objectAtIndex:1];
+        headersInfo = [command.arguments objectAtIndex:2];
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+
+        }
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+
+        }
+        
+        [MAS getFrom:path
+      withParameters:parametersInfo
+          andHeaders:nil
+         requestType:requestType
+        responseType:responseType
+          completion:^(NSDictionary *responseInfo, NSError *error) {
+              if (error) {
+                  
+                  NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                              @"errorMessage":[error localizedDescription],
+                                              @"errorInfo":[error userInfo]};
+                  
+                  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                  
+                  return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+              }
+              
+              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+              
+              return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+              
+          }];
+    }
+    
+
+}
+- (void)deleteFromPath:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSDictionary *parametersInfo = @{};
+    NSDictionary *headersInfo = @{};
+    MASRequestResponseType requestType = MASRequestResponseTypeJson;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+    
+    
+    
+//    if (command.arguments.count>0 && command.arguments.count==3) {
+//        path = [command.arguments objectAtIndex:0];
+//        parametersInfo = [command.arguments objectAtIndex:1];
+//        headersInfo = [command.arguments objectAtIndex:2];
+//        
+//        [MAS deleteFrom:path
+//         withParameters:parametersInfo
+//             andHeaders:headersInfo
+//             completion:^(NSDictionary *responseInfo, NSError *error) {
+//                 if (error) {
+//                     
+//                     NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+//                                                 @"errorMessage":[error localizedDescription],
+//                                                 @"errorInfo":[error userInfo]};
+//                     
+//                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+//                     
+//                     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//                 }
+//                 
+//                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+//                 
+//                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//                 
+//             }];
+//    }
+//    else
+    if (command.arguments.count>0 && command.arguments.count==5)
+    {
+        path = [command.arguments objectAtIndex:0];
+        parametersInfo = [command.arguments objectAtIndex:1];
+        headersInfo = [command.arguments objectAtIndex:2];
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+            
+        }
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+            
+        }
+        
+        [MAS deleteFrom:path
+         withParameters:parametersInfo
+             andHeaders:headersInfo
+            requestType:requestType
+           responseType:responseType
+             completion:^(NSDictionary *responseInfo, NSError *error) {
+                 if (error) {
+                     
+                     NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                 @"errorMessage":[error localizedDescription],
+                                                 @"errorInfo":[error userInfo]};
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                     
+                     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                 }
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                 
+             }];
+    }
+    
+    
+}
+- (void)postToPath:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSDictionary *parametersInfo = @{};
+    NSDictionary *headersInfo = @{};
+    MASRequestResponseType requestType = MASRequestResponseTypeJson;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+
+//    if (command.arguments.count>0 && command.arguments.count==3) {
+//        path = [command.arguments objectAtIndex:0];
+//        parametersInfo = [command.arguments objectAtIndex:1];
+//        headersInfo = [command.arguments objectAtIndex:2];
+//        
+//        [MAS postTo:path
+//     withParameters:parametersInfo
+//         andHeaders:headersInfo
+//         completion:^(NSDictionary *responseInfo, NSError *error) {
+//             if (error) {
+//                 
+//                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+//                                             @"errorMessage":[error localizedDescription],
+//                                             @"errorInfo":[error userInfo]};
+//                 
+//                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+//                 
+//                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//             }
+//             
+//             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+//             
+//             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//             
+//        }];
+//    }
+//    else
+    if (command.arguments.count>0 && command.arguments.count==5)
+    {
+        path = [command.arguments objectAtIndex:0];
+        parametersInfo = [command.arguments objectAtIndex:1];
+        headersInfo = [command.arguments objectAtIndex:2];
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+            
+        }
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+            
+        }
+        
+        [MAS postTo:path
+     withParameters:parametersInfo
+         andHeaders:headersInfo
+        requestType:requestType
+       responseType:responseType
+         completion:^(NSDictionary *responseInfo, NSError *error) {
+             if (error) {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             
+         }];
+    }
+}
+- (void)putToPath:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSDictionary *parametersInfo = @{};
+    NSDictionary *headersInfo = @{};
+    MASRequestResponseType requestType = MASRequestResponseTypeJson;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+    
+    
+    
+//    if (command.arguments.count>0 && command.arguments.count==3) {
+//        path = [command.arguments objectAtIndex:0];
+//        parametersInfo = [command.arguments objectAtIndex:1];
+//        headersInfo = [command.arguments objectAtIndex:2];
+//        
+//        [MAS putTo:path
+//    withParameters:parametersInfo
+//        andHeaders:headersInfo
+//        completion:^(NSDictionary *responseInfo, NSError *error) {
+//            if (error) {
+//                
+//                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+//                                            @"errorMessage":[error localizedDescription],
+//                                            @"errorInfo":[error userInfo]};
+//                
+//                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+//                
+//                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//            }
+//            
+//            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+//            
+//            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//            
+//        }];
+//    }
+//    else
+    if (command.arguments.count>0 && command.arguments.count==5)
+    {
+        path = [command.arguments objectAtIndex:0];
+        parametersInfo = [command.arguments objectAtIndex:1];
+        headersInfo = [command.arguments objectAtIndex:2];
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+            
+        }
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+            
+        }
+        
+        [MAS putTo:path
+     withParameters:parametersInfo
+         andHeaders:headersInfo
+        requestType:requestType
+       responseType:responseType
+         completion:^(NSDictionary *responseInfo, NSError *error) {
+             if (error) {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             
+         }];
+    }
+}
+- (void)patchToPath:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSDictionary *parametersInfo = @{};
+    NSDictionary *headersInfo = @{};
+    MASRequestResponseType requestType = MASRequestResponseTypeJson;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+    
+    
+    
+//    if (command.arguments.count>0 && command.arguments.count==3) {
+//        path = [command.arguments objectAtIndex:0];
+//        parametersInfo = [command.arguments objectAtIndex:1];
+//        headersInfo = [command.arguments objectAtIndex:2];
+//        
+//        [MAS patchTo:path
+//    withParameters:parametersInfo
+//        andHeaders:headersInfo
+//        completion:^(NSDictionary *responseInfo, NSError *error) {
+//            if (error) {
+//                
+//                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+//                                            @"errorMessage":[error localizedDescription],
+//                                            @"errorInfo":[error userInfo]};
+//                
+//                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+//                
+//                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//            }
+//            
+//            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+//            
+//            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//            
+//        }];
+//    }
+//    else
+    if (command.arguments.count>0 && command.arguments.count==5)
+    {
+        path = [command.arguments objectAtIndex:0];
+        parametersInfo = [command.arguments objectAtIndex:1];
+        headersInfo = [command.arguments objectAtIndex:2];
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+            
+        }
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+            
+        }
+        
+        [MAS patchTo:path
+      withParameters:parametersInfo
+          andHeaders:headersInfo
+         requestType:requestType
+        responseType:responseType
+          completion:^(NSDictionary *responseInfo, NSError *error) {
+            if (error) {
+                
+                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[error userInfo]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseInfo];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            
+        }];
+    }
+}
+- (void)stop:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    [MAS stop:^(BOOL completed, NSError *error) {
+        
+        if (error) {
+            
+            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                        @"errorMessage":[error localizedDescription],
+                                        @"errorInfo":[error userInfo]};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command
 {
@@ -193,7 +603,7 @@
     __block CDVPluginResult *result;
     
     
-    [MASUser logoffWithCompletion:^(BOOL completed, NSError *error) {
+    [[MASUser currentUser] logoffWithCompletion:^(BOOL completed, NSError *error) {
         
         if (error) {
             
