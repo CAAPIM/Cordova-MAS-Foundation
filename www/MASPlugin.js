@@ -1,4 +1,4 @@
-//
+cordova.define("com.ca.apim.MASPlugin", function(require, exports, module) { //
 //  MASPlugin.js
 //
 //  Created by Kaushik Thekkekere on 2016-02-04.
@@ -29,7 +29,43 @@ var MASPlugin = {
     */
     MASDeviceRegistrationTypeCount: 2
     },
-
+               
+   MASRequestResponseType:{
+   /**
+    * Unknown encoding type.
+    */
+    MASRequestResponseTypeUnknown: -1,
+   
+   /**
+    * Standard JSON encoding.
+    */
+    MASRequestResponseTypeJson:0,
+   
+   /**
+    * SCIM-specific JSON variant encoding.
+    */
+    MASRequestResponseTypeScimJson:1,
+   
+   /**
+    * Plain Text.
+    */
+    MASRequestResponseTypeTextPlain:2,
+   
+   /**
+    * Standard WWW Form URL encoding.
+    */
+    MASRequestResponseTypeWwwFormUrlEncoded:3,
+   
+   /**
+    * Standard XML encoding.
+    */
+    MASRequestResponseTypeXml:4,
+   
+   /**
+    * The total number of supported types.
+    */
+    MASRequestResponseTypeCount:5
+   },
 
     /**
     MAS which has the interfaces mapped to the native MAS class.
@@ -56,6 +92,52 @@ var MASPlugin = {
         this.start=function(successHandler,errorHandler){
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","start",[]);
         };
+               
+        /**
+         getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+         
+         */
+               
+        this.getFromPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","getFromPath",[path,parametersInfo,headersInfo,requestType,responseType]);
+        };
+               
+        /**
+        deleteFromPath does the HTTP DELTE call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+
+        */
+
+        this.deleteFromPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","deleteFromPath",[path,parametersInfo,headersInfo,requestType,responseType]);
+        };
+        /**
+        putToPath does the HTTP PUT call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+
+        */
+        this.putToPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","putToPath",[path,parametersInfo,headersInfo,requestType,responseType]);
+        };
+        /**
+        postToPath does the HTTP POST call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+
+        */
+        this.postToPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","postToPath",[path,parametersInfo,headersInfo,requestType,responseType]);
+        };
+        /**
+        patchToPath does the HTTP PATCH call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+
+        */
+        this.patchToPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","patchToPath",[path,parametersInfo,headersInfo,requestType,responseType]);
+        };
+               
+       /**
+        Stops the lifecycle of all MAS processes. 
+        */
+       this.stop=function(successHandler,errorHandler){
+       return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","stop",[]);
+       };
 
     },
 
@@ -106,3 +188,5 @@ var MASPlugin = {
 };
 
     module.exports = MASPlugin;
+
+});

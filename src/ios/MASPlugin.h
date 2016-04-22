@@ -28,6 +28,37 @@
 - (void)start:(CDVInvokedUrlCommand*)command;
 
 /**
+ *  Request method for an HTTP GET call from the Gateway.
+ */
+- (void)getFromPath:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Request method for an HTTP DELETE call from the Gateway.
+ */
+- (void)deleteFromPath:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Request method for an HTTP POST call from the Gateway.
+ */
+- (void)postToPath:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Request method for an HTTP PUT call from the Gateway.
+ */
+- (void)putToPath:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Request method for an HTTP PATCH call from the Gateway.
+ */
+- (void)patchToPath:(CDVInvokedUrlCommand*)command;
+
+/**
+ * Stops the lifecycle of all MAS processes.
+ */
+- (void)stop:(CDVInvokedUrlCommand*)command;
+
+
+/**
  * Authenticates the user using username and password.
  */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
