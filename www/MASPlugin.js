@@ -1,4 +1,4 @@
-cordova.define("com.ca.apim.MASPlugin", function(require, exports, module) { //
+//
 //  MASPlugin.js
 //
 //  Created by Kaushik Thekkekere on 2016-02-04.
@@ -183,10 +183,8 @@ var MASPlugin = {
         };
 
 
-    },
+    }
     
 };
+module.exports = MASPlugin;
 
-    module.exports = MASPlugin;
-
-});
