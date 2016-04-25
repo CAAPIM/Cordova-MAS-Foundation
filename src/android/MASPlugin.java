@@ -32,22 +32,24 @@ public class MASPlugin extends CordovaPlugin{
 
 
         Context context = webView.getContext();
-        Device masDevice = null;
-
 
         if(action.equals(REGISTER_WITH_USER_CREDENTIALS)){
 
-            masDevice=new MASDevice(context);
             final CountDownLatch latch=new CountDownLatch(1);
-            MASUser.getCurrentUser(context).login(new MASCallback<MASUser>() {
+            String username= (String) args.get(0);
+            String password= (String) args.get(1);
+
+            MASUser.getCurrentUser(context).login(username, password, new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
+                    Log.i(TAG,"user login SUCCESSFUL with username and password");
                     callbackContext.success(SUCCESS);
                     latch.countDown();
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
+                    Log.i(TAG,"user login FAIL with username and password");
                     callbackContext.error(FAIL);
                     latch.countDown();
                 }
@@ -55,7 +57,7 @@ public class MASPlugin extends CordovaPlugin{
             try {
                 latch.await();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Exception in latch await",e);
             }
         }
         if(action.equals(START)){
@@ -70,7 +72,7 @@ public class MASPlugin extends CordovaPlugin{
             }
         }
         if(action.equals(DEREGISTER)){
-            masDevice=new MASDevice(context);
+            Device masDevice = new MASDevice(context);
             final CountDownLatch latch=new CountDownLatch(1);
             masDevice.deregister(new MASCallback<Void>() {
                 @Override
@@ -88,7 +90,7 @@ public class MASPlugin extends CordovaPlugin{
             try {
                 latch.await();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Exception in latch await",e);
             }
         }
         return false;
