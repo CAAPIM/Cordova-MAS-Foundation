@@ -1,6 +1,7 @@
 package com.ca.apim;
 
 import android.content.Context;
+import android.telecom.Call;
 import android.util.Log;
 
 import com.ca.mas.MAS;
@@ -32,36 +33,43 @@ public class MASPlugin extends CordovaPlugin{
 
 
         Context context = webView.getContext();
+        Command command;
+        switch(action){
 
-        if(action.equals(REGISTER_WITH_USER_CREDENTIALS)){
+            case REGISTER_WITH_USER_CREDENTIALS:
+                command=new LoginCommand(context,args,callbackContext);
+                command.execute();
+                return true;
 
-            final CountDownLatch latch=new CountDownLatch(1);
-            String username= (String) args.get(0);
-            String password= (String) args.get(1);
-
-            MASUser.getCurrentUser(context).login(username, password, new MASCallback<MASUser>() {
-                @Override
-                public void onSuccess(MASUser masUser) {
-                    Log.i(TAG,"user login SUCCESSFUL with username and password");
-                    callbackContext.success(SUCCESS);
-                    latch.countDown();
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    Log.i(TAG,"user login FAIL with username and password");
-                    callbackContext.error(FAIL);
-                    latch.countDown();
-                }
-            });
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                Log.e(TAG,"Exception in latch await",e);
-            }
+            case START:
+                command=new STARTCommand(context,args,callbackContext);
+                command.execute();
+                return true;
+            case DEREGISTER:
+                command=new DeregisterCommand(context,args,callbackContext);
+                command.execute();
+                return true;
         }
-        if(action.equals(START)){
+        return false;
+    }
 
+    public interface Command{
+        void execute();
+    }
+
+    public class STARTCommand implements  Command{
+        Context context;
+        CallbackContext callbackContext;
+        JSONArray jsonArray;
+
+        public STARTCommand(Context context,JSONArray args,CallbackContext callbackContext){
+            this.context=context;
+            this.callbackContext=callbackContext;
+            jsonArray=args;
+        }
+
+        @Override
+        public void execute() {
             try{
                 MAS.start(context);
                 callbackContext.success(SUCCESS);
@@ -71,29 +79,72 @@ public class MASPlugin extends CordovaPlugin{
                 callbackContext.error(FAIL);
             }
         }
-        if(action.equals(DEREGISTER)){
+    }
+
+    public class LoginCommand implements  Command{
+        Context context;
+        CallbackContext callbackContext;
+        JSONArray jsonArray;
+
+        public LoginCommand(Context context,JSONArray args,CallbackContext callbackContext){
+            this.context=context;
+            this.callbackContext=callbackContext;
+            jsonArray=args;
+        }
+
+        @Override
+        public void execute() {
+            String username= null;
+            String password=null;
+            try {
+                username = (String) jsonArray.get(0);
+                password= (String) jsonArray.get(1);
+            } catch (JSONException e) {
+                callbackContext.error(FAIL+" Could not retrieve username or password");
+            }
+
+            MASUser.getCurrentUser(context).login(username, password, new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+                    Log.i(TAG,"User login with username and password was SUCCESSFUL");
+                    callbackContext.success(SUCCESS);
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    Log.i(TAG,"User login with username and password was FAIL");
+                    callbackContext.error(FAIL);
+                }
+            });
+        }
+    }
+
+    public class DeregisterCommand implements  Command{
+        Context context;
+        CallbackContext callbackContext;
+        JSONArray jsonArray;
+
+        public DeregisterCommand(Context context,JSONArray args,CallbackContext callbackContext){
+            this.context=context;
+            this.callbackContext=callbackContext;
+            jsonArray=args;
+        }
+
+        @Override
+        public void execute() {
             Device masDevice = new MASDevice(context);
-            final CountDownLatch latch=new CountDownLatch(1);
             masDevice.deregister(new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     callbackContext.success(SUCCESS);
-                    latch.countDown();
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
                     callbackContext.error(FAIL);
-                    latch.countDown();
                 }
             });
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                Log.e(TAG,"Exception in latch await",e);
-            }
         }
-        return false;
     }
 
 }
