@@ -11,9 +11,10 @@
 @interface MASPlugin : CDVPlugin
 
 /**
- * sets the device registration type to the MASFoundation framework.
+ * sets the grant flow to the MASFoundation framework.
  */
-- (void)setDeviceRegistrationType:(CDVInvokedUrlCommand*)command;
+- (void)setGrantFlow:(CDVInvokedUrlCommand*)command;
+
 
 
 /**
@@ -22,35 +23,47 @@
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
 
 
+
 /**
  * starts the process which includes the registration of the device and authentication of the user depending on the device registration type.
  */
 - (void)start:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  *  Request method for an HTTP GET call from the Gateway.
  */
 - (void)getFromPath:(CDVInvokedUrlCommand*)command;
 
+
 /**
  *  Request method for an HTTP DELETE call from the Gateway.
  */
 - (void)deleteFromPath:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  *  Request method for an HTTP POST call from the Gateway.
  */
 - (void)postToPath:(CDVInvokedUrlCommand*)command;
 
+
+
 /**
  *  Request method for an HTTP PUT call from the Gateway.
  */
 - (void)putToPath:(CDVInvokedUrlCommand*)command;
 
+
+
 /**
  *  Request method for an HTTP PATCH call from the Gateway.
  */
 - (void)patchToPath:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  * Stops the lifecycle of all MAS processes.
@@ -58,28 +71,27 @@
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
 
+
 /**
  * Authenticates the user using username and password.
  */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
 
-/**
- * Logs out the device. This mehod internally calls the logout device functionality in the MASFoundation framework. This also clears the local cache based
- *  on the option.
- */
-- (void)logOutDeviceAndClearLocal:(CDVInvokedUrlCommand*)command;
+
 
 
 /**
- * Logs off the current logged in user.
+ * Logs out the current logged in user.
  */
+- (void)logoutUser:(CDVInvokedUrlCommand *)command;
 
-- (void)logOffUser:(CDVInvokedUrlCommand*)command;
+
 
 /**
  * Deregisters the device from the server and also cleans the informations which are stored locally.
  */
 - (void)deregister:(CDVInvokedUrlCommand*)command;
+
 
 
 /**
@@ -88,9 +100,18 @@
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command;
 
 
+
 /**
  * checks whether the current user is authenticated or not.
  */
-- (void)isUserAuthenticated:(CDVInvokedUrlCommand*)command;
+- (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)resetLocally:(CDVInvokedUrlCommand*)command;
 
 @end
