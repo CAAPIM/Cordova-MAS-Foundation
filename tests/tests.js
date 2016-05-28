@@ -1,3 +1,4 @@
+cordova.define("com.ca.apim-tests.tests", function(require, exports, module) {
 
 
 /**
@@ -9,7 +10,62 @@
 
 
 exports.defineManualTests = function(contentEl, createActionButton) {
-    
+
+    createActionButton('MAS.start()', function() {
+        var name = 'MAS.start()';
+        var mas = new MASPlugin.MAS();
+        mas.start(startSuccessHandler, errorHandler);
+        function startSuccessHandler(result) {
+            console.log(name + ' Success: ' + result);
+        }
+        function errorHandler(error) {
+            console.log(name + ' Failed: ' + result);
+        }
+    });
+
+
+    createActionButton('MASUser.loginWithUsernameAndPassword()', function() {
+        var name = 'MASUser.loginWithUsernameAndPassword()';
+        var masUser = new MASPlugin.MASUser();
+        masUser.loginWithUsernameAndPassword(startSuccessHandler, errorHandler, 'sarek', '7layer');
+        function startSuccessHandler(result) {
+            console.log(name + ' Success: ' + result);
+        }
+        function errorHandler(error) {
+            console.log(name + ' Failed: ' + result);
+        }
+    });
+
+    createActionButton('MASDevice.deregister()', function() {
+        var name = 'MASDevice.deregister()';
+        var masDevice = new MASPlugin.MASDevice();
+        masDevice.deregister(startSuccessHandler, errorHandler);
+        function startSuccessHandler(result) {
+            console.log(name + ' - Success: ' + result);
+        }
+        function errorHandler(error) {
+            console.log(name + ' - Failed: ' + error);
+        }
+    });
+
+    createActionButton('MAS.getFromPath()', function() {
+        var name = 'MAS.getFromPath()';
+        var mas = new MASPlugin.MAS();
+        var parameters = {"operation": "listProducts"};
+        var headers = {"headerName" : "headerValue"};
+        mas.getFromPath(startSuccessHandler, errorHandler, '/protected/resource/products'
+            , parameters, headers, 0,  0);
+        function startSuccessHandler(result) {
+            console.log(name + ' - Success: ' + JSON.stringify(result));
+        }
+        function errorHandler(error) {
+            console.log(name + ' - Failed: ' + error.errorInfo);
+        }
+    });
+
+
+
+
     createActionButton('Valid Registration Type', function() {
                        
                        var MAS = new MASPlugin.MAS();
@@ -100,3 +156,5 @@ exports.defineManualTests = function(contentEl, createActionButton) {
                        });
     
 };
+
+});
