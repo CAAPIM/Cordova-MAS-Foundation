@@ -1,79 +1,144 @@
 //
 //  MASPlugin.h
 //
-//  Created by Kaushik Thekkekere on 2016-02-04.
 //  Copyright (c) 2016 CA Technologies. All rights reserved.
 //
-
 
 #import <Cordova/CDV.h>
 
 @interface MASPlugin : CDVPlugin
 
 /**
- * sets the grant flow to the MASFoundation framework.
+ *  Set grant flow of MASFoundation
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)setGrantFlow:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * sets the configuration json file name to the MASFoundation framework. This can used to set any custom name to the json config file.
+ *  Set configuration JSON file name to MASFoundation.  File name without extention should be passed as parameter.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * starts the process which includes the registration of the device and authentication of the user depending on the device registration type.
+ *  Starts the lifecycle of the MAS processes.
+ *
+ *  This will load the last used JSON configuration from keychain storage.  If there was none,
+ *  it will load from default JSON configuration file (msso_config.json)
+ *  or JSON file with file name set through setConfigFileName:.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)start:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- *  Request method for an HTTP GET call from the Gateway.
+ *  Starts the lifecycle of the MAS processes.
+ *
+ *  This will load the default JSON configuration rather than from keychain storage; if the SDK was already initialized, this method will fully stop and re-start the SDK.
+ *  The default JSON configuration file should be msso_config.json or file name defined through setConfigurationFileName:.
+ *  This will ignore the JSON configuration in keychain storage and replace with the default configuration.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)startWithDefaultConfiguration:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Starts the lifecycle of the MAS processes with given JSON configuration data.
+ *  This method will overwrite JSON configuration (if they are different) that was stored in keychain.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)startWithJSON:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Starts the lifecycle of the MAS processes with given JSON configuration file path.
+ *  This method will overwrite JSON configuration (if they are different) that was stored in keychain.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)startWithURL:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  TBD
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)setUserLoginBlock:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Request method for an HTTP GET call to the Gateway.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)getFromPath:(CDVInvokedUrlCommand*)command;
 
 
+
 /**
- *  Request method for an HTTP DELETE call from the Gateway.
+ *  Request method for an HTTP DELETE call to the Gateway.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)deleteFromPath:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- *  Request method for an HTTP POST call from the Gateway.
+ *  Request method for an HTTP POST call to the Gateway.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)postToPath:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- *  Request method for an HTTP PUT call from the Gateway.
+ *  Request method for an HTTP GET call to the Gateway.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)putToPath:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- *  Request method for an HTTP PATCH call from the Gateway.
+ *  Request method for an HTTP PATCH call to the Gateway.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)patchToPath:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * Stops the lifecycle of all MAS processes.
+ *  Stops the lifecycle of all MAS processes.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * Authenticates the user using username and password.
+ *  Authenticates a user with given username and password.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
 
@@ -81,37 +146,64 @@
 
 
 /**
- * Logs out the current logged in user.
+ *  Logs out currently authenticated user.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)logoutUser:(CDVInvokedUrlCommand *)command;
 
 
 
 /**
- * Deregisters the device from the server and also cleans the informations which are stored locally.
+ *  De-register the currently registered device and clears out all keychain information from local and shared keychain storage.
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)deregister:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * checks whether the current device is registered or not.
+ *  Boolean property of device registration status
+ *
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command;
 
 
 
 /**
- * checks whether the current user is authenticated or not.
+ *  Boolean property of user authentication status
+ *
+ *  @param command CDInvokedUrlCommand object
  */
-- (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
+- (void)isUserAuthenticated:(CDVInvokedUrlCommand*)command;
 
 
 
+/**
+ *  Boolean property of the application authentication status (primarily for client credential authentication.)
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Enumeration value of authentication status.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
 
 
+/**
+ *  Reset local keychain storage
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)resetLocally:(CDVInvokedUrlCommand*)command;
 
 @end
