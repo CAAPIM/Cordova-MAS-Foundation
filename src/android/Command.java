@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2016 CA, Inc.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
 package com.ca.apim;
 
 import android.content.Context;
@@ -12,9 +19,6 @@ import org.json.JSONObject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * Created by andy on 2016-05-25.
- */
 public abstract class Command {
 
     String SUCCESS = "success";
