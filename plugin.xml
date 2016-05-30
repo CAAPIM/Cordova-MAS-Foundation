@@ -36,34 +36,18 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.INTERNET"/>
-            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="com.ca.mas.core.gui.LogonActivity"
-                android:theme="@android:style/Theme.Holo.Light.Dialog"
-                android:label="Log On to Example App"
-                android:windowSoftInputMode="stateVisible"
-                android:exported="false">
-                <intent-filter>
-                    <action android:name="com.ca.mas.core.service.action.OBTAIN_CREDENTIALS"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                </intent-filter>
-            </activity>
-            <activity android:name="com.ca.mas.core.gui.SocialLoginActivity"
-                android:theme="@android:style/Theme.Holo.Light"
-                android:windowSoftInputMode="stateVisible"
-                android:exported="false">
-            </activity>
-            <service android:name="com.ca.mas.core.service.MssoService"
-                android:exported="false">
-            </service>
-        </config-file>
-
+        <source-file src="src/android/Command.java" target-dir="src/com/ca/apim" />
+        <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/apim" />
+        <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/apim" />
         <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/apim" />
+        <source-file src="src/android/MASUserCommand.java" target-dir="src/com/ca/apim" />
+
+        <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
+        <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
+        <framework src="com.google.zxing:core:3.2.0" />
+        <framework src="com.android.support:appcompat-v7:23+" />
     </platform>
-
-
 </plugin>
 
