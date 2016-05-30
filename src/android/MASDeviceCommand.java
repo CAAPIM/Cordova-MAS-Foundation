@@ -60,7 +60,7 @@ public class MASDeviceCommand {
         }
     }
 
-    public static class DeviceResetLocallyCommand extends Command{
+    public static class ResetLocallyCommand extends Command{
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
