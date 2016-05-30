@@ -290,6 +290,24 @@
                 });
             });
             
+            $("#resetLocally").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                
+                $(this).find("textarea.error").hide();
+                
+                var thisElement = $(this);
+                var MASDevice = new MASPlugin.MASDevice();
+                
+                MASDevice.resetLocally(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error) {
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+            
             $("#getCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
                 
