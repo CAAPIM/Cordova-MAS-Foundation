@@ -2,6 +2,8 @@ package com.ca.apim;
 
 import android.content.Context;
 
+import com.ca.mas.core.error.MAGServerException;
+
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,10 +24,17 @@ public abstract class Command {
     abstract String getAction();
 
     protected JSONObject getError(Throwable e) {
+        int errorCode = 0;
+        String errorMessage = e.getMessage();
+        if (e.getCause() != null && e.getCause() instanceof MAGServerException) {
+            MAGServerException serverException = ((MAGServerException) e.getCause());
+            errorCode = serverException.getErrorCode();
+            errorMessage = serverException.getMessage();
+        }
         JSONObject error = new JSONObject();
         try {
-            error.put("errorCode", 1);
-            error.put("errorMessage", e.getMessage());
+            error.put("errorCode", errorCode);
+            error.put("errorMessage", errorMessage);
             StringWriter errors = new StringWriter();
             e.printStackTrace(new PrintWriter(errors));
             error.put("errorInfo", errors.toString());

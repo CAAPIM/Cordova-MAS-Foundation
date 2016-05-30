@@ -19,6 +19,7 @@ public class MASDeviceCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+
             Device masDevice = MASDevice.getCurrentDevice();
             masDevice.deregister(new MASCallback<Void>() {
                 @Override
@@ -59,7 +60,7 @@ public class MASDeviceCommand {
         }
     }
 
-    public static class resetLocallyCommand extends Command{
+    public static class DeviceResetLocallyCommand extends Command{
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
