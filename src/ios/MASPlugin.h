@@ -177,7 +177,7 @@
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)isUserAuthenticated:(CDVInvokedUrlCommand*)command;
+- (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
 
 
 

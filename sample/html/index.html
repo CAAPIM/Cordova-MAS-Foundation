@@ -101,7 +101,7 @@
             });
             
             $("#start").bind("click",function(event,ui){
-                
+                             
                 $(this).find("textarea.error").hide();
                 
                 var thisElement = $(this);
@@ -236,6 +236,24 @@
                 });
             });
             
+            $("#isDeviceRegistered").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASDevice = new MASPlugin.MASDevice();
+
+                MASDevice.isDeviceRegistered(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
             $("#userLogout").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
                 
@@ -404,15 +422,25 @@
             
             function displayResult(element, result)
             {
-                if (result && jQuery.type(result) === "string")
+                var isJSON = true;
+
+                try
                 {
-                    element.find("textarea.error").show();
-                    element.find("textarea.error").html(result);
+                    var json = $.parseJSON(result);
                 }
-                else if (result)
+                catch(err)
+                {
+                    isJSON = false;
+                }
+
+                if (isJSON)
                 {
                     element.find("textarea.error").show();
-                    element.find("textarea.error").html(JSON.stringify(result));   
+                    element.find("textarea.error").html(JSON.stringify(result));
+                }
+                else {
+                    element.find("textarea.error").show();
+                    element.find("textarea.error").html(result+"");
                 }
             }
             
@@ -420,15 +448,6 @@
             {
                 element.find("textarea.error").show();
                 element.find("textarea.error").html(error.errorMessage);
-            }
-            function objToString (obj) {
-                var str = '';
-                for (var p in obj) {
-                    if (obj.hasOwnProperty(p)) {
-                        str += p + '::' + obj[p] + '\n';
-                    }
-                }
-                return str;
             }
         });
     </script>
@@ -465,6 +484,7 @@
             <li data-icon="false"><a href="#" id="authenticationStatus">MASApplication authentication status<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
             
             <li data-icon="false">
                 <a href="#" id="getCRUD">MAS get 

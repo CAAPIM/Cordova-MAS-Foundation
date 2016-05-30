@@ -859,7 +859,7 @@
 }
 
 
-- (void)isUserAuthenticated:(CDVInvokedUrlCommand*)command
+- (void)isAuthenticated:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
     
