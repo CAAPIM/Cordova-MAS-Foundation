@@ -36,7 +36,7 @@ public class MASCommand {
         @Override
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
-                MAS.start(context, true);
+                MAS.start(context);
                 callbackContext.success(SUCCESS);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
@@ -46,6 +46,46 @@ public class MASCommand {
         @Override
         public String getAction() {
             return "start";
+        }
+
+    }
+
+    public static class StartWithDefaultConfigurationCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+            try {
+                boolean shouldUseDefault = args.getBoolean(0);
+                MAS.start(context, shouldUseDefault);
+                callbackContext.success(SUCCESS);
+            } catch (Exception e) {
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "startWithDefaultConfiguration";
+        }
+
+    }
+
+    public static class StartWithJSONCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+            try {
+                JSONObject jsonObject = args.getJSONObject(0);
+                MAS.start(context, jsonObject);
+                callbackContext.success(SUCCESS);
+            } catch (Exception e) {
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "startWithJSON";
         }
 
     }
@@ -86,6 +126,28 @@ public class MASCommand {
         public String getAction() {
             return "setConfigFileName";
         }
+    }
+
+    public static class SetGrantFlowCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+
+            try {
+                int grantFlow = args.getInt(0);
+                MAS.setGrantFlow(grantFlow);
+                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                callbackContext.sendPluginResult(result);
+            } catch (Exception e) {
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "setGrantFlow";
+        }
+
     }
 
 
@@ -130,11 +192,11 @@ public class MASCommand {
                             } catch (JSONException ignore) {
                             }
                         }
-                        Map<String, List<String>> headers = masResponse.getHeaders();
-                        if (headers != null) {
+                        Map<String, List<String>> responseHeaders = masResponse.getHeaders();
+                        if (responseHeaders != null) {
                             JSONObject headerJson = new JSONObject();
-                            for (String h: headers.keySet()) {
-                                List<String> hv = headers.get(h);
+                            for (String h: responseHeaders.keySet()) {
+                                List<String> hv = responseHeaders.get(h);
                                 if (hv != null && !hv.isEmpty()) {
                                     try {
                                         headerJson.put(h, hv.get(0));

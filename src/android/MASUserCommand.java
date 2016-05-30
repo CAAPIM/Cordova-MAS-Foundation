@@ -6,6 +6,7 @@ import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -47,7 +48,7 @@ public class MASUserCommand {
         }
     }
 
-    public static class LogOffUserCommand extends Command {
+    public static class LogoutUserCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
@@ -72,7 +73,33 @@ public class MASUserCommand {
 
         @Override
         public String getAction() {
-            return "logOffUser";
+            return "logoutUser";
+        }
+    }
+
+    public static class IsAuthenticatedCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+
+            MASUser masUser = MASUser.getCurrentUser();
+            if (masUser != null) {
+                if (masUser.isAuthenticated()) {
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                    callbackContext.sendPluginResult(result);
+                } else {
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+                    callbackContext.sendPluginResult(result);
+                }
+            } else {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+                callbackContext.sendPluginResult(result);
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "isAuthenticated";
         }
     }
 

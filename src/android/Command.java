@@ -32,7 +32,8 @@ public abstract class Command {
         } catch (JSONException ignore) {
         }
         return error;
-
     }
+
+
 
 }

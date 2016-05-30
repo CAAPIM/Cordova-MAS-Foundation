@@ -7,6 +7,7 @@ import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASDevice;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 
 /**
@@ -35,6 +36,47 @@ public class MASDeviceCommand {
         @Override
         public String getAction() {
             return "deregister";
+        }
+    }
+
+    public static class IsRegisteredCommand extends Command{
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            Device masDevice = MASDevice.getCurrentDevice();
+            if (masDevice.isRegistered()) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                callbackContext.sendPluginResult(result);
+            } else {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+                callbackContext.sendPluginResult(result);
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "isRegistered";
+        }
+    }
+
+    public static class resetLocallyCommand extends Command{
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            Device masDevice = MASDevice.getCurrentDevice();
+            try {
+                masDevice.resetLocally();
+                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                callbackContext.sendPluginResult(result);
+            } catch (Exception e) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+                callbackContext.sendPluginResult(result);
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "resetLocally";
         }
     }
 }
