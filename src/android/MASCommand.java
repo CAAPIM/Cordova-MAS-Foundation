@@ -41,7 +41,7 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 MAS.start(context);
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
             }
@@ -61,7 +61,7 @@ public class MASCommand {
             try {
                 boolean shouldUseDefault = args.getBoolean(0);
                 MAS.start(context, shouldUseDefault);
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
             }
@@ -81,7 +81,7 @@ public class MASCommand {
             try {
                 JSONObject jsonObject = args.getJSONObject(0);
                 MAS.start(context, jsonObject);
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
             }
@@ -100,7 +100,7 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 MAS.stop();
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
             }
@@ -120,7 +120,7 @@ public class MASCommand {
             try {
                 String filename = args.getString(0);
                 MAS.setConfigurationFileName(filename);
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             } catch (Exception e) {
                 callbackContext.error(getError(e));
             }

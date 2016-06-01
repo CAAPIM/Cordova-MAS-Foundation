@@ -28,7 +28,7 @@ public class MASDeviceCommand {
             masDevice.deregister(new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    callbackContext.success(SUCCESS);
+                    success(callbackContext, true);
                 }
 
                 @Override

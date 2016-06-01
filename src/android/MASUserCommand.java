@@ -36,7 +36,7 @@ public class MASUserCommand {
             MASUser.login(username, password, new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
-                    callbackContext.success(SUCCESS);
+                    success(callbackContext, true);
                 }
 
                 @Override
@@ -62,7 +62,7 @@ public class MASUserCommand {
                 masUser.logout(new MASCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        callbackContext.success(SUCCESS);
+                        success(callbackContext, true);
                     }
 
                     @Override
@@ -71,7 +71,7 @@ public class MASUserCommand {
                     }
                 });
             } else {
-                callbackContext.success(SUCCESS);
+                success(callbackContext, true);
             }
         }
 
