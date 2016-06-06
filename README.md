@@ -17,7 +17,7 @@ This is the repo for the Cordova Plugin
 2. cd into the ```PROJECT_DIR_NAME```
 3. Execute the following command in terminal to add iOS platform to the project: ```cordova platform add ios```
 4. Execute the following command in terminal to add MASPlugin to the project: ```cordova plugin add PATH_TO_PLUGIN```.  Note that ```PATH_TO_PLUGIN``` is the absolute file path to the Cordova repo directory.
-5. Replace the sample index.html file from ```PROJECT_DIR_NAME/plugins/com.ca.apim/sample/index.html``` with ```PROJECT_DIR_NAME/www/index.html```.
+5. Replace the sample index.html file ```PROJECT_DIR_NAME/www/index.html``` with ```PROJECT_DIR_NAME/plugins/com.ca.apim/sample/index.html```.
 6. Execute following command in terminal: ```cordova prepare```; this command will update the master index.html code into platform specific project.
 7. Open Cordova iOS project in Xcode, and make sure to add ```MASFoundation.framework```, ```MASUI.framework```, and ```MASUIResources.bundle```.  Also add valid ```msso_config.json``` of your gateway.
 8. In ```.plist``` of the project, make sure to add following value: ```    <key>NSLocationWhenInUseUsageDescription</key>
