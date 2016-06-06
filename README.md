@@ -39,14 +39,17 @@ This is the repo for the Cordova Plugin
 1. Create Cordova project by executing the following command in terminal: ```cordova create PROJECT_DIR_NAME com.app.bundle.identifier PROJECT_SCHEME```
 2. cd into the ```PROJECT_DIR_NAME```
 3. Execute the following command in terminal to add Android platform to the project: ```cordova platform add android```
-4. Execute the following command in terminal to add MASPlugin to the project: ```cordova plugin add PATH_TO_PLUGIN```.  Note that ```PATH_TO_PLUGIN``` is the absolute file path to the Cordova repo directory.
-5. Open Cordova project in Android Studio, and add the following dependencies in the build.gradle file:
+4. Execute the following command in terminal to add Cordova Plugin to the project: ```cordova plugin add PATH_TO_PLUGIN```.  Note that ```PATH_TO_PLUGIN``` is the absolute file path to the Cordova Plugin directory.
+6. Replace the sample index.html file ```PROJECT_DIR_NAME/www/index.html``` with ```PROJECT_DIR_NAME/plugins/com.ca.apim/sample/index.html```.
+7. Open Cordova project in Android Studio, and add the following dependencies in the build.gradle file:
  - compile 'com.ca.mas.core:mobile-api-gateway-sdk-3.2.0@aar'
  - compile 'com.ca.mas:mobile-app-service-sdk-1.2.0@aar'
  - compile 'com.ca.mas.ui:mobile-app-service-sdk-ui-1.2.0@aar'
-6. Copy above SDK libraries to the libs directory
-7. Also add valid ```msso_config.json``` of your gateway.
-8. Build your project in Android Studio.
+8. Copy above SDK libraries to the libs directory
+9. Also add valid ```msso_config.json``` of your gateway.
+10. Update the minSdkVersion in AndroidManifest.xml to 17
+11. Update the target to android-23
+12. Build your project in Android Studio.
 
 
 [nodejs]: https://nodejs.org
