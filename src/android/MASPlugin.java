@@ -9,6 +9,7 @@ package com.ca.apim;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.util.Log;
 
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASUserLoginWithUserCredentialsListener;
@@ -24,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MASPlugin extends CordovaPlugin {
+
+    private static final String TAG = MASPlugin.class.getCanonicalName();
 
     private static final Map<String, Command> commands = new HashMap();
 
@@ -70,9 +73,15 @@ public class MASPlugin extends CordovaPlugin {
 
         Command command = commands.get(action);
         if (command != null) {
-            command.execute(webView.getContext(), args, callbackContext);
-            return true;
+            try {
+                command.execute(webView.getContext(), args, callbackContext);
+                return true;
+            } catch (Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+                return false;
+            }
         } else {
+            Log.e(TAG, "Action not found: " + action);
             return false;
         }
     }

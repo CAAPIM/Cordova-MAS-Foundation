@@ -8,6 +8,7 @@
 package com.ca.apim;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
@@ -19,12 +20,14 @@ import org.json.JSONException;
 
 public class MASUserCommand {
 
+    private static final String TAG = LoginCommand.class.getCanonicalName();
+
     public static class LoginCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             String username= null;
-            String password=null;
+            String password= null;
             try {
                 username = (String) args.get(0);
                 password= (String) args.get(1);
@@ -41,6 +44,7 @@ public class MASUserCommand {
 
                 @Override
                 public void onError(Throwable throwable) {
+                    Log.e(TAG, throwable.getMessage(), throwable);
                     callbackContext.error(getError(throwable));
                 }
             });
@@ -67,6 +71,7 @@ public class MASUserCommand {
 
                     @Override
                     public void onError(Throwable throwable) {
+                        Log.e(TAG, throwable.getMessage(), throwable);
                         callbackContext.error(getError(throwable));
                     }
                 });

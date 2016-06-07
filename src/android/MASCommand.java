@@ -35,6 +35,8 @@ import java.util.Objects;
 
 public class MASCommand {
 
+    private static final String TAG = MASCommand.class.getCanonicalName();
+
     public static class StartCommand extends Command {
 
         @Override
@@ -43,6 +45,7 @@ public class MASCommand {
                 MAS.start(context);
                 success(callbackContext, true);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -63,6 +66,7 @@ public class MASCommand {
                 MAS.start(context, shouldUseDefault);
                 success(callbackContext, true);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -83,6 +87,7 @@ public class MASCommand {
                 MAS.start(context, jsonObject);
                 success(callbackContext, true);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -102,6 +107,7 @@ public class MASCommand {
                 MAS.stop();
                 success(callbackContext, true);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -122,6 +128,7 @@ public class MASCommand {
                 MAS.setConfigurationFileName(filename);
                 success(callbackContext, true);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -143,6 +150,7 @@ public class MASCommand {
                 PluginResult result = new PluginResult(PluginResult.Status.OK, true);
                 callbackContext.sendPluginResult(result);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }
@@ -222,6 +230,7 @@ public class MASCommand {
                     }
                 });
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
         }

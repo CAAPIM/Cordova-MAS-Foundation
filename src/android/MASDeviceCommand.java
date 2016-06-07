@@ -8,6 +8,7 @@
 package com.ca.apim;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ca.mas.foundation.Device;
 import com.ca.mas.foundation.MASCallback;
@@ -18,6 +19,9 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 
 public class MASDeviceCommand {
+
+    private static final String TAG = MASDeviceCommand.class.getCanonicalName();
+
 
     public static class DeregisterCommand extends Command{
 
@@ -32,8 +36,9 @@ public class MASDeviceCommand {
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
-                    callbackContext.error(getError(throwable));
+                public void onError(Throwable e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    callbackContext.error(getError(e));
                 }
             });
         }
@@ -48,13 +53,18 @@ public class MASDeviceCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            Device masDevice = MASDevice.getCurrentDevice();
-            if (masDevice.isRegistered()) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-                callbackContext.sendPluginResult(result);
-            } else {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, false);
-                callbackContext.sendPluginResult(result);
+            try {
+                Device masDevice = MASDevice.getCurrentDevice();
+                if (masDevice.isRegistered()) {
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                    callbackContext.sendPluginResult(result);
+                } else {
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+                    callbackContext.sendPluginResult(result);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
             }
         }
 
@@ -74,6 +84,7 @@ public class MASDeviceCommand {
                 PluginResult result = new PluginResult(PluginResult.Status.OK, true);
                 callbackContext.sendPluginResult(result);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
                 PluginResult result = new PluginResult(PluginResult.Status.OK, false);
                 callbackContext.sendPluginResult(result);
             }
