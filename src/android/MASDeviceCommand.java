@@ -70,7 +70,7 @@ public class MASDeviceCommand {
 
         @Override
         public String getAction() {
-            return "isRegistered";
+            return "isDeviceRegistered";
         }
     }
 
