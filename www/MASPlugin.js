@@ -121,13 +121,6 @@ MAS: function(){
     };
     
     /**
-     patchToPath does the HTTP PATCH call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
-     */
-    this.patchToPath=function(successHandler,errorHandler,path,parametersInfo,headersInfo,requestType,responseType){
-        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","patchToPath",[path,parametersInfo,headersInfo,requestType,responseType]);
-    };
-    
-    /**
      Stops the lifecycle of all MAS processes.
      */
     this.stop=function(successHandler,errorHandler){
@@ -156,13 +149,6 @@ MASUser: function(){
     
     this.isAuthenticated=function(successHandler, errorHandler){
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","isAuthenticated",[]);
-    };
-},
-    
-MASApplication: function() {
-    
-    this.authenticationStatus=function(successHandler, errorHandler){
-        return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "authenticationStatus", []);
     };
 },
     

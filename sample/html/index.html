@@ -118,6 +118,7 @@
             });
             
             $("#startWithDefault").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
                 
                 $(this).find("textarea.error").hide();
                 
@@ -136,6 +137,7 @@
             });
             
             $("#startWithJSON").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
                 
                 $(this).find("textarea.error").hide();
                 
@@ -153,16 +155,6 @@
                 }, jsonObject);
             });
             
-            $("#startWithURL").bind("click",function(event,ui){
-                
-                $(this).find("textarea.error").hide();
-                
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var fileURL = thisElement.find("input[name='fileURL']").val();
-
-            });
-            
             $("#stop").bind("click",function(event,ui){
                 
                 $(this).find("textarea.error").hide();
@@ -178,24 +170,6 @@
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
-            });
-            
-            $("#authenticationStatus").bind("click",function(event,ui){
-                if($(event.target).context.tagName != 'A') return;
-                
-                $(this).find("textarea.error").hide();
-                
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                
-                MASApplication.authenticationStatus(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                },
-                function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                });
             });
             
             $("#userLogin").bind("click",function(event,ui){
@@ -497,9 +471,7 @@
             <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="startWithDefault">MAS start with default configuration<label><input type="checkbox" name="defaultConfiguration" checked>Default</label><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="startWithJSON">MAS start with JSON <input type="text" name="jsonObject" placeholder="JSON object in text"/><textarea class='error' style="display:none;"></textarea></a></li>
-            <!--<li data-icon="false"><a href="#" id="startWithURL">MAS start with URL <input type="text" name="fileURL" placeholder="File *name* only with extension"/><textarea class='error' style="display:none;"></textarea></a></li>-->
             <li data-icon="false"><a href="#" id="stop">MAS stop<textarea class='error' style="display:none;"></textarea></a></li>
-            <li data-icon="false"><a href="#" id="authenticationStatus">MASApplication authentication status<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
