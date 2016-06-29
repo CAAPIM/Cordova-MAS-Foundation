@@ -8,10 +8,14 @@
 package com.ca.apim;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.ca.mas.core.client.ServerClient;
+import com.ca.mas.core.error.MAGErrorCode;
 import com.ca.mas.core.error.MAGException;
 import com.ca.mas.core.error.MAGRuntimeException;
 import com.ca.mas.core.error.MAGServerException;
+import com.ca.mas.core.error.TargetApiException;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -19,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -51,7 +56,7 @@ public abstract class Command {
      * @return A JSON Object to represent the error
      */
     protected JSONObject getError(Throwable throwable) {
-        int errorCode = 0;
+        int errorCode = MAGErrorCode.UNKNOWN;
         String errorMessage = throwable.getMessage();
 
         //Try to capture the root cause of the error
@@ -75,6 +80,12 @@ public abstract class Command {
             MAGServerException serverException = ((MAGServerException) throwable.getCause());
             errorCode = serverException.getErrorCode();
             errorMessage = serverException.getMessage();
+        } else if (throwable.getCause() != null && throwable.getCause() instanceof TargetApiException) {
+            TargetApiException e = ((TargetApiException) throwable.getCause());
+            try {
+                errorCode = ServerClient.findErrorCode(e.getResponse());
+            } catch (IOException ignore) {
+            }
         }
 
         JSONObject error = new JSONObject();

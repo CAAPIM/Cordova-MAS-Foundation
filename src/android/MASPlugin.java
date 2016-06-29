@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
+import com.ca.mas.foundation.MASConnectionListener;
 import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.ui.MASLoginFragment;
@@ -23,7 +24,9 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MASPlugin extends CordovaPlugin {
@@ -74,6 +77,31 @@ public class MASPlugin extends CordovaPlugin {
                 //ignore
             }
         });
+
+        /* Enable below for debugging.
+        MAS.setConnectionListener(new MASConnectionListener() {
+            @Override
+            public void onObtained(HttpURLConnection connection) {
+
+            }
+
+            @Override
+            public void onConnected(HttpURLConnection connection) {
+                Map<String, List<String>> request = connection.getRequestProperties();
+                StringBuilder sb = new StringBuilder();
+                sb.append("{").append(connection.getURL()).append("}");
+                for (String key : request.keySet()) {
+                    List<String> values = request.get(key);
+                    if (values != null && !values.isEmpty()) {
+                        sb.append("Request method: ").append(connection.getRequestMethod()).append("\n");
+                        sb.append("{\"").append(key).append("\":");
+                        sb.append("\"").append(values.get(0)).append("\"}");
+                    }
+                }
+                Log.d(MASConnectionListener.class.getCanonicalName(), sb.toString());
+            }
+        });
+        */
     }
 
     @Override
