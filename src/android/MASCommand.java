@@ -147,9 +147,15 @@ public class MASCommand {
 
             try {
                 int grantFlow = args.getInt(0);
-                if (grantFlow == 0) {
-                    grantFlow = MASConstants.MAS_GRANT_FLOW_CLIENT_CREDENTIALS;
+                switch (grantFlow) {
+                    case 0:
+                        grantFlow = MASConstants.MAS_GRANT_FLOW_CLIENT_CREDENTIALS;
+                        break;
+                    case 1:
+                        grantFlow = MASConstants.MAS_GRANT_FLOW_PASSWORD;
+                        break;
                 }
+
                 MAS.setGrantFlow(grantFlow);
                 PluginResult result = new PluginResult(PluginResult.Status.OK, true);
                 callbackContext.sendPluginResult(result);
