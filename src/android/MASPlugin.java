@@ -9,10 +9,12 @@ package com.ca.apim;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.util.Log;
 
 import com.ca.mas.foundation.MAS;
-import com.ca.mas.foundation.MASUserLoginWithUserCredentialsListener;
+import com.ca.mas.foundation.MASAuthenticationListener;
+import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.ui.MASLoginFragment;
 
@@ -59,11 +61,17 @@ public class MASPlugin extends CordovaPlugin {
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-        MAS.setUserLoginListener(new MASUserLoginWithUserCredentialsListener() {
+        MAS.setAuthenticationListener(new MASAuthenticationListener() {
             @Override
-            public void onAuthenticateRequest(long requestId, MASAuthenticationProviders providers) {
+            public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
                 DialogFragment loginFragment = MASLoginFragment.newInstance(requestId, providers);
-                loginFragment.show(((Activity) (webView.getContext())).getFragmentManager(), "logonDialog");
+                loginFragment.show(((Activity)context).getFragmentManager(), "logonDialog");
+
+            }
+
+            @Override
+            public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
+                //ignore
             }
         });
     }

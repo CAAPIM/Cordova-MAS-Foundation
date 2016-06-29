@@ -14,6 +14,7 @@ import android.util.Pair;
 
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
+import com.ca.mas.foundation.MASConstants;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
@@ -146,6 +147,9 @@ public class MASCommand {
 
             try {
                 int grantFlow = args.getInt(0);
+                if (grantFlow == 0) {
+                    grantFlow = MASConstants.MAS_GRANT_FLOW_CLIENT_CREDENTIALS;
+                }
                 MAS.setGrantFlow(grantFlow);
                 PluginResult result = new PluginResult(PluginResult.Status.OK, true);
                 callbackContext.sendPluginResult(result);
