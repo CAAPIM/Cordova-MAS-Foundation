@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.l7tech.msso-tests"
+    version="3.0.0">
+    <name>Mag Tests</name>
+
+    <js-module src="tests.js" name="tests">
+    </js-module>
+</plugin>

@@ -1,0 +1,154 @@
+<!--
+   Created by Yash Sangani on 2015-11-03.
+   Copyright (c) 2016 CA Technologies. All rights reserved.
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Storage Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div data-role="page" id="second">
+    <div  style="margin-top:20px" data-theme="b"  data-role="header">
+        <a href="#first" data-icon="back" data-rel="back">Back</a>
+        <h1>Storage</h1>
+        <script type="text/javascript">
+
+         $(document).ready(function () {
+
+            $("#submitButton").bind("click", function (event, ui) {
+                    callStorage();
+                });
+         });
+
+
+         function callStorage(){
+            $("#output").val("");
+            var stype=$("#storageType").val();
+            var smode=$("#storageMode").val();
+            var oper=$("#operation").val();
+
+
+            var config='{ "android":{ "type":"'+stype+'", "mode":"'+smode+'" },'+
+                                        '"ios":{ "key1":"value1","key2":"value2"} }';
+
+            var L7Obj=new L7SMssoSDKPlugin.MASStorage(config);
+            if(oper=="read"){
+                 $('#Value').val("");
+                 var key=$("#key").val();
+                 var res=L7Obj.read(successCallStorage,errorCallStorage,key);
+             }
+            if(oper=="write"){
+                 var key=$("#key").val();
+                 var value=$("#Value").val();
+                 var res=L7Obj.write(successCallStorage,errorCallStorage,key,value);
+             }
+            if(oper=="update"){
+                 var key=$("#key").val();
+                 var value=$("#Value").val();
+                 var res=L7Obj.update(successCallStorage,errorCallStorage,key,value);
+             }
+            if(oper=="writeOrUpdate"){
+                 var key=$("#key").val();
+                 var value=$("#Value").val();
+                 var res=L7Obj.writeOrUpdate(successCallStorage,errorCallStorage,key,value);
+             }
+             if(oper=="delete"){
+                $('#Value').val("");
+                 var key=$("#key").val();
+                 var res=L7Obj.delete(successCallStorage,errorCallStorage,key);
+             }
+             if(oper=="deleteAll"){
+                $('#key').val("");
+                $('#Value').val("");
+                 var res=L7Obj.deleteAll(successCallStorage,errorCallStorage);
+             }
+             if(oper=="getAllKeys"){
+                $('#key').val("");
+                $('#Value').val("");
+                 var res=L7Obj.getAllKeys(successCallStorage,errorCallStorage);
+             }
+             if(oper=="getType"){
+                $('#key').val("");
+                $('#Value').val("");
+                 var res=L7Obj.getType(successCallStorage,errorCallStorage);
+             }
+        }
+
+        function successCallStorage(result){
+            var result=JSON.parse(result);
+            var data=result.status;
+            data=data+" "+result.data;
+            $("#output").val(data);
+        }
+        function errorCallStorage(result){
+            var result=JSON.parse(result);
+            var result_data=JSON.parse(result.data);
+            var data=result.status;
+            data=data+" "+result_data.code;
+            var data_code=result_data.code;
+            if(data_code=="105"){
+                data=data+" "+"READ DATA NOT FOUND";
+            }
+            if(data_code=="104"){
+                data=data+" "+"WRITE DATA ALREADY EXISTS";
+            }
+
+            $("#output").val(data);
+        }
+
+    </script>
+    </div>
+    <div data-role="content">
+        <div id="storageSection">
+
+            <div data-role="fieldcontain">
+
+                <label for="storageType" class="select">Choose storage type:</label>
+                <select name="storageType" id="storageType">
+                    <option value="com.ca.mas.core.storage.implementation.KeyStoreStorage">KeyStore</option>
+                    <option value="com.ca.mas.core.storage.implementation.EncryptedLocalStorage">ELS</option>
+                </select>
+
+                <label for="storageMode" class="select">Choose storage Mode:</label>
+                <select name="storageMode" id="storageMode">
+                    <option value=false>Private</option>
+                    <option value=true>Shared</option>
+                </select>
+
+                <label for="operation" class="select">Choose operation:</label>
+                <select name="operation" id="operation">
+                    <option value="read">READ</option>
+                    <option value="write">WRITE</option>
+                    <option value="update">UPDATE</option>
+                    <option value="writeOrUpdate">WRITEORUPDATE</option>
+                    <option value="delete">DELETE</option>
+                    <option value="deleteAll">DELETEALL</option>
+                    <option value="getAllKeys">GETALLKEYS</option>
+                    <option value="getType">GET TYPE</option>
+                </select>
+
+                <label for="key">Key</label>
+                <input type="text" name="key" id="key" value=""  />
+
+                <label for="Value">Value</label>
+                <input type="text" name="Value" id="Value" value=""  />
+            </div>
+            <a href="#" id="submitButton" data-role="button">Submit</a>
+
+            <div data-role="fieldcontain">
+                <label for="output">OUTPUT:</label>
+                <textarea cols="40" rows="8" name="output" id="output" ></textarea>
+            </div>
+        </div> <!-- end of div storage section -->
+    </div><!-- content div end -->
+
+</div> <!-- page div end -->
+
+
+</body>
+</html>

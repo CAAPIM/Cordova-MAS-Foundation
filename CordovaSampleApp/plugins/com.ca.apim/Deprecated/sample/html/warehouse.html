@@ -1,0 +1,77 @@
+<!--
+   Created by Anthony Yu on 2013-11-15.
+   Copyright (c) 2016 CA Technologies. All rights reserved.
+ -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Warehouse Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    </head>
+    <body>
+
+
+
+        <div data-role="page">
+
+            <div  style="margin-top:20px" data-theme="b"  data-role="header">
+                <a href="index.html" data-icon="back" data-rel="back">Back</a>
+                <h1>Products</h1>
+                <script type="text/javascript">
+                    $(document).ready( function () {
+
+                                    getJSONConfig("msso_config.json",function(config){
+
+                                      //Test Get
+                                      var httpClient = new L7SMssoSDKPlugin.HttpClient('https://'+config.server.hostname+':8443');
+                                      httpClient.path = '/protected/resource/products';
+                                      httpClient.headers = {"Accept":"application/json", "Content-Type":L7SMssoSDKPlugin.CONTENT_TYPE.FORM_URL};
+                                      httpClient.parameters = {"operation":"listProducts"};
+                                      httpClient.httpCall(httpCallPluginResultHandler, nativePluginErrorHandler, L7SMssoSDKPlugin.HTTPMethod.GET);
+
+                                      //test POST
+                                      //var httpClient = new L7SMssoSDKPlugin.HttpClient('https://'+config.server.hostname+':8443');
+                                      //httpClient.path = '/protected/resource/products';
+                                      //httpClient.headers = {"Accept":"application/json", "Content-Type":L7SMssoSDKPlugin.CONTENT_TYPE.FORM_URL};
+                                      //httpClient.parameters = {"operation":"listProducts"};
+                                      //httpClient.httpCall(httpCallPluginResultHandler, nativePluginErrorHandler, L7SMssoSDKPlugin.HTTPMethod.POST);
+
+                                    },function(evt){
+                                        alert("Error reading configuration "+evt.code);
+                                    });
+                                      
+                    });
+
+                    function httpCallPluginResultHandler (result) {
+                            //alert("SUCCESS: \r\n"+result);
+                            var json = $.parseJSON(result);
+                            // alert("SUCCESS: \r\n"+json);
+                            $.each(json.products, function(key, product) {
+                                    //alert(key + ': ' + value);
+                                    //alert(product);
+                                    $("#products").append('<li> ' + product.name +' </li>');
+                            });
+                                    // $("#products").append('<li> test </li>');
+                                    $("#products").listview("refresh");
+                    }
+                
+                   function nativePluginErrorHandler (error) {
+                      alert("ERROR: \r\n"+error.errorCode );
+                   }
+                </script>
+
+            </div>
+
+            <div data-role="content">
+                <ul id="products" data-role="listview" data-inset="true" data-filter="false" >
+                </ul>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+    </body>
+</html>

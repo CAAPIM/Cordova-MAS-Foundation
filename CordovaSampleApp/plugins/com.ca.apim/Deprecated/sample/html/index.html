@@ -1,0 +1,280 @@
+<!--
+ Created by Anthony Yu on 2013-11-15.
+ Copyright (c) 2016 CA Technologies. All rights reserved.
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <meta charset="utf-8">
+
+
+    <!-- iPad/iPhone specific css below, add after your main css >
+     <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
+     <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+     -->
+    <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+    <script type="text/javascript">
+
+
+        // If you want to prevent dragging, uncomment this section
+        /*
+         function preventBehavior(e)
+         {
+         e.preventDefault();
+         };
+         document.addEventListener("touchmove", preventBehavior, false);
+         */
+
+        /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+         see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+         for more details -jm */
+        /*
+         function handleOpenURL(url)
+         {
+         // TODO: do something with the url passed in.
+         }
+         */
+
+        function onBodyLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        /* When this function is called, Cordova has been initialized and is ready to roll */
+        /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+         see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+         for more details -jm */
+
+        function onDeviceReady() {
+            initializeSDK();
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+        //initialize the SDK with custom JSON
+        function initializeSDK(){
+
+            getJSONConfig("msso_config.json",function(result){
+                var jsonObject=JSON.stringify(result);
+                L7SMssoSDKPlugin.initialize(successCallback,errorCallback,jsonObject);
+            },function(evt){
+                console.log("Error reading configuration "+evt.code);
+            });
+        }
+
+        function successCallback(result){
+            //console.log(result);
+            isLogin();
+            isAppLogon();
+            isDeviceRegistered();
+        }
+        function errorCallback(result){
+            console.log(result);
+        }
+        //isLogin
+        function isLogin() {
+            L7SMssoSDKPlugin.isLogin(isLoginPluginResultHandler);
+        }
+
+        /*function to grab the configuration JSON file from assets folder.
+        *@assetPath: path with in the assets folder, with out any leading /
+        *@successCallback will be called with the JSON config object, in case of success
+        *@errorCallback will be called with error event, in case of error
+        */
+        function getJSONConfig(assetPath,successCallback,errorCallback)
+        {
+            var url = "file:///android_asset/"+assetPath;
+            window.resolveLocalFileSystemURL(url,function (fileEntry){
+            fileEntry.file(function(file){
+                    var reader = new FileReader();
+                    reader.onloadend = function(e) {
+                        console.log(this.result);
+                        successCallback(JSON.parse(this.result));
+                    };
+                    reader.readAsText(file);
+                },function(evt){
+                    console.log(evt.code);
+                    errorCallback(evt);
+                });
+
+            },function(evt){
+                console.log(evt.code);
+                errorCallback(evt);
+            });
+        }
+
+        function isLoginPluginResultHandler(result) {
+            if (result) {
+                $("#logoutButton").removeClass('ui-disabled');
+                $("#loginHolder").addClass('ui-disabled');
+            } else {
+                $("#logoutButton").addClass('ui-disabled');
+                $("#loginHolder").removeClass('ui-disabled');
+            }
+
+        }
+
+
+        //isLogoff
+        function isAppLogon() {
+            L7SMssoSDKPlugin.isAppLogon(isAppLogonPluginResultHandler);
+        }
+
+        function isAppLogonPluginResultHandler(result) {
+            //alert("isLogOn: \r\n"+result );
+            if (result) {
+                $("#logoffButton").removeClass('ui-disabled');
+                $("#loginHolder").addClass('ui-disabled');
+
+            } else {
+                $("#logoffButton").addClass('ui-disabled');
+                $("#loginHolder").removeClass('ui-disabled');
+
+            }
+        }
+
+        //authenticate
+        function authenticate(username, password) {
+            L7SMssoSDKPlugin.authenticate(username,password,authSuccessHandler, authErrorHandler);
+        }
+
+        function authSuccessHandler(result){
+            $("#logoutButton").removeClass('ui-disabled');
+            $("#logoffButton").removeClass('ui-disabled');
+            $("#deRegisterButton").removeClass('ui-disabled');
+
+            $("#loginHolder").trigger('collapse');
+            $("#loginHolder").addClass('ui-disabled');
+            $("#textinput-u").val("");
+            $("#textinput-p").val("");
+
+        }
+
+        function authErrorHandler(result){
+            alert("result: "+result);
+            $("#logoutButton").addClass('ui-disabled');
+            $("#logoffButton").addClass('ui-disabled');
+
+        }
+
+
+        //isDeviceRegistered
+
+        function isDeviceRegistered() {
+            L7SMssoSDKPlugin.isDeviceRegistered(isDeviceRegisteredPluginResultHandler);
+        }
+
+        function isDeviceRegisteredPluginResultHandler(result) {
+            //alert("isRegistered: \r\n"+result );
+            if (result) {
+                $("#deRegisterButton").removeClass('ui-disabled');
+            } else {
+                //alert("not registered");
+                $("#deRegisterButton").addClass('ui-disabled');
+            }
+
+        }
+
+
+        $(document).ready(function () {
+
+            $("#logoutButton").bind("click", function (event, ui) {
+                // alert("loging out");
+                L7SMssoSDKPlugin.logoutDevice();
+                isLogin();
+            });
+
+            $("#deRegisterButton").bind("click", function (event, ui) {
+                //alert("deRegister");
+                L7SMssoSDKPlugin.deRegister();
+                isDeviceRegistered();
+            });
+            $("#logoffButton").bind("click", function (event, ui) {
+                //alert("logoffApp");
+                L7SMssoSDKPlugin.logoffApp();
+                isAppLogon();
+            });
+
+            $('#storageButton').bind("click",function(event,ui){
+                $.mobile.changePage('storage.html#second');
+
+            });
+
+            $('#loginButton').bind("click",function(event,ui){
+                  var un = $("#textinput-u").val().trim();
+                  var pw = $("#textinput-p").val().trim();
+                  if(un.length==0){
+                   alert("Empty username");
+                   console.log('Empty username');
+                   }else if(pw.length==0){
+                   alert("Empty password");
+                   console.log('Empty password');
+                   }else{
+                   authenticate(un,pw);
+                   }
+
+            });
+
+        });
+
+    </script>
+</head>
+
+
+<body onload="onBodyLoad();">
+
+
+<div data-role="page" id="first">
+
+    <div style="margin-top:20px" data-theme="b" data-role="header">
+        <h1>Demo C</h1>
+    </div>
+    <!-- /header -->
+    <div data-role="content">
+        <div align="center">
+            <img src="img/logo@2x.png" alt="Layer7 Logo" width="86" height="72">
+        </div>
+        <ul data-role="listview" data-inset="true" data-filter="false">
+            <li><a href="warehouse.html">Warehouse Demo</a></li>
+        </ul>
+
+        <a id="logoutButton" href="#" data-role="button">Logout Device</a>
+
+        <a id="logoffButton" href="#" data-role="button">Logoff App</a>
+
+        <a id="deRegisterButton" href="#" data-role="button">De-Register</a>
+
+
+        <form>
+            <fieldset data-role="collapsible" id="loginHolder">
+                <legend>Login</legend>
+                <label for="textinput-u">User Name</label>
+                <input type="text" name="textinput-u" id="textinput-u" placeholder="User Name" value="">
+                <label for="textinput-p">Password</label>
+                <input type="text" name="textinput-p" id="textinput-p" placeholder="Password" value="">
+                <a id="loginButton" href="#" data-role="button">Submit</a>
+            </fieldset>
+        </form>
+
+
+
+        <a id="storageButton" href="#" data-role="button">Storage</a>
+    </div>
+    <!-- /content -->
+
+</div>
+<!-- /page -->
+
+</body>
+</html>
