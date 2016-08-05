@@ -212,12 +212,23 @@ function sendCredentials() {
     var password = document.getElementById('CA-Password').value;
     var MASUser = new MASPlugin.MASUser();
     document.getElementById("errorMesg").innerHTML="";
+    var errorMsgToDisplay="";
     MASUser.loginWithUsernameAndPassword( function(result) {
         closeLoginFragment();
         }, function(error) {
+        var errorCodeLastDigits=error.errorCode%1000;
         var returnedError=JSON.parse(error.errorMessage);
-        console.log(returnedError);
-        document.getElementById("errorMesg").innerHTML=returnedError.error_description;
+        console.log(error);
+        if(errorCodeLastDigits === 103){
+            errorMsgToDisplay="invalid request: Missing or duplicate parameters"
+        }
+        else if(errorCodeLastDigits === 202){
+            errorMsgToDisplay="Username or Password invalid";
+        }
+        else{
+            errorMsgToDisplay=returnedError.error_description;
+        }
+        document.getElementById("errorMesg").innerHTML=errorMsgToDisplay;
         },
         username, password);
 }
