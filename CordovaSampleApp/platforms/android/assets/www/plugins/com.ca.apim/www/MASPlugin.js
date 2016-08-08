@@ -232,7 +232,7 @@ var MASPopupLoginUI = function(loginPage, popupafterclose) {
                           });
 }
 
-var MASAuthenticationCallback = function() {
+var MASAuthenticationCallback = function(result) {
     var htmlToLoad="login.html";
     if(result.requestType === "Login"){
                htmlToLoad="login.html";
@@ -242,8 +242,8 @@ var MASAuthenticationCallback = function() {
                 htmlToLoad="otpchannel.html";
             }
     MASPopupLoginUI(htmlToLoad,function(){
-        var MAS = new MASPlugin.MAS();
-        MAS.cancelAuthentication(function(){},function(){});
+        //var MAS = new MASPlugin.MAS();
+       // MAS.cancelAuthentication(function(){},function(){});
     });
     
 };

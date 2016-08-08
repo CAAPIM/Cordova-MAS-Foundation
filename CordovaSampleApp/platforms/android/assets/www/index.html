@@ -2,10 +2,11 @@
 <html>
 <head>
     <title>Home Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script src="https://raw.github.com/dinbror/bpopup/master/jquery.bpopup.min.js"></script>
     <meta charset="utf-8">
     <!-- iPad/iPhone specific css below, add after your main css >
      <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
@@ -15,40 +16,6 @@
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script>
     <script type="text/javascript">
-
-    function showLoginFragment() {
-            $('#loginDiv').load("login.html");
-            $('#myPopup').popup("open",{positionTo: '#parentDiv'});
-
-    }
-   function closeLoginFragment() {
-            $('#myPopup').popup("close",{positionTo: '#parentDiv'});
-
-    }
-    function showOtpDeliveryChannelFragment(){
-        var htmlContent='<label class="radio-inline"><input type="radio" name="optradio" value = "email"  checked = "">Send by Email</label><label class="radio-inline">< input type="radio" name="optradio" active value = "sms">Send by SMS</label>'
-         $('#loginDiv').load("otpchannel.html");
-         $('#myPopup').popup("open",{positionTo: '#parentDiv'});
-          var form= $("<form/>",
-          {role : 'form'}
-          );
-         form.append($("<label/>",
-         {class:'radio-inline'})
-         );
-         form.append($("<input>",
-         {type:'radio',
-         name:'optradio',
-         value:'email',
-         checked:'',
-         text:'Send By Email'})
-         );
-         console.log(document.getElementById("loginDiv").innerHTML);
-         $('#channelForm').append(form);
-    }
-    function showOtpAuthenticateFragment(){
-        $('#loginDiv').load("otp.html");
-        $('#myPopup').popup("open",{positionTo: '#parentDiv'});
-    }
                 // If you want to prevent dragging, uncomment this section
                 /*
                  function preventBehavior(e)
@@ -74,13 +41,29 @@
             }
 
             function onDeviceReady() {
-                $('#loginDiv').load("login.html");
-                init();
+                
             }
     </script>
     
     <script type="text/javascript">
+        function closeLoginFragment() {
+            $('#loginDiv').popup("close",{positionTo: '#parentDiv'});
+    }
         $(document).ready(function(){
+            
+            $("#init").bind("click",function(event,ui){
+                
+                $(this).find("textarea.error").hide();
+                
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                
+                MAS.initialize(function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+                          
             $("#setGrantFlowPassword").bind("click",function(event,ui){
                 
                 $(this).find("textarea.error").hide();
@@ -124,7 +107,7 @@
                 var MAS = new MASPlugin.MAS();
                 var configFileName = $("input[name='configName']").val();
                 
-                MAS.setConfigName(function (result){
+                MAS.configFileName(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
@@ -132,27 +115,7 @@
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }
-                );
-            });
-                          
-            $("#setUserLoginBlock").bind("click",function(event,ui){
-                if($(event.target).context.tagName != 'A') return;
-            
-                $(this).find("textarea.error").hide();
-            
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var username = null;
-                var password = null;
-                $('#myPopup').popup("open",{positionTo: '#parentDiv'});
-                MAS.setUserLoginBlock(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                },
-                function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                });
+                , configFileName);
             });
             
             $("#start").bind("click",function(event,ui){
@@ -299,7 +262,6 @@
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
-                init();
             });
             
             $("#deregisterDevice").bind("click",function(event,ui){
@@ -498,6 +460,7 @@
                 element.find("textarea.error").html(error.errorMessage);
             }
         });
+
     </script>
     <style type="text/css">
         .success { background-color: chartreuse; color: #898989;}
@@ -510,22 +473,21 @@
 <body onload="onBodyLoad();">
 
 
-<div id="parentDiv" data-role="page">
+<div data-role="page">
 
     <div style="margin-top:20px" data-theme="b" data-role="header">
         <h1>Demo App</h1>
     </div>
     <!-- /header -->
     <div data-role="content">
-	        <div align="center">
-	            <img src="img/logo.png" alt="Layer7 Logo" width="86" height="72">
-	        </div>
-	        
+        <div align="center">
+            <img src="img/logo.png" alt="Layer7 Logo" width="86" height="72">
+        </div>
         <ul data-role="listview" data-inset="true" data-filter="false" id="actionsListView">
+            <li data-icon="false"><a href="#" id="init">MAS Init<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false" ><a href="#" id="setGrantFlowPassword" >MAS GrantFlow: password<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential<textarea class='error' style="display:none;"></textarea></a></li>
-            <li data-icon="false"><a href="#" id="setConfigName">MAS set configuration file name <input type="text" name="configName" placeholder="configName"/><textarea class='error' style="display:none;"></textarea></a></li>
-            <li data-icon="false" ><a href="#" id="setUserLoginBlock" >MAS set user login block<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="setConfigName">MAS set configuration fila name <input type="text" name="configName" placeholder="configName"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="startWithDefault">MAS start with default configuration<label><input type="checkbox" name="defaultConfiguration" checked>Default</label><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="startWithJSON">MAS start with JSON <input type="text" name="jsonObject" placeholder="JSON object in text"/><textarea class='error' style="display:none;"></textarea></a></li>
@@ -533,11 +495,10 @@
             <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
-            <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error' style="display:none;"></textarea></a></li>
             
             <li data-icon="false">
                 <a href="#" id="getCRUD">MAS get 
-                    <input type="text" name="path" value="/protected/resource/products" placeholder="API path"/>
+                    <input type="text" name="path" value = "/protected/resource/products" placeholder="API path"/>
                     <label for="requestType">Request Type:</label>
                     <select name="requestType" >
                         <option value="json">JSON</option>
@@ -635,15 +596,10 @@
                 </a>
             </li>
             
-
+            <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="deregisterDevice">MASDevice deregister<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="resetLocally">MASDevice resetLocally<textarea class='error' style="display:none;"></textarea></a></li>
         </ul>
-        
-	        <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-	        <div id="loginDiv">
-	        </div>
-        	</div>
     </div>
     <!-- /content -->
 </div>
