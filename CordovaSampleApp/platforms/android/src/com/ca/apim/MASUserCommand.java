@@ -56,6 +56,54 @@ public class MASUserCommand {
         }
     }
 
+
+    public static class CompleteAuthenticaionCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            String username= null;
+            String password= null;
+            try {
+                username = (String) args.get(0);
+                password= (String) args.get(1);
+            } catch (JSONException e) {
+                callbackContext.error(getError(e));
+                return;
+            }
+
+            MASUser.login(username, password, new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+                    success(callbackContext, true);
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    Log.e(TAG, throwable.getMessage(), throwable);
+                    callbackContext.error(getError(throwable));
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "completeAuthentication";
+        }
+    }
+
+
+    public static class CancelAuthenticaionCommand extends Command {
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelAuthentication";
+        }
+    }
+
     public static class LogoutUserCommand extends Command {
 
         @Override

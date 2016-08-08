@@ -46,6 +46,9 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.DeleteFromPathCommand());
         add(new MASCommand.PostToPathCommand());
         add(new MASCommand.PutToPathCommand());
+        add(new MASCommand.CancelRequestCommand());
+        add(new MASCommand.SetAuthenticationListenerCommand());
+
 
         add(new MASDeviceCommand.DeregisterCommand());
         add(new MASDeviceCommand.IsRegisteredCommand());
@@ -54,7 +57,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.LoginCommand());
         add(new MASUserCommand.LogoutUserCommand());
         add(new MASUserCommand.IsAuthenticatedCommand());
-        add(new MASCommand.SetAuthenticationListenerCommand());
+        add(new MASUserCommand.CompleteAuthenticaionCommand());
 
     }
 

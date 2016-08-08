@@ -108,6 +108,28 @@ public class MASCommand {
 
     }
 
+
+    public static class CancelRequestCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+           /* try {
+                String shouldUseDefault = args.getString(0);
+                MAS.start(context, shouldUseDefault);
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }*/
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelRequest";
+        }
+
+    }
+
     public static class StartWithDefaultConfigurationCommand extends Command {
 
         @Override
