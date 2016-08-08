@@ -28,6 +28,12 @@
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
 
 
+- (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command;
+
+- (void)completeAuthentication:(CDVInvokedUrlCommand*)command;
+
+- (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
+
 
 /**
  *  Starts the lifecycle of the MAS processes.

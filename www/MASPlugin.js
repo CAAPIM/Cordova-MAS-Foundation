@@ -1,4 +1,3 @@
-cordova.define("com.ca.apim.MASPlugin", function(require, exports, module) {
 //
 //  MASPlugin.js
 //
@@ -218,15 +217,12 @@ MASDevice: function(){
 };
 
 module.exports = MASPlugin;
-});
 
-var loginPage = "login.html";
 
-var MASPopupLoginUI = function(loginPage, popupafterclose) {
-    
-    window.onbeforeunload = function() {
-        return "Dude, are you sure you want to leave? Think of the kittens!";
-    }
+ loginPage = "login.html";
+
+
+ MASPopupLoginUI = function(loginPage, popupafterclose) {
     
     var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>"
     + "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' "
@@ -263,7 +259,7 @@ var MASPopupLoginUI = function(loginPage, popupafterclose) {
     return false;
 }
 
-var MASAuthenticationCallback = function(result) {
+ MASAuthenticationCallback = function(result) {
     
     MASPopupLoginUI(loginPage,function(){
         
@@ -275,13 +271,13 @@ var MASAuthenticationCallback = function(result) {
     
 }
 
-var MASSendCredentials = function(username, password) {
+ MASSendCredentials = function(username, password) {
     
     var MAS = new MASPlugin.MAS();
     MAS.completeAuthentication(function(){}, function(){}, username, password);
 }
 
-var MASCancelLogin = function(args) {
+ MASCancelLogin = function(args) {
     
     var MAS = new MASPlugin.MAS();
     MAS.cancelAuthentication(function(){}, function(){}, args);

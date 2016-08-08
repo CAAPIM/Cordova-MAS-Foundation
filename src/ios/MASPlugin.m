@@ -12,7 +12,10 @@
 #import <MASUI/MASUI.h>
 
 
-@interface MASPlugin()
+@interface MASPlugin() {
+    
+    MASBasicCredentialsBlock _basicBlock_;
+}
 
 
 @end
@@ -62,6 +65,54 @@
     }
     
     [MAS setConfigurationFileName:fileName];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Config file name is set"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    [MAS setUserLoginBlock:^(MASBasicCredentialsBlock basicBlock, MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
+        
+        _basicBlock_ = basicBlock;
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Login with user and pwd"];
+        
+        [result setKeepCallbackAsBool:YES];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        
+    }];
+}
+
+
+- (void)completeAuthentication:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    if (_basicBlock_) {
+        
+        _basicBlock_(command.arguments[0], command.arguments[1], NO, nil);
+    }
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Config file name is set"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)cancelAuthentication:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    if (_basicBlock_) {
+        
+        _basicBlock_(nil, nil, YES, nil);
+    }
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Config file name is set"];
     
