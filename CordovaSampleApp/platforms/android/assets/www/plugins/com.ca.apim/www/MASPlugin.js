@@ -7,7 +7,6 @@ cordova.define("com.ca.apim.MASPlugin", function(require, exports, module) {
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
-
                
 var MASPlugin = {
     
@@ -74,6 +73,19 @@ MAS: function(){
         Cordova.exec(MASAuthenticationCallback,errorHandler,"com.ca.apim.MASPlugin","setAuthenticationListener",[]);
     };
     
+               
+    this.setCustomLoginPage=function(successHandler,errorHandler,customLoginPage){
+               
+        loginPage = customLoginPage;
+        $.ajax({
+            url: loginPage,
+            success: function(data){},
+            error: function(data){
+                loginPage="login.html";
+            },
+        })
+    };
+               
     /**
      Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
      */
@@ -107,14 +119,20 @@ MAS: function(){
      Completes the current user's authentication session validation.
     */
     this.completeAuthentication=function(successHandler,errorHandler,username,password){
+       
+        $.mobile.activePage.find(".messagePopup").popup("close");
+               
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","completeAuthentication",[username,password]);
     };
 
     /**
      Cancels the current user's authentication session validation.
      */
-    this.cancelAuthentication=function(successHandler,errorHandler){
-        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","cancelAuthentication",[]);
+    this.cancelAuthentication=function(successHandler,errorHandler,args){
+        
+        $.mobile.activePage.find(".messagePopup").popup("close");
+               
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","cancelAuthentication",[args]);
     };
                
     /**
@@ -202,7 +220,13 @@ MASDevice: function(){
 module.exports = MASPlugin;
 });
 
+var loginPage = "login.html";
+
 var MASPopupLoginUI = function(loginPage, popupafterclose) {
+    
+    window.onbeforeunload = function() {
+        return "Dude, are you sure you want to leave? Think of the kittens!";
+    }
     
     var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>"
     + "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' "
@@ -218,60 +242,48 @@ var MASPopupLoginUI = function(loginPage, popupafterclose) {
                                                  $.mobile.activePage.find(".messagePopup").popup("close");
                                                  });
     
-    $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
-                                                                         popupafterclose: function () {
-                                                                         $(this).unbind("popupafterclose").remove();
-                                                                         popupafterclose();
-                                                                         }
-                                                                         });
+    $.mobile.activePage.find(".messagePopup").popup(
+                                                    { transition: 'slidedown',
+                                                      history: false,
+                                                      overlay: true
+                                                    }).popup("open").bind({
+                                                            
+                                                        popupafterclose: function () {
+                                                        $(this).unbind("popupafterclose").remove();
+                                                        popupafterclose();
+                                                    }
+                                                });
     
     $(".messagePopup").on({
                           popupbeforeposition: function () {
                           $('.ui-popup-screen').off();
                           }
                           });
+    
+    return false;
 }
 
 var MASAuthenticationCallback = function(result) {
-    var htmlToLoad="login.html";
-    if(result.requestType === "Login"){
-               htmlToLoad="login.html";
-            }
-            else if(result.requestType === "OTP"){
-                alert("OTP");
-                htmlToLoad="otpchannel.html";
-            }
-    MASPopupLoginUI(htmlToLoad,function(){
-        //var MAS = new MASPlugin.MAS();
-       // MAS.cancelAuthentication(function(){},function(){});
+    
+    MASPopupLoginUI(loginPage,function(){
+        
+        $('#loginDiv').remove();
+        
+        var MAS = new MASPlugin.MAS();
+        MAS.cancelAuthentication(function(){},function(){});
     });
     
-};
+}
 
-function MASSendCredentials() {
-    var username = document.getElementById('CA-Username').value;
-    var password = document.getElementById('CA-Password').value;
-    var MASUser = new MASPlugin.MASUser();
-    document.getElementById("errorMesg").innerHTML="";
-    var errorMsgToDisplay="";
-   //MAS.completeAuthentication(fucusername )
+var MASSendCredentials = function(username, password) {
+    
+    var MAS = new MASPlugin.MAS();
+    MAS.completeAuthentication(function(){}, function(){}, username, password);
+}
 
-    MASUser.loginWithUsernameAndPassword( function(result) {
-        closeLoginFragment();
-        }, function(error) {
-        var errorCodeLastDigits=error.errorCode%1000;
-        var returnedError=JSON.parse(error.errorMessage);
-        console.log(error);
-        if(errorCodeLastDigits === 103){
-            errorMsgToDisplay="invalid request: Missing or duplicate parameters"
-        }
-        else if(errorCodeLastDigits === 202){
-            errorMsgToDisplay="Username or Password invalid";
-        }
-        else{
-            errorMsgToDisplay=returnedError.error_description;
-        }
-        document.getElementById("errorMesg").innerHTML=errorMsgToDisplay;
-        },
-        username, password);
-};
+var MASCancelLogin = function(args) {
+    
+    var MAS = new MASPlugin.MAS();
+    MAS.cancelAuthentication(function(){}, function(){}, args);
+}
+
