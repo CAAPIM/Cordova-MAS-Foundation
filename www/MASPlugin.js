@@ -1,3 +1,4 @@
+cordova.define("com.ca.apim.MASPlugin", function(require, exports, module) {
 //
 //  MASPlugin.js
 //
@@ -6,7 +7,7 @@
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
-
+               
 var MASPlugin = {
     
 MASAuthenticationStatus:{
@@ -63,6 +64,28 @@ MASRequestResponseTypeCount:5
      MAS which has the interfaces mapped to the native MAS class.
      */
 MAS: function(){
+               
+    /**
+     Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
+     */
+    this.initialize=function(errorHandler){
+        
+        Cordova.exec(MASAuthenticationCallback,errorHandler,"com.ca.apim.MASPlugin","setAuthenticationListener",[]);
+    };
+    
+               
+    this.setCustomLoginPage=function(successHandler,errorHandler,customLoginPage){
+               
+        loginPage = customLoginPage;
+        $.ajax({
+            url: loginPage,
+            success: function(data){},
+            error: function(data){
+                loginPage="login.html";
+            },
+        })
+    };
+               
     /**
      Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
      */
@@ -92,6 +115,26 @@ MAS: function(){
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","startWithJSON",[jsonObject]);
     };
     
+    /**
+     Completes the current user's authentication session validation.
+    */
+    this.completeAuthentication=function(successHandler,errorHandler,username,password){
+       
+        $.mobile.activePage.find(".messagePopup").popup("close");
+               
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","completeAuthentication",[username,password]);
+    };
+
+    /**
+     Cancels the current user's authentication session validation.
+     */
+    this.cancelAuthentication=function(successHandler,errorHandler,args){
+        
+        $.mobile.activePage.find(".messagePopup").popup("close");
+               
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","cancelAuthentication",[args]);
+    };
+               
     /**
      getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
      */
@@ -175,3 +218,72 @@ MASDevice: function(){
 };
 
 module.exports = MASPlugin;
+});
+
+var loginPage = "login.html";
+
+var MASPopupLoginUI = function(loginPage, popupafterclose) {
+    
+    window.onbeforeunload = function() {
+        return "Dude, are you sure you want to leave? Think of the kittens!";
+    }
+    
+    var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>"
+    + "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' "
+    + " class='ui-btn-right closePopup'>Close</a> </div>";
+    
+    popupafterclose = popupafterclose ? popupafterclose : function () {};
+    
+    $.mobile.activePage.append(template).trigger("create");
+    
+    $('#loginDiv').load(loginPage);
+    
+    $.mobile.activePage.find(".closePopup").bind("tap", function (e) {
+                                                 $.mobile.activePage.find(".messagePopup").popup("close");
+                                                 });
+    
+    $.mobile.activePage.find(".messagePopup").popup(
+                                                    { transition: 'slidedown',
+                                                      history: false,
+                                                      overlay: true
+                                                    }).popup("open").bind({
+                                                            
+                                                        popupafterclose: function () {
+                                                        $(this).unbind("popupafterclose").remove();
+                                                        popupafterclose();
+                                                    }
+                                                });
+    
+    $(".messagePopup").on({
+                          popupbeforeposition: function () {
+                          $('.ui-popup-screen').off();
+                          }
+                          });
+    
+    return false;
+}
+
+var MASAuthenticationCallback = function(result) {
+    
+    MASPopupLoginUI(loginPage,function(){
+        
+        $('#loginDiv').remove();
+        
+        var MAS = new MASPlugin.MAS();
+        MAS.cancelAuthentication(function(){},function(){});
+    });
+    
+}
+
+var MASSendCredentials = function(username, password) {
+    
+    var MAS = new MASPlugin.MAS();
+    MAS.completeAuthentication(function(){}, function(){}, username, password);
+}
+
+var MASCancelLogin = function(args) {
+    
+    var MAS = new MASPlugin.MAS();
+    MAS.cancelAuthentication(function(){}, function(){}, args);
+}
+

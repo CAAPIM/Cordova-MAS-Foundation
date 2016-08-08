@@ -13,11 +13,14 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.ca.mas.foundation.MAS;
+import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASConstants;
+import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
+import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -54,6 +57,79 @@ public class MASCommand {
         @Override
         public String getAction() {
             return "start";
+        }
+
+    }
+
+    public static class SetAuthenticationListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                MAS.setAuthenticationListener(new MASAuthenticationListener() {
+                    @Override
+                    public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders masAuthenticationProviders) {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("requestType", "Login");
+                            jsonObject.put("requestId", requestId);
+                        } catch (Exception e ) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                        callbackContext.success(jsonObject);
+                    }
+
+                    @Override
+                    public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("requestType", "OTP");
+                           List<String> channels= masOtpAuthenticationHandler.getChannels();
+                            StringBuffer channelResult=new StringBuffer();
+                            for(int i=0;i<channels.size();i++){
+                                channelResult.append(channels.get(i));
+                                if(i!=channels.size()-1){
+                                    channelResult.append(",");
+                                }
+                            }
+                         jsonObject.put("channels", channelResult);
+                        } catch (Exception e ) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                        callbackContext.success(jsonObject);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "setAuthenticationListener";
+        }
+
+    }
+
+
+    public static class CancelRequestCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+           /* try {
+                String shouldUseDefault = args.getString(0);
+                MAS.start(context, shouldUseDefault);
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }*/
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelRequest";
         }
 
     }
