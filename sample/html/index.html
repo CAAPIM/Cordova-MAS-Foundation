@@ -41,36 +41,39 @@
             }
 
             function onDeviceReady() {
-                
+
             }
     </script>
-    
+
     <script type="text/javascript">
         $(document).ready(function(){
-            
+
             $("#init").bind("click",function(event,ui){
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
-                MAS.initialize(function (error){
+
+                MAS.initialize(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
-                
+
             $("#setCustomLoginPage").bind("click",function(event,ui){
-                                          
+
                 if($(event.target).context.tagName != 'A') return;
-                                                        
+
                 $(this).find("textarea.error").hide();
-                                                        
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
                 var loginPageName = $("input[name='loginPageName']").val();
-                                                        
+
                 MAS.setCustomLoginPage(function (result){
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
@@ -80,50 +83,50 @@
                         displayError(thisElement, error);
                     }, loginPageName);
             });
-                          
+
             $("#setGrantFlowPassword").bind("click",function(event,ui){
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 MAS.grantFlow(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
             });
-            
+
             $("#setGrantFlowClientCredential").bind("click",function(event,ui){
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 MAS.grantFlow(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
-            
+
             $("#setConfigName").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
                 var configFileName = $("input[name='configName']").val();
-                
+
                 MAS.configFileName(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -134,89 +137,89 @@
                 }
                 , configFileName);
             });
-            
+
             $("#start").bind("click",function(event,ui){
-                             
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 MAS.start(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
-            
+
             $("#startWithDefault").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
                 var defaultConfiguration = $("input[name='defaultConfiguration']").prop("checked");
-                
+
                 MAS.startWithDefaultConfiguration(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, defaultConfiguration);
             });
-            
+
             $("#startWithJSON").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
                 var jsonObject = thisElement.find("input[name='jsonObject']").val() ? JSON.parse(thisElement.find("input[name='jsonObject']").val()) : null;
-                
+
                 MAS.startWithJSON(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, jsonObject);
             });
-            
+
             $("#stop").bind("click",function(event,ui){
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 MAS.stop(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, 
+                },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
-            
+
             $("#userLogin").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 var username = $("input[name='userLoginUsername']").val();
                 var password = $("input[name='userLoginPassword']").val();
-                
+
                 MASUser.loginWithUsernameAndPassword(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -226,15 +229,15 @@
                     displayError(thisElement, error);
                 },username, password);
             });
-            
+
             $("#isUserAuthenticated").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
-                
+
                 MASUser.isAuthenticated(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -244,7 +247,7 @@
                     displayError(thisElement, error);
                 });
             });
-            
+
             $("#isDeviceRegistered").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
 
@@ -265,12 +268,12 @@
 
             $("#userLogout").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
-                
+
                 MASUser.logoutUser(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -280,15 +283,15 @@
                     displayError(thisElement, error);
                 });
             });
-            
+
             $("#deregisterDevice").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MASDevice = new MASPlugin.MASDevice();
-                
+
                 MASDevice.deregister(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -298,15 +301,15 @@
                     displayError(thisElement, error);
                 });
             });
-            
+
             $("#resetLocally").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MASDevice = new MASPlugin.MASDevice();
-                
+
                 MASDevice.resetLocally(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -316,21 +319,21 @@
                     displayError(thisElement, error);
                 });
             });
-            
+
             $("#getCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 var requestType = parseRequestResponseType(thisElement.find("select[name='requestType']").val());
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val();
-                
+
                 MAS.getFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -340,21 +343,21 @@
                     displayError(thisElement, error);
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
-            
+
             $("#putCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 var requestType = parseRequestResponseType(thisElement.find("select[name='requestType']").val());
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val();
-                
+
                 MAS.putToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -364,21 +367,21 @@
                     displayError(thisElement, error);
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
-            
+
             $("#postCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 var requestType = parseRequestResponseType(thisElement.find("select[name='requestType']").val());
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val();
-                
+
                 MAS.postToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -388,21 +391,21 @@
                     displayError(thisElement, error);
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
-            
+
             $("#deleteCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
-                
+
                 $(this).find("textarea.error").hide();
-                
+
                 var thisElement = $(this);
                 var MAS = new MASPlugin.MAS();
-                
+
                 var requestType = parseRequestResponseType(thisElement.find("select[name='requestType']").val());
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val();
-                
+
                 MAS.deleteFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -412,7 +415,7 @@
                     displayError(thisElement, error);
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
-            
+
             function parseRequestResponseType(type)
             {
                 if (type == "json")
@@ -435,18 +438,18 @@
                 {
                     return MASPlugin.MASRequestResponseType.MASRequestResponseTypeXml;
                 }
-                else 
+                else
                 {
                     return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
                 }
             }
-            
+
             function resetAction(element)
             {
                 element.find("textarea.error").hide();
                 element.removeClass("succes").removeClass("failure");
             }
-            
+
             function displayResult(element, result)
             {
                 var isJSON = true;
@@ -470,7 +473,7 @@
                     element.find("textarea.error").html(result+"");
                 }
             }
-            
+
             function displayError(element, error)
             {
                 element.find("textarea.error").show();
@@ -480,7 +483,7 @@
     </script>
     <style type="text/css">
         .success { background-color: chartreuse; color: #898989;}
-        
+
         .failure { background-color: chocolate; color: #FFFFFF;}
     </style>
 </head>
@@ -512,9 +515,9 @@
             <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
-            
+
             <li data-icon="false">
-                <a href="#" id="getCRUD">MAS get 
+                <a href="#" id="getCRUD">MAS get
                     <input type="text" name="path" placeholder="API path"/>
                     <label for="requestType">Request Type:</label>
                     <select name="requestType" >
@@ -523,7 +526,7 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <label for="requestType">Response Type:</label>
                     <select name="responseType" >
                         <option value="json">JSON</option>
@@ -531,15 +534,15 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                     <input type="text" name="header" placeholder="Header in JSON format"/>
                     <textarea class='error' style="display:none;"></textarea>
                 </a>
             </li>
-            
+
             <li data-icon="false">
-                <a href="#" id="putCRUD">MAS put 
+                <a href="#" id="putCRUD">MAS put
                     <input type="text" name="path" placeholder="API path"/>
                     <label for="requestType">Request Type:</label>
                     <select name="requestType" >
@@ -548,7 +551,7 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <label for="requestType">Response Type:</label>
                     <select name="responseType" >
                         <option value="json">JSON</option>
@@ -556,15 +559,15 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                     <input type="text" name="header" placeholder="Header in JSON format"/>
                     <textarea class='error' style="display:none;"></textarea>
                 </a>
             </li>
-            
+
             <li data-icon="false">
-                <a href="#" id="postCRUD">MAS post 
+                <a href="#" id="postCRUD">MAS post
                     <input type="text" name="path" placeholder="API path"/>
                     <label for="requestType">Request Type:</label>
                     <select name="requestType" >
@@ -573,7 +576,7 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <label for="requestType">Response Type:</label>
                     <select name="responseType" >
                         <option value="json">JSON</option>
@@ -581,15 +584,15 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                     <input type="text" name="header" placeholder="Header in JSON format"/>
                     <textarea class='error' style="display:none;"></textarea>
                 </a>
             </li>
-            
+
             <li data-icon="false">
-                <a href="#" id="deleteCRUD">MAS delete 
+                <a href="#" id="deleteCRUD">MAS delete
                     <input type="text" name="path" placeholder="API path"/>
                     <label for="requestType">Request Type:</label>
                     <select name="requestType" >
@@ -598,7 +601,7 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <label for="requestType">Response Type:</label>
                     <select name="responseType" >
                         <option value="json">JSON</option>
@@ -606,13 +609,13 @@
                         <option value="text">Plain Text</option>
                         <option value="urlEncoded">URL Encoded</option>
                         <option value="xml">XML</option>
-                    </select>   
+                    </select>
                     <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                     <input type="text" name="header" placeholder="Header in JSON format"/>
                     <textarea class='error' style="display:none;"></textarea>
                 </a>
             </li>
-            
+
             <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="deregisterDevice">MASDevice deregister<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="resetLocally">MASDevice resetLocally<textarea class='error' style="display:none;"></textarea></a></li>
