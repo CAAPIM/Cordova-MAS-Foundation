@@ -268,7 +268,8 @@ module.exports = MASPlugin;
         console.log("requestId is null or empty");
      }
     MASPopupLoginUI(loginPage,function(){
-        
+        var MAS=new MASPlugin.MAS();
+        MAS.initialize();
         $('#loginDiv').remove();
         
         //var MAS = new MASPlugin.MAS();
