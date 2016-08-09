@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Custom Login Page</title>
+</head>
+<body>
+
+<div align="center">
+  <h4>Custom Login Page</h4>
+<form action="<c:url value='main.do'/>" method="post">
+
+<div>
+<span style="width:500px;color:blue;font-size:30px;font-weight:bold;border-bottom:1px solid blue;">Sign-In</span>
+</div>
+<div style="margin-bottom:5px;">
+<span style="width:100px;">Name</span>
+<input style="height:25px; width:150px;" type="text" id="CA-Username">
+</div>
+<div><span style="width:100px;">password</span><input style="height:25px; width:150px;" id="CA-Password" type="password">
+
+
+</div>
+
+ <input id="signin_button" type="submit" value="Login"></form>
+</div>
+</body>
+<script>
+
+    $("#signin_button").on("click", function(e) {
+        e.preventDefault();
+
+        login();
+    });
+
+    $("#close_button").on("click", function(e) {
+        e.preventDefault();
+
+        MASCancelLogin();
+    });
+
+    function login(){
+
+        var username = document.getElementById("CA-Username").value;
+        var password = document.getElementById("CA-Password").value;
+
+        if (username && password)
+            MASSendCredentials(username, password);
+        else
+            alert("Please enter valid credentials");
+    }
+
+</script>
+</html>

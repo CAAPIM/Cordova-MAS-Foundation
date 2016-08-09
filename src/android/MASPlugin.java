@@ -49,6 +49,8 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.CancelRequestCommand());
         add(new MASCommand.SetAuthenticationListenerCommand());
 
+
+
         add(new MASDeviceCommand.DeregisterCommand());
         add(new MASDeviceCommand.IsRegisteredCommand());
         add(new MASDeviceCommand.ResetLocallyCommand());
@@ -57,6 +59,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.LogoutUserCommand());
         add(new MASUserCommand.IsAuthenticatedCommand());
         add(new MASUserCommand.CompleteAuthenticaionCommand());
+        add(new MASUserCommand.CancelAuthenticationCommand());
 
     }
 
@@ -72,7 +75,6 @@ public class MASPlugin extends CordovaPlugin {
             public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
                 DialogFragment loginFragment = MASLoginFragment.newInstance(requestId, providers);
                 loginFragment.show(((Activity)context).getFragmentManager(), "logonDialog");
-
             }
 
             @Override

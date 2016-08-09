@@ -117,14 +117,16 @@ public class MASCommand {
 
         @Override
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
-           /* try {
-                String shouldUseDefault = args.getString(0);
-                MAS.start(context, shouldUseDefault);
+            try {
+                String requestId = args.getString(0);
+                MAS.cancelRequest(Long.getLong(requestId));
+                //MAS.start(context, shouldUseDefault);
                 success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
-            }*/
+            }
+
         }
 
         @Override

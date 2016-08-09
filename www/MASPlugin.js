@@ -260,13 +260,19 @@ module.exports = MASPlugin;
 }
 
  MASAuthenticationCallback = function(result) {
-    
+
+     if (result != null && result != undefined && result.requestId != null && result.requestId != "") {
+        loginAuthRequestId=result.requestId;
+        console.log("requestId=="+loginAuthRequestId);
+     } else {
+        console.log("requestId is null or empty");
+     }
     MASPopupLoginUI(loginPage,function(){
         
         $('#loginDiv').remove();
         
-        var MAS = new MASPlugin.MAS();
-        MAS.cancelAuthentication(function(){},function(){});
+        //var MAS = new MASPlugin.MAS();
+        //MAS.cancelAuthentication(function(){},function(){},loginAuthRequestId);
     });
     
 }
@@ -274,12 +280,14 @@ module.exports = MASPlugin;
  MASSendCredentials = function(username, password) {
     
     var MAS = new MASPlugin.MAS();
-    MAS.completeAuthentication(function(){}, function(){}, username, password);
+    MAS.completeAuthentication(function(){}, function(){
+        MASCancelLogin();
+    }, username, password);
 }
 
- MASCancelLogin = function(args) {
+ MASCancelLogin = function() {
     
     var MAS = new MASPlugin.MAS();
-    MAS.cancelAuthentication(function(){}, function(){}, args);
+    MAS.cancelAuthentication(function(){}, function(){}, loginAuthRequestId);
 }
 

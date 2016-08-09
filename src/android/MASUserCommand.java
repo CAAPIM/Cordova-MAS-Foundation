@@ -10,6 +10,7 @@ package com.ca.apim;
 import android.content.Context;
 import android.util.Log;
 
+import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
 
@@ -92,10 +93,21 @@ public class MASUserCommand {
     }
 
 
-    public static class CancelAuthenticaionCommand extends Command {
+    public static class CancelAuthenticationCommand extends Command {
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            
+            try {
+                int requestId = args.getInt(0);
+                if (requestId == 0 ) {
+                    Log.e(TAG, "request Id is empty");
+                    callbackContext.error("request Id is  empty");
+                }
+                MAS.cancelRequest(requestId);
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
         }
 
         @Override
