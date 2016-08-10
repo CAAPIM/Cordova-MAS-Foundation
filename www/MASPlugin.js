@@ -234,7 +234,7 @@ module.exports = MASPlugin;
 
 
  loginPage = "login.html";
-
+ loginAuthRequestId = "";  
 
  MASPopupLoginUI = function(loginPage, popupafterclose) {
 
