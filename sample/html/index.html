@@ -332,7 +332,7 @@
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
-                var requestPath = thisElement.find("input[name='path']").val();
+                var requestPath = thisElement.find("input[name='path']").val().trim();
 
                 MAS.getFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -356,7 +356,7 @@
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
-                var requestPath = thisElement.find("input[name='path']").val();
+                var requestPath = thisElement.find("input[name='path']").val().trim();
 
                 MAS.putToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -380,7 +380,7 @@
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
-                var requestPath = thisElement.find("input[name='path']").val();
+                var requestPath = thisElement.find("input[name='path']").val().trim();
 
                 MAS.postToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -404,7 +404,7 @@
                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
-                var requestPath = thisElement.find("input[name='path']").val();
+                var requestPath = thisElement.find("input[name='path']").val().trim();
 
                 MAS.deleteFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
