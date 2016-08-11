@@ -64,9 +64,9 @@ MASRequestResponseTypeCount:5
      */
 MAS: function(){
 
-   /**
-     Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
-   */
+    /**
+    Initializes the MAS plugin. This includes setting of the various listeners required for authenticating the user while registeration of the application with the Gateway and accessing various protected api.
+    */
    this.initialize=function(successHandler,errorHandler){
 
       Cordova.exec(MASAuthenticationCallback,errorHandler,"com.ca.apim.MASPlugin","setAuthenticationListener",[]);
@@ -234,7 +234,7 @@ module.exports = MASPlugin;
 
 
  loginPage = "login.html";
- loginAuthRequestId = "";  
+ loginAuthRequestId = "";
 
  MASPopupLoginUI = function(loginPage, popupafterclose) {
 
@@ -252,13 +252,9 @@ module.exports = MASPlugin;
                                                  $.mobile.activePage.find(".messagePopup").popup("close");
                                                  });
 
-    $.mobile.activePage.find(".messagePopup").popup(
-                                                    { transition: 'slidedown',
-                                                      history: false,
-                                                      overlay: true
-                                                    }).popup("open").bind({
-
+    $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
                                                         popupafterclose: function () {
+                                                        $('body').off('touchmove');
                                                         $(this).unbind("popupafterclose").remove();
                                                         popupafterclose();
                                                     }
@@ -267,6 +263,7 @@ module.exports = MASPlugin;
     $(".messagePopup").on({
                           popupbeforeposition: function () {
                           $('.ui-popup-screen').off();
+                          $('body').on('touchmove', false);
                           }
                           });
 
@@ -281,13 +278,13 @@ module.exports = MASPlugin;
      } else {
         console.log("requestId is null or empty");
      }
+
     MASPopupLoginUI(loginPage,function(){
+
         var MAS=new MASPlugin.MAS();
         MAS.initialize(function(){});
-        $('#loginDiv').remove();
 
-        //var MAS = new MASPlugin.MAS();
-        //MAS.cancelAuthentication(function(){},function(){},loginAuthRequestId);
+        $('#loginDiv').remove();
     });
 
 }
