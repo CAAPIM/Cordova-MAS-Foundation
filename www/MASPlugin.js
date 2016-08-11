@@ -133,7 +133,7 @@ MAS: function(){
     */
     this.completeAuthentication=function(successHandler,errorHandler,username,password){
 
-        $.mobile.activePage.find(".messagePopup").popup("close");
+       // $.mobile.activePage.find(".messagePopup").popup("close");
 
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","completeAuthentication",[username,password]);
     };
@@ -283,7 +283,7 @@ module.exports = MASPlugin;
      }
     MASPopupLoginUI(loginPage,function(){
         var MAS=new MASPlugin.MAS();
-        MAS.initialize();
+        MAS.initialize(function(){});
         $('#loginDiv').remove();
 
         //var MAS = new MASPlugin.MAS();
@@ -294,9 +294,28 @@ module.exports = MASPlugin;
 
  MASSendCredentials = function(username, password) {
 
+ document.getElementById("errorMesg").innerHTML="";
+    var errorMsgToDisplay="";
+
     var MAS = new MASPlugin.MAS();
-    MAS.completeAuthentication(function(){}, function(){
-        MASCancelLogin();
+    MAS.completeAuthentication(function(){
+        $.mobile.activePage.find(".messagePopup").popup("close");
+    }, function(error){
+        //MASCancelLogin();
+        var errorCodeLastDigits=error.errorCode%1000;
+        var returnedError=JSON.parse(error.errorMessage);
+        console.log(error);
+        if(errorCodeLastDigits === 103){
+            errorMsgToDisplay="invalid request: Missing or duplicate parameters";
+        }
+        else if(errorCodeLastDigits === 202){
+            errorMsgToDisplay="Username or Password invalid";
+        }
+        else{
+            errorMsgToDisplay=returnedError.error_description;
+        }
+        document.getElementById("errorMesg").innerHTML=errorMsgToDisplay;
+
     }, username, password);
 }
 
