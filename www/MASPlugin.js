@@ -271,22 +271,29 @@ module.exports = MASPlugin;
 }
 
  MASAuthenticationCallback = function(result) {
-
+     var pageToLoad=loginPage;
      if (result != null && result != undefined && result.requestId != null && result.requestId != "") {
         loginAuthRequestId=result.requestId;
         console.log("requestId=="+loginAuthRequestId);
-     } else {
+     }
+     else if (result != null && result != undefined && result.requestType != null && result.requestType != "") {
+        console.log("request type is="+result.requestType);
+        if(result.requestType === "OTP"){
+            pageToLoad="otpchannel.html";
+        }
+     }
+      else {
         console.log("requestId is null or empty");
      }
+    //if(isLoginPopUpRequired){
+        MASPopupLoginUI(pageToLoad,function(){
 
-    MASPopupLoginUI(loginPage,function(){
+            var MAS=new MASPlugin.MAS();
+            MAS.initialize(function(){});
 
-        var MAS=new MASPlugin.MAS();
-        MAS.initialize(function(){});
-
-        $('#loginDiv').remove();
-    });
-
+            $('#loginDiv').remove();
+        });
+    //}
 }
 
  MASSendCredentials = function(username, password) {

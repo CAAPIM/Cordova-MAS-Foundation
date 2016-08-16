@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+body {
+background-color: #f4f4f4;
+color: #5a5656;
+font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+font-size: 16px;
+line-height: 1.5em;
+}
+a { text-decoration: none; }
+h1 { font-size: 1.2em; text-align: center}
+h1, p {
+margin-bottom: 2px;
+}
+strong {
+font-weight: bold;
+}
+.uppercase { text-transform: uppercase; }
+
+/* ---------- Channel Selection ---------- */
+#channel {
+margin: 10px auto;
+width: 300px;
+}
+form fieldset input[type="submit"] {
+background-color: #008dde;
+border: none;
+border-radius: 3px;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+color: #f4f4f4;
+cursor: pointer;
+font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+font-weight: bold;
+font-size: 20px;
+height: 50px;
+text-transform: uppercase;
+width: 300px;
+-webkit-appearance:none;
+}
+form fieldset a {
+color: #5a5656;
+font-size: 10px;
+}
+form fieldset a:hover { text-decoration: underline; }
+.btn-round {
+background-color: #5a5656;
+border-radius: 50%;
+-moz-border-radius: 50%;
+-webkit-border-radius: 50%;
+color: #f4f4f4;
+display: block;
+font-size: 12px;
+height: 50px;
+line-height: 50px;
+margin: 30px 125px;
+text-align: center;
+text-transform: uppercase;
+width: 50px;
+}
+input {
+    vertical-align: -2px;
+}
+</style>
+</head>
+<body>
+<div id="channel">
+<h1>Select OTP Channels</h1>
+<form action="javascript:void(0);" method="get">
+<fieldset>
+<p><input id="CA-OTPByEmail" type="checkbox" style="width:22px; height:22px; font-size=17px; font-type:bold" required value="Email" checked>Email<br></p>
+<p><input id="CA-OTPBySMS" type="checkbox" style="width:22px; height:22px; font-size=17px font-type:bold" required value="SMS">SMS<br></p>
+<p><input id="submit_channels" type="submit" value="Submit"></p>
+</fieldset>
+</form>
+</div> <!-- end channel select -->
+</body>
+<script>
+
+    $("#submit_channels").on("click", function(e) {
+        e.preventDefault();
+        submit();
+    });
+
+    $("#close").on("click", function(e) {
+        e.preventDefault();
+
+        MASCancelLogin();
+    });
+
+    function submit(){
+
+        var array = new Array();
+
+        if (document.getElementById("CA-OTPByEmail").checked)
+            array.push("EMAIL");
+
+        if (document.getElementById("CA-OTPBySMS").checked)
+            array.push("SMS");
+
+        if (array.length)
+            MASSendOTPChannels(array);
+        else
+            alert("Please select otp channels");
+    }
+
+</script>
+</html>
