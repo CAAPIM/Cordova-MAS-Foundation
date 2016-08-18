@@ -112,6 +112,20 @@ MAS: function(){
     this.configFileName=function(successHandler,errorHandler,fileName){
         return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","setConfigFileName",[fileName]);
     };
+    /**
+    //TODO --To generate and Send OTP
+    **/
+    this.generateAndSendOtp= function(successHandler,errorHandler,channelsArray){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","generateAndSendOtp",channelsArray);
+
+    };
+
+    this.validateOtp=function(successHandler,errorHandler,otp){
+        return Cordova.exec(successHandler,errorHandler,"com.ca.apim.MASPlugin","validateOtp",[otp]);
+
+    };
+
+
 
     /**
      Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
@@ -328,3 +342,14 @@ module.exports = MASPlugin;
     var MAS = new MASPlugin.MAS();
     MAS.cancelAuthentication(function(){}, function(){}, loginAuthRequestId);
 }
+MASSendOTPChannels = function(array) {
+        //TODO: change it
+    var MAS = new MASPlugin.MAS();
+    //var channelsArray = new Array();
+    MAS.generateAndSendOtp(function(val){
+        alert(val);
+
+        MAS.validateOtp("2345");
+        }, function(val){alert(val);},array);
+}
+

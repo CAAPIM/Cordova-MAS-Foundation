@@ -40,13 +40,14 @@ import java.util.Objects;
 public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
+    private static  MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
 
     public static class StartCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
-                MAS.start(context);
+                MAS.start(context,true);
                 success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
@@ -60,6 +61,102 @@ public class MASCommand {
         }
 
     }
+
+    public static class GenerateAndSendOtpCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args,final CallbackContext callbackContext) {
+            try {
+               // MAS.start(context);
+                //
+                //success(callbackContext, true);
+            /*    MASRequest.MASRequestBuilder builder =new  MASRequest.MASRequestBuilder(new URI("/auth/generateOTP"));
+
+
+                MAS.invoke(builder.build(), new MASCallback<MASResponse<Object>>() {
+
+                    @Override
+                    public void onSuccess(MASResponse masResponse) {
+                        JSONObject response = new JSONObject();
+                        Object content = masResponse.getBody().getContent();
+                        if (content != null) {
+                            try {
+                                response.put("MASResponseInfoBodyInfoKey", content);
+                            } catch (JSONException ignore) {
+                            }
+                        }
+                        Map<String, List<String>> responseHeaders = masResponse.getHeaders();
+                        if (responseHeaders != null) {
+                            JSONObject headerJson = new JSONObject();
+                            for (String h: responseHeaders.keySet()) {
+                                List<String> hv = responseHeaders.get(h);
+                                if (hv != null && !hv.isEmpty()) {
+                                    try {
+                                        headerJson.put(h, hv.get(0));
+                                    } catch (JSONException ignore) {
+                                    }
+                                }
+                            }
+                            try {
+                                response.put("MASResponseInfoHeaderInfoKey", headerJson);
+                            } catch (JSONException ignore) {
+                            }
+                        }
+                        callbackContext.success(response);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        callbackContext.error(getError(throwable));
+                    }
+                });*/
+                masOtpAuthenticationHandlerStatic.deliver(args.getString(0), new MASCallback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        callbackContext.success("pass");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callbackContext.error("fail");
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "generateAndSendOtp";
+        }
+
+    }
+
+
+    public static class ValidateOtpCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args,final CallbackContext callbackContext) {
+            try {
+                String otp = args.getString(0);
+                masOtpAuthenticationHandlerStatic.proceed(context, otp);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "validateOtp";
+        }
+
+    }
+
+
 
     public static class SetAuthenticationListenerCommand extends Command {
 
@@ -81,6 +178,7 @@ public class MASCommand {
 
                     @Override
                     public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
+                        masOtpAuthenticationHandlerStatic=masOtpAuthenticationHandler;
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("requestType", "OTP");
