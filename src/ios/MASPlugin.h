@@ -9,6 +9,8 @@
 
 #import <Cordova/CDV.h>
 
+
+
 @interface MASPlugin : CDVPlugin
 
 /**
@@ -28,12 +30,43 @@
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
 
 
+
+/**
+ *  Set a user login block to handle the case where the type set in 'setDeviceRegistrationType:(MASDeviceRegistrationType)'
+ *  is 'MASDeviceRegistrationTypeUserCredentials'.  If it set to 'MASDeviceRegistrationTypeClientCredentials' this
+ *  is not called.
+ */
 - (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command;
 
+
+
+/**
+ *  Complete the user login block with user provided credentials to handle the case where the type set in
+ *  'setDeviceRegistrationType:(MASDeviceRegistrationType)' is 'MASDeviceRegistrationTypeUserCredentials'.
+ */
 - (void)completeAuthentication:(CDVInvokedUrlCommand*)command;
 
+
+
+/**
+ *  Cancel the user login block to handle the case where the type set in
+ *  'setDeviceRegistrationType:(MASDeviceRegistrationType)' is 'MASDeviceRegistrationTypeUserCredentials'.
+ */
 - (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
 
+
+- (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command;
+
+- (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command;
+
+- (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command;
+
+
+- (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command;
+
+- (void)validateOTP:(CDVInvokedUrlCommand*)command;
+
+- (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Starts the lifecycle of the MAS processes.
@@ -78,15 +111,6 @@
  *  @param command CDInvokedUrlCommand object
  */
 - (void)startWithURL:(CDVInvokedUrlCommand*)command;
-
-
-
-/**
- *  TBD
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)setUserLoginBlock:(CDVInvokedUrlCommand*)command;
 
 
 

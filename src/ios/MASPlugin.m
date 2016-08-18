@@ -22,8 +22,15 @@
 # pragma mark - Properties
 
 @property (nonatomic, copy) MASAuthorizationCodeCredentialsBlock authorizationCodeBlock;
+
+
 @property (nonatomic, copy) MASBasicCredentialsBlock basicCredentialsBlock;
 
+
+@property (nonatomic, copy) MASOTPGenerationBlock otpGenerationBlock;
+
+
+@property (nonatomic, copy) MASOTPFetchCredentialsBlock otpBlock;
 
 @end
 
@@ -79,61 +86,155 @@
 }
 
 
-- (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command {
-
+- (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command
+{
     __block CDVPluginResult *result;
-
+    
     [MAS setUserLoginBlock:
-        ^(MASBasicCredentialsBlock basicBlock, MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
-
+        ^(MASBasicCredentialsBlock basicBlock,
+          MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
+        
         self.basicCredentialsBlock = basicBlock;
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"AuthenticationListener is set"];
-
+        self.authorizationCodeBlock = authorizationCodeBlock;
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"AuthenticationListener is set"];
+        
         [result setKeepCallbackAsBool:YES];
-
+        
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
 
-- (void)completeAuthentication:(CDVInvokedUrlCommand *)command {
-
-    CDVPluginResult *result;
-
-    if (self.basicCredentialsBlock) {
-
-        self.basicCredentialsBlock(command.arguments[0], command.arguments[1], NO, nil);
-    }
-
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"BasicCredentialsBlock called"];
-
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-
-- (void)cancelAuthentication:(CDVInvokedUrlCommand *)command {
-
-    CDVPluginResult *result;
-
-    if (self.basicCredentialsBlock) {
-
-        self.basicCredentialsBlock(nil, nil, YES, nil);
-    }
-
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"BasicCredentialsBlock cancel called"];
-
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-
-- (void)setUserLoginBlock:(CDVInvokedUrlCommand*)command
+- (void)completeAuthentication:(CDVInvokedUrlCommand *)command
 {
-    [MAS setUserLoginBlock:^(MASBasicCredentialsBlock basicBlock, MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
+    __block CDVPluginResult *result;
+    
+    if (self.basicCredentialsBlock) {
+        
+        self.basicCredentialsBlock(command.arguments[0], command.arguments[1], NO, nil);
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"BasicCredentialsBlock called"];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
 
+
+- (void)cancelAuthentication:(CDVInvokedUrlCommand *)command
+{
+    __block CDVPluginResult *result;
+    
+    if (self.basicCredentialsBlock) {
+        
+        self.basicCredentialsBlock(nil, nil, YES, nil);
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"BasicCredentialsBlock called"];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
+
+- (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    [MAS setOTPChannelSelectionBlock:
+     ^(NSArray *supportedOTPChannels, MASOTPGenerationBlock otpGenerationBlock){
+        
+         self.otpGenerationBlock = otpGenerationBlock;
+         
+         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:supportedOTPChannels];
+         
+         [result setKeepCallbackAsBool:YES];
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
+}
+
+
+- (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    if (self.otpGenerationBlock) {
+        
+        self.otpGenerationBlock(command.arguments[0], NO, nil);
+    }
+    
+//    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OTP Channels Sent"];
+//    
+//    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    if (self.otpGenerationBlock) {
+        
+        self.otpGenerationBlock(nil, YES, nil);
+    }
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"OTP Channels Cancelled"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    [MAS setOTPCredentialsBlock:^(MASOTPFetchCredentialsBlock otpBlock, NSError *otpError){
+         
+         self.otpBlock = otpBlock;
+        
+         NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[otpError code]],
+                                    @"errorMessage":[otpError localizedDescription],
+                                    @"errorInfo":[otpError userInfo]};
+        
+         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:errorInfo];
+         
+         [result setKeepCallbackAsBool:YES];
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+
+- (void)validateOTP:(CDVInvokedUrlCommand*)command {
+ 
+    CDVPluginResult *result;
+    
+    if (self.otpBlock) {
+        
+        self.otpBlock(command.arguments[0], NO, nil);
+    }
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OTP Sent"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    if (self.otpBlock) {
+        
+        self.otpBlock(nil, YES, nil);
+    }
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"OTP Cancelled"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 

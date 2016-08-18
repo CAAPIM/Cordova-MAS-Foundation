@@ -1,110 +1,420 @@
-<html>
-<head>
-<meta charset="utf-8">
-<style type="text/css">
-body {
-background-color: #f4f4f4;
-color: #5a5656;
-font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-font-size: 16px;
-line-height: 1.5em;
-}
-a { text-decoration: none; }
-h1 { font-size: 1.2em; text-align: center}
-h1, p {
-margin-bottom: 2px;
-}
-strong {
-font-weight: bold;
-}
-.uppercase { text-transform: uppercase; }
+<!DOCTYPE html>
+<html lang="en-IN">
 
-/* ---------- Channel Selection ---------- */
-#channel {
-margin: 10px auto;
-width: 300px;
-}
-form fieldset input[type="submit"] {
-background-color: #008dde;
-border: none;
-border-radius: 3px;
--moz-border-radius: 3px;
--webkit-border-radius: 3px;
-color: #f4f4f4;
-cursor: pointer;
-font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-font-weight: bold;
-font-size: 20px;
-height: 50px;
-text-transform: uppercase;
-width: 300px;
--webkit-appearance:none;
-}
-form fieldset a {
-color: #5a5656;
-font-size: 10px;
-}
-form fieldset a:hover { text-decoration: underline; }
-.btn-round {
-background-color: #5a5656;
-border-radius: 50%;
--moz-border-radius: 50%;
--webkit-border-radius: 50%;
-color: #f4f4f4;
-display: block;
-font-size: 12px;
-height: 50px;
-line-height: 50px;
-margin: 30px 125px;
-text-align: center;
-text-transform: uppercase;
-width: 50px;
-}
-input {
-    vertical-align: -2px;
-}
-</style>
+<head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Ropa Sans', sans-serif;
+            color: #666
+        }
+
+        .add1 {
+            margin: 0 auto;
+            width: 720px
+        }
+
+        li,
+        ul,
+        body {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        #login-form {
+            width: 350px;
+            background: #FFF;
+            margin: 50px auto;
+            background: #f1f1f1
+        }
+
+        .form-header {
+            display: table;
+            clear: both
+        }
+
+        .form-header li {
+            display: inline-block;
+            line-height: 40px;
+            width: 246px;
+            margin: 0 2px;
+            text-align: center;
+            background: #e8e8e8
+        }
+
+        .form-header li:nth-child(odd) {
+            width: 50px;
+            margin: 0 0;
+        }
+
+        .user-image {
+            padding: 20px 0;
+            text-align: center
+        }
+
+        .user {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            border: solid 8px #e1e1e1;
+            line-height: 100px;
+            color: #e1e1e1;
+            font-size: 50px
+        }
+
+        .form {
+            padding: 0 30px;
+            padding-bottom: 10px
+        }
+
+        .login li {
+            height: 35px;
+            line-height: 35px;
+            margin-bottom: 15px
+        }
+
+        .input {
+            border: solid 1px #e8e8e8;
+            outline: none;
+            background: #f8f8f8;
+            margin: 0 auto;
+            font-family: 'Ropa Sans', sans-serif;
+            font-size: 15px;
+            display: block;
+            height: 35px;
+            width: 268px;
+            padding: 0 10px;
+            border-radius: 3px;
+            transition: all .3s
+        }
+
+        .input:focus:invalid {
+            border-color: red
+        }
+
+        .input:focus:valid {
+            border-color: green
+        }
+
+        #check {
+            top: 2px;
+            position: relative
+        }
+
+        .inline:after {
+            display: table;
+            content: ''
+        }
+
+        .remember {
+            width: 45%;
+            float: left;
+            position: relative;
+            font-size: 14px
+        }
+
+        .remember a {
+            text-decoration: none;
+            color: #666
+        }
+
+        .remember:nth-child(2) {
+            text-align: right
+        }
+
+        .btn {
+            border: none;
+            outline: none;
+            background: #009966;
+            border-bottom: solid 4px #006666;
+            font-family: 'Ropa Sans', sans-serif;
+            margin: 0 auto;
+            margin-top: 10px;
+            display: block;
+            height: 40px;
+            width: 290px;
+            padding: 0 10px;
+            border-radius: 3px;
+            font-size: 16px;
+            color: #FFF
+        }
+
+        .social-login {
+            padding: 10px 30px;
+            background: #e8e8e8;
+            text-align: center
+        }
+
+        .social-login a {
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            width: 35px;
+            margin: 0 3px;
+            text-decoration: none;
+            color: #FFFFFF
+        }
+
+        .close_button {
+            width: 25%;
+        }
+
+        .form a i.fa {
+            line-height: 35px
+        }
+
+        .slicon {
+            display: block;
+            max-width: 35px;
+            max-height: 35px;
+            width: auto;
+            height: auto;
+        }
+
+        .fb {
+            background: #e8e8e8
+        }
+
+        .tw {
+            background: #e8e8e8
+        }
+
+        .gp {
+            background: #e8e8e8
+        }
+
+        .in {
+            background: #e8e8e8
+        }
+
+        .form-footer {
+            height: 40px;
+            line-height: 40px;
+            padding: 3px 35px;
+            text-align: right;
+            font-size: 14px
+        }
+
+        .form-footer a {
+            padding: 6px;
+            background: #006699;
+            border-radius: 3px;
+            margin-left: 4px;
+            color: #FFFFFF;
+            text-decoration: none
+        }
+
+        #powered {
+            padding: 10px;
+            font-size: 14px;
+            background: #eee;
+            text-align: center;
+            color: #999
+        }
+
+        #powered a {
+            text-decoration: none;
+            color: #666
+        }
+
+        dl {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        a {
+            color: #fff;
+        }
+
+        .dropdown dd,
+        .dropdown dt {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .dropdown ul {
+            margin: -1px 0 0 0;
+        }
+
+        .dropdown dd {
+            position: relative;
+        }
+
+        .dropdown a,
+        .dropdown a:visited {
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            outline: none;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .dropdown dt a {
+            background-color: #4F6877;
+            display: block;
+            padding: 8px 20px 5px 10px;
+            min-height: 15px;
+            line-height: 14px;
+            overflow: hidden;
+            border: 0;
+            width: 272px;
+        }
+
+        .dropdown dt a span,
+        .multiSel span {
+            cursor: pointer;
+            display: inline-block;
+            padding: 0 3px 2px 0;
+        }
+
+        .dropdown dd ul {
+            background-color: #4F6877;
+            border: 0;
+            color: #fff;
+            display: none;
+            left: 0px;
+            padding: 2px 15px 2px 5px;
+            position: absolute;
+            top: 2px;
+            width: 280px;
+            list-style: none;
+            height: 100px;
+            overflow: auto;
+        }
+
+        .dropdown span.value {
+            display: none;
+        }
+
+        .dropdown dd ul li a {
+            padding: 5px;
+            display: block;
+        }
+
+        .dropdown dd ul li a:hover {
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #6BBE92;
+            width: 302px;
+            border: 0;
+            padding: 10px 0;
+            margin: 5px 0;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
-<div id="channel">
-<h1>Select OTP Channels</h1>
-<form action="javascript:void(0);" method="get">
-<fieldset>
-<p><input id="CA-OTPByEmail" type="checkbox" style="width:22px; height:22px; font-size=17px; font-type:bold" required value="Email" checked>Email<br></p>
-<p><input id="CA-OTPBySMS" type="checkbox" style="width:22px; height:22px; font-size=17px font-type:bold" required value="SMS">SMS<br></p>
-<p><input id="submit_channels" type="submit" value="Submit"></p>
-</fieldset>
-</form>
-</div> <!-- end channel select -->
+    <div id="errorMesg" style="color:red"> </div>
+    <br>
+    <div id="login-form">
+        <div>
+            <ul id="" class="form-header">
+                <li><i class="fa"></i></li>
+                <li>Select OTP Channel</li>
+                <li id="close">
+                    <img src="img/close.png" class="close_button" id="close_button"></img>
+                </li>
+            </ul>
+        </div>
+        <div class="user-image"><img src="img/ca-logo.png"></img>
+        </div>
+        <dl class="dropdown">
+            <dt>
+                 <a href="#">
+                     <span class="hida">Select Channel</span>
+                     <p class="multiSel"></p>
+                 </a>
+            </dt>
+            <dd>
+                <div class="mutliSelect">
+                    <ul>
+                        <li id="EMAIL">
+                            <input type="checkbox" value="EMAIL" />EMAIL</li>
+                        <li id="SMS" hidden=true>
+                            <input type="checkbox" value="SMS" />SMS</li>
+                        <li id="PUSH" hidden=true>
+                            <input type="checkbox" value="Push_Notifications" />Push Notifications
+                        </li>
+                    </ul>
+                </div>
+            </dd>
+            <li>
+                <input id="send_button" class="btn" type="submit" value="SEND">
+            </li>
+        </dl>
+    </div>
 </body>
 <script>
 
-    $("#submit_channels").on("click", function(e) {
+    var selectedChannels = new Array();
+
+    $("#send_button").on("click", function(e) {
         e.preventDefault();
-        submit();
+
+        send();
     });
 
     $("#close").on("click", function(e) {
         e.preventDefault();
 
-        MASCancelLogin();
+        var MAS = new MASPlugin.MAS();
+        MAS.cancelGenerateAndSendOTP();
     });
 
-    function submit(){
+    function send() {
 
-        var array = new Array();
-
-        if (document.getElementById("CA-OTPByEmail").checked)
-            array.push("EMAIL");
-
-        if (document.getElementById("CA-OTPBySMS").checked)
-            array.push("SMS");
-
-        if (array.length)
-            MASSendOTPChannels(array);
+        if (selectedChannels.length)
+            MASSendOTPChannels(selectedChannels);
         else
-            alert("Please select otp channels");
+            alert("You have to select atleast one OTP channel");
     }
 
+    $(".dropdown dt a").on('click', function() {
+        $(".dropdown dd ul").slideToggle('fast');
+    });
+
+    $(".dropdown dd ul li a").on('click', function() {
+        $(".dropdown dd ul").hide();
+    });
+
+    function getSelectedValue(id) {
+        return $("#" + id).find("dt a span.value").html();
+    }
+
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+    });
+
+    $('.mutliSelect input[type="checkbox"]').on('click', function() {
+
+        var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').val(),
+            title = $(this).val() + ",";
+
+        if ($(this).is(':checked')) {
+            var html = '<span title="' + title + '">' + title + '</span>';
+            $('.multiSel').append(html);
+            $(".hida").hide();
+
+            selectedChannels.push(title.substring(0, title.length - 1));
+
+        } else {
+            $('span[title="' + title + '"]').remove();
+            var ret = $(".hida");
+            $('.dropdown dt a').append(ret);
+
+            selectedChannels.pop(title);
+        }
+    });
 </script>
+
 </html>
