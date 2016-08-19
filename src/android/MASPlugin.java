@@ -48,9 +48,10 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.PutToPathCommand());
         add(new MASCommand.CancelRequestCommand());
         add(new MASCommand.SetAuthenticationListenerCommand());
-        add(new MASCommand.GenerateAndSendOtpCommand());
+        add(new MASCommand.GenerateAndSendOTPCommand());
         add(new MASCommand.ValidateOtpCommand());
-
+        add(new MASCommand.setOTPAuthenticationListenerCommand());
+        add(new MASCommand.setOTPChannelSelectorListenerCommand());
 
 
 

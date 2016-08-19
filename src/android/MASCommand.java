@@ -40,14 +40,14 @@ import java.util.Objects;
 public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
-    private static  MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
+    private static MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
 
     public static class StartCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
-                MAS.start(context,true);
+                MAS.start(context, true);
                 success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
@@ -62,12 +62,12 @@ public class MASCommand {
 
     }
 
-    public static class GenerateAndSendOtpCommand extends Command {
+    public static class GenerateAndSendOTPCommand extends Command {
 
         @Override
-        public void execute(Context context, JSONArray args,final CallbackContext callbackContext) {
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
-               // MAS.start(context);
+                // MAS.start(context);
                 //
                 //success(callbackContext, true);
             /*    MASRequest.MASRequestBuilder builder =new  MASRequest.MASRequestBuilder(new URI("/auth/generateOTP"));
@@ -110,11 +110,21 @@ public class MASCommand {
                         callbackContext.error(getError(throwable));
                     }
                 });*/
-                masOtpAuthenticationHandlerStatic.deliver(args.getString(0), new MASCallback<Void>() {
+
+                JSONArray channels = args.getJSONArray(0);//String(0);
+                StringBuffer channelResult = new StringBuffer();
+                for (int i = 0; i < channels.length(); i++) {
+                    channelResult.append(channels.get(i));
+                    if (i != channels.length() - 1) {
+                        channelResult.append(",");
+                    }
+                }
+
+                masOtpAuthenticationHandlerStatic.deliver(channelResult.toString(), new MASCallback<Void>() {
 
                     @Override
                     public void onSuccess(Void result) {
-                        callbackContext.success("pass");
+                        callbackContext.success("true");
                     }
 
                     @Override
@@ -130,7 +140,7 @@ public class MASCommand {
 
         @Override
         public String getAction() {
-            return "generateAndSendOtp";
+            return "generateAndSendOTP";
         }
 
     }
@@ -139,7 +149,7 @@ public class MASCommand {
     public static class ValidateOtpCommand extends Command {
 
         @Override
-        public void execute(Context context, JSONArray args,final CallbackContext callbackContext) {
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
                 String otp = args.getString(0);
                 masOtpAuthenticationHandlerStatic.proceed(context, otp);
@@ -151,11 +161,39 @@ public class MASCommand {
 
         @Override
         public String getAction() {
-            return "validateOtp";
+            return "validateOTP";
         }
 
     }
 
+
+    /* to maintain consistency with IOS */
+    public static class setOTPChannelSelectorListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        }
+
+        @Override
+        public String getAction() {
+            return "setOTPChannelSelectorListener";
+        }
+
+    }
+
+    /* to maintain consistency with IOS */
+    public static class setOTPAuthenticationListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        }
+
+        @Override
+        public String getAction() {
+            return "setOTPAuthenticationListener";
+        }
+
+    }
 
 
     public static class SetAuthenticationListenerCommand extends Command {
@@ -170,7 +208,7 @@ public class MASCommand {
                         try {
                             jsonObject.put("requestType", "Login");
                             jsonObject.put("requestId", requestId);
-                        } catch (Exception e ) {
+                        } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
                         callbackContext.success(jsonObject);
@@ -178,22 +216,32 @@ public class MASCommand {
 
                     @Override
                     public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
-                        masOtpAuthenticationHandlerStatic=masOtpAuthenticationHandler;
+                        masOtpAuthenticationHandlerStatic = masOtpAuthenticationHandler;
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("requestType", "OTP");
-                           List<String> channels= masOtpAuthenticationHandler.getChannels();
-                            StringBuffer channelResult=new StringBuffer();
-                            for(int i=0;i<channels.size();i++){
-                                channelResult.append(channels.get(i));
-                                if(i!=channels.size()-1){
-                                    channelResult.append(",");
+                            if (masOtpAuthenticationHandler.isInvalidOtp()) {
+                                jsonObject.put("isInvalidOtp", "true");
+                                jsonObject.put("errorMessage","Otp is invalid");
+                            } else {
+                                List<String> channels = masOtpAuthenticationHandler.getChannels();
+                                if (channels != null) {
+                                    StringBuffer channelResult = new StringBuffer();
+                                    for (int i = 0; i < channels.size(); i++) {
+                                        channelResult.append(channels.get(i));
+                                        if (i != channels.size() - 1) {
+                                            channelResult.append(",");
+                                        }
+                                    }
+                                    jsonObject.put("channels", channelResult);
                                 }
                             }
-                         jsonObject.put("channels", channelResult);
-                        } catch (Exception e ) {
+                        } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
+                       /* JSONArray arr = new JSONArray();
+                        arr.put("EMAIL");
+                        arr.put("SMS");*/
                         callbackContext.success(jsonObject);
                     }
                 });
@@ -393,7 +441,7 @@ public class MASCommand {
                         Map<String, List<String>> responseHeaders = masResponse.getHeaders();
                         if (responseHeaders != null) {
                             JSONObject headerJson = new JSONObject();
-                            for (String h: responseHeaders.keySet()) {
+                            for (String h : responseHeaders.keySet()) {
                                 List<String> hv = responseHeaders.get(h);
                                 if (hv != null && !hv.isEmpty()) {
                                     try {
