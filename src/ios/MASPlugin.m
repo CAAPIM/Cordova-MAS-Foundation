@@ -166,9 +166,9 @@
         self.otpGenerationBlock(command.arguments[0], NO, nil);
     }
     
-//    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OTP Channels Sent"];
-//    
-//    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 

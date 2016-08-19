@@ -83,6 +83,46 @@
                         displayError(thisElement, error);
                     }, loginPageName);
             });
+            
+            $("#setCustomOTPChannelsPage").bind("click",function(event,ui){
+                
+                if($(event.target).context.tagName != 'A') return;
+                
+                $(this).find("textarea.error").hide();
+                
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                var otpChannelsPageName = $("input[name='otpChannelsPageName']").val();
+                
+                MAS.setCustomOTPChannelsPage(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, otpChannelsPageName);
+            });
+            
+            $("#setCustomOTPPage").bind("click",function(event,ui){
+                
+                if($(event.target).context.tagName != 'A') return;
+                
+                $(this).find("textarea.error").hide();
+                
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                var otpPageName = $("input[name='otpPageName']").val();
+                
+                MAS.setCustomOTPPage(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, otpPageName);
+            });
 
             $("#setGrantFlowPassword").bind("click",function(event,ui){
 
@@ -505,6 +545,8 @@
         <ul data-role="listview" data-inset="true" data-filter="false" id="actionsListView">
             <li data-icon="false"><a href="#" id="init">MAS Init<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomLoginPage">MAS set custom login page <input type="text" name="loginPageName" placeholder="loginPageName"/><textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="setCustomOTPChannelsPage">MAS set custom OTP Channels page <input type="text" name="otpChannelsPageName" placeholder="otpChannelsPageName"/><textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="setCustomOTPPage">MAS set custom OTP page <input type="text" name="otpPageName" placeholder="otpPageName"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false" ><a href="#" id="setGrantFlowPassword" >MAS GrantFlow: password<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setConfigName">MAS set configuration fila name <input type="text" name="configName" placeholder="configName"/><textarea class='error' style="display:none;"></textarea></a></li>
