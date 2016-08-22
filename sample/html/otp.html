@@ -282,7 +282,7 @@
 
         var otp = document.getElementById("CA-OTP").value;
         if (otp)
-            MASSendOTPCredentials(otp);
+            MASPlugin.MASConfig.MASSendOTPCredentials(otp);
         else
             alert("Please enter valid OTP");
 }

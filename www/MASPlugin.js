@@ -7,6 +7,8 @@
     //  of the MIT license. See the LICENSE file for details.
     //
 
+
+
     var MASPlugin = {
 
         MASAuthenticationStatus: {
@@ -69,11 +71,11 @@
             */
             this.initialize = function(successHandler, errorHandler) {
 
-                Cordova.exec(MASAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setAuthenticationListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setAuthenticationListener", []);
 
-                Cordova.exec(MASOTPChannelSelectCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPChannelSelectorListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASOTPChannelSelectCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPChannelSelectorListener", []);
 
-                Cordova.exec(MASOTPAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPAuthenticationListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASOTPAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPAuthenticationListener", []);
 
                 return successHandler("Initialization success !!");
             };
@@ -90,18 +92,18 @@
                     $.ajax({
                         url: customPage,
                         success: function(data) {
-                            loginPage = customPage;
-                            return successHandler("Login page set to :" + loginPage);
+                            MASPlugin.MASConfig.loginPage = customPage;
+                            return successHandler("Login page set to :" + MASPlugin.MASConfig.loginPage);
                         },
                         error: function(data) {
-                            loginPage = "login.html";
+                            MASPlugin.MASConfig.loginPage = "login.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    loginPage = "login.html";
+                    MASPlugin.MASConfig.loginPage = "login.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -120,18 +122,18 @@
                     $.ajax({
                         url: customPage,
                         success: function(data) {
-                            otpChannelsPage = customPage;
-                            return successHandler("OTP Channels page set to :" + otpChannelsPage);
+                            MASPlugin.MASConfig.otpChannelsPage = customPage;
+                            return successHandler("OTP Channels page set to :" + MASPlugin.MASConfig.otpChannelsPage);
                         },
                         error: function(data) {
-                            otpChannelsPage = "otpchannel.html";
+                            MASPlugin.MASConfig.otpChannelsPage = "otpchannel.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    otpChannelsPage = "otpchannel.html";
+                    MASPlugin.MASConfig.otpChannelsPage = "otpchannel.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -150,18 +152,18 @@
                     $.ajax({
                         url: customPage,
                         success: function(data) {
-                            otpPage = customPage;
-                            return successHandler("OTP page set to :" + otpPage);
+                            MASPlugin.MASConfig.otpPage = customPage;
+                            return successHandler("OTP page set to :" + MASPlugin.MASConfig.otpPage);
                         },
                         error: function(data) {
-                            otpPage = "otp.html";
+                            MASPlugin.MASConfig.otpPage = "otp.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    otpPage = "otp.html";
+                    MASPlugin.MASConfig.otpPage = "otp.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -233,6 +235,7 @@
             this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
 
                 $.mobile.activePage.find(".messagePopup").popup("close");
+               // this.initialize(function() {});
 
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelGenerateAndSendOTP", []);
             };
@@ -336,161 +339,170 @@
             this.isDeviceRegistered = function(successHandler, errorHandler) {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isDeviceRegistered", []);
             };
+        },
+
+        MASConfig:{
+
+         loginPage: "login.html",
+         otpPage : "otp.html",
+         otpChannelsPage : "otpchannel.html",
+         loginAuthRequestId : "",
+         MASPopupUI : function(url, popupafterclose, onload) {
+
+                 var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>" +
+                     "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' " +
+                     " class='ui-btn-right closePopup'>Close</a> </div>";
+
+                 popupafterclose = popupafterclose ? popupafterclose : function() {};
+
+                 $.mobile.activePage.append(template).trigger("create");
+
+                 $('#loginDiv').load(url, onload);
+
+                 $.mobile.activePage.find(".closePopup").bind("tap", function(e) {
+                     $.mobile.activePage.find(".messagePopup").popup("close");
+                 });
+
+                 $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
+                     popupafterclose: function() {
+                         $('body').off('touchmove');
+                         $(this).unbind("popupafterclose").remove();
+                         popupafterclose();
+                     }
+                 });
+
+                 $(".messagePopup").on({
+                     popupbeforeposition: function() {
+                         $('.ui-popup-screen').off();
+                         $('body').on('touchmove', false);
+                     }
+                 });
+         },
+         MASAuthenticationCallback : function(result) {
+                 var pageToLoad = MASPlugin.MASConfig.loginPage;
+                 // invalidOtpFlag=false;
+                 if (result != null && result != undefined && result.requestId != null && result.requestId != "" && result.requestType === "Login") {
+                     MASPlugin.MASConfig.loginAuthRequestId = result.requestId;
+                 }
+
+                 if (result != null && result != undefined && result.requestType != null && result.requestType != "" && result.requestType === "OTP") {
+                     if (result.isInvalidOtp != undefined && result.isInvalidOtp != null && result.isInvalidOtp != "" && result.isInvalidOtp == "true") {
+                         MASPlugin.MASConfig.MASOTPAuthenticationCallback(result);
+                     } else {
+                         if (result.channels == null) {
+                             console.log("Channel list is empty");
+                             return;
+                         }
+                         var channelsCSV = result.channels;
+                         var channels = result.channels.split(',');
+                         MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
+                     }
+                 } else {
+                     MASPlugin.MASConfig.MASPopupUI(pageToLoad, function() {
+                         var MAS = new MASPlugin.MAS();
+                         MAS.initialize(function() {});
+                         $('#loginDiv').remove();
+                     }, function() {});
+                 }
+
+         },
+         MASSendCredentials : function(username, password) {
+
+                 document.getElementById("errorMesg").innerHTML = "";
+                 var errorMsgToDisplay = "";
+
+                 var MAS = new MASPlugin.MAS();
+                 MAS.completeAuthentication(function() {
+                     $.mobile.activePage.find(".messagePopup").popup("close");
+                 }, function(error) {
+                     if (error != null && error != undefined && error != "") {
+                         if (error.errorCode != undefined && error.errorCode != null && !isNaN(error.errorCode)) {
+                             var errorCodeLastDigits = error.errorCode % 1000;
+                             var returnedError = "";
+                             try {
+                                 if (error.errorMessage != null && error.errorMessage != undefined && error.errorMessage != "") {
+                                     returnedError = JSON.parse(error.errorMessage);
+                                 }
+                             } catch (e) {
+
+                             }
+                             if (errorCodeLastDigits === 103) {
+                                 errorMsgToDisplay = "invalid request: Missing or duplicate parameters";
+                                 document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                             } else if (errorCodeLastDigits === 202) {
+                                 errorMsgToDisplay = "Username or Password invalid";
+                                 document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                             } else {
+                                 $.mobile.activePage.find(".messagePopup").popup("close");
+                             }
+                         }
+                     } else {
+                         $.mobile.activePage.find(".messagePopup").popup("close");
+                     }
+
+                 }, username, password);
+         },
+         MASCancelLogin : function() {
+
+                 var MAS = new MASPlugin.MAS();
+                 MAS.cancelAuthentication(function() {
+                     $.mobile.activePage.find(".messagePopup").popup("close");
+                 }, function(error) {}, MASPlugin.MASConfig.loginAuthRequestId);
+         },
+         MASOTPChannelSelectCallback : function(otpChannels) {
+
+                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpChannelsPage, function() {
+
+                     $('#loginDiv').remove();
+                 }, function() {
+
+                     if (otpChannels.length > 1)
+                         for (i = 0; i < otpChannels.length; i++) {
+                             if (document.getElementById(otpChannels[i]))
+                                 document.getElementById(otpChannels[i]).hidden = false;
+                         }
+                 });
+         },
+
+         MASSendOTPChannels : function(otpChannels) {
+                 var MAS = new MASPlugin.MAS();
+                 MAS.generateAndSendOTP(
+                     function(shouldValidateOTP) {
+                         if ("true" == shouldValidateOTP) {
+                             MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function() {
+                                 $('#loginDiv').remove();
+                             }, function() {});
+                         }
+                     },
+                     function(val) {}, otpChannels);
+         },
+
+         MASOTPAuthenticationCallback : function(error) {
+                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function() {
+                     $('#loginDiv').remove();
+                 }, function() {
+                     document.getElementById("CA-Title").innerHTML = error.errorMessage;
+                 });
+         },
+
+         MASSendOTPCredentials : function(otp) {
+
+                 var MAS = new MASPlugin.MAS();
+                 MAS.initialize(function() {});
+                 MAS.validateOTP(function() {}, function() {}, otp);
+         },
+         MASSetOtpValidationPage  : function (pageName) {
+             MASPlugin.MASConfig.otpPage = pageName;
+         },
+         MASSetOtpChannelsPage : function (pageName) {
+            MASPlugin.MASConfig.otpChannelsPage = pageName;
+         },
+         MASSetLoginPage  : function (pageName) {
+            MASPlugin.MASConfig.loginPage = pageName;
+         }
+
         }
+
     };
-
     module.exports = MASPlugin;
-
-    loginPage = "login.html";
-    otpPage = "otp.html";
-    otpChannelsPage = "otpchannel.html";
-    loginAuthRequestId = "";
-
-    MASPopupUI = function(url, popupafterclose, onload) {
-
-        var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>" +
-            "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' " +
-            " class='ui-btn-right closePopup'>Close</a> </div>";
-
-        popupafterclose = popupafterclose ? popupafterclose : function() {};
-
-        $.mobile.activePage.append(template).trigger("create");
-
-        $('#loginDiv').load(url, onload);
-
-        $.mobile.activePage.find(".closePopup").bind("tap", function(e) {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        });
-
-        $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
-            popupafterclose: function() {
-                $('body').off('touchmove');
-                $(this).unbind("popupafterclose").remove();
-                popupafterclose();
-            }
-        });
-
-        $(".messagePopup").on({
-            popupbeforeposition: function() {
-                $('.ui-popup-screen').off();
-                $('body').on('touchmove', false);
-            }
-        });
-    }
-
-    MASAuthenticationCallback = function(result) {
-        var pageToLoad = loginPage;
-        // invalidOtpFlag=false;
-        if (result != null && result != undefined && result.requestId != null && result.requestId != "" && result.requestType === "Login") {
-            loginAuthRequestId = result.requestId;
-        }
-
-        if (result != null && result != undefined && result.requestType != null && result.requestType != "" && result.requestType === "OTP") {
-            if (result.isInvalidOtp != undefined && result.isInvalidOtp != null && result.isInvalidOtp != "" && result.isInvalidOtp == "true") {
-                MASOTPAuthenticationCallback(result);
-            } else {
-                if (result.channels == null) {
-                    console.log("Channel list is empty");
-                    return;
-                }
-                var channelsCSV = result.channels;
-                var channels = result.channels.split(',');
-                MASOTPChannelSelectCallback(channels);
-            }
-        } else {
-            MASPopupUI(pageToLoad, function() {
-                var MAS = new MASPlugin.MAS();
-                MAS.initialize(function() {});
-                $('#loginDiv').remove();
-            }, function() {});
-        }
-
-    }
-
-    MASSendCredentials = function(username, password) {
-
-        document.getElementById("errorMesg").innerHTML = "";
-        var errorMsgToDisplay = "";
-
-        var MAS = new MASPlugin.MAS();
-        MAS.completeAuthentication(function() {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        }, function(error) {
-            if (error != null && error != undefined && error != "") {
-                if (error.errorCode != undefined && error.errorCode != null && !isNaN(error.errorCode)) {
-                    var errorCodeLastDigits = error.errorCode % 1000;
-                    var returnedError = "";
-                    try {
-                        if (error.errorMessage != null && error.errorMessage != undefined && error.errorMessage != "") {
-                            returnedError = JSON.parse(error.errorMessage);
-                        }
-                    } catch (e) {
-
-                    }
-                    if (errorCodeLastDigits === 103) {
-                        errorMsgToDisplay = "invalid request: Missing or duplicate parameters";
-                        document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                    } else if (errorCodeLastDigits === 202) {
-                        errorMsgToDisplay = "Username or Password invalid";
-                        document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                    } else {
-                        $.mobile.activePage.find(".messagePopup").popup("close");
-                    }
-                }
-            } else {
-                $.mobile.activePage.find(".messagePopup").popup("close");
-            }
-
-        }, username, password);
-    }
-
-    MASCancelLogin = function() {
-
-        var MAS = new MASPlugin.MAS();
-        MAS.cancelAuthentication(function() {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        }, function(error) {}, loginAuthRequestId);
-    }
-
-    MASOTPChannelSelectCallback = function(otpChannels) {
-
-        MASPopupUI(otpChannelsPage, function() {
-
-            $('#loginDiv').remove();
-        }, function() {
-
-            if (otpChannels.length > 1)
-                for (i = 0; i < otpChannels.length; i++) {
-                    if (document.getElementById(otpChannels[i]))
-                        document.getElementById(otpChannels[i]).hidden = false;
-                }
-        });
-    }
-
-    MASSendOTPChannels = function(otpChannels) {
-        var MAS = new MASPlugin.MAS();
-        MAS.generateAndSendOTP(
-            function(shouldValidateOTP) {
-                if ("true" == shouldValidateOTP) {
-                    MASPopupUI(otpPage, function() {
-                        $('#loginDiv').remove();
-                    }, function() {});
-                }
-            },
-            function(val) {}, otpChannels);
-    }
-
-    MASOTPAuthenticationCallback = function(error) {
-        MASPopupUI(otpPage, function() {
-            $('#loginDiv').remove();
-        }, function() {
-            document.getElementById("CA-Title").innerHTML = error.errorMessage;
-        });
-    }
-
-    MASSendOTPCredentials = function(otp) {
-
-        var MAS = new MASPlugin.MAS();
-        MAS.initialize(function() {});
-        MAS.validateOTP(function() {}, function() {}, otp);
-    }
+    

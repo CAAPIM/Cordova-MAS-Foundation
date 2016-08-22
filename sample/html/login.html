@@ -73,7 +73,7 @@
         $("#close").on("click", function(e) {
             e.preventDefault();
 
-            MASCancelLogin();
+            MASPlugin.MASConfig.MASCancelLogin();
         });
 
         function login(){
@@ -82,7 +82,7 @@
             var password = document.getElementById("CA-Password").value;
 
             if (username && password)
-                MASSendCredentials(username, password);
+                MASPlugin.MASConfig.MASSendCredentials(username, password);
             else
               //  alert("Please enter valid credentials");
               document.getElementById("errorMesg").innerHTML="invalid request: Missing or duplicate parameters";

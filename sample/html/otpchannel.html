@@ -374,7 +374,7 @@
     function send() {
 
         if (selectedChannels.length)
-            MASSendOTPChannels(selectedChannels);
+            MASPlugin.MASConfig.MASSendOTPChannels(selectedChannels);
         else
             alert("You have to select atleast one OTP channel");
     }
