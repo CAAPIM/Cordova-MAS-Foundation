@@ -459,7 +459,7 @@
                      if (otpChannels.length > 1)
                          for (i = 0; i < otpChannels.length; i++) {
                              if (document.getElementById(otpChannels[i]))
-                                 document.getElementById(otpChannels[i]).hidden = false;
+                                 document.getElementById(otpChannels[i]).style.display = 'block';
                          }
                  });
          },
@@ -505,4 +505,3 @@
 
     };
     module.exports = MASPlugin;
-    

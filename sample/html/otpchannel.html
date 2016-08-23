@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Login Page</title>
+    <!--            <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet'>-->
+    <!--                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel='stylesheet'>-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -132,7 +134,6 @@
             border-bottom: solid 4px #006666;
             font-family: 'Ropa Sans', sans-serif;
             margin: 0 auto;
-            margin-top: 10px;
             display: block;
             height: 40px;
             width: 290px;
@@ -220,95 +221,51 @@
             color: #666
         }
 
-        dl {
-            width: 300px;
-            margin: 0 auto;
+        select {
+            height: 30px;
+            line-height: 30px;
+            background: #f2f2f2;
+            font-size: 17px;
+            font-weight: bold;
         }
 
-        a {
-            color: #fff;
+        .multiselect {
+            margin-bottom: 25px;
+            width: 290px;
         }
 
-        .dropdown dd,
-        .dropdown dt {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        .dropdown ul {
-            margin: -1px 0 0 0;
-        }
-
-        .dropdown dd {
+        .selectBox {
             position: relative;
+            height: 25px;
+            line-height: 25px;
+            background: #f4f4f4;
         }
 
-        .dropdown a,
-        .dropdown a:visited {
-            color: #fff;
-            text-decoration: none;
-            text-align: center;
-            outline: none;
-            font-size: 21px;
+        .selectBox select {
+            width: 100%;
             font-weight: bold;
         }
 
-        .dropdown dt a {
-            background-color: #4F6877;
-            display: block;
-            padding: 8px 20px 5px 10px;
-            min-height: 15px;
-            line-height: 14px;
-            overflow: hidden;
-            border: 2px solid;
-            border-radius: 25px;
-            width: 272px;
-        }
-
-        .dropdown dt a span,
-        .multiSel span {
-            cursor: pointer;
-            display: inline-block;
-            padding: 10px 3px 2px 10px;
-        }
-
-        .dropdown dd ul {
-            background-color: #4F6877;
-            border: 0;
-            color: #fff;
-            display: none;
-            left: 0px;
-            padding: 2px 15px 2px 5px;
+        .overSelect {
             position: absolute;
-            top: 2px;
-            width: 280px;
-            list-style: none;
-            height: 100px;
-            overflow: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
         }
 
-        .dropdown span.value {
+        #checkboxes {
             display: none;
+            border: 1px #dadada solid;
         }
 
-        .dropdown dd ul li a {
-            padding: 5px;
+        #checkboxes label {
             display: block;
+            margin-top: 5px;
         }
 
-        .dropdown dd ul li a:hover {
-            background-color: #fff;
-        }
-
-        button {
-            background-color: #6BBE92;
-            width: 302px;
-            border: 0;
-            padding: 10px 0;
-            margin: 5px 0;
-            text-align: center;
-            color: #fff;
-            font-weight: bold;
+        #checkboxes label:hover {
+            background-color: #9999ff;
         }
     </style>
 </head>
@@ -320,43 +277,58 @@
         <div>
             <ul id="" class="form-header">
                 <li><i class="fa"></i></li>
-                <li>Select OTP Channel</li>
-                <li id="close">
-                    <img src="img/close.png" class="close_button" id="close_button"></img>
+                <li>OTP Channels</li>
+                <li id="close"><img src="img/close.png" class="close_button" id="close_button"></img>
                 </li>
             </ul>
         </div>
         <div class="user-image"><img src="img/ca-logo.png"></img>
         </div>
-        <dl class="dropdown">
-            <dt>
-                 <a href="#">
-                     <span class="hida">Select Channel</span>
-                     <p class="multiSel"></p>
-                 </a>
-            </dt>
-            <dd>
-                <div class="mutliSelect">
-                    <ul>
-                        <li id="EMAIL">
-                            <input type="checkbox" value="EMAIL" />EMAIL</li>
-                        <li id="SMS" hidden=true>
-                            <input type="checkbox" value="SMS" />SMS</li>
-                        <li id="PUSH" hidden=true>
-                            <input type="checkbox" value="Push_Notifications" />Push Notifications
-                        </li>
-                    </ul>
+
+        <form class="form">
+            <ul class="login">
+                <div class="multiselect">
+                    <div class="selectBox" onclick="showCheckboxes()">
+                        <select>
+                            <option style="text-align:center">Select an OTP channel</option>
+                        </select>
+                        <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes">
+                        <label id="EMAIL" style="display:none">
+                            <input class="otp" type="checkbox" value="EMAIL" checked />EMAIL</label>
+                        <label id="SMS" style="display:none">
+                            <input class="otp" type="checkbox" value="SMS" />SMS</label>
+                        <label id="PUSH" style="display:none">
+                            <input class="otp" type="checkbox" value="PUSH" />PUSH</label>
+                    </div>
                 </div>
-            </dd>
-            <li>
-                <input id="send_button" class="btn" type="submit" value="SEND">
-            </li>
-        </dl>
+                <li>
+                    <input id="send_button" class="btn" type="submit" value="SEND">
+                </li>
+            </ul>
+        </form>
+        <!--            <div class="social-login">-->
+        <!--                <a href="" class="fb"><img class="slicon" src="img/facebook.png"></img></a>-->
+        <!--                <a href="" class="tw"><img class="slicon" src="img/twitter.png"></img></a>-->
+        <!--                <a href="" class="gp"><img class="slicon" src="img/gplus.png"></img></a>-->
+        <!--                <a href="" class="in"><img class="slicon" src="img/linkedin.png"></img></a>-->
+        <!--            </div>-->
     </div>
 </body>
 <script>
+    var expanded = false;
 
-    var selectedChannels = new Array();
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
 
     $("#send_button").on("click", function(e) {
         e.preventDefault();
@@ -373,49 +345,18 @@
 
     function send() {
 
-        if (selectedChannels.length)
-            MASPlugin.MASConfig.MASSendOTPChannels(selectedChannels);
+        var checkArray = [];
+        $('input.otp').each(function() {
+            if ($(this).is(':checked')) {
+                checkArray.push($(this).val());
+            }
+        });
+
+        if (checkArray.length)
+            MASPlugin.MASConfig.MASSendOTPChannels(checkArray);
         else
             alert("You have to select atleast one OTP channel");
     }
-
-    $(".dropdown dt a").on('click', function() {
-        $(".dropdown dd ul").slideToggle('fast');
-    });
-
-    $(".dropdown dd ul li a").on('click', function() {
-        $(".dropdown dd ul").hide();
-    });
-
-    function getSelectedValue(id) {
-        return $("#" + id).find("dt a span.value").html();
-    }
-
-    $(document).bind('click', function(e) {
-        var $clicked = $(e.target);
-        if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
-    });
-
-    $('.mutliSelect input[type="checkbox"]').on('click', function() {
-
-        var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').val(),
-            title = $(this).val() + ",";
-
-        if ($(this).is(':checked')) {
-            var html = '<span title="' + title + '">' + title + '</span>';
-            $('.multiSel').append(html);
-            $(".hida").hide();
-
-            selectedChannels.push(title.substring(0, title.length - 1));
-
-        } else {
-            $('span[title="' + title + '"]').remove();
-            var ret = $(".hida");
-            $('.dropdown dt a').append(ret);
-
-            selectedChannels.pop(title);
-        }
-    });
 </script>
 
 </html>
