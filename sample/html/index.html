@@ -46,6 +46,8 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
+            
+            $('body').append("<div class='ui-loader-background'> </div>");
 
             $("#init").bind("click",function(event,ui){
 
@@ -373,13 +375,20 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
+                $.mobile.showPageLoadingMsg();
+                
                 MAS.getFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
+                    
+                    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
+                    
+                    $.mobile.hidePageLoadingMsg();
+                    
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -397,13 +406,20 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
+                $.mobile.showPageLoadingMsg();
+
                 MAS.putToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
+                    
+                    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
+                    
+                    $.mobile.hidePageLoadingMsg();
+                    
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -421,13 +437,20 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
+                $.mobile.showPageLoadingMsg();
+
                 MAS.postToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
+                    
+                    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
+                    
+                    $.mobile.hidePageLoadingMsg();
+                    
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -445,13 +468,20 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
+                $.mobile.showPageLoadingMsg();
+
                 MAS.deleteFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
+                    
+                    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
+                    
+                    $.mobile.hidePageLoadingMsg();
+                    
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -524,6 +554,23 @@
         .success { background-color: chartreuse; color: #898989;}
 
         .failure { background-color: chocolate; color: #FFFFFF;}
+        
+        .ui-loader-background {
+            width:100%;
+            height:100%;
+            top:0;
+            padding: 0;
+            margin: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display:none;
+            position: fixed;
+            z-index:100;
+        }
+    
+    .ui-loading .ui-loader-background {
+        display:block;
+    }
+    
     </style>
 </head>
 
