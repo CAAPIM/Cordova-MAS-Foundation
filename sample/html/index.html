@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Home Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
@@ -47,7 +47,7 @@
     <script type="text/javascript">
         $(document).ready(function(){
             
-            $('body').append("<div class='ui-loader-background'> </div>");
+        //    $('body').append("<div class='ui-loader-background'> </div>");
 
             $("#init").bind("click",function(event,ui){
 
@@ -375,19 +375,24 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                $.mobile.showPageLoadingMsg();
+           //     $.mobile.showPageLoadingMsg();
                 
                 MAS.getFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
-                    $.mobile.hidePageLoadingMsg();
+              //      $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
+             //       console.log(error);
+                    var returnedMsg=getErrorMessage(error);
+                    if(returnedMsg!=null && returnedMsg!=undefined && returnedMsg!=""){
+                        error.errorMessage=returnedMsg;
+                    }
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
-                    $.mobile.hidePageLoadingMsg();
+                 //   $.mobile.hidePageLoadingMsg();
                     
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
@@ -406,19 +411,19 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                $.mobile.showPageLoadingMsg();
+             //   $.mobile.showPageLoadingMsg();
 
                 MAS.putToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
-                    $.mobile.hidePageLoadingMsg();
+              //      $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
-                    $.mobile.hidePageLoadingMsg();
+                //    $.mobile.hidePageLoadingMsg();
                     
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
@@ -437,19 +442,19 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                $.mobile.showPageLoadingMsg();
+             //   $.mobile.showPageLoadingMsg();
 
                 MAS.postToPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
-                    $.mobile.hidePageLoadingMsg();
+                //    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
-                    $.mobile.hidePageLoadingMsg();
+                //    $.mobile.hidePageLoadingMsg();
                     
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
@@ -468,19 +473,19 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                $.mobile.showPageLoadingMsg();
+            //    $.mobile.showPageLoadingMsg();
 
                 MAS.deleteFromPath(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
-                    $.mobile.hidePageLoadingMsg();
+              //      $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
-                    $.mobile.hidePageLoadingMsg();
+               //     $.mobile.hidePageLoadingMsg();
                     
                 }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
@@ -549,6 +554,45 @@
                 element.find("textarea.error").html(error.errorMessage);
             }
         });
+    </script>
+    <script type="text/javascript">
+
+        function getErrorMessage(error){
+            var errorMsgToDisplay="";
+            if(error != null && error!=undefined && error != ""){
+                if(error.errorCode != null && error.errorCode != undefined && !isNaN(error.errorCode)){
+                    var errorCodeLastDigits = error.errorCode % 1000;
+                    if(errorCodeLastDigits === 140){
+                        errorMsgToDisplay="X-OTP header required";
+                    }
+                    else if(errorCodeLastDigits === 142){
+                         errorMsgToDisplay="Authentication failed due to an invalid OTP.";
+                    }
+                    else if(errorCodeLastDigits === 143){
+                         errorMsgToDisplay="The OTP has expired.";
+                    }
+                    else if(errorCodeLastDigits === 144){
+                         errorMsgToDisplay="You have exceeded the maximum number of invalid attempts.  Please try after some time.";
+                    }
+                    else if(errorCodeLastDigits === 145){
+                         errorMsgToDisplay="Your account is blocked. Try after some time.";
+                    }
+                    else if(errorCodeLastDigits === 400){
+                         errorMsgToDisplay="Internal server error.";
+                    }
+                    else if(errorCodeLastDigits === 500){
+                         errorMsgToDisplay="Internal server error.";
+                    }
+                    else{
+                        errorMsgToDisplay="Internal server error.";
+                    }
+
+                }
+            }
+            return errorMsgToDisplay;
+
+        }
+
     </script>
     <style type="text/css">
         .success { background-color: chartreuse; color: #898989;}

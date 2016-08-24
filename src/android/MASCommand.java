@@ -33,6 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -145,7 +146,6 @@ public class MASCommand {
 
     }
 
-
     public static class ValidateOtpCommand extends Command {
 
         @Override
@@ -166,6 +166,45 @@ public class MASCommand {
 
     }
 
+
+    public static class CancelGenerateAndSendOTPCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                masOtpAuthenticationHandlerStatic.cancel();
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelGenerateAndSendOTP";
+        }
+
+    }
+
+    public static class CancelOTPValidationCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                masOtpAuthenticationHandlerStatic.cancel();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelOTPValidation";
+        }
+
+    }
 
     /* to maintain consistency with IOS */
     public static class setOTPChannelSelectorListenerCommand extends Command {
@@ -239,9 +278,6 @@ public class MASCommand {
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
-                       /* JSONArray arr = new JSONArray();
-                        arr.put("EMAIL");
-                        arr.put("SMS");*/
                         callbackContext.success(jsonObject);
                     }
                 });

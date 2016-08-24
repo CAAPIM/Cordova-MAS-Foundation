@@ -235,7 +235,7 @@
             this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
 
                 $.mobile.activePage.find(".messagePopup").popup("close");
-               // this.initialize(function() {});
+                this.initialize(function() {});
 
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelGenerateAndSendOTP", []);
             };
@@ -256,6 +256,7 @@
             this.cancelOTPValidation = function(successHandler, errorHandler) {
 
                 $.mobile.activePage.find(".messagePopup").popup("close");
+                this.initialize(function() {});
 
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelOTPValidation", []);
             };
