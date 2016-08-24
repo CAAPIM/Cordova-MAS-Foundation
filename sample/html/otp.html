@@ -281,11 +281,22 @@
     function submit() {
 
         var otp = document.getElementById("CA-OTP").value;
-        if (otp)
+        if (otp.trim())
             MASPlugin.MASConfig.MASSendOTPCredentials(otp);
         else
             alert("Please enter valid OTP");
-}
+    }
+
+    function doOnOrientationChange()
+    {
+        if($("#CA-OTP").is(":focus")) {
+            document.getElementById("CA-OTP").blur();
+            document.getElementById("CA-OTP").focus();
+          }
+    }
+
+    window.addEventListener('orientationchange', doOnOrientationChange);
+
 </script>
 
 </html>
