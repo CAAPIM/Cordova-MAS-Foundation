@@ -408,7 +408,8 @@
          },
          MASSendCredentials : function(username, password) {
 
-                 document.getElementById("errorMesg").innerHTML = "";
+                  if (document.getElementById("errorMesg"))
+                      document.getElementById("errorMesg").innerHTML = "";
                  var errorMsgToDisplay = "";
 
                  var MAS = new MASPlugin.MAS();
