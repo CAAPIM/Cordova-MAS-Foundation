@@ -1,5 +1,3 @@
-cordova.define("com.ca.apim-tests.tests", function(require, exports, module) {
-
 
 /**
  *Below are the manual tests for the MASPlugin.
@@ -241,5 +239,3 @@ exports.defineManualTests = function(contentEl, createActionButton) {
                        });
     
 };
-
-});
