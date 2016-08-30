@@ -12,7 +12,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <js-module src="www/MASPlugin.js" name="MASPlugin">
         <clobbers target="MASPlugin" />
     </js-module>
-
+    <asset src="sample/html/login.html" target="login.html"/>
+    <asset src="sample/html/otp.html" target="otp.html"/>
+    <asset src="sample/html/otpchannel.html" target="otpchannel.html"/>
+    <asset src="sample/img" target="img"/>
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >

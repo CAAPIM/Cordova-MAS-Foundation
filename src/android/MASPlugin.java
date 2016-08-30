@@ -18,6 +18,7 @@ import com.ca.mas.foundation.MASConnectionListener;
 import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.ui.MASLoginFragment;
+import com.ca.mas.ui.otp.MASOtpSelectDeliveryChannelFragment;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -84,7 +85,9 @@ public class MASPlugin extends CordovaPlugin {
 
             @Override
             public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
-                //ignore
+                android.app.DialogFragment otpFragment = MASOtpSelectDeliveryChannelFragment.newInstance(handler);
+                otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
+
             }
         });
 
