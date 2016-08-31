@@ -7,9 +7,14 @@
 
 package com.ca.apim;
 
+import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
+import com.ca.mas.core.MAGResultReceiver;
+import com.ca.mas.core.MobileSsoFactory;
+import com.ca.mas.core.error.MAGError;
+import com.ca.mas.core.http.MAGResponse;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
@@ -58,7 +63,7 @@ public class MASUserCommand {
     }
 
 
-    public static class CompleteAuthenticaionCommand extends Command {
+    public static class CompleteAuthenticationCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
@@ -72,16 +77,22 @@ public class MASUserCommand {
                 return;
             }
 
-            MASUser.login(username, password, new MASCallback<MASUser>() {
+            MobileSsoFactory.getInstance().authenticate(username, password.toCharArray(), new MAGResultReceiver<JSONObject>() {
+
                 @Override
-                public void onSuccess(MASUser masUser) {
+                public void onSuccess(MAGResponse<JSONObject> response) {
                     success(callbackContext, true);
                 }
 
                 @Override
-                public void onError(Throwable throwable) {
-                    Log.e(TAG, throwable.getMessage(), throwable);
-                    callbackContext.error(getError(throwable));
+                public void onError(MAGError error) {
+                    Log.e(TAG, error.getMessage(), error);
+                    callbackContext.error(getError(error));
+                }
+
+                @Override
+                public void onRequestCancelled() {
+
                 }
             });
         }

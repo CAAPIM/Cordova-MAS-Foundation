@@ -84,7 +84,7 @@
              * Set the authentication UI handling page by this plugin.
              *
              * @param customLoginPage user defined page if you want the plugin to use it.
-             *     "login.html" is the default page.
+             *     "mas-login.html" is the default page.
              */
             this.setCustomLoginPage = function(successHandler, errorHandler, customPage) {
 
@@ -96,14 +96,14 @@
                             return successHandler("Login page set to :" + MASPlugin.MASConfig.loginPage);
                         },
                         error: function(data) {
-                            MASPlugin.MASConfig.loginPage = "login.html";
+                            MASPlugin.MASConfig.loginPage = "masui/mas-login.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    MASPlugin.MASConfig.loginPage = "login.html";
+                    MASPlugin.MASConfig.loginPage = "masui/mas-login.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -114,7 +114,7 @@
              * Set the OTP Channels Selection UI handling page by this plugin.
              *
              * @param customPage user defined page if you want the plugin to use it.
-             *     "otpchannel.html" is the default page.
+             *     "mas-otpchannel.html" is the default page.
              */
             this.setCustomOTPChannelsPage = function(successHandler, errorHandler, customPage) {
 
@@ -126,14 +126,14 @@
                             return successHandler("OTP Channels page set to :" + MASPlugin.MASConfig.otpChannelsPage);
                         },
                         error: function(data) {
-                            MASPlugin.MASConfig.otpChannelsPage = "otpchannel.html";
+                            MASPlugin.MASConfig.otpChannelsPage = "mas-otpchannel.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    MASPlugin.MASConfig.otpChannelsPage = "otpchannel.html";
+                    MASPlugin.MASConfig.otpChannelsPage = "mas-otpchannel.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -144,7 +144,7 @@
              * Set the OTP UI handling page by this plugin.
              *
              * @param customPage user defined page if you want the plugin to use it.
-             *     "otp.html" is the default page.
+             *     "mas-otp.html" is the default page.
              */
             this.setCustomOTPPage = function(successHandler, errorHandler, customPage) {
 
@@ -156,14 +156,14 @@
                             return successHandler("OTP page set to :" + MASPlugin.MASConfig.otpPage);
                         },
                         error: function(data) {
-                            MASPlugin.MASConfig.otpPage = "otp.html";
+                            MASPlugin.MASConfig.otpPage = "mas-otp.html";
                             return errorHandler({
                                 errorMessage: "Can't find " + customPage
                             });
                         },
                     });
                 } else {
-                    MASPlugin.MASConfig.otpPage = "otp.html";
+                    MASPlugin.MASConfig.otpPage = "mas-otp.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
@@ -344,9 +344,9 @@
 
         MASConfig:{
 
-         loginPage: "login.html",
-         otpPage : "otp.html",
-         otpChannelsPage : "otpchannel.html",
+         loginPage: "masui/mas-login.html",
+         otpPage : "masui/mas-otp.html",
+         otpChannelsPage : "masui/mas-otpchannel.html",
          loginAuthRequestId : "",
          MASPopupUI : function(url, popupafterclose, onload) {
 
