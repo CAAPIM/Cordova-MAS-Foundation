@@ -372,7 +372,7 @@
             loginAuthRequestId: "",
             MASPopupUI: function(url, popupafterclose, onload)
             {
-                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>" + "<a href='#' data-role='button' data-theme='g' data-icon='delete' data-iconpos='notext' " + " class='ui-btn-right closePopup'>Close</a> </div>";
+                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
                 $('#loginDiv').load(url, onload);
