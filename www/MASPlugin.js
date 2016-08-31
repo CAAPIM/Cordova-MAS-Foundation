@@ -58,7 +58,7 @@
         {
             /**
             Initializes the MAS plugin. This includes setting of the various listeners required
-            for authenticating the user while registeration of the application with the Gateway
+            for authenticating the user while registration of the application with the Gateway
             and accessing various protected api.
             */
             this.initialize = function(successHandler, errorHandler)
@@ -71,7 +71,9 @@
             /**
              * Set the authentication UI handling page by this plugin.
              *
-             * @param customLoginPage user defined page if you want the plugin to use it.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             * @param customPage user defined page if you want the plugin to use it.
              *     "mas-login.html" is the default page.
              */
             this.setCustomLoginPage = function(successHandler, errorHandler, customPage)
@@ -108,6 +110,8 @@
             /**
              * Set the OTP Channels Selection UI handling page by this plugin.
              *
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
              * @param customPage user defined page if you want the plugin to use it.
              *     "mas-otpchannel.html" is the default page.
              */
@@ -145,6 +149,8 @@
             /**
              * Set the OTP UI handling page by this plugin.
              *
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
              * @param customPage user defined page if you want the plugin to use it.
              *     "mas-otp.html" is the default page.
              */
@@ -210,6 +216,10 @@
             };
             /**
              Completes the current user's authentication session validation.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             * @param username user defined username
+             * @param password user defined password
             */
             this.completeAuthentication = function(successHandler, errorHandler, username, password)
             {
@@ -217,6 +227,9 @@
             };
             /**
              Cancels the current user's authentication session validation.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             * @param args user defined variable which is request Id in Android. It is not used in iOS
              */
             this.cancelAuthentication = function(successHandler, errorHandler, args)
             {
@@ -224,7 +237,10 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelAuthentication", [args]);
             };
             /**
-             Cancels the current user's authentication session validation.
+             Request Server to generate and send OTP to the channels provided.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             * @channels user defined variable which is an array of channels where the OTP is to be delivered.
              */
             this.generateAndSendOTP = function(successHandler, errorHandler, channels)
             {
@@ -232,7 +248,9 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "generateAndSendOTP", [channels]);
             };
             /**
-             Cancels the current user's authentication session validation.
+             Cancels the current user's generating and sending OTP call.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
              */
             this.cancelGenerateAndSendOTP = function(successHandler, errorHandler)
             {
@@ -241,7 +259,10 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelGenerateAndSendOTP", []);
             };
             /**
-             Completes the current user's authentication session validation.
+             Validate the entered OTP.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             * @param otp user defined one time password that is to be verified
              */
             this.validateOTP = function(successHandler, errorHandler, otp)
             {
@@ -250,6 +271,8 @@
             };
             /**
              Cancels the current user's authentication session validation.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
              */
             this.cancelOTPValidation = function(successHandler, errorHandler)
             {
@@ -338,6 +361,9 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isDeviceRegistered", []);
             };
         },
+        /**
+        MASConfig which is a singleton class used to store the state of the properties required.
+        */
         MASConfig:
         {
             loginPage: "masui/mas-login.html",
@@ -372,10 +398,13 @@
                     }
                 });
             },
+
+            /** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
+            * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
+            */            
             MASAuthenticationCallback: function(result)
             {
                 var pageToLoad = MASPlugin.MASConfig.loginPage;
-                // invalidOtpFlag=false;
                 if (result != null && result != undefined && result.requestId != null && result.requestId != "" && result.requestType === "Login")
                 {
                     MASPlugin.MASConfig.loginAuthRequestId = result.requestId;
@@ -408,6 +437,10 @@
                     }, function() {});
                 }
             },
+            /** Used to send the username and password to the server and setting div with id "errorMesg" with error message if error occurs.
+            * @param username user defined username
+             * @param password user defined password
+            */
             MASSendCredentials: function(username, password)
             {
                 if (document.getElementById("errorMesg")) document.getElementById("errorMesg").innerHTML = "";
@@ -455,6 +488,9 @@
                     }
                 }, username, password);
             },
+            /**
+            * Cancels the login reqest already made   
+            */
             MASCancelLogin: function()
             {
                 var MAS = new MASPlugin.MAS();
@@ -463,6 +499,12 @@
                     $.mobile.activePage.find(".messagePopup").popup("close");
                 }, function(error) {}, MASPlugin.MASConfig.loginAuthRequestId);
             },
+            /**
+            * Callback which is used to prompt for the OTP provided channels
+            * @param otpChannels available channels array that will be recieved from server
+            * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
+            */
+
             MASOTPChannelSelectCallback: function(otpChannels)
             {
                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpChannelsPage, function()
@@ -477,6 +519,10 @@
                         }
                 });
             },
+            /**
+            * Used to send the OTP channels to the server
+            * @param otpChannels user defined channels array that will be passed to server
+            */
             MASSendOTPChannels: function(otpChannels)
             {
                 var MAS = new MASPlugin.MAS();
@@ -491,6 +537,11 @@
                     }
                 }, function(val) {}, otpChannels);
             },
+             /**
+            * Callback for the OTP Listener
+            * @param error message that is recieved from server for invalid attempt
+            * Note: This has to be called from android if otp is invalid.
+            */
             MASOTPAuthenticationCallback: function(error)
             {
                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function()
@@ -501,20 +552,36 @@
                     document.getElementById("CA-Title").innerHTML = error.errorMessage;
                 });
             },
+            /**
+            * Used to send OTP for validation to the server
+            @param otp user defined one time password that is passed to the server
+            */
             MASSendOTPCredentials: function(otp)
             {
                 var MAS = new MASPlugin.MAS();
                 MAS.initialize(function() {});
                 MAS.validateOTP(function() {}, function() {}, otp);
             },
+            /**
+            * Set Custom OTP validation page
+            @param pagename user defined page that is bundled with the application
+            */
             MASSetOtpValidationPage: function(pageName)
             {
                 MASPlugin.MASConfig.otpPage = pageName;
             },
+            /**
+            * Set Custom OTP Channel Selection page
+            @param pagename user defined page that is bundled with the application
+            */
             MASSetOtpChannelsPage: function(pageName)
             {
                 MASPlugin.MASConfig.otpChannelsPage = pageName;
             },
+            /**
+            * Set Custom Login page
+            @param pagename user defined page that is bundled with the application
+            */
             MASSetLoginPage: function(pageName)
             {
                 MASPlugin.MASConfig.loginPage = pageName;
