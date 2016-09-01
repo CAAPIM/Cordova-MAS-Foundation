@@ -68,50 +68,6 @@ public class MASCommand {
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
-                // MAS.start(context);
-                //
-                //success(callbackContext, true);
-            /*    MASRequest.MASRequestBuilder builder =new  MASRequest.MASRequestBuilder(new URI("/auth/generateOTP"));
-
-
-                MAS.invoke(builder.build(), new MASCallback<MASResponse<Object>>() {
-
-                    @Override
-                    public void onSuccess(MASResponse masResponse) {
-                        JSONObject response = new JSONObject();
-                        Object content = masResponse.getBody().getContent();
-                        if (content != null) {
-                            try {
-                                response.put("MASResponseInfoBodyInfoKey", content);
-                            } catch (JSONException ignore) {
-                            }
-                        }
-                        Map<String, List<String>> responseHeaders = masResponse.getHeaders();
-                        if (responseHeaders != null) {
-                            JSONObject headerJson = new JSONObject();
-                            for (String h: responseHeaders.keySet()) {
-                                List<String> hv = responseHeaders.get(h);
-                                if (hv != null && !hv.isEmpty()) {
-                                    try {
-                                        headerJson.put(h, hv.get(0));
-                                    } catch (JSONException ignore) {
-                                    }
-                                }
-                            }
-                            try {
-                                response.put("MASResponseInfoHeaderInfoKey", headerJson);
-                            } catch (JSONException ignore) {
-                            }
-                        }
-                        callbackContext.success(response);
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        callbackContext.error(getError(throwable));
-                    }
-                });*/
-
                 JSONArray channels = args.getJSONArray(0);//String(0);
                 StringBuffer channelResult = new StringBuffer();
                 for (int i = 0; i < channels.length(); i++) {

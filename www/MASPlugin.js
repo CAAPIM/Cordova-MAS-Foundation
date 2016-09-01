@@ -561,30 +561,6 @@
                 var MAS = new MASPlugin.MAS();
                 MAS.initialize(function() {});
                 MAS.validateOTP(function() {}, function() {}, otp);
-            },
-            /**
-            * Set Custom OTP validation page
-            @param pagename user defined page that is bundled with the application
-            */
-            MASSetOtpValidationPage: function(pageName)
-            {
-                MASPlugin.MASConfig.otpPage = pageName;
-            },
-            /**
-            * Set Custom OTP Channel Selection page
-            @param pagename user defined page that is bundled with the application
-            */
-            MASSetOtpChannelsPage: function(pageName)
-            {
-                MASPlugin.MASConfig.otpChannelsPage = pageName;
-            },
-            /**
-            * Set Custom Login page
-            @param pagename user defined page that is bundled with the application
-            */
-            MASSetLoginPage: function(pageName)
-            {
-                MASPlugin.MASConfig.loginPage = pageName;
             }
         }
     };
