@@ -59,7 +59,7 @@
             /**
             Initializes the MAS plugin. This includes setting of the various listeners required
             for authenticating the user while registration of the application with the Gateway
-            and accessing various protected api.
+            and accessing various protected api. Any further initialization related setting will go here.
             */
             this.initialize = function(successHandler, errorHandler)
             {
