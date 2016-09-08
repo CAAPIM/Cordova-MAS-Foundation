@@ -329,16 +329,32 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "loginWithUsernameAndPassword", [username, password]);
             };
             /**
+            * Performs an implicit login by calling an endpoint that requires authentication.
+            */
+             this.loginWithImplicitFlow = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "loginWithImplicitFlow", []);
+            };
+            /**
              log off user.
              */
             this.logoutUser = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "logoutUser", []);
             };
+            /**
+            *
+            */
+            this.getCurrentUser = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentUser", []);
+            };
+
             this.isAuthenticated = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isAuthenticated", []);
             };
+
         },
         /**
          MASDevice which has the interfaces mapped to the native MASDevice class.
@@ -359,6 +375,10 @@
             this.isDeviceRegistered = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isDeviceRegistered", []);
+            };
+            this.getDeviceIdentifier = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getDeviceIdentifier", []);
             };
         },
         /**

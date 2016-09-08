@@ -8,6 +8,7 @@
 package com.ca.apim;
 
 import org.json.JSONObject;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -32,11 +33,11 @@ public class MASUserCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            String username= null;
-            String password= null;
+            String username = null;
+            String password = null;
             try {
                 username = (String) args.get(0);
-                password= (String) args.get(1);
+                password = (String) args.get(1);
             } catch (JSONException e) {
                 callbackContext.error(getError(e));
                 return;
@@ -62,16 +63,73 @@ public class MASUserCommand {
         }
     }
 
+    public static class LoginWithImplicitFlowCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+
+            MASUser.login(new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+                    success(callbackContext, true);
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    Log.e(TAG, throwable.getMessage(), throwable);
+                    callbackContext.error(getError(throwable));
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "loginWithImplicitFlow";
+        }
+    }
+
+    public static class GetCurrentUserCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+
+            MASUser masUser = MASUser.getCurrentUser();
+
+            if (masUser != null) {
+                JSONObject result = null;
+                try {
+                    result = masUser.getAsJSONObject();
+                } catch (JSONException e) {
+                    callbackContext.success(masUser.toString());
+                }
+                callbackContext.success(result);
+            } else {
+                String msg = "No current user exists";
+                JSONObject error = new JSONObject();
+                try {
+                    error.put("errorMessage", msg);
+                } catch (JSONException e) {
+                    callbackContext.error("");
+                }
+                callbackContext.error(error);
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "getCurrentUser";
+        }
+    }
 
     public static class CompleteAuthenticationCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            String username= null;
-            String password= null;
+            String username = null;
+            String password = null;
             try {
                 username = (String) args.get(0);
-                password= (String) args.get(1);
+                password = (String) args.get(1);
             } catch (JSONException e) {
                 callbackContext.error(getError(e));
                 return;
@@ -109,7 +167,7 @@ public class MASUserCommand {
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
                 int requestId = args.getInt(0);
-                if (requestId == 0 ) {
+                if (requestId == 0) {
                     Log.e(TAG, "request Id is empty");
                     callbackContext.error("request Id is  empty");
                 }
