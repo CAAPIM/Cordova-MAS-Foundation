@@ -350,6 +350,16 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentUser", []);
             };
 
+            this.getUserName = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getUserName", []);
+            }
+
+            this.gatewayIsReachable = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "gatewayIsReachable", []);
+            }
+
             this.isAuthenticated = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isAuthenticated", []);

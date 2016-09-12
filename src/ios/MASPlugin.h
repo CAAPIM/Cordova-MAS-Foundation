@@ -247,6 +247,13 @@
 - (void)getUserName:(CDVInvokedUrlCommand*)command;
 
 /**
+  * Boolean value of gateway reachability
+  *
+  * @param command CDInvokeUrlCommand object
+  */
+- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
+
+/**
  *  Reset local keychain storage
  *
  *  @param command CDInvokedUrlCommand object

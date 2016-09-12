@@ -1109,6 +1109,23 @@
     }
 }
 
+- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if ([MAS gatewayIsReachable])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[MAS gatewayIsReachable]];
+    }
+    else
+    {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"Gateway is not reachable"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];       
+    }
+}
+
 - (void)resetLocally:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
