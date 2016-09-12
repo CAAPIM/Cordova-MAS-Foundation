@@ -288,12 +288,12 @@
                 },username, password);
             });
 
-            $("#username").bind("click",function(event,ui){
+            $("#getUsername").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
-                MASUser.username(function(result){
+                MASUser.getUserName(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },

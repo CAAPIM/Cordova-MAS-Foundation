@@ -295,6 +295,37 @@ public class MASCommand {
 
     }
 
+    public static class GatewayIsReachableCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                MAS.gatewayIsReachable(new MASCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        success(callbackContext,result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, e.getMessage(), e);
+                        callbackContext.error(getError(e));
+                    }
+                });
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "gatewayIsReachable";
+        }
+
+    }
+
     public static class StartWithJSONCommand extends Command {
 
         @Override

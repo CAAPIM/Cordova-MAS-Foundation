@@ -55,6 +55,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.setOTPChannelSelectorListenerCommand());
         add(new MASCommand.CancelOTPValidationCommand());
         add(new MASCommand.CancelGenerateAndSendOTPCommand());
+        add(new MASCommand.GatewayIsReachableCommand());
 
 
         add(new MASDeviceCommand.DeregisterCommand());
@@ -69,6 +70,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.GetCurrentUserCommand());
         add(new MASUserCommand.CompleteAuthenticationCommand());
         add(new MASUserCommand.CancelAuthenticationCommand());
+        add(new MASUserCommand.GetUserNameCommand());
 
     }
 

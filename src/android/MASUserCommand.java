@@ -121,6 +121,26 @@ public class MASUserCommand {
         }
     }
 
+    public static class GetUserNameCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+
+            MASUser masUser = MASUser.getCurrentUser();
+
+            if (masUser != null) {
+               callbackContext.success(masUser.getUserName());
+            } else {
+               callbackContext.error("No current user exists");
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "getUserName";
+        }
+    }
+
     public static class CompleteAuthenticationCommand extends Command {
 
         @Override
