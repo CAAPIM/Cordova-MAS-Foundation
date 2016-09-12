@@ -230,7 +230,21 @@
  */
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  The authenticated user for the application, if any.
+ *  This is a singleton object.
+ *
+ *  @param command CDInvokeUrlCommand object
+ */
+- (void)getCurrentUser:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  The username of the current user.
+ *  This is a singleton object.
+ *
+ *  @param command CDInvokeUrlCommand object
+ */
+- (void)getUserName:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Reset local keychain storage

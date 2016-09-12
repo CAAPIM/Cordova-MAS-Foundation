@@ -1077,6 +1077,37 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)getCurrentUser:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASUser currentUser] isCurrentUser]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"User not logged in"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+}
+
+- (void)getUserName:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] userName]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"User not logged in"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+}
 
 - (void)resetLocally:(CDVInvokedUrlCommand*)command
 {
