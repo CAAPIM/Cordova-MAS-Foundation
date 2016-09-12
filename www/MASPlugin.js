@@ -315,6 +315,11 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "stop", []);
             };
+
+            this.gatewayIsReachable = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "gatewayIsReachable", []);
+            }
         },
         /**
          MASUser which has the interfaces mapped to the native MASUser class.
@@ -353,11 +358,6 @@
             this.getUserName = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getUserName", []);
-            }
-
-            this.gatewayIsReachable = function(successHandler, errorHandler)
-            {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "gatewayIsReachable", []);
             }
 
             this.isAuthenticated = function(successHandler, errorHandler)
