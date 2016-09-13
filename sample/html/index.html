@@ -441,6 +441,98 @@
                 });
             });
 
+            $("#getApplicationIdentifier").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getIdentifier(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+
+            $("#getApplicationName").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getName(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+             $("#getApplicationIconUrl").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getIconUrl(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+             $("#getApplicationAuthUrl").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getAuthUrl(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            }); 
+
+            $("#getApplicationNativeUri").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getNativeUri(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            }); 
+
+            $("#getApplicationCustom").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASApplication = new MASPlugin.MASApplication();
+                MASApplication.getCustom(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            }); 
+
+
             $("#getCRUD").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
 
@@ -728,6 +820,13 @@
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;"></textarea></a></li>
+
+            <li data-icon="false"><a href="#" id="getApplicationIdentifier">MASApplication Identifier<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationName">MASApplication Name<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationIconUrl">MASApplication IconUrl<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationAuthUrl">MASApplication AuthUrl<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationNativeUri">MASApplication NativeUri<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationCustom">MASApplication Custom<textarea class='error' style="display:none;"></textarea></a></li>
 
             <li data-icon="false">
                 <a href="#" id="getCRUD">MAS get
