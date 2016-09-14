@@ -414,6 +414,24 @@
                 });
             });
 
+            $("#getCurrentDevice").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASDevice = new MASPlugin.MASDevice();
+
+                MASDevice.getCurrentDevice(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
             $("#isActive").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
 
@@ -907,6 +925,7 @@
            
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice getCurrentDevice<textarea class='error' style="display:none;"></textarea></a></li>
             <!--
             Commented as of now, as these would be required when Enterprise Browser is implemented
             <li data-icon="false"><a href="#" id="retrieveEnterpriseApps">MASApplication Retrieve Enterprise Apps<textarea class='error' style="display:none;"></textarea></a></li>
