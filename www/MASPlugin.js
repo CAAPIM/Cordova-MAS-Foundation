@@ -412,6 +412,47 @@
             };
         },
         /**
+        *  Commented as of now, as these would be required when Enterprise Browser is implemented
+        *
+        * MASApplication has the interfaces mapped to the native MASApplication class.
+
+        MASApplication: function()
+        {
+            /**
+            * @return The application identifier.
+
+            this.getIdentifier = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getIdentifier",[]);
+            };
+            this.getName = function(successHandler, errorHandler,args)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName",[args]);
+            };
+            this.getIconUrl = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getIconUrl",[]);
+            };
+            this.getAuthUrl = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getAuthUrl",[]);
+            };
+            this.getNativeUri = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getNativeUri",[]);
+            };
+            this.getCustom = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCustom",[]);
+            };
+            this.retrieveEnterpriseApps = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps",[]);
+            };
+        },
+        */
+
+        /**
         MASConfig which is a singleton class used to store the state of the properties required.
         */
         MASConfig:
