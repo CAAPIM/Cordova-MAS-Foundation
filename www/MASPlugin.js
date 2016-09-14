@@ -357,7 +357,7 @@
 
             this.getName = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isActive", []);
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName", []);
             }
 
             this.getUserName = function(successHandler, errorHandler)

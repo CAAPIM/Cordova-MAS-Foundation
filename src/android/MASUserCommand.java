@@ -96,12 +96,16 @@ public class MASUserCommand {
             MASUser masUser = MASUser.getCurrentUser();
 
             if (masUser != null) {
-                JSONObject result = null;
+                JSONObject result = new JSONObject();
                 try {
-                    result = masUser.getAsJSONObject();
+                    result.put("isAuthenticated",masUser.isAuthenticated());
+                    result.put("userName",masUser.getUserName());
+                    result.put("active",masUser.isActive());
                 } catch (JSONException e) {
                     callbackContext.success(masUser.toString());
                 }
+
+
                 callbackContext.success(result);
             } else {
                 String msg = "No current user exists";
