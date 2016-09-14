@@ -72,6 +72,11 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.CancelAuthenticationCommand());
         add(new MASUserCommand.GetUserNameCommand());
 
+
+        add(new MASApplicationCommand.GetIdentifierCommand());
+        add(new MASApplicationCommand.GetNameCommand());
+        add(new MASApplicationCommand.RetrieveEnterpriseAppsCommand());
+
     }
 
     private static void add(Command command) {
