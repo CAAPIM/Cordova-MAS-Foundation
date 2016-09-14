@@ -355,14 +355,15 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentUser", []);
             };
 
-            this.getName = function(successHandler, errorHandler)
-            {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName", []);
-            }
-
             this.getUserName = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getUserName", []);
+            }
+            /**
+            Commented as they are related to SCIM as in Android, so Android implentation is not yet added.
+            this.getName = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName", []);
             }
 
             this.getAddressList = function(successHandler, errorHandler)
@@ -379,6 +380,7 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isActive", []);
             }
+            */
 
             this.isAuthenticated = function(successHandler, errorHandler)
             {
