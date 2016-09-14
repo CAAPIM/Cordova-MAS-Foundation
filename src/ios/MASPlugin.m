@@ -1039,6 +1039,22 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)isActive:(CDVInvokedUrlCommand*)command
+ {
+    CDVPluginResult *result;
+
+    if ([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASUser currentUser] isActive]];
+    }
+    else {
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+ }
+
 
 - (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command
 {
@@ -1050,9 +1066,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
     }
 
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -1091,6 +1105,8 @@
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)getUserName:(CDVInvokedUrlCommand*)command
@@ -1103,10 +1119,66 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"User not logged in"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"Username not found"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)getName:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] formattedName]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"Name not found"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)getAddressList:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] addresses]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"Address not found"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)getEmailList:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] emailAddresses]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"Email address not found"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command
@@ -1117,13 +1189,12 @@
     {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[MAS gatewayIsReachable]];
     }
-    else
-    {
+    else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"Gateway is not reachable"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];       
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];       
     }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)resetLocally:(CDVInvokedUrlCommand*)command
