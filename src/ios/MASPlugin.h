@@ -183,9 +183,14 @@
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)logoutUser:(CDVInvokedUrlCommand *)command;
+- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-
+/**
+  *  Gets current device information
+  *
+  *  @param command CDInvokedUrlCommand object
+  */
+- (void)getCurrentDevice:(CDVInvokedUrlCommand*)command;
 
 /**
  *  De-register the currently registered device and clears out all keychain information from local and shared keychain storage.

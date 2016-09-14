@@ -1003,6 +1003,27 @@
     }
 }
 
+- (void)getCurrentDevice:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if ([MASDevice currentDevice])
+    {
+        NSDictionary *currentDevice = @{@"isRegistered": [[MASDevice currentDevice] isRegistered],
+                                          @"identifier":[[MASDevice currentDevice] identifier]};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:currentDevice];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"No device found"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command
 {
@@ -1097,7 +1118,11 @@
 
     if([MASUser currentUser])
     {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASUser currentUser] isCurrentUser]];
+        NSDictionary *currentUser = @{@"isAuthenticated": [[MASUser currentUser] isAuthenticated],
+                                             @"userName":[[MASUser currentUser] userName],
+                                               @"active":[[MASUser currentUser] isActive]};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:currentUser];
     }
     else {
 
@@ -1151,7 +1176,7 @@
 
     if([MASUser currentUser])
     {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] addresses]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[[MASUser currentUser] addresses]];
     }
     else {
 
@@ -1169,7 +1194,7 @@
 
     if([MASUser currentUser])
     {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASUser currentUser] emailAddresses]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[[MASUser currentUser] emailAddresses]];
     }
     else {
 
