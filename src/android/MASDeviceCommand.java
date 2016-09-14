@@ -19,6 +19,7 @@ import com.ca.mas.foundation.auth.MASProximityLoginBLEUserConsentHandler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MASDeviceCommand {
 
@@ -115,6 +116,28 @@ public class MASDeviceCommand {
         @Override
         public String getAction() {
             return "getDeviceIdentifier";
+        }
+    }
+
+    public static class GetCurrentDeviceCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            Device masDevice = MASDevice.getCurrentDevice();
+            try {
+                JSONObject result=new JSONObject();
+                result.put("isRegistered",masDevice.isRegistered());
+                result.put("identifier",masDevice.getIdentifier());
+                callbackContext.success(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "getCurrentDevice";
         }
     }
     /*
