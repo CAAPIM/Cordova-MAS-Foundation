@@ -303,6 +303,51 @@
                 });
             });
 
+            $("#getName").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+                MASUser.getName(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#getAddressList").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+                MASUser.getAddressList(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#getEmailList").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+                $(this).find("textarea.error").hide();
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+                MASUser.getEmailList(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
             $("#userImplicitLogin").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -360,6 +405,24 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.isDeviceRegistered(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#isActive").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASDevice = new MASPlugin.MASDevice();
+
+                MASDevice.isActive(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
@@ -725,7 +788,10 @@
             <li data-icon="false"><a href="#" id="userImplicitLogin">MAS Implicit Login<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="getCurrentUser">MAS CurrentUser<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="getUsername">MASUser GetUsername<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getName">MASUser GetName<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getAddressList">MASUser GetAddressList<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;"></textarea></a></li>
+            <li data-icon="false"><a href="#" id="isActive">MASUser isActive<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;"></textarea></a></li>
 

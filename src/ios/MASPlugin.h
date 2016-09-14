@@ -234,24 +234,56 @@
  *  The authenticated user for the application, if any.
  *  This is a singleton object.
  *
- *  @param command CDInvokeUrlCommand object
+ *  @param command CDInvokedUrlCommand object
  */
 - (void)getCurrentUser:(CDVInvokedUrlCommand*)command;
 
 /**
- *  The username of the current user.
- *  This is a singleton object.
+ *   The username of the current user.
+ *   This is a singleton object.
  *
- *  @param command CDInvokeUrlCommand object
+ *   @param command CDInvokedUrlCommand object
  */
 - (void)getUserName:(CDVInvokedUrlCommand*)command;
 
 /**
-  * Boolean value of gateway reachability
+ *   The username of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getName:(CDVInvokedUrlCommand*)command;
+
+/**
+ *   The address of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getAddressList:(CDVInvokedUrlCommand*)command;
+
+/**
+ *   The email address of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getEmailList:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Boolean value of gateway reachability
   *
-  * @param command CDInvokeUrlCommand object
+  *  @param command CDInvokedUrlCommand object
   */
 - (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Boolean value that tells whether the user is active or not
+  *
+  *  @param command CDVInvokedUrlCommand object
+  *
+  */
+- (void)isActive:(CDInvokedUrlCommand*)command;
 
 /**
  *  Reset local keychain storage
