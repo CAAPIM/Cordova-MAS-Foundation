@@ -108,7 +108,7 @@ public class MASUserCommand {
 
                 callbackContext.success(result);
             } else {
-                String msg = "No current user exists";
+                String msg = "User not logged in";
                 JSONObject error = new JSONObject();
                 try {
                     error.put("errorMessage", msg);
@@ -135,7 +135,14 @@ public class MASUserCommand {
             if (masUser != null) {
                callbackContext.success(masUser.getUserName());
             } else {
-               callbackContext.error("No current user exists");
+                String msg = "User not logged in";
+                JSONObject error = new JSONObject();
+                try {
+                    error.put("errorMessage", msg);
+                } catch (JSONException e) {
+                    callbackContext.error("");
+                }
+                callbackContext.error(error);
             }
         }
 

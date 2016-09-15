@@ -312,7 +312,6 @@ public class MASCommand {
                         callbackContext.error(getError(e));
                     }
                 });
-                success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
