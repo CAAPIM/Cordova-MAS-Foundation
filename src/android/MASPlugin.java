@@ -62,6 +62,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASDeviceCommand.IsRegisteredCommand());
         add(new MASDeviceCommand.ResetLocallyCommand());
         add(new MASDeviceCommand.GetDeviceIdentifierCommand());
+        add(new MASDeviceCommand.GetCurrentDeviceCommand());
 
         add(new MASUserCommand.LoginCommand());
         add(new MASUserCommand.LogoutUserCommand());

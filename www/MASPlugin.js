@@ -393,13 +393,14 @@
          */
         MASDevice: function()
         {
-            /**
-             Deregister the application resources on this device.
-             */
             this.getCurrentDevice = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentDevice", []);
             }
+            
+            /**
+             Deregister the application resources on this device.
+             */
             this.deregister = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "deregister", []);

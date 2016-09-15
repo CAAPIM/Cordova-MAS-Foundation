@@ -1009,10 +1009,10 @@
 
     if ([MASDevice currentDevice])
     {
-        NSDictionary *currentDevice = @{@"isRegistered": [[MASDevice currentDevice] isRegistered],
+        NSDictionary *currentDevice = @{@"isRegistered": [NSNumber numberWithBool:[[MASDevice currentDevice] isRegistered]],
                                           @"identifier":[[MASDevice currentDevice] identifier]};
 
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:currentDevice];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:currentDevice];
     }
     else {
 
@@ -1043,6 +1043,23 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    if ([MASDevice currentDevice])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASDevice currentDevice]identifier]];
+    }
+    else {
+
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void)isAuthenticated:(CDVInvokedUrlCommand*)command
 {
@@ -1066,7 +1083,7 @@
 
     if ([MASUser currentUser])
     {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASUser currentUser] isActive]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASUser currentUser] active]];
     }
     else {
 
@@ -1118,11 +1135,11 @@
 
     if([MASUser currentUser])
     {
-        NSDictionary *currentUser = @{@"isAuthenticated": [[MASUser currentUser] isAuthenticated],
+        NSDictionary *currentUser = @{@"isAuthenticated":[NSNumber numberWithBool:[[MASUser currentUser] isAuthenticated]],
                                              @"userName":[[MASUser currentUser] userName],
-                                               @"active":[[MASUser currentUser] isActive]};
+                                               @"active":[NSNumber numberWithBool:[[MASUser currentUser] active]]};
 
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:currentUser];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK   messageAsDictionary:currentUser];
     }
     else {
 
@@ -1144,7 +1161,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"Username not found"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"User not logged in"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }

@@ -208,7 +208,12 @@
  */
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Returns the device identifier
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Boolean property of user authentication status
@@ -288,7 +293,7 @@
   *  @param command CDVInvokedUrlCommand object
   *
   */
-- (void)isActive:(CDInvokedUrlCommand*)command;
+- (void)isActive:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Reset local keychain storage
