@@ -11,7 +11,6 @@
 #import <MASFoundation/MASFoundation.h>
 #import <MASUI/MASUI.h>
 
-
 @interface MASPlugin()
 
 
@@ -1110,6 +1109,25 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)launchNativeApp:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    NSString *nativeUrl = @"";
+    nativeUrl = [command.arguments objectAtIndex:0];
+    BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:nativeUrl]];
+    if (canOpenUrl)
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:nativeUrl]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+    }
+    else {
+
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
+    }
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command
 {
@@ -1238,6 +1256,47 @@
 
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
+    
+- (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command
+    {
+        __block CDVPluginResult *result;
+        __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
+        if([MASApplication currentApplication])
+        {
+            [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
+                if(error){
+                    NSDictionary *errorInfo = @{@"errorMessage":@"SDK not initialized properly"};
+                    
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                }
+                else{
+                    //[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:objects];
+                    for(id object in objects){
+                        MASApplication *application = object;
+                        NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
+                        [app setObject:application.name forKey:@"appName"];
+                        [app setObject:application.identifier forKey:@"identifier"];
+                        [app setObject:application.nativeUrl forKey:@"nativeUrl"];
+                        [app setObject:application.authUrl forKey:@"authUrl"];
+                        [app setObject:application.iconUrl forKey:@"iconUrl"];
+                        [enterpriseApps addObject:app];
+                    }
+                    
+                    NSError *jsonError;
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:enterpriseApps options:NSJSONWritingPrettyPrinted error:&jsonError];
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
+                    
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                }
+
+                [result setKeepCallbackAsBool:YES];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }];
+        }
+    }
+
 
 - (void)resetLocally:(CDVInvokedUrlCommand*)command
 {

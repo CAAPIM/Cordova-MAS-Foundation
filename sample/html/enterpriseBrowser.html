@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Enterprise Browser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/> -->
+    <!-- <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script>
+ -->
+    <meta charset="utf-8">
+    <style type="text/css">  
+
+    </style>
+    <script>
+        var apps;
+    function goBack() {
+		window.location.replace("index.html");
+	}
+    function launchNativeApp(nativeUrl) {
+        var MASApplication = new MASPlugin.MASApplication();
+        MASApplication.launchNativeApp(function(){}, function(){}, nativeUrl);
+    }
+    function retrieve() {
+        var MASApplication = new MASPlugin.MASApplication();
+        MASApplication.retrieveEnterpriseApps(function(result){alert(result);},function(error){});
+    }
+    function displayApps(result){
+        var apps = JSON.parse(result);
+        for(var key in apps){
+            if(apps[key].nativeUrl){
+                $(".appList").append("<div style=\"display:inline;\" onclick=\"launchNativeApp('" + apps[key].nativeUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+            }
+            else if(apps[key].authUrl){
+                $(".appList").append("<div style=\"display:inline;\" onclick=\"launchNativeApp('" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+            }
+        }
+        
+    }
+	</script>
+
+    </head>
+<body>
+
+<div>
+    
+    <div style="margin-top:20px">
+        <h2 align="center">Enterprise Browser
+         </h2>
+    </div>
+    <div class="appList">
+    </div>
+    <div style="text-align:center; margin-bottom:20px" >   
+	<div style="float:left; margin-left:30px" onclick="goBack()">	Back </div>
+	<div style="text-align:right; margin-right:30px">	Forward </div>
+    </div>
+</div>
+
+</body>
+</html>

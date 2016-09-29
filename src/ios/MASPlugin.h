@@ -222,8 +222,6 @@
  */
 - (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
 
-
-
 /**
  *  Boolean property of the application authentication status (primarily for client credential authentication.)
  *
@@ -231,7 +229,12 @@
  */
 - (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Launches a native app with a given URI
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)launchNativeApp:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Enumeration value of authentication status.
@@ -294,6 +297,14 @@
   *
   */
 - (void)isActive:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Retrieves the list of enterprise apps
+  *
+  *  @param command CDVInvokedUrlCommand object
+  *
+*/
+- (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Reset local keychain storage
