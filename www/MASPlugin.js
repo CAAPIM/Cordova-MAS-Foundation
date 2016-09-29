@@ -281,6 +281,16 @@
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelOTPValidation", []);
             };
             /**
+             Closes an existing popup.
+             * @param successHandler user defined success callback
+             * @param errorHandler user defined error callback
+             */
+            this.closePopup = function(successHandler, errorHandler)
+            {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+                return;
+            }
+            /**
              getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
              */
             this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType)
@@ -453,16 +463,17 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps",[]);
             };
-            this.launchNativeApp = function(successHandler, errorHandler, nativeUrl)
+            this.launchApp = function(successHandler, errorHandler, appId, nativeUrl)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchNativeApp", [nativeUrl]);
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId, nativeUrl]);
             }
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
                return result = Cordova.exec(function(result){
-                                         MASPlugin.MASConfig.MASPopupUI("enterpriseBrowser.html", function(){}, function(){
-                                                                        displayApps(result);
-                                                                        });}, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps");
+                    MASPlugin.MASConfig.MASPopupUI("enterpriseBrowser.html", function(){}, function(){
+                        displayApps(result);
+                    });
+                }, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps", []);
             };
         },
  

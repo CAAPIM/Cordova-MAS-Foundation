@@ -1109,16 +1109,16 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)launchNativeApp:(CDVInvokedUrlCommand*)command
+- (void)launchApp:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
 
-    NSString *nativeUrl = @"";
-    nativeUrl = [command.arguments objectAtIndex:0];
-    BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:nativeUrl]];
+    NSString *appId = [command.arguments objectAtIndex:0];
+    NSString *appUrl = [command.arguments objectAtIndex:1];
+    BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appUrl]];
     if (canOpenUrl)
     {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:nativeUrl]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appUrl]];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
     }
     else {
@@ -1282,12 +1282,7 @@
                         [enterpriseApps addObject:app];
                     }
                     
-                    NSError *jsonError;
-                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:enterpriseApps options:NSJSONWritingPrettyPrinted error:&jsonError];
-                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
-                    
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:enterpriseApps];
                 }
 
                 [result setKeepCallbackAsBool:YES];

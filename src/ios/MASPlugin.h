@@ -234,7 +234,7 @@
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)launchNativeApp:(CDVInvokedUrlCommand*)command;
+- (void)launchApp:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Enumeration value of authentication status.

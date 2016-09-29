@@ -15,28 +15,23 @@
     </style>
     <script>
         var apps;
-    function goBack() {
-		window.location.replace("index.html");
+    function closePopup() {
+        var MAS = new MASPlugin.MAS();
+        MAS.closePopup();
 	}
-    function launchNativeApp(nativeUrl) {
+    function launchApp(appId, nativeUrl) {
         var MASApplication = new MASPlugin.MASApplication();
-        MASApplication.launchNativeApp(function(){}, function(){}, nativeUrl);
+        MASApplication.launchApp(function(){}, function(){}, appId, nativeUrl);
     }
-    function retrieve() {
-        var MASApplication = new MASPlugin.MASApplication();
-        MASApplication.retrieveEnterpriseApps(function(result){alert(result);},function(error){});
-    }
-    function displayApps(result){
-        var apps = JSON.parse(result);
+    function displayApps(apps){
         for(var key in apps){
             if(apps[key].nativeUrl){
-                $(".appList").append("<div style=\"display:inline;\" onclick=\"launchNativeApp('" + apps[key].nativeUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+                $(".appList").append("<div onclick=\"launchApp('" + apps[key].identifier + "', '" + apps[key].nativeUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
             }
             else if(apps[key].authUrl){
-                $(".appList").append("<div style=\"display:inline;\" onclick=\"launchNativeApp('" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+                $(".appList").append("<div onclick=\"launchApp('" + apps[key].identifier + "', '" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
             }
         }
-        
     }
 	</script>
 
@@ -46,13 +41,12 @@
 <div>
     
     <div style="margin-top:20px">
-        <h2 align="center">Enterprise Browser
-         </h2>
+    <h2 align="center">Enterprise Browser</h2>
     </div>
     <div class="appList">
     </div>
     <div style="text-align:center; margin-bottom:20px" >   
-	<div style="float:left; margin-left:30px" onclick="goBack()">	Back </div>
+	<div style="float:left; margin-left:30px" onclick="closePopup();">	Back </div>
 	<div style="text-align:right; margin-right:30px">	Forward </div>
     </div>
 </div>
