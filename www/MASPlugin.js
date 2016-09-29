@@ -434,7 +434,7 @@
         */
         MASApplication: function()
         {
-
+            /**
             this.getIdentifier = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getIdentifier",[]);
@@ -459,6 +459,7 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCustom",[]);
             };
+            */
             this.retrieveEnterpriseApps = function(successHandler, errorHandler)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps",[]);
@@ -466,7 +467,7 @@
             this.launchApp = function(successHandler, errorHandler, appId, nativeUrl)
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId, nativeUrl]);
-            }
+            };
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
                return result = Cordova.exec(function(result){
