@@ -8,8 +8,12 @@
 //
 
 #import "MASPlugin.h"
+
+#import "MASPluginAuthenticationController.h"
+
 #import <MASFoundation/MASFoundation.h>
 #import <MASUI/MASUI.h>
+
 
 @interface MASPlugin()
 
@@ -19,12 +23,6 @@
 ///-------------------------------------
 
 # pragma mark - Properties
-
-@property (nonatomic, copy) MASAuthorizationCodeCredentialsBlock authorizationCodeBlock;
-
-
-@property (nonatomic, copy) MASBasicCredentialsBlock basicCredentialsBlock;
-
 
 @property (nonatomic, copy) MASOTPGenerationBlock otpGenerationBlock;
 
@@ -90,51 +88,87 @@
     __block CDVPluginResult *result;
     
     [MAS setUserLoginBlock:
-        ^(MASBasicCredentialsBlock basicBlock,
-          MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
-        
-        self.basicCredentialsBlock = basicBlock;
-        self.authorizationCodeBlock = authorizationCodeBlock;
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsString:@"AuthenticationListener is set"];
-        
-        [result setKeepCallbackAsBool:YES];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+     ^(MASBasicCredentialsBlock basicBlock,
+       MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
+         
+         MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+         
+         NSDictionary *resultDictionary =
+            [MPAuthCntrl setLoginBlocksWithAuthentiationProviders:[MASAuthenticationProviders currentProviders]
+                                          basicCredentialsBlock__:basicBlock
+                                         authorizationCodeBlock__:authorizationCodeBlock
+                                                removeQRCodeBlock:^(BOOL completed, NSError *error){
+                                                    
+                                                    if (completed) {
+                                                        
+                                                        [self removeQRCode:command.callbackId];
+                                                    }
+                                                }];
+         
+         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
+         
+         [result setKeepCallbackAsBool:YES];
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+     }];
 }
 
 
 - (void)completeAuthentication:(CDVInvokedUrlCommand *)command
 {
-    __block CDVPluginResult *result;
+    CDVPluginResult *result;
     
-    if (self.basicCredentialsBlock) {
-        
-        self.basicCredentialsBlock(command.arguments[0], command.arguments[1], NO, nil);
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsString:@"BasicCredentialsBlock called"];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+    MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];    
+    [MPAuthCntrl completeAuthenticationWithUserName:command.arguments[0] andPassword:command.arguments[1]];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"BasicCredentialsBlock called"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 
 - (void)cancelAuthentication:(CDVInvokedUrlCommand *)command
 {
+    CDVPluginResult *result;
+    
+    MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+    [MPAuthCntrl cancelAuthentication];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"BasicCredentialsBlock cancelled"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)removeQRCode:(NSString *)callbackId {
+    
+    CDVPluginResult *result;
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+}
+
+- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command
+{
     __block CDVPluginResult *result;
     
-    if (self.basicCredentialsBlock) {
+    MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+    [MPAuthCntrl authorizeQRCode:command.arguments[0]
+                      completion:^(BOOL completed, NSError *error) {
         
-        self.basicCredentialsBlock(nil, nil, YES, nil);
+        if (!completed && error) {
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsString:[error localizedDescription]];
+        }
+        else {
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:@"QRCode authorized successfully !!"];
+        }
         
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsString:@"BasicCredentialsBlock called"];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
 }
 
 

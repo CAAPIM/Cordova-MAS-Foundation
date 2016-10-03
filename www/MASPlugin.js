@@ -56,6 +56,11 @@
          */
         MAS: function()
         {
+            this.authorize = function(successHandler, errorHandler, code)
+            {
+               Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "authorizeQRCode", [code]);
+            }
+
             /**
             Initializes the MAS plugin. This includes setting of the various listeners required
             for authenticating the user while registration of the application with the Gateway
@@ -523,10 +528,12 @@
             MASAuthenticationCallback: function(result)
             {
                 var pageToLoad = MASPlugin.MASConfig.loginPage;
+                
                 if (result != null && result != undefined && result.requestId != null && result.requestId != "" && result.requestType === "Login")
                 {
                     MASPlugin.MASConfig.loginAuthRequestId = result.requestId;
                 }
+                
                 if (result != null && result != undefined && result.requestType != null && result.requestType != "" && result.requestType === "OTP")
                 {
                     if (result.isInvalidOtp != undefined && result.isInvalidOtp != null && result.isInvalidOtp != "" && result.isInvalidOtp == "true")
@@ -545,6 +552,10 @@
                         MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
                     }
                 }
+                else if (result === "removeQRCode") {
+               
+                    document.getElementById('qr-code').src = "#";
+               }
                 else
                 {
                     MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()
@@ -552,7 +563,10 @@
                         var MAS = new MASPlugin.MAS();
                         MAS.initialize(function() {});
                         $('#loginDiv').remove();
-                    }, function() {});
+                    }, function() {
+
+                        document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
+                    });
                 }
             },
             /** Used to send the username and password to the server and setting div with id "errorMesg" with error message if error occurs.

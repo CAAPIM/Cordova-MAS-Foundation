@@ -54,6 +54,7 @@
  */
 - (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
 
+- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
 
 - (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command;
 

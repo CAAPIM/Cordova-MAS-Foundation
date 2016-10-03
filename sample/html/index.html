@@ -49,6 +49,33 @@
             
         //    $('body').append("<div class='ui-loader-background'> </div>");
 
+            $("#scan").bind("click",function(event,ui){
+               
+                $(this).find("textarea.error").hide();
+               
+                var thisElement = $(this);
+               
+                QRCode.scanCode(
+                
+                    function(info) {
+                     
+                        var MAS = new MASPlugin.MAS();
+                     
+                        MAS.authorize(function(result) {
+                          
+                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                            displayResult(thisElement, result);
+                    
+                        },function (error){
+                      
+                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                            displayError(thisElement, error);
+                        },
+                        info);
+                    }
+                );
+            });
+            
             $("#init").bind("click",function(event,ui){
 
                 $(this).find("textarea.error").hide();
@@ -913,6 +940,7 @@
             <img src="img/logo.png" alt="Layer7 Logo" width="86" height="72">
         </div>
         <ul data-role="listview" data-inset="true" data-filter="false" id="actionsListView">
+            <li data-icon="false"><a href="#" id="scan">Scan QRCode<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="init">MAS Init<textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomLoginPage">MAS set custom login page <input type="text" name="loginPageName" placeholder="loginPageName"/><textarea class='error' style="display:none;"></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomOTPChannelsPage">MAS set custom OTP Channels page <input type="text" name="otpChannelsPageName" placeholder="otpChannelsPageName"/><textarea class='error' style="display:none;"></textarea></a></li>
