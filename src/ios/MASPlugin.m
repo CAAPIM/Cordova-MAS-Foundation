@@ -31,6 +31,9 @@
 
 @property (nonatomic, copy) MASOTPFetchCredentialsBlock otpBlock;
 
+
+@property (nonatomic, copy) NSArray* currentEnterpriseApps;
+
 @end
 
 
@@ -1129,6 +1132,30 @@
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void) launchWebApp:(CDVInvokedUrlCommand *)command
+{
+    NSString *appId = [command.arguments objectAtIndex:0];
+    MASApplication *app = nil;
+    MASApplication *currentApp = nil;
+    for(app in _currentEnterpriseApps){
+        if([app.identifier isEqualToString:appId]){
+            currentApp = app;
+        }
+    }
+    NSLog(@"%@", currentApp.authUrl);
+    UIWebView *webView=[[UIWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.view = webView;
+    
+    [self.viewController presentViewController:vc animated:YES completion:nil];
+    
+    [currentApp loadWebApp:webView completion:^(BOOL completed, NSError *error){
+        NSLog(@"Web app loaded successfully");
+    }];
+}
+
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
@@ -1264,6 +1291,7 @@
         if([MASApplication currentApplication])
         {
             [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
+                _currentEnterpriseApps = objects;
                 if(error){
                     NSDictionary *errorInfo = @{@"errorMessage":@"SDK not initialized properly"};
                     
@@ -1271,7 +1299,7 @@
                 }
                 else{
                     //[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:objects];
-                    for(id object in objects){
+                    for(id object in _currentEnterpriseApps){
                         MASApplication *application = object;
                         NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
                         [app setObject:application.name forKey:@"appName"];

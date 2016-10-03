@@ -468,6 +468,10 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId, nativeUrl]);
             };
+            this.launchWebApp = function(successHandler, errorHandler, appId, authUrl)
+            {
+               return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchWebApp", [appId, authUrl]);
+            };
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
                return result = Cordova.exec(function(result){
