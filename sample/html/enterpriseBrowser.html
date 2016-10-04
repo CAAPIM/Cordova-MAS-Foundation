@@ -23,13 +23,17 @@
         var MASApplication = new MASPlugin.MASApplication();
         MASApplication.launchApp(function(){}, function(){}, appId, nativeUrl);
     }
+    function launchWebApp(appId, authUrl) {
+        var MASApplication = new MASPlugin.MASApplication();
+        MASApplication.launchWebApp(function(){}, function(){}, appId, authUrl);
+    }
     function displayApps(apps){
         for(var key in apps){
             if(apps[key].nativeUrl){
                 $(".appList").append("<div onclick=\"launchApp('" + apps[key].identifier + "', '" + apps[key].nativeUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
             }
             else if(apps[key].authUrl){
-                $(".appList").append("<div onclick=\"launchApp('" + apps[key].identifier + "', '" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+                $(".appList").append("<div onclick=\"launchWebApp('" + apps[key].identifier + "', '" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
             }
         }
     }
