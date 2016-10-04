@@ -10,6 +10,7 @@
 #import "MASPlugin.h"
 #import <MASFoundation/MASFoundation.h>
 #import <MASUI/MASUI.h>
+#import "WebViewController.h"
 
 @interface MASPlugin()
 
@@ -1143,17 +1144,36 @@
         }
     }
     NSLog(@"%@", currentApp.authUrl);
-    UIWebView *webView=[[UIWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view = webView;
+    
+    UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
+                                                  bundle:nil];
+    WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
+    vc.app = currentApp;
     
     [self.viewController presentViewController:vc animated:YES completion:nil];
-    
-    [currentApp loadWebApp:webView completion:^(BOOL completed, NSError *error){
-        NSLog(@"Web app loaded successfully");
-    }];
+    //
+    //    [currentApp loadWebApp:webView completion:^(BOOL completed, NSError *error){
+    //        NSLog(@"Web app loaded successfully");
+    //    }];
+}
+
+- (void)enterpriseWebApp:(MASApplication *)app
+{
+    [self.viewController performSegueWithIdentifier: @"webviewSegue" sender: app];
+}
+
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"webviewSegue"])
+    {
+        WebViewController *vc = [segue destinationViewController];
+        vc.app = sender;
+        
+    }
 }
 
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command
