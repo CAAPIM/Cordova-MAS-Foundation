@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ca.mas.core.MAGResultReceiver;
 import com.ca.mas.core.MobileSsoFactory;
@@ -19,6 +20,7 @@ import com.ca.mas.core.http.MAGResponse;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -60,6 +62,41 @@ public class MASUserCommand {
         @Override
         public String getAction() {
             return "loginWithUsernameAndPassword";
+        }
+    }
+
+    public static class AuthorizeCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            String url = null;
+            String password = null;
+            try {
+                url = (String) args.get(0);
+            } catch (JSONException e) {
+                callbackContext.error(getError(e));
+                return;
+            }
+
+            MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    success(callbackContext, true);
+                }
+
+
+                @Override
+                public void onError(Throwable e) {
+                    //context.showMessage(e.getMessage(), Toast.LENGTH_LONG);
+                    Log.e(TAG, e.getMessage(), e);
+                    callbackContext.error(getError(e));
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "authorizeQRCode";
         }
     }
 
