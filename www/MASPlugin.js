@@ -560,6 +560,10 @@
                
                     document.getElementById('qr-code').src = "#";
                }
+               else if (result === "qrCodeAuthorizationComplete") {
+               
+                    $('#loginDiv').remove();
+               }
                 else
                 {
                     MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()

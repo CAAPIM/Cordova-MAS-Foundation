@@ -29,9 +29,10 @@
 
 
 - (NSDictionary *)setLoginBlocksWithAuthentiationProviders:(MASAuthenticationProviders *)providers
-                         basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
-                        authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
-                               removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock;
+                                   basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
+                                  authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
+                                         removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
+                                completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization;
 
 
 - (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password;

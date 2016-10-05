@@ -28,6 +28,7 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 @property (nonatomic, copy) MASAuthorizationCodeCredentialsBlock authorizationCodeBlock;
 @property (nonatomic, copy) MASBasicCredentialsBlock basicCredentialsBlock;
 @property (nonatomic, copy) MASCompletionErrorBlock removeQRCodeBlock;
+@property (nonatomic, copy) MASCompletionErrorBlock completeAuthorizationBlock;
 
 @property (nonatomic, copy) NSArray *authenticationProviders;
 @property (nonatomic, copy) NSString *availableProvider;
@@ -63,7 +64,8 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 - (NSDictionary *)setLoginBlocksWithAuthentiationProviders:(MASAuthenticationProviders *)providers
                                    basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
                                   authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
-                                         removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock;
+                                         removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
+                                completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveAuthorizationCodeFromSessionSharing:)
                                                  name:MASDeviceDidReceiveAuthorizationCodeFromProximityLoginNotification
@@ -89,6 +91,7 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
     }
     
     self.removeQRCodeBlock = removeQRCodeBlock;
+    self.completeAuthorizationBlock = completeAuthorization;
     self.basicCredentialsBlock = basicCredentialsBlock;
     self.authorizationCodeBlock = authorizationCodeBlock;
     
@@ -138,7 +141,6 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 - (void)didReceiveAuthorizationCodeFromSessionSharing:(NSNotification *)notification
 {
-    __block MASPluginAuthenticationController *blockSelf = self;
     
     NSString *authorizationCode = [notification.object objectForKey:@"code"];
     
@@ -146,6 +148,8 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
     // Stop QR Code session sharing
     //
     [self qrCodeCleanup];
+    
+    self.completeAuthorizationBlock(YES, nil);
     
     self.authorizationCodeBlock(authorizationCode, NO, ^(BOOL completed, NSError *error) {
                                     

@@ -107,7 +107,11 @@
                                                         
                                                         [self removeQRCode:command.callbackId];
                                                     }
-                                                }];
+                                                }
+                                       completeAuthorizationBlock:^(BOOL completed, NSError *error){
+                                           
+                                           [self completeAuthorization:command.callbackId];
+                                       }];
          
          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
          
@@ -141,6 +145,15 @@
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"BasicCredentialsBlock cancelled"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)completeAuthorization:(NSString *)callbackId {
+    
+    CDVPluginResult *result;
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 - (void)removeQRCode:(NSString *)callbackId {
