@@ -48,6 +48,10 @@
     
     [self.webView addGestureRecognizer:tapCatcher];
     
+    self.navigationItem.leftBarButtonItem = nil;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    
     
 }
 
@@ -74,6 +78,10 @@
     [self.webView goForward];
 }
 
+- (void)done:(id)sender {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 /*

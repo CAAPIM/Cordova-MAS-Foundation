@@ -1178,7 +1178,7 @@
         }
     }
     NSLog(@"%@", currentApp.authUrl);
-    
+
     
     
     UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
@@ -1186,11 +1186,10 @@
     WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
     vc.app = currentApp;
     
-    [self.viewController presentViewController:vc animated:YES completion:nil];
-    //
-    //    [currentApp loadWebApp:webView completion:^(BOOL completed, NSError *error){
-    //        NSLog(@"Web app loaded successfully");
-    //    }];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+    
+    
+    [self.viewController presentViewController:nc animated:YES completion:nil];
 }
 
 - (void)enterpriseWebApp:(MASApplication *)app
@@ -1209,6 +1208,7 @@
         
     }
 }
+
 
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command
 {
