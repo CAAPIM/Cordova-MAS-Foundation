@@ -7,10 +7,15 @@
 
 package com.ca.apim;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.ImageView;
 
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
@@ -21,6 +26,8 @@ import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
+import com.ca.mas.foundation.auth.MASProximityLogin;
+import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -28,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -201,8 +209,30 @@ public class MASCommand {
                     public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders masAuthenticationProviders) {
                         JSONObject jsonObject = new JSONObject();
                         try {
+                            MASProximityLogin qrcode = new MASProximityLoginQRCode(){
+                               /* @Override
+                                public void onError(int errorCode, final String m, Exception e) {
+
+                                }*/
+                                @Override
+                                protected void onAuthCodeReceived(String code) {
+                                    super.onAuthCodeReceived(code);
+                                   // dismiss();
+                                }
+                            };
+                            boolean init = qrcode.init((Activity)context, requestId, masAuthenticationProviders);
+                            String encodedImage="";
+                            if(init){
+                                ImageView image= (ImageView)qrcode.render();
+                                Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                                ByteArrayOutputStream byteArrOutStream= new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrOutStream);
+                                byte byteImgArr[]=byteArrOutStream.toByteArray();
+                                encodedImage=Base64.encodeToString(byteImgArr,Base64.DEFAULT);
+                            }
                             jsonObject.put("requestType", "Login");
                             jsonObject.put("requestId", requestId);
+                            jsonObject.put("qrCodeImageBase64",encodedImage);
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
