@@ -237,14 +237,6 @@
 - (void)launchApp:(CDVInvokedUrlCommand*)command;
 
 /**
- *  Launches a web app with a given URI
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)launchWebApp:(CDVInvokedUrlCommand*)command;
-
-
-/**
  *  Enumeration value of authentication status.
  *
  *  @param command CDInvokedUrlCommand object

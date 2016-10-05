@@ -25,6 +25,7 @@
         .form a i.fa{ line-height:35px}
         .form-footer{height:40px; line-height:40px; padding:3px 35px; text-align:right; font-size:14px}
         .form-footer a{padding:6px; background:#006699; border-radius:3px; margin-left:4px; color:#FFFFFF; text-decoration:none}
+        .appListItem{display: inline-block; width: 150px; height: 150px; margin-left: 20px; }
         </style>
     <script>
         var apps;
@@ -32,22 +33,13 @@
         var MAS = new MASPlugin.MAS();
         MAS.closePopup();
 	}
-    function launchApp(appId, nativeUrl) {
+    function launchApp(appId) {
         var MASApplication = new MASPlugin.MASApplication();
-        MASApplication.launchApp(function(){}, function(){}, appId, nativeUrl);
-    }
-    function launchWebApp(appId, authUrl) {
-        var MASApplication = new MASPlugin.MASApplication();
-        MASApplication.launchWebApp(function(){}, function(){}, appId, authUrl);
+        MASApplication.launchApp(function(){}, function(){}, appId);
     }
     function displayApps(apps){
         for(var key in apps){
-            if(apps[key].nativeUrl){
-                $(".appList").append("<div onclick=\"launchApp('" + apps[key].identifier + "', '" + apps[key].nativeUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
-            }
-            else if(apps[key].authUrl){
-                $(".appList").append("<div onclick=\"launchWebApp('" + apps[key].identifier + "', '" + apps[key].authUrl + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
-            }
+                $(".appList").append("<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
         }
     }
 	</script>
@@ -60,7 +52,7 @@
         <div id="login-form">
             <div><ul id="" class="form-header"><li><i class="fa"></i></li><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
         </div>
-        <div class="appList" style="margin: 0 auto; text-align: center;"></div>
+        <div class="appList"></div>
         
     </div>
 
