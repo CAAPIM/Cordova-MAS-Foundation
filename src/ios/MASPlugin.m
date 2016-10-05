@@ -1163,26 +1163,9 @@
 - (void)launchApp:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
-
+    
     NSString *appId = [command.arguments objectAtIndex:0];
-    NSString *appUrl = [command.arguments objectAtIndex:1];
-    BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appUrl]];
-    if (canOpenUrl)
-    {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appUrl]];
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-    }
-    else {
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void) launchWebApp:(CDVInvokedUrlCommand *)command
-{
-    NSString *appId = [command.arguments objectAtIndex:0];
+    NSString *appUrl = nil;
     MASApplication *app = nil;
     MASApplication *currentApp = nil;
     for(app in _currentEnterpriseApps){
@@ -1190,36 +1173,37 @@
             currentApp = app;
         }
     }
-    NSLog(@"%@", currentApp.authUrl);
-
-    
-    
-    UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
-                                                  bundle:nil];
-    WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
-    vc.app = currentApp;
-    
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    
-    
-    [self.viewController presentViewController:nc animated:YES completion:nil];
-}
-
-- (void)enterpriseWebApp:(MASApplication *)app
-{
-    [self.viewController performSegueWithIdentifier: @"webviewSegue" sender: app];
-}
-
-
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"webviewSegue"])
-    {
-        WebViewController *vc = [segue destinationViewController];
-        vc.app = sender;
+    if([currentApp.nativeUrl length]) {
         
+        appUrl = currentApp.nativeUrl;
+        BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appUrl]];
+        if (canOpenUrl)
+        {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appUrl]];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+        }
+        else {
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
+        }
     }
+    else if ([currentApp.authUrl length]) {
+        
+        UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
+                                                      bundle:nil];
+        WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
+        vc.app = currentApp;
+        
+        UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+        
+        [self.viewController presentViewController:nc animated:YES completion:nil];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+    }
+    else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 

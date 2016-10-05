@@ -469,13 +469,9 @@
             {
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps",[]);
             };
-            this.launchApp = function(successHandler, errorHandler, appId, nativeUrl)
+            this.launchApp = function(successHandler, errorHandler, appId)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId, nativeUrl]);
-            };
-            this.launchWebApp = function(successHandler, errorHandler, appId, authUrl)
-            {
-               return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchWebApp", [appId, authUrl]);
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId]);
             };
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
@@ -499,7 +495,7 @@
             loginAuthRequestId: "",
             MASPopupUI: function(url, popupafterclose, onload)
             {
-                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%)'>" + "</div>";
+                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 500px; overflow: auto'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
                 $('#loginDiv').load(url, onload);
@@ -521,7 +517,6 @@
                     popupbeforeposition: function()
                     {
                         $('.ui-popup-screen').off();
-                        $('body').on('touchmove', false);
                     }
                 });
             },
