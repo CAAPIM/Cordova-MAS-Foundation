@@ -15,12 +15,12 @@ import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Build;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MASCallback;
@@ -109,14 +109,8 @@ public abstract class MASApplicationCommand {
             MASApplication.retrieveEnterpriseApps(new MASCallback<List<MASApplication>>() {
                 @Override
                 public void onSuccess(List<MASApplication> masApplications) {
-                    //System.out.println("hello"+masApplications.get(0).getIdentifier());
                     masApplicationsStatic = masApplications;
                     JSONArray appIdentifiers = new JSONArray();
-                    
-                   /* for(int i=0;i<masApplicationsStatic.size();i++){
-                        appIdentifiers.put(masApplicationsStatic.get(i).getIdentifier());
-                    }*/
-
                     appIdentifiers = MASUtil.convertMASApplicationListToJson(masApplications);
                     callbackContext.success(appIdentifiers);
                 }
@@ -148,14 +142,16 @@ public abstract class MASApplicationCommand {
                 MASApplication.MASApplicationLauncher masApplicationLauncher = new MASApplication.MASApplicationLauncher() {
                     @Override
                     public void onWebAppLaunch(final MASApplication masApplication) {
-
                         try {
                             MASPlugin.getCurrentInstance().cordova.getActivity().runOnUiThread(
                                     new Runnable() {
                                         @Override
                                         public void run() {
                                             final WebView web = new WebView(MASPlugin.getCurrentInstance().cordova.getActivity());
-                                            MASPlugin.getCurrentInstance().cordova.getActivity().addContentView(web, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+                                            LinearLayout.MarginLayoutParams layoutParams= new LinearLayout.MarginLayoutParams
+                                                    (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+
+                                            MASPlugin.getCurrentInstance().cordova.getActivity().addContentView(web, layoutParams);
                                             new MASWebApplication(web, masApplication.getAuthUrl()) {
                                                 @Override
                                                 protected WebViewClient getWebViewClient() {

@@ -30,9 +30,8 @@ import org.json.JSONException;
 public class MASUserCommand {
 
     private static final String TAG = LoginCommand.class.getCanonicalName();
-
+    public static CallbackContext COMPLETE_AUTH_CALLBACK;
     public static class LoginCommand extends Command {
-
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             String username = null;
@@ -193,6 +192,7 @@ public class MASUserCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            COMPLETE_AUTH_CALLBACK = callbackContext;
             String username = null;
             String password = null;
             try {
@@ -207,7 +207,11 @@ public class MASUserCommand {
 
                 @Override
                 public void onSuccess(MAGResponse<JSONObject> response) {
-                    success(callbackContext, true);
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+
+                    //success(callbackContext, true);
                 }
 
                 @Override

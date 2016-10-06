@@ -50,6 +50,7 @@ public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
     private static MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
+    private static CallbackContext AUTH_LISTENER_CALLBACK;
 
     public static class StartCommand extends Command {
 
@@ -203,6 +204,7 @@ public class MASCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            AUTH_LISTENER_CALLBACK = callbackContext;
             try {
                 MAS.setAuthenticationListener(new MASAuthenticationListener() {
                     @Override
@@ -217,7 +219,13 @@ public class MASCommand {
                                 @Override
                                 protected void onAuthCodeReceived(String code) {
                                     super.onAuthCodeReceived(code);
-                                   // dismiss();
+
+                                    String data = "qrCodeAuthorizationComplete";
+                                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, data);
+                                    pluginResult.setKeepCallback(true);
+                                    AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+
+                                    // dismiss();
                                 }
                             };
                             boolean init = qrcode.init((Activity)context, requestId, masAuthenticationProviders);
@@ -233,10 +241,15 @@ public class MASCommand {
                             jsonObject.put("requestType", "Login");
                             jsonObject.put("requestId", requestId);
                             jsonObject.put("qrCodeImageBase64",encodedImage);
+                            qrcode.start();
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
-                        callbackContext.success(jsonObject);
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                        pluginResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(pluginResult);
+
+                        //callbackContext.success(jsonObject);
                     }
 
                     @Override
