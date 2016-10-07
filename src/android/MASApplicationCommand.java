@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Build;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -40,6 +41,7 @@ public abstract class MASApplicationCommand {
 
     private static final String TAG = MASApplicationCommand.class.getCanonicalName();
     private static List<MASApplication> masApplicationsStatic;
+    public static WebView ENTERPRISE_BROWSER_WEBVIEW;
 
     private static MASApplication fetchCurrentApp(String appIdentifier) {
         MASApplication masApplication = null;
@@ -128,6 +130,26 @@ public abstract class MASApplicationCommand {
         }
     }
 
+    public static class BackButtonHandlerCommand extends Command {
+        @Override
+        void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
+            MASPlugin.getCurrentInstance().cordova.getActivity().runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            ((ViewGroup)ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
+                            callbackContext.success();
+                        }
+                    }
+            );
+        }
+
+        @Override
+        String getAction() {
+            return "backButtonHandler";
+        }
+    }
+
     public static class LaunchAppCommand extends Command {
 
         @Override
@@ -137,7 +159,6 @@ public abstract class MASApplicationCommand {
             }
             try {
                 String appIdentifier = args.getString(0);
-                String nativeOrWebUrl = args.getString(1);  //TODO not used
                 MASApplication masApplication = fetchCurrentApp(appIdentifier);
                 MASApplication.MASApplicationLauncher masApplicationLauncher = new MASApplication.MASApplicationLauncher() {
                     @Override
@@ -148,6 +169,7 @@ public abstract class MASApplicationCommand {
                                         @Override
                                         public void run() {
                                             final WebView web = new WebView(MASPlugin.getCurrentInstance().cordova.getActivity());
+                                            ENTERPRISE_BROWSER_WEBVIEW = web;
                                             LinearLayout.MarginLayoutParams layoutParams= new LinearLayout.MarginLayoutParams
                                                     (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 

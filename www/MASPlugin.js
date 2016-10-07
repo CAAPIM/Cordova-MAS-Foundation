@@ -471,6 +471,7 @@
             };
             this.launchApp = function(successHandler, errorHandler, appId)
             {
+                document.addEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId]);
             };
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
@@ -493,6 +494,12 @@
             otpPage: "masui/mas-otp.html",
             otpChannelsPage: "masui/mas-otpchannel.html",
             loginAuthRequestId: "",
+            onBackKeyPressEvent: function(){
+                successHandler=function(){
+                    document.removeEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
+                }
+                 return Cordova.exec(successHandler, function(){}, "com.ca.apim.MASPlugin", "backButtonHandler", []);
+            },
             MASPopupUI: function(url, popupafterclose, onload)
             {
                 var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 500px; overflow: auto'>" + "</div>";
