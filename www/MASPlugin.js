@@ -498,7 +498,7 @@
                 successHandler=function(){
                     document.removeEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
                 }
-                 return Cordova.exec(successHandler, function(){}, "com.ca.apim.MASPlugin", "backButtonHandler", []);
+                 return Cordova.exec(successHandler, function(){}, "com.ca.apim.MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
             },
             MASPopupUI: function(url, popupafterclose, onload)
             {

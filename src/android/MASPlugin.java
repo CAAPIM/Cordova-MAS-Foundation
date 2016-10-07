@@ -68,7 +68,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASApplicationCommand.GetNameCommand());
         add(new MASApplicationCommand.RetrieveEnterpriseAppsCommand());
         add(new MASApplicationCommand.LaunchAppCommand());
-        add(new MASApplicationCommand.BackButtonHandlerCommand());
+        add(new MASApplicationCommand.EnterpriseBrowserWebAppBackButtonHandlerCommand());
 
     }
 

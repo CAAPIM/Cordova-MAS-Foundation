@@ -41,7 +41,7 @@ public abstract class MASApplicationCommand {
 
     private static final String TAG = MASApplicationCommand.class.getCanonicalName();
     private static List<MASApplication> masApplicationsStatic;
-    public static WebView ENTERPRISE_BROWSER_WEBVIEW;
+    private static WebView ENTERPRISE_BROWSER_WEBVIEW;
 
     private static MASApplication fetchCurrentApp(String appIdentifier) {
         MASApplication masApplication = null;
@@ -130,7 +130,7 @@ public abstract class MASApplicationCommand {
         }
     }
 
-    public static class BackButtonHandlerCommand extends Command {
+    public static class EnterpriseBrowserWebAppBackButtonHandlerCommand extends Command {
         @Override
         void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
             MASPlugin.getCurrentInstance().cordova.getActivity().runOnUiThread(
@@ -146,7 +146,7 @@ public abstract class MASApplicationCommand {
 
         @Override
         String getAction() {
-            return "backButtonHandler";
+            return "enterpriseBrowserWebAppBackButtonHandler";
         }
     }
 
