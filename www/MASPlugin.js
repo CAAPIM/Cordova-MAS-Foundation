@@ -477,7 +477,7 @@
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
                return result = Cordova.exec(function(result){
-                    MASPlugin.MASConfig.MASPopupUI("enterpriseBrowser.html", function(){}, function(){
+                    MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.enterpriseBrowserPage, function(){}, function(){
                         displayApps(result);
                     });
                 }, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps", []);
@@ -493,6 +493,7 @@
             loginPage: "masui/mas-login.html",
             otpPage: "masui/mas-otp.html",
             otpChannelsPage: "masui/mas-otpchannel.html",
+            enterpriseBrowserPage: "masui/mas-enterpriseBrowser.html",
             loginAuthRequestId: "",
             onBackKeyPressEvent: function(){
                 successHandler=function(){
