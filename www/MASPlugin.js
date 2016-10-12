@@ -560,7 +560,7 @@
                 }
                 else if (result === "removeQRCode") {
                
-                    document.getElementById('qr-code').src = "#";
+                    document.getElementById('qr-code').style.display = 'none';
                }
                else if (result === "qrCodeAuthorizationComplete") {
                
