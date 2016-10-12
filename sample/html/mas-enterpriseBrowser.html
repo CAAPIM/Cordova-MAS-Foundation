@@ -15,9 +15,10 @@
         
         li,ul,body{margin:0; padding:0; list-style:none}
         #login-form{width:350px; background:#FFF; margin:50px auto; background:#f1f1f1}
-        .form-header{display:table; clear:both}
-        .form-header li{display:inline-block; line-height:40px; width:246px; margin:0 2px; text-align:center; background:#e8e8e8}
-        .form-header li:nth-child(odd){width:50px; margin:0 0;}
+        .form-header{display:table; clear:both}	
+        .form-header li{display:inline-block; line-height:40px; width:255px; margin:0 2px; text-align:center; background:#e8e8e8}
+        .form-header li:nth-child(odd){padding-left: 40px;}
+        .form-header li:nth-child(even){width:50px; margin:0 0;}
         .form{padding:0 30px; padding-bottom:10px}
         .login li{height:35px; line-height:35px; margin-bottom:15px}
         .inline:after{display:table; content:''}
@@ -50,7 +51,7 @@
 
     <div style="margin-top:20px">
         <div id="login-form">
-            <div><ul id="" class="form-header"><li><i class="fa"></i></li><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
+            <div><ul id="" class="form-header"><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
         </div>
         <div class="appList"></div>
         
