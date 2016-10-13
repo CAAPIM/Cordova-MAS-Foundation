@@ -183,11 +183,16 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 - (void)qrCodeCleanup {
     
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self
+                                  name:MASDeviceDidReceiveAuthorizationCodeFromProximityLoginNotification
+                                object:nil];
+    
+    [notificationCenter removeObserver:self
+                                  name:MASProximityLoginQRCodeDidStopDisplayingQRCodeImage
+                                object:nil];
+    
     if (_qrCode) {
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:MASProximityLoginQRCodeDidStopDisplayingQRCodeImage
-                                                      object:nil];
         
         [_qrCode stopDisplayingQRCodeImageForProximityLogin];
         
