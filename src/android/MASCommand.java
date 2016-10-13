@@ -17,6 +17,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
+import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
@@ -36,15 +37,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MASCommand {
 
@@ -227,7 +223,17 @@ public class MASCommand {
 
                                     // dismiss();
                                 }
+                                @Override
+                                public void close() {
+                                    super.close();
+                                    String data = "removeQRCode";
+                                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, data);
+                                    pluginResult.setKeepCallback(true);
+                                    AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+                                }
+
                             };
+                            MASUtil.setQrCode(qrcode);
                             boolean init = qrcode.init((Activity)context, requestId, masAuthenticationProviders);
                             String encodedImage="";
                             if(init){

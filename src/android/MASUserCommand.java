@@ -11,8 +11,8 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.ca.apim.util.MASUtil;
 import com.ca.mas.core.MAGResultReceiver;
 import com.ca.mas.core.MobileSsoFactory;
 import com.ca.mas.core.error.MAGError;
@@ -243,6 +243,7 @@ public class MASUserCommand {
                     Log.e(TAG, "request Id is empty");
                     callbackContext.error("request Id is  empty");
                 }
+                MASUtil.getQrCode().stop();
                 MAS.cancelRequest(requestId);
                 success(callbackContext, true);
             } catch (Exception e) {

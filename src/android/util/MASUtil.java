@@ -3,6 +3,7 @@ package com.ca.apim.util;
 import android.util.Log;
 
 import com.ca.mas.foundation.auth.MASApplication;
+import com.ca.mas.foundation.auth.MASProximityLogin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,16 @@ import java.util.List;
  */
 public class MASUtil {
     private static final String TAG = MASUtil.class.getCanonicalName();
+    private static MASProximityLogin qrCode;
+
+    public static MASProximityLogin getQrCode() {
+        return qrCode;
+    }
+
+    public static void setQrCode(MASProximityLogin qrCode) {
+        MASUtil.qrCode = qrCode;
+    }
+
     public static JSONArray convertMASApplicationListToJson(List<MASApplication> masApplications){
         JSONArray result=new JSONArray();
         try {
