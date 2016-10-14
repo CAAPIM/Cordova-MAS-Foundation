@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
-
+import android.widget.Toast;
 import com.ca.apim.util.MASUtil;
 import com.ca.mas.core.MAGResultReceiver;
 import com.ca.mas.core.MobileSsoFactory;
@@ -30,6 +30,7 @@ import org.json.JSONException;
 public class MASUserCommand {
 
     private static final String TAG = LoginCommand.class.getCanonicalName();
+    @Deprecated
     public static CallbackContext COMPLETE_AUTH_CALLBACK;
     public static class LoginCommand extends Command {
         @Override
@@ -192,7 +193,7 @@ public class MASUserCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            COMPLETE_AUTH_CALLBACK = callbackContext;
+            //COMPLETE_AUTH_CALLBACK = callbackContext;
             String username = null;
             String password = null;
             try {

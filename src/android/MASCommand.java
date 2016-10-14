@@ -17,6 +17,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
+import com.ca.mas.core.error.MAGError;
 import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
@@ -37,10 +38,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MASCommand {
 
@@ -91,7 +97,8 @@ public class MASCommand {
 
                     @Override
                     public void onError(Throwable e) {
-                        callbackContext.error("fail");
+                        callbackContext.error(getError(e));
+                        ;
                     }
                 });
             } catch (Exception e) {
@@ -283,12 +290,20 @@ public class MASCommand {
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
-                        callbackContext.success(jsonObject);
+                        //callbackContext.success(jsonObject);
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                        pluginResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(pluginResult);
+
                     }
                 });
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
-                callbackContext.error(getError(e));
+                //callbackContext.error(getError(e));
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.ERROR, getError(e));
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+
             }
         }
 

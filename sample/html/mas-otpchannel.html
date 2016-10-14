@@ -354,8 +354,14 @@
             }
         });
 
-        if (checkArray.length)
-            MASPlugin.MASConfig.MASSendOTPChannels(checkArray);
+        if (checkArray.length) {
+            MASPlugin.MASConfig.MASSendOTPChannels(checkArray,
+                function(onError) {
+                     console.log(onError);
+                    //Handle error if errorMesg element does not exist
+                }
+                );
+            }
         else
             alert("You have to select atleast one OTP channel");
     }

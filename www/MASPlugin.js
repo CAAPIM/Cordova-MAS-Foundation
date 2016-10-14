@@ -249,7 +249,7 @@
              */
             this.generateAndSendOTP = function(successHandler, errorHandler, channels)
             {
-                $.mobile.activePage.find(".messagePopup").popup("close");
+                //$.mobile.activePage.find(".messagePopup").popup("close");
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "generateAndSendOTP", [channels]);
             };
             /**
@@ -260,7 +260,7 @@
             this.cancelGenerateAndSendOTP = function(successHandler, errorHandler)
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
-                this.initialize(function() {});
+                //this.initialize(function() {});
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelGenerateAndSendOTP", []);
             };
             /**
@@ -282,7 +282,7 @@
             this.cancelOTPValidation = function(successHandler, errorHandler)
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
-                this.initialize(function() {});
+                //this.initialize(function() {});
                 return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelOTPValidation", []);
             };
             /**
@@ -572,7 +572,7 @@
                     MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()
                     {
                         var MAS = new MASPlugin.MAS();
-                        MAS.initialize(function() {});
+                        //MAS.initialize(function() {});
                         $('#loginDiv').remove();
                     }, function() {
 
@@ -666,11 +666,13 @@
             * Used to send the OTP channels to the server
             * @param otpChannels user defined channels array that will be passed to server
             */
-            MASSendOTPChannels: function(otpChannels)
+            MASSendOTPChannels: function(otpChannels, onError)
             {
                 var MAS = new MASPlugin.MAS();
-                MAS.generateAndSendOTP(function(shouldValidateOTP)
+                MAS.generateAndSendOTP(
+                function(shouldValidateOTP)
                 {
+                    $('#loginDiv').remove();
                     if ("true" == shouldValidateOTP)
                     {
                         MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function()
@@ -678,7 +680,18 @@
                             $('#loginDiv').remove();
                         }, function() {});
                     }
-                }, function(val) {}, otpChannels);
+                },
+                function(error) {
+                    if (document.getElementById("errorMesg")) {
+                        var errorMsgToDisplay = "Internal Server Error.";
+                        if (error != undefined && error.errorMessage != undefined )
+                            errorMsgToDisplay = error.errorMessage;
+                        document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                    } else {
+                        onError(val);
+                    }
+                    MAS.ca
+                }, otpChannels);
             },
              /**
             * Callback for the OTP Listener
@@ -702,7 +715,7 @@
             MASSendOTPCredentials: function(otp)
             {
                 var MAS = new MASPlugin.MAS();
-                MAS.initialize(function() {});
+                //MAS.initialize(function() {});
                 MAS.validateOTP(function() {}, function() {}, otp);
             }
         }
