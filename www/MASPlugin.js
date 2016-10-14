@@ -503,7 +503,7 @@
             },
             MASPopupUI: function(url, popupafterclose, onload)
             {
-                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 500px; overflow: auto'>" + "</div>";
+                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 90%; overflow: auto'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
                 $('#loginDiv').load(url, onload);

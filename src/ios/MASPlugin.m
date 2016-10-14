@@ -182,8 +182,7 @@
         if (!completed && error) {
             
             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                        @"errorMessage":[error localizedDescription],
-                                        @"errorInfo":[error userInfo]};
+                                        @"errorMessage":[error localizedDescription]};
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
         }
