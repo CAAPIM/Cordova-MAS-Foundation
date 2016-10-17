@@ -1197,15 +1197,22 @@
     }
     else if ([currentApp.authUrl length]) {
         
-        UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
-                                                      bundle:nil];
-        WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
-        vc.app = currentApp;
+        if (![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"]) {
+            
+            UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
+                                                          bundle:nil];
+            WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
+            vc.app = currentApp;
+            
+            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+            
+            [self.viewController presentViewController:nc animated:YES completion:nil];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+        }
+        else {
         
-        UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-        
-        [self.viewController presentViewController:nc animated:YES completion:nil];
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Host is currently not reachable"];
+        }
     }
     else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
@@ -1344,15 +1351,18 @@
 }
     
 - (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command
-    {
+{
         __block CDVPluginResult *result;
         __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
-        if([MASApplication currentApplication])
+        if([MAS gatewayIsReachable] && [MASApplication currentApplication])
         {
             [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
                 _currentEnterpriseApps = objects;
                 if(error){
-                    NSDictionary *errorInfo = @{@"errorMessage":@"SDK not initialized properly"};
+                    
+                    NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                @"errorMessage":[error localizedDescription],
+                                                @"errorInfo":[error userInfo]};
                     
                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
                 }
@@ -1376,6 +1386,18 @@
                 
                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             }];
+        }
+        else {
+            
+            NSString *errorMessage = nil;
+            if (![MAS gatewayIsReachable])
+                errorMessage = @"Host is currently not reachable";
+            else
+                errorMessage = @"Application not initialized";
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
     }
 
