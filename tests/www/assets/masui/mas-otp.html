@@ -53,17 +53,20 @@
         }
 
         .form-header li {
-            display: inline-block;
-            line-height: 40px;
-            width: 246px;
-            margin: 0 2px;
-            text-align: center;
-            background: #e8e8e8
+            display:inline-block; 
+            line-height:40px; 
+            width:255px; 
+            margin:0 2px; 
+            text-align:center; 
+            background:#e8e8e8
         }
 
         .form-header li:nth-child(odd) {
-            width: 50px;
-            margin: 0 0;
+            padding-left: 40px;
+        }
+
+        .form-header li:nth-child(even) {
+            width:50px; margin:0 0;
         }
 
         .user-image {
@@ -243,8 +246,7 @@
     <div id="login-form">
         <div>
             <ul id="" class="form-header">
-                <li><i class="fa"></i></li>
-                <li>ONE TIME PASSWORD</li>
+                <li>One Time Password</li>
                 <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
                 </li>
             </ul>

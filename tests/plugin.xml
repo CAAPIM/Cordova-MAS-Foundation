@@ -9,5 +9,5 @@
 
     <js-module src="tests.js" name="tests">
     </js-module>
-    <asset src="www/assets" target="cdvtests"/>
+    <asset src="www/assets/masui" target="cdvtests/masui"/>
 </plugin>
