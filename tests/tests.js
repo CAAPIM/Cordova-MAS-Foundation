@@ -152,10 +152,10 @@ exports.defineManualTests = function(contentEl, createActionButton) {
             }
         });
 
-     createActionButton('MASDevice.isRegistered()', function() {
-            var name = 'MASDevice.isRegistered()';
+     createActionButton('MASDevice.isDeviceRegistered()', function() {
+            var name = 'MASDevice.isDeviceRegistered()';
             var masDevice = new MASPlugin.MASDevice();
-            masDevice.isRegistered(startSuccessHandler, errorHandler);
+            masDevice.isDeviceRegistered(startSuccessHandler, errorHandler);
             function startSuccessHandler(result) {
                 console.log(name + ' - Success: ' + result);
             }

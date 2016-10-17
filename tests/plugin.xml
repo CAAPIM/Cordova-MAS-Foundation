@@ -9,5 +9,6 @@
 
     <js-module src="tests.js" name="tests">
     </js-module>
+    <asset src="www/assets/csp-incl.js" target="csp-incl.js"/>
     <asset src="www/assets/masui" target="cdvtests/masui"/>
 </plugin>
