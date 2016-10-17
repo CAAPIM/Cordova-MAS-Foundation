@@ -158,6 +158,8 @@
     CDVPluginResult *result;
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
+
+    [result setKeepCallbackAsBool:YES];
     
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
