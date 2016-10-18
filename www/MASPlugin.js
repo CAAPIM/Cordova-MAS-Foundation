@@ -58,7 +58,7 @@
         {
             this.authorize = function(successHandler, errorHandler, code)
             {
-               Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "authorizeQRCode", [code]);
+               Cordova.exec(successHandler, errorHandler, "MASPlugin", "authorizeQRCode", [code]);
             }
 
             /**
@@ -68,9 +68,9 @@
             */
             this.initialize = function(successHandler, errorHandler)
             {
-                Cordova.exec(MASPlugin.MASConfig.MASAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setAuthenticationListener", []);
-                Cordova.exec(MASPlugin.MASConfig.MASOTPChannelSelectCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPChannelSelectorListener", []);
-                Cordova.exec(MASPlugin.MASConfig.MASOTPAuthenticationCallback, errorHandler, "com.ca.apim.MASPlugin", "setOTPAuthenticationListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASAuthenticationCallback, errorHandler, "MASPlugin", "setAuthenticationListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASOTPChannelSelectCallback, errorHandler, "MASPlugin", "setOTPChannelSelectorListener", []);
+                Cordova.exec(MASPlugin.MASConfig.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
                 return successHandler("Initialization success !!");
             };
             /**
@@ -195,29 +195,29 @@
              */
             this.grantFlow = function(successHandler, errorHandler, MASGrantFlow)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "setGrantFlow", [MASGrantFlow]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setGrantFlow", [MASGrantFlow]);
             };
             /**
              Set the name of the configuration file.  This gives the ability to set the file's name to a custom value.
              */
             this.configFileName = function(successHandler, errorHandler, fileName)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "setConfigFileName", [fileName]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
             };
             /**
              Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
              */
             this.start = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "start", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "start", []);
             };
             this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "startWithDefaultConfiguration", [defaultConfiguration]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithDefaultConfiguration", [defaultConfiguration]);
             };
             this.startWithJSON = function(successHandler, errorHandler, jsonObject)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "startWithJSON", [jsonObject]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithJSON", [jsonObject]);
             };
             /**
              Completes the current user's authentication session validation.
@@ -228,7 +228,7 @@
             */
             this.completeAuthentication = function(successHandler, errorHandler, username, password)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "completeAuthentication", [username, password]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "completeAuthentication", [username, password]);
             };
             /**
              Cancels the current user's authentication session validation.
@@ -239,7 +239,7 @@
             this.cancelAuthentication = function(successHandler, errorHandler, args)
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelAuthentication", [args]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelAuthentication", [args]);
             };
             /**
              Request Server to generate and send OTP to the channels provided.
@@ -250,7 +250,7 @@
             this.generateAndSendOTP = function(successHandler, errorHandler, channels)
             {
                 //$.mobile.activePage.find(".messagePopup").popup("close");
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "generateAndSendOTP", [channels]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "generateAndSendOTP", [channels]);
             };
             /**
              Cancels the current user's generating and sending OTP call.
@@ -261,7 +261,7 @@
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
                 //this.initialize(function() {});
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelGenerateAndSendOTP", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelGenerateAndSendOTP", []);
             };
             /**
              Validate the entered OTP.
@@ -272,7 +272,7 @@
             this.validateOTP = function(successHandler, errorHandler, otp)
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "validateOTP", [otp]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "validateOTP", [otp]);
             };
             /**
              Cancels the current user's authentication session validation.
@@ -283,7 +283,7 @@
             {
                 $.mobile.activePage.find(".messagePopup").popup("close");
                 //this.initialize(function() {});
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "cancelOTPValidation", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelOTPValidation", []);
             };
             /**
              Closes an existing popup.
@@ -300,40 +300,40 @@
              */
             this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
             };
             /**
              deleteFromPath does the HTTP DELTE call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
              */
             this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
             };
             /**
              putToPath does the HTTP PUT call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
              */
             this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
             };
             /**
              postToPath does the HTTP POST call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
              */
             this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
             };
             /**
              Stops the lifecycle of all MAS processes.
              */
             this.stop = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "stop", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "stop", []);
             };
 
             this.gatewayIsReachable = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "gatewayIsReachable", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "gatewayIsReachable", []);
             }
         },
         /**
@@ -346,60 +346,60 @@
              */
             this.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "loginWithUsernameAndPassword", [username, password]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "loginWithUsernameAndPassword", [username, password]);
             };
             /**
             * Performs an implicit login by calling an endpoint that requires authentication.
             */
              this.loginWithImplicitFlow = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "loginWithImplicitFlow", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "loginWithImplicitFlow", []);
             };
             /**
              log off user.
              */
             this.logoutUser = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "logoutUser", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "logoutUser", []);
             };
             /**
             *
             */
             this.getCurrentUser = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentUser", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getCurrentUser", []);
             };
 
             this.getUserName = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getUserName", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getUserName", []);
             }
             /**
             Commented as they are related to SCIM as in Android, so Android implentation is not yet added.
             this.getName = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getName", []);
             }
 
             this.getAddressList = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getAddressList", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getAddressList", []);
             }
 
             this.getEmailList = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getEmailList", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getEmailList", []);
             }
 
             this.isActive = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isActive", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isActive", []);
             }
             */
 
             this.isAuthenticated = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isAuthenticated", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isAuthenticated", []);
             };
 
         },
@@ -410,7 +410,7 @@
         {
             this.getCurrentDevice = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentDevice", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getCurrentDevice", []);
             }
             
             /**
@@ -418,19 +418,19 @@
              */
             this.deregister = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "deregister", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "deregister", []);
             };
             this.resetLocally = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "resetLocally", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "resetLocally", []);
             };
             this.isDeviceRegistered = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "isDeviceRegistered", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isDeviceRegistered", []);
             };
             this.getDeviceIdentifier = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getDeviceIdentifier", []);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getDeviceIdentifier", []);
             };
         },
         /**
@@ -442,37 +442,37 @@
             /**
             this.getIdentifier = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getIdentifier",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getIdentifier",[]);
             };
             this.getName = function(successHandler, errorHandler,args)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getName",[args]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getName",[args]);
             };
             this.getIconUrl = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getIconUrl",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getIconUrl",[]);
             };
             this.getAuthUrl = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getAuthUrl",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getAuthUrl",[]);
             };
             this.getNativeUri = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getNativeUri",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getNativeUri",[]);
             };
             this.getCustom = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCustom",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getCustom",[]);
             };
             */
             this.retrieveEnterpriseApps = function(successHandler, errorHandler)
             {
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps",[]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "retrieveEnterpriseApps",[]);
             };
             this.launchApp = function(successHandler, errorHandler, appId)
             {
                 document.addEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
-                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "launchApp", [appId]);
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "launchApp", [appId]);
             };
             this.initEnterpriseBrowser = function(successHandler, errorHandler)
             {
@@ -480,7 +480,7 @@
                     MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.enterpriseBrowserPage, function(){}, function(){
                         displayApps(result);
                     });
-                }, errorHandler, "com.ca.apim.MASPlugin", "retrieveEnterpriseApps", []);
+                }, errorHandler, "MASPlugin", "retrieveEnterpriseApps", []);
             };
         },
  
@@ -499,7 +499,7 @@
                 successHandler=function(){
                     document.removeEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
                 }
-                 return Cordova.exec(successHandler, function(){}, "com.ca.apim.MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
+                 return Cordova.exec(successHandler, function(){}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
             },
             MASPopupUI: function(url, popupafterclose, onload)
             {
