@@ -5,7 +5,7 @@
  *
  */
 
-package com.ca.apim;
+package com.ca.mascordova.core;
 
 import org.json.JSONObject;
 

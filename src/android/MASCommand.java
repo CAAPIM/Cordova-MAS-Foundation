@@ -5,7 +5,7 @@
  *
  */
 
-package com.ca.apim;
+package com.ca.mascordova.core;
 
 import android.app.Activity;
 import android.content.Context;
