@@ -39,7 +39,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="MASPlugin" >
-                <param name="android-package" value="com.ca.mascordova.core.MASPlugin"/>
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPlugin"/>
             </feature>
         </config-file>
 
@@ -47,13 +47,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.INTERNET"/>
         </config-file>
 
-        <source-file src="src/android/Command.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/MASUserCommand.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mascordova/core" />
-        <source-file src="src/android/util/MASUtil.java" target-dir="src/com/ca/mascordova/core"/>
+        <source-file src="src/android/Command.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASUserCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/util/MASUtil.java" target-dir="src/com/ca/mas/cordova/core"/>
 
         <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />

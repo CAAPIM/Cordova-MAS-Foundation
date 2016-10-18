@@ -5,7 +5,7 @@
  *
  */
 
-package com.ca.mascordova.core;
+package com.ca.mas.cordova.core;
 
 import android.app.Activity;
 import android.content.Context;

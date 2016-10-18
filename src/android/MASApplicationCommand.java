@@ -5,7 +5,7 @@
  *
  */
 
-package com.ca.mascordova.core;
+package com.ca.mas.cordova.core;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
