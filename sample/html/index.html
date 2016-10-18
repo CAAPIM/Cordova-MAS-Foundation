@@ -40,7 +40,10 @@
             }
 
             function onDeviceReady() {
-
+                var MAS = new MASPlugin.MAS();
+                MAS.initialize(function(result){},function (error){
+                    alert("Initialization failure");
+                });
             }
     </script>
 
