@@ -48,7 +48,8 @@ public class MASUserCommand {
             MASUser.login(username, password, new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
-                    success(callbackContext, true);
+                    String result="Login with username and password complete";
+                    callbackContext.success(result);
                 }
 
                 @Override
@@ -269,7 +270,8 @@ public class MASUserCommand {
                 masUser.logout(new MASCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        success(callbackContext, true);
+                        String result="Logoff user complete";
+                        callbackContext.success(result);
                     }
 
                     @Override
@@ -279,7 +281,9 @@ public class MASUserCommand {
                     }
                 });
             } else {
-                success(callbackContext, true);
+                String result="User has not been authenticated";
+                Exception e= new Exception(result);
+                callbackContext.error(getError(e));
             }
         }
 

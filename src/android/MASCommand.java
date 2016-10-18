@@ -60,7 +60,8 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 MAS.start(context, true);
-                success(callbackContext, true);
+                String result="Start Complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -345,7 +346,8 @@ public class MASCommand {
             try {
                 boolean shouldUseDefault = args.getBoolean(0);
                 MAS.start(context, shouldUseDefault);
-                success(callbackContext, true);
+                String result="Start complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -416,7 +418,8 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 MAS.stop();
-                success(callbackContext, true);
+                String result="Stop Complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -437,7 +440,8 @@ public class MASCommand {
             try {
                 String filename = args.getString(0);
                 MAS.setConfigurationFileName(filename);
-                success(callbackContext, true);
+                String result="Config file name is set";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -467,8 +471,8 @@ public class MASCommand {
                 }
 
                 MAS.setGrantFlow(grantFlow);
-                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-                callbackContext.sendPluginResult(result);
+                String result="Grant flow is set";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
