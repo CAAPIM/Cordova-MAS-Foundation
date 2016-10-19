@@ -1155,7 +1155,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -1173,7 +1173,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -1294,7 +1294,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -1475,7 +1475,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
