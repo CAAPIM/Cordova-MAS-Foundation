@@ -404,7 +404,7 @@
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
 
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Stop complete"];
 
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
@@ -1021,7 +1021,7 @@
     }
     else {
 
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initlaized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
 
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
 
