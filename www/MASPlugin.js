@@ -403,6 +403,23 @@
             };
 
         },
+
+        /**
+         *
+         * MASAuthenticationProviders represents all available providers
+         */
+        MASAuthenticationProviders: function()
+        {
+            this.getCurrentProviders = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentProviders", []);
+            };
+            this.retrieveAuthenticationProviderForProximityLogin = function(successHandler, errorHandler)
+            {
+                return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveAuthenticationProviderForProximityLogin", []);
+            };
+        },
+
         /**
          MASDevice which has the interfaces mapped to the native MASDevice class.
          */

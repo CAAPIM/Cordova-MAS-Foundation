@@ -200,7 +200,21 @@
  */
 - (void)deregister:(CDVInvokedUrlCommand*)command;
 
+/**
+ *
+ *  Returns the authentication provider for proximity login
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)retrieveAuthenticationProviderForProximityLogin:(CDVInvokedUrlCommand*)command;
 
+/**
+ *
+ *  Returns the list of current providers
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getCurrentProviders:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Boolean property of device registration status
