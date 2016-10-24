@@ -57,7 +57,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
-        <framework src="com.google.zxing:core:3.2.0" />
+       <!-- <framework src="com.google.zxing:core:3.2.0" /> -->
         <framework src="com.android.support:appcompat-v7:23+" />
     </platform>
 </plugin>

@@ -80,7 +80,7 @@
                         "orientation" : "landscape" // Android only (portrait|landscape), default unset so it rotates with the device
                     } );
                }
-               else if (QRCode !== undefined)  {
+               else if (typeof QRCode !== 'undefined')  {
 
                     QRCode.scanCode(function(info) {                                            
                         
