@@ -18,7 +18,6 @@ import android.util.Pair;
 import android.widget.ImageView;
 
 import com.ca.mas.core.error.MAGError;
-import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;

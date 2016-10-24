@@ -23,7 +23,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.auth.MASApplication;
 import com.ca.mas.foundation.auth.MASWebApplication;

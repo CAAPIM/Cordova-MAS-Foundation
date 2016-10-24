@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-import com.ca.apim.util.MASUtil;
 import com.ca.mas.core.MAGResultReceiver;
 import com.ca.mas.core.MobileSsoFactory;
 import com.ca.mas.core.error.MAGError;
