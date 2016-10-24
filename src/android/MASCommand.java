@@ -5,19 +5,31 @@
  *
  */
 
-package com.ca.apim;
+package com.ca.mas.cordova.core;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.ImageView;
 
+import com.ca.mas.core.error.MAGError;
+import com.ca.apim.util.MASUtil;
 import com.ca.mas.foundation.MAS;
+import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASConstants;
+import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
+import com.ca.mas.foundation.auth.MASAuthenticationProviders;
+import com.ca.mas.foundation.auth.MASProximityLogin;
+import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -25,11 +37,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,14 +51,17 @@ import java.util.Objects;
 public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
+    private static MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
+    private static CallbackContext AUTH_LISTENER_CALLBACK;
 
     public static class StartCommand extends Command {
 
         @Override
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
-                MAS.start(context);
-                success(callbackContext, true);
+                MAS.start(context, true);
+                String result="Start Complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -58,6 +75,270 @@ public class MASCommand {
 
     }
 
+    public static class GenerateAndSendOTPCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                JSONArray channels = args.getJSONArray(0);//String(0);
+                StringBuffer channelResult = new StringBuffer();
+                for (int i = 0; i < channels.length(); i++) {
+                    channelResult.append(channels.get(i));
+                    if (i != channels.length() - 1) {
+                        channelResult.append(",");
+                    }
+                }
+
+                masOtpAuthenticationHandlerStatic.deliver(channelResult.toString(), new MASCallback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        callbackContext.success("true");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callbackContext.error(getError(e));
+                        ;
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "generateAndSendOTP";
+        }
+
+    }
+
+    public static class ValidateOtpCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                String otp = args.getString(0);
+                masOtpAuthenticationHandlerStatic.proceed(context, otp);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "validateOTP";
+        }
+
+    }
+
+
+    public static class CancelGenerateAndSendOTPCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                masOtpAuthenticationHandlerStatic.cancel();
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelGenerateAndSendOTP";
+        }
+
+    }
+
+    public static class CancelOTPValidationCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                masOtpAuthenticationHandlerStatic.cancel();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelOTPValidation";
+        }
+
+    }
+
+    /* to maintain consistency with IOS */
+    public static class setOTPChannelSelectorListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        }
+
+        @Override
+        public String getAction() {
+            return "setOTPChannelSelectorListener";
+        }
+
+    }
+
+    /* to maintain consistency with IOS */
+    public static class setOTPAuthenticationListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        }
+
+        @Override
+        public String getAction() {
+            return "setOTPAuthenticationListener";
+        }
+
+    }
+
+
+    public static class SetAuthenticationListenerCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            AUTH_LISTENER_CALLBACK = callbackContext;
+            try {
+                MAS.setAuthenticationListener(new MASAuthenticationListener() {
+                    @Override
+                    public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders masAuthenticationProviders) {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            MASProximityLogin qrcode = new MASProximityLoginQRCode(){
+                               /* @Override
+                                public void onError(int errorCode, final String m, Exception e) {
+
+                                }*/
+                                @Override
+                                protected void onAuthCodeReceived(String code) {
+                                    super.onAuthCodeReceived(code);
+
+                                    String data = "qrCodeAuthorizationComplete";
+                                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, data);
+                                    pluginResult.setKeepCallback(true);
+                                    AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+
+                                    // dismiss();
+                                }
+                                @Override
+                                public void close() {
+                                    super.close();
+                                    String data = "removeQRCode";
+                                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, data);
+                                    pluginResult.setKeepCallback(true);
+                                    AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+                                }
+
+                            };
+                            MASUtil.setQrCode(qrcode);
+                            boolean init = qrcode.init((Activity)context, requestId, masAuthenticationProviders);
+                            String encodedImage="";
+                            if(init){
+                                ImageView image= (ImageView)qrcode.render();
+                                Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                                ByteArrayOutputStream byteArrOutStream= new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrOutStream);
+                                byte byteImgArr[]=byteArrOutStream.toByteArray();
+                                encodedImage=Base64.encodeToString(byteImgArr,Base64.DEFAULT);
+                            }
+                            jsonObject.put("requestType", "Login");
+                            jsonObject.put("requestId", requestId);
+                            jsonObject.put("qrCodeImageBase64",encodedImage);
+                            qrcode.start();
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                        pluginResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(pluginResult);
+
+                        //callbackContext.success(jsonObject);
+                    }
+
+                    @Override
+                    public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
+                        masOtpAuthenticationHandlerStatic = masOtpAuthenticationHandler;
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("requestType", "OTP");
+                            if (masOtpAuthenticationHandler.isInvalidOtp()) {
+                                jsonObject.put("isInvalidOtp", "true");
+                                jsonObject.put("errorMessage","Otp is invalid");
+                            } else {
+                                List<String> channels = masOtpAuthenticationHandler.getChannels();
+                                if (channels != null) {
+                                    StringBuffer channelResult = new StringBuffer();
+                                    for (int i = 0; i < channels.size(); i++) {
+                                        channelResult.append(channels.get(i));
+                                        if (i != channels.size() - 1) {
+                                            channelResult.append(",");
+                                        }
+                                    }
+                                    jsonObject.put("channels", channelResult);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage(), e);
+                        }
+                        //callbackContext.success(jsonObject);
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                        pluginResult.setKeepCallback(true);
+                        callbackContext.sendPluginResult(pluginResult);
+
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                //callbackContext.error(getError(e));
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.ERROR, getError(e));
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "setAuthenticationListener";
+        }
+
+    }
+
+
+    public static class CancelRequestCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
+            try {
+                String requestId = args.getString(0);
+                MAS.cancelRequest(Long.getLong(requestId));
+                //MAS.start(context, shouldUseDefault);
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelRequest";
+        }
+
+    }
+
     public static class StartWithDefaultConfigurationCommand extends Command {
 
         @Override
@@ -65,7 +346,8 @@ public class MASCommand {
             try {
                 boolean shouldUseDefault = args.getBoolean(0);
                 MAS.start(context, shouldUseDefault);
-                success(callbackContext, true);
+                String result="Start complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -75,6 +357,36 @@ public class MASCommand {
         @Override
         public String getAction() {
             return "startWithDefaultConfiguration";
+        }
+
+    }
+
+    public static class GatewayIsReachableCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                MAS.gatewayIsReachable(new MASCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        success(callbackContext,result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, e.getMessage(), e);
+                        callbackContext.error(getError(e));
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "gatewayIsReachable";
         }
 
     }
@@ -106,7 +418,8 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 MAS.stop();
-                success(callbackContext, true);
+                String result="Stop Complete";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -127,7 +440,8 @@ public class MASCommand {
             try {
                 String filename = args.getString(0);
                 MAS.setConfigurationFileName(filename);
-                success(callbackContext, true);
+                String result="Config file name is set";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -157,8 +471,8 @@ public class MASCommand {
                 }
 
                 MAS.setGrantFlow(grantFlow);
-                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-                callbackContext.sendPluginResult(result);
+                String result="Grant flow is set";
+                callbackContext.success(result);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
@@ -217,7 +531,7 @@ public class MASCommand {
                         Map<String, List<String>> responseHeaders = masResponse.getHeaders();
                         if (responseHeaders != null) {
                             JSONObject headerJson = new JSONObject();
-                            for (String h: responseHeaders.keySet()) {
+                            for (String h : responseHeaders.keySet()) {
                                 List<String> hv = responseHeaders.get(h);
                                 if (hv != null && !hv.isEmpty()) {
                                     try {

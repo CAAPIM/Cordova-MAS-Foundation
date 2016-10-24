@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <title>Enterprise Browser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/> -->
+    <!-- <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script> -->
+    <meta charset="utf-8">
+    <style type="text/css">  
+        body{font-family: 'Ropa Sans', sans-serif; color:#666}
+        
+        li,ul,body{margin:0; padding:0; list-style:none}
+        #login-form{width:350px; background:#FFF; margin:50px auto; background:#f1f1f1}
+        .form-header{display:table; clear:both}	
+        .form-header li{display:inline-block; line-height:40px; width:255px; margin:0 2px; text-align:center; background:#e8e8e8}
+        .form-header li:nth-child(odd){padding-left: 40px;}
+        .form-header li:nth-child(even){width:50px; margin:0 0;}
+        .form{padding:0 30px; padding-bottom:10px}
+        .login li{height:35px; line-height:35px; margin-bottom:15px}
+        .inline:after{display:table; content:''}
+        .close_button{width:25%;}
+        .form a i.fa{ line-height:35px}
+        .form-footer{height:40px; line-height:40px; padding:3px 35px; text-align:right; font-size:14px}
+        .form-footer a{padding:6px; background:#006699; border-radius:3px; margin-left:4px; color:#FFFFFF; text-decoration:none}
+        .appListItem{display: inline-block; width: 150px; height: 150px; margin-left: 20px; }
+        </style>
+    <script>
+        var apps;
+    function closePopup() {
+        var MAS = new MASPlugin.MAS();
+        MAS.closePopup();
+	}
+    function launchApp(appId) {
+        var MASApplication = new MASPlugin.MASApplication();
+        MASApplication.launchApp(function(){}, function(){}, appId);
+    }
+    function displayApps(apps){
+        for(var key in apps){
+                $(".appList").append("<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+        }
+    }
+	</script>
+
+    </head>
+<body>
+
+
+    <div style="margin-top:20px">
+        <div id="login-form">
+            <div><ul id="" class="form-header"><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
+        </div>
+        <div class="appList"></div>
+        
+    </div>
+
+</body>
+</html>

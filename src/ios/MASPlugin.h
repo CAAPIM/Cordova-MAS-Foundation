@@ -9,6 +9,8 @@
 
 #import <Cordova/CDV.h>
 
+
+
 @interface MASPlugin : CDVPlugin
 
 /**
@@ -28,6 +30,44 @@
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
 
 
+
+/**
+ *  Set a user login block to handle the case where the type set in 'setDeviceRegistrationType:(MASDeviceRegistrationType)'
+ *  is 'MASDeviceRegistrationTypeUserCredentials'.  If it set to 'MASDeviceRegistrationTypeClientCredentials' this
+ *  is not called.
+ */
+- (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Complete the user login block with user provided credentials to handle the case where the type set in
+ *  'setDeviceRegistrationType:(MASDeviceRegistrationType)' is 'MASDeviceRegistrationTypeUserCredentials'.
+ */
+- (void)completeAuthentication:(CDVInvokedUrlCommand*)command;
+
+
+
+/**
+ *  Cancel the user login block to handle the case where the type set in
+ *  'setDeviceRegistrationType:(MASDeviceRegistrationType)' is 'MASDeviceRegistrationTypeUserCredentials'.
+ */
+- (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
+
+- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
+
+- (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command;
+
+- (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command;
+
+- (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command;
+
+
+- (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command;
+
+- (void)validateOTP:(CDVInvokedUrlCommand*)command;
+
+- (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Starts the lifecycle of the MAS processes.
@@ -72,15 +112,6 @@
  *  @param command CDInvokedUrlCommand object
  */
 - (void)startWithURL:(CDVInvokedUrlCommand*)command;
-
-
-
-/**
- *  TBD
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)setUserLoginBlock:(CDVInvokedUrlCommand*)command;
 
 
 
@@ -153,9 +184,14 @@
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)logoutUser:(CDVInvokedUrlCommand *)command;
+- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-
+/**
+  *  Gets current device information
+  *
+  *  @param command CDInvokedUrlCommand object
+  */
+- (void)getCurrentDevice:(CDVInvokedUrlCommand*)command;
 
 /**
  *  De-register the currently registered device and clears out all keychain information from local and shared keychain storage.
@@ -164,7 +200,21 @@
  */
 - (void)deregister:(CDVInvokedUrlCommand*)command;
 
+/**
+ *
+ *  Returns the authentication provider for proximity login
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)retrieveAuthenticationProviderForProximityLogin:(CDVInvokedUrlCommand*)command;
 
+/**
+ *
+ *  Returns the list of current providers
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getCurrentProviders:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Boolean property of device registration status
@@ -173,7 +223,12 @@
  */
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Returns the device identifier
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Boolean property of user authentication status
@@ -182,8 +237,6 @@
  */
 - (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
 
-
-
 /**
  *  Boolean property of the application authentication status (primarily for client credential authentication.)
  *
@@ -191,7 +244,12 @@
  */
 - (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Launches a native app with a given URI
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)launchApp:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Enumeration value of authentication status.
@@ -200,7 +258,68 @@
  */
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  The authenticated user for the application, if any.
+ *  This is a singleton object.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getCurrentUser:(CDVInvokedUrlCommand*)command;
 
+/**
+ *   The username of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getUserName:(CDVInvokedUrlCommand*)command;
+
+/**
+ *   The username of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getName:(CDVInvokedUrlCommand*)command;
+
+/**
+ *   The address of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getAddressList:(CDVInvokedUrlCommand*)command;
+
+/**
+ *   The email address of the current user.
+ *   This is a singleton object.
+ *
+ *   @param command CDInvokedUrlCommand object
+ */
+- (void)getEmailList:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Boolean value of gateway reachability
+  *
+  *  @param command CDInvokedUrlCommand object
+  */
+- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Boolean value that tells whether the user is active or not
+  *
+  *  @param command CDVInvokedUrlCommand object
+  *
+  */
+- (void)isActive:(CDVInvokedUrlCommand*)command;
+
+/**
+  *  Retrieves the list of enterprise apps
+  *
+  *  @param command CDVInvokedUrlCommand object
+  *
+*/
+- (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Reset local keychain storage
