@@ -73,6 +73,16 @@
                 Cordova.exec(MASPlugin.MASConfig.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
                 return successHandler("Initialization success !!");
             };
+
+            /**
+            Use Native MASUI
+            */
+            this.useNativeMASUI = function(successHandler, errorHandler)
+            {
+                Cordova.exec(successHandler, errorHandler, "MASPlugin", "useNativeMASUI", []);
+            };
+
+
             /**
              * Set the authentication UI handling page by this plugin.
              *

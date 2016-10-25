@@ -80,7 +80,7 @@
                         "orientation" : "landscape" // Android only (portrait|landscape), default unset so it rotates with the device
                     } );
                }
-               else if (typeof QRCode !== 'undefined')  {
+               else if (QRCode !== undefined)  {
 
                     QRCode.scanCode(function(info) {                                            
                         
@@ -117,7 +117,21 @@
                     displayError(thisElement, error);
                 });
             });
+            $("#useNativeMASUI").bind("click",function(event,ui){
 
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+
+                MAS.useNativeMASUI(function(result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
             $("#setCustomLoginPage").bind("click",function(event,ui){
 
                 if($(event.target).context.tagName != 'A') return;
@@ -962,6 +976,7 @@
         <ul data-role="listview" data-inset="true" data-filter="false" id="actionsListView">
             <li data-icon="false"><a href="#" id="scan">Scan QRCode<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="init">MAS Init<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="useNativeMASUI">Use Native MASUI<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomLoginPage">MAS set custom login page <input type="text" name="loginPageName" placeholder="loginPageName"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomOTPChannelsPage">MAS set custom OTP Channels page <input type="text" name="otpChannelsPageName" placeholder="otpChannelsPageName"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="setCustomOTPPage">MAS set custom OTP page <input type="text" name="otpPageName" placeholder="otpPageName"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>

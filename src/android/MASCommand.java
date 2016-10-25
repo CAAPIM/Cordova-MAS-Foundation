@@ -8,6 +8,7 @@
 package com.ca.mas.cordova.core;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -389,6 +390,51 @@ public class MASCommand {
         }
 
     }
+
+    public static class UseNativeMASUICommand extends Command {
+        private static DialogFragment getLoginFragment(long requestID, MASAuthenticationProviders providers) {
+            try {
+                Class c = Class.forName("com.ca.mas.ui.MASLoginFragment");
+                return (DialogFragment) c.getMethod("newInstance", long.class, MASAuthenticationProviders.class).invoke(null, requestID, providers);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        private static DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
+            try {
+                Class c = Class.forName("com.ca.mas.ui.otp.MASOtpSelectDeliveryChannelFragment");
+                return (DialogFragment) c.getMethod("newInstance",  MASOtpAuthenticationHandler.class).invoke(null, handler);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            MAS.setAuthenticationListener(new MASAuthenticationListener() {
+                @Override
+                public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers){
+                    android.app.DialogFragment loginFragment = getLoginFragment(requestId,providers);
+                    loginFragment.show(((Activity) context).getFragmentManager(), "logonDialog");
+                }
+
+                @Override
+                public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
+                    android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
+                    otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
+                }
+            });
+            success(callbackContext,true);
+        }
+
+        @Override
+        public String getAction() {
+            return "useNativeMASUI";
+        }
+
+    }
+
 
     public static class StartWithJSONCommand extends Command {
 

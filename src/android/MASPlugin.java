@@ -7,6 +7,8 @@
 
 package com.ca.mas.cordova.core;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.util.Log;
 import com.ca.mas.foundation.MAS;
@@ -46,6 +48,7 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.CancelOTPValidationCommand());
         add(new MASCommand.CancelGenerateAndSendOTPCommand());
         add(new MASCommand.GatewayIsReachableCommand());
+        add(new MASCommand.UseNativeMASUICommand());
 
         add(new MASDeviceCommand.DeregisterCommand());
         add(new MASDeviceCommand.IsRegisteredCommand());
@@ -76,20 +79,40 @@ public class MASPlugin extends CordovaPlugin {
         commands.put(command.getAction(), command);
     }
 
+
+    private static DialogFragment getLoginFragment(long requestID, MASAuthenticationProviders providers) {
+        try {
+            Class c = Class.forName("com.ca.mas.ui.MASLoginFragment");
+            return (DialogFragment) c.getMethod("newInstance", long.class, MASAuthenticationProviders.class).invoke(null, requestID, providers);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
+        try {
+            Class c = Class.forName("com.ca.mas.ui.MASOtpSelectDeliveryChannelFragment");
+            return (DialogFragment) c.getMethod("newInstance",  MASOtpAuthenticationHandler.class).invoke(null, handler);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
         MAS.setAuthenticationListener(new MASAuthenticationListener() {
             @Override
-            public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
-               /* DialogFragment loginFragment = MASLoginFragment.newInstance(requestId, providers);
-                loginFragment.show(((Activity)context).getFragmentManager(), "logonDialog");*/
+            public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers){
+                android.app.DialogFragment loginFragment = getLoginFragment(requestId,providers);
+                loginFragment.show(((Activity) context).getFragmentManager(), "logonDialog");
             }
 
             @Override
             public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
-                /*android.app.DialogFragment otpFragment = MASOtpSelectDeliveryChannelFragment.newInstance(handler);
-                otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");*/
+                android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
+                otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
             }
         });
 
