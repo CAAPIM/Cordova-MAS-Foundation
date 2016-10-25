@@ -514,7 +514,7 @@ public class MASCommand {
                         builder.header(name, value);
                     }
                 }
-
+                builder.notifyOnCancel();
                 MAS.invoke(builder.build(), new MASCallback<MASResponse<Object>>() {
 
                     @Override
@@ -549,7 +549,14 @@ public class MASCommand {
 
                     @Override
                     public void onError(Throwable throwable) {
-                        callbackContext.error(getError(throwable));
+                        if (throwable instanceof  MAS.RequestCancelledException) {
+                            JSONObject error = new JSONObject();
+                            try {
+                                error.put("errorMessage", "Request Cancelled");
+                            }catch (JSONException e){}
+                            callbackContext.error(error);
+                        } else
+                            callbackContext.error(getError(throwable));
                     }
                 });
             } catch (Exception e) {
