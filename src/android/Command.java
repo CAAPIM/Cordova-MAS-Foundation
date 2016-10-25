@@ -82,8 +82,10 @@ public abstract class Command {
             errorMessage = serverException.getMessage();
         } else if (throwable.getCause() != null && throwable.getCause() instanceof TargetApiException) {
             TargetApiException e = ((TargetApiException) throwable.getCause());
-            errorCode = ServerClient.findErrorCode(e.getResponse());
-
+            try {
+                errorCode = ServerClient.findErrorCode(e.getResponse());
+            } catch (Exception ignore) {
+            }
         } else {
             errorMessageDetail = throwable.getMessage();
         }
