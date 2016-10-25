@@ -81,7 +81,8 @@ public class MASUserCommand {
             MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
-                    success(callbackContext, true);
+                    String msg="QR Code authorized successfully!";
+                    callbackContext.success(msg);
                 }
 
 
@@ -100,6 +101,7 @@ public class MASUserCommand {
         }
     }
 
+    //Not supported by iOS
     public static class LoginWithImplicitFlowCommand extends Command {
 
         @Override
