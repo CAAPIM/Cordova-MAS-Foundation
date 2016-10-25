@@ -213,8 +213,8 @@ public class MASUserCommand {
                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
                     pluginResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(pluginResult);
-
-                    //success(callbackContext, true);
+                    // This call to getCurrent user is added as first call to this function returns some empty user.[DE230510]
+                    MASUser.getCurrentUser();
                 }
 
                 @Override
