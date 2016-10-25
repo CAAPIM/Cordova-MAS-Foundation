@@ -80,7 +80,7 @@
                         "orientation" : "landscape" // Android only (portrait|landscape), default unset so it rotates with the device
                     } );
                }
-               else if (QRCode !== undefined)  {
+               else if (typeof QRCode !== 'undefined')  {
 
                     QRCode.scanCode(function(info) {                                            
                         
@@ -902,6 +902,11 @@
             function displayError(element, error)
             {
                 element.find("textarea.error").show();
+                if(typeof error === 'undefined' || typeof error.errorMessage === 'undefined' ){
+                    error={
+                        errorMessage:"Unknown error"
+                    }
+                }
                 element.find("textarea.error").html(error.errorMessage);
             }
         });
@@ -1006,14 +1011,15 @@
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-            <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice getCurrentDevice<textarea class='error' style="display:none;" readonly=""></textarea></a></li> 
+            <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice getCurrentDevice<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <!--
             <li data-icon="false"><a href="#" id="retrieveEnterpriseApps">MASApplication Retrieve Enterprise Apps<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getApplicationIdentifier">MASApplication Identifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getApplicationName">MASApplication Name<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getApplicationIconUrl">MASApplication IconUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getApplicationAuthUrl">MASApplication AuthUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getApplicationNativeUri">MASApplication NativeUri<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-            <li data-icon="false"><a href="#" id="getApplicationCustom">MASApplication Custom<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="getApplicationCustom">MASApplication Custom<textarea class='error' style="display:none;" readonly=""></textarea></a></li> -->
             <li data-icon="false">
                 <a href="#" id="getCRUD">MAS get
                     <input type="text" name="path" placeholder="API path"/>
