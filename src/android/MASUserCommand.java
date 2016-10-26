@@ -215,6 +215,7 @@ public class MASUserCommand {
                     callbackContext.sendPluginResult(pluginResult);
                     // This call to getCurrent user is added as first call to this function returns some empty user.[DE230510]
                     MASUser.getCurrentUser();
+                    MASUtil.getQrCode().stop();
                 }
 
                 @Override
