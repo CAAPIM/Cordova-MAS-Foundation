@@ -274,7 +274,7 @@ public class MASCommand {
                             jsonObject.put("requestType", "OTP");
                             if (masOtpAuthenticationHandler.isInvalidOtp()) {
                                 jsonObject.put("isInvalidOtp", "true");
-                                jsonObject.put("errorMessage","Otp is invalid");
+                                jsonObject.put("errorMessage","Authentication failed due to an invalid OTP.");
                             } else {
                                 List<String> channels = masOtpAuthenticationHandler.getChannels();
                                 if (channels != null) {
