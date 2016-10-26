@@ -7,11 +7,9 @@
 
 package com.ca.mas.cordova.core;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
+
 import com.ca.mas.core.MAGResultReceiver;
 import com.ca.mas.core.MobileSsoFactory;
 import com.ca.mas.core.error.MAGError;
@@ -25,17 +23,16 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MASUserCommand {
 
     private static final String TAG = LoginCommand.class.getCanonicalName();
-    @Deprecated
-    public static CallbackContext COMPLETE_AUTH_CALLBACK;
     public static class LoginCommand extends Command {
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            String username = null;
-            String password = null;
+            String username;
+            String password;
             try {
                 username = (String) args.get(0);
                 password = (String) args.get(1);
@@ -69,8 +66,7 @@ public class MASUserCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            String url = null;
-            String password = null;
+            String url;
             try {
                 url = (String) args.get(0);
             } catch (JSONException e) {
@@ -195,9 +191,8 @@ public class MASUserCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
-            //COMPLETE_AUTH_CALLBACK = callbackContext;
-            String username = null;
-            String password = null;
+            String username;
+            String password;
             try {
                 username = (String) args.get(0);
                 password = (String) args.get(1);

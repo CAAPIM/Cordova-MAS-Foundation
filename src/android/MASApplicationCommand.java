@@ -80,17 +80,11 @@ public abstract class MASApplicationCommand {
         void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
                 String appId = args.getString(0);
-               /* MASApplication masApplication=null;
-                for(int i=0;i<masApplicationsStatic.size();i++){
-                    if(masApplicationsStatic.get(i).getIdentifier().equals(appId)){
-                        masApplication=masApplicationsStatic.get(i);
-                        break;
-                    }
-                }*/
                 MASApplication masApplication = fetchCurrentApp(appId);
                 callbackContext.success(masApplication.getName());
             } catch (Exception e) {
-
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
             }
 
         }
@@ -111,7 +105,7 @@ public abstract class MASApplicationCommand {
                 @Override
                 public void onSuccess(List<MASApplication> masApplications) {
                     masApplicationsStatic = masApplications;
-                    JSONArray appIdentifiers = new JSONArray();
+                    JSONArray appIdentifiers;
                     appIdentifiers = MASUtil.convertMASApplicationListToJson(masApplications);
                     callbackContext.success(appIdentifiers);
                 }
@@ -170,7 +164,7 @@ public abstract class MASApplicationCommand {
                                             final WebView web = new WebView(MASPlugin.getCurrentInstance().cordova.getActivity());
                                             ENTERPRISE_BROWSER_WEBVIEW = web;
                                             LinearLayout.MarginLayoutParams layoutParams= new LinearLayout.MarginLayoutParams
-                                                    (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+                                                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
                                             MASPlugin.getCurrentInstance().cordova.getActivity().addContentView(web, layoutParams);
                                             new MASWebApplication(web, masApplication.getAuthUrl()) {
@@ -182,7 +176,7 @@ public abstract class MASApplicationCommand {
                                                         public void onReceivedSslError(WebView webView, final SslErrorHandler handler, SslError error) {
                                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                                             AlertDialog ad = builder.create();
-                                                            String message = null;
+                                                            String message;
                                                             switch (error.getPrimaryError()) {
                                                                 case SslError.SSL_UNTRUSTED:
                                                                     message = "Certificate is untrusted.";

@@ -8,7 +8,6 @@
 package com.ca.mas.cordova.core;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ca.mas.core.client.ServerClient;
 import com.ca.mas.core.error.MAGErrorCode;
@@ -23,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 

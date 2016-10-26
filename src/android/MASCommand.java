@@ -18,7 +18,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
-import com.ca.mas.core.error.MAGError;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
@@ -38,15 +37,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MASCommand {
 
@@ -81,7 +75,7 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
                 JSONArray channels = args.getJSONArray(0);//String(0);
-                StringBuffer channelResult = new StringBuffer();
+                StringBuilder channelResult = new StringBuilder();
                 for (int i = 0; i < channels.length(); i++) {
                     channelResult.append(channels.get(i));
                     if (i != channels.length() - 1) {
@@ -99,7 +93,6 @@ public class MASCommand {
                     @Override
                     public void onError(Throwable e) {
                         callbackContext.error(getError(e));
-                        ;
                     }
                 });
             } catch (Exception e) {
@@ -513,6 +506,8 @@ public class MASCommand {
                     case 1:
                         grantFlow = MASConstants.MAS_GRANT_FLOW_PASSWORD;
                         break;
+                    default:
+                        throw new UnsupportedOperationException("No such flow present");
                 }
 
                 MAS.setGrantFlow(grantFlow);
@@ -599,7 +594,9 @@ public class MASCommand {
                             JSONObject error = new JSONObject();
                             try {
                                 error.put("errorMessage", "Request Cancelled");
-                            }catch (JSONException e){}
+                            }catch (JSONException ignore){
+                                Log.e(TAG, ignore.getMessage(), ignore);
+                            }
                             callbackContext.error(error);
                         } else
                             callbackContext.error(getError(throwable));
@@ -683,7 +680,7 @@ public class MASCommand {
                         for (int i = 0; i < parameters.names().length(); i++) {
                             String name = parameters.names().getString(i);
                             String value = parameters.getString(name);
-                            list.add(new Pair<String, String>(name, value));
+                            list.add(new Pair<>(name, value));
                         }
                         builder.put(MASRequestBody.urlEncodedFormBody(list));
                         break;
@@ -720,7 +717,7 @@ public class MASCommand {
                         for (int i = 0; i < parameters.names().length(); i++) {
                             String name = parameters.names().getString(i);
                             String value = parameters.getString(name);
-                            list.add(new Pair<String, String>(name, value));
+                            list.add(new Pair<>(name, value));
                         }
                         builder.post(MASRequestBody.urlEncodedFormBody(list));
                         break;

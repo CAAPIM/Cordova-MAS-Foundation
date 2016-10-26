@@ -13,8 +13,6 @@ import android.util.Log;
 import com.ca.mas.foundation.Device;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASDevice;
-import com.ca.mas.foundation.auth.MASProximityLoginBLEPeripheralListener;
-import com.ca.mas.foundation.auth.MASProximityLoginBLEUserConsentHandler;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
