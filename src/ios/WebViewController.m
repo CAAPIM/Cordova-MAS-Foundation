@@ -80,6 +80,13 @@
 
 - (void)done:(id)sender {
     
+    for (UIGestureRecognizer *gr in self.webView.gestureRecognizers) {
+        
+        gr.delegate = nil;
+    }
+    
+    self.webView.scrollView.delegate = nil;
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
