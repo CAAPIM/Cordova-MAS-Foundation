@@ -47,6 +47,8 @@ public class MASCommand {
     private static final String TAG = MASCommand.class.getCanonicalName();
     private static MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
     private static CallbackContext AUTH_LISTENER_CALLBACK;
+    private static CallbackContext OTP_AUTH_LISTENER_CALLBACK;
+    private static CallbackContext OTP_CHANNEL_SELECT_LISTENER_CALLBACK;
 
     public static class StartCommand extends Command {
 
@@ -173,6 +175,7 @@ public class MASCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            OTP_CHANNEL_SELECT_LISTENER_CALLBACK = callbackContext;
         }
 
         @Override
@@ -187,6 +190,7 @@ public class MASCommand {
 
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            OTP_AUTH_LISTENER_CALLBACK = callbackContext;
         }
 
         @Override
@@ -209,20 +213,13 @@ public class MASCommand {
                         JSONObject jsonObject = new JSONObject();
                         try {
                             MASProximityLogin qrcode = new MASProximityLoginQRCode(){
-                               /* @Override
-                                public void onError(int errorCode, final String m, Exception e) {
-
-                                }*/
                                 @Override
                                 protected void onAuthCodeReceived(String code) {
                                     super.onAuthCodeReceived(code);
-
                                     String data = "qrCodeAuthorizationComplete";
                                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, data);
                                     pluginResult.setKeepCallback(true);
                                     AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
-
-                                    // dismiss();
                                 }
                                 @Override
                                 public void close() {
@@ -232,7 +229,6 @@ public class MASCommand {
                                     pluginResult.setKeepCallback(true);
                                     AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
                                 }
-
                             };
                             MASUtil.setQrCode(qrcode);
                             boolean init = qrcode.init((Activity)context, requestId, masAuthenticationProviders);
@@ -254,50 +250,50 @@ public class MASCommand {
                         }
                         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
                         pluginResult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(pluginResult);
-
-                        //callbackContext.success(jsonObject);
+                        AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
                     }
 
                     @Override
                     public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
                         masOtpAuthenticationHandlerStatic = masOtpAuthenticationHandler;
-                        JSONObject jsonObject = new JSONObject();
+                        JSONArray jsonArray = new JSONArray();
                         try {
-                            jsonObject.put("requestType", "OTP");
+                            //jsonObject.put("requestType", "OTP");
+                            JSONObject jsonObject = new JSONObject();
                             if (masOtpAuthenticationHandler.isInvalidOtp()) {
                                 jsonObject.put("isInvalidOtp", "true");
-                                jsonObject.put("errorMessage","Authentication failed due to an invalid OTP.");
+                                jsonObject.put("errorMessage","Otp is invalid");
+                                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                                pluginResult.setKeepCallback(true);
+                                OTP_AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+                                return;
                             } else {
                                 List<String> channels = masOtpAuthenticationHandler.getChannels();
                                 if (channels != null) {
                                     StringBuffer channelResult = new StringBuffer();
                                     for (int i = 0; i < channels.size(); i++) {
                                         channelResult.append(channels.get(i));
+                                        jsonArray.put(channels.get(i));
                                         if (i != channels.size() - 1) {
                                             channelResult.append(",");
                                         }
                                     }
-                                    jsonObject.put("channels", channelResult);
+                                    //jsonObject.put("channels", channelResult);
                                 }
                             }
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
-                        //callbackContext.success(jsonObject);
-                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonObject);
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonArray);
                         pluginResult.setKeepCallback(true);
-                        callbackContext.sendPluginResult(pluginResult);
-
+                        OTP_CHANNEL_SELECT_LISTENER_CALLBACK.sendPluginResult(pluginResult);
                     }
                 });
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
-                //callbackContext.error(getError(e));
                 PluginResult pluginResult = new PluginResult(PluginResult.Status.ERROR, getError(e));
                 pluginResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(pluginResult);
-
+                AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
             }
         }
 
@@ -316,13 +312,11 @@ public class MASCommand {
             try {
                 String requestId = args.getString(0);
                 MAS.cancelRequest(Long.getLong(requestId));
-                //MAS.start(context, shouldUseDefault);
                 success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
                 callbackContext.error(getError(e));
             }
-
         }
 
         @Override

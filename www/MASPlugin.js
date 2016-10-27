@@ -497,7 +497,7 @@
                     MASPlugin.MASConfig.loginAuthRequestId = result.requestId;
                 }
 
-                if (typeof result !== 'undefined' && !isEmpty(result) &&
+                /*if (typeof result !== 'undefined' && !isEmpty(result) &&
                     typeof result.requestType !== 'undefined' && !isEmpty(result.requestType) &&
                     result.requestType === "OTP") {
                     if (typeof result.isInvalidOtp !== 'undefined' && !isEmpty(result.isInvalidOtp) && result.isInvalidOtp == "true") {
@@ -511,7 +511,7 @@
                         var channels = channelsCSV.split(',');
                         MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
                     }
-                } else if (result === "removeQRCode") {
+                } else */if (result === "removeQRCode") {
                     document.getElementById('qr-code').style.display = 'none';
                 } else if (result === "qrCodeAuthorizationComplete") {
                     $('#loginDiv').remove();
