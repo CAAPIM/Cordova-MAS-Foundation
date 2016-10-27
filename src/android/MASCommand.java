@@ -387,7 +387,7 @@ public class MASCommand {
     public static class UseNativeMASUICommand extends Command {
         private static DialogFragment getLoginFragment(long requestID, MASAuthenticationProviders providers) {
             try {
-                Class c = Class.forName("com.ca.mas.ui.MASLoginFragment");
+                Class<?> c = Class.forName("com.ca.mas.ui.MASLoginFragment");
                 return (DialogFragment) c.getMethod("newInstance", long.class, MASAuthenticationProviders.class).invoke(null, requestID, providers);
             } catch (Exception e) {
                 return null;
@@ -396,7 +396,7 @@ public class MASCommand {
 
         private static DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
             try {
-                Class c = Class.forName("com.ca.mas.ui.otp.MASOtpSelectDeliveryChannelFragment");
+                Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpSelectDeliveryChannelFragment");
                 return (DialogFragment) c.getMethod("newInstance",  MASOtpAuthenticationHandler.class).invoke(null, handler);
             } catch (Exception e) {
                 return null;
@@ -409,13 +409,19 @@ public class MASCommand {
                 @Override
                 public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers){
                     android.app.DialogFragment loginFragment = getLoginFragment(requestId,providers);
-                    loginFragment.show(((Activity) context).getFragmentManager(), "logonDialog");
+                    if(loginFragment!=null) {
+                        loginFragment.show(((Activity) context).getFragmentManager(), "logonDialog");
+                    }
+
                 }
 
                 @Override
                 public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
                     android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
-                    otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
+                    if(otpFragment!=null){
+                        otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
+                    }
+
                 }
             });
             success(callbackContext,true);
@@ -568,7 +574,7 @@ public class MASCommand {
                             } catch (JSONException ignore) {
                             }
                         }
-                        Map<String, List<String>> responseHeaders = masResponse.getHeaders();
+                        Map<String, List<String>> responseHeaders =masResponse.getHeaders();
                         if (responseHeaders != null) {
                             JSONObject headerJson = new JSONObject();
                             for (String h : responseHeaders.keySet()) {
