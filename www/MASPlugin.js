@@ -515,14 +515,20 @@
                     document.getElementById('qr-code').style.display = 'none';
                 } else if (result === "qrCodeAuthorizationComplete") {
                     $('#loginDiv').remove();
-                } else {
-                    MASPlugin.MASConfig.MASPopupUI(pageToLoad, function() {
-                        $('#loginDiv').remove();
-                    }, function() {
+                } else{
+                      if(pageToLoad === MASPlugin.MASConfig.loginPage && document.getElementById('loginDiv') === null){
 
-                        document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
-                    });
-                }
+                           MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()
+                           {
+                               var MAS = new MASPlugin.MAS();
+                               //MAS.initialize(function() {});
+                               $('#loginDiv').remove();
+                           }, function() {
+
+                               document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
+                           });
+                      }
+                   }
             },
             /** Used to send the username and password to the server and setting div with id "errorMesg" with error message if error occurs.
              * @param username user defined username
