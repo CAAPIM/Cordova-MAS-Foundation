@@ -1454,8 +1454,10 @@
             NSDictionary *errorInfo = nil;
             if ([[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"])
                 errorInfo = @{@"errorMessage":@"Host is currently not reachable"};
-            else
-                errorInfo = @{@"errorMessage":@"Application not initialized"};
+            else if (![MASApplication currentApplication])
+                errorMessage = @"Application not initialized";
+            
+            NSDictionary *errorInfo = @{@"errorMessage":errorMessage};
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
             
