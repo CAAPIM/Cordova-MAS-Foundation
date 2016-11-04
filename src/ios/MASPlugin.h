@@ -168,6 +168,15 @@
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
 
+- (void)isSessionLocked:(CDVInvokedUrlCommand*)command;
+
+- (void)lockSession:(CDVInvokedUrlCommand*)command;
+
+- (void)unlockSession:(CDVInvokedUrlCommand*)command;
+
+- (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command;
+
+- (void)removeSessionLock:(CDVInvokedUrlCommand*)command;
 
 /**
  *  Authenticates a user with given username and password.
