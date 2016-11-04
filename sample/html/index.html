@@ -319,9 +319,12 @@
             });
 
             $("#initEnterpriseBrowser").bind("click",function(event,ui){
-               $(this).find("textarea.error").hide();
-               
+                
+                $(this).find("textarea.error").hide();
+                                             
+                var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
+
                 MASApplication.initEnterpriseBrowser(function (result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
