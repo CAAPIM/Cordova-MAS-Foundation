@@ -21,8 +21,10 @@ public class MASPlugin extends CordovaPlugin {
 
     private static final String TAG = MASPlugin.class.getCanonicalName();
     private static final Map<String, Command> commands = new HashMap<>();
+    private final static int FINGERPRINT_REQUEST_CODE = 0x1000;
 
     public static MASPlugin masPlugin;
+
     static {
         add(new MASCommand.StartCommand());
         add(new MASCommand.StartWithDefaultConfigurationCommand());
@@ -60,6 +62,12 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.CancelAuthenticationCommand());
         add(new MASUserCommand.GetUserNameCommand());
         add(new MASUserCommand.AuthorizeCommand());
+        // Fingerprint commands
+        add(new MASUserCommand.IsSessionLockedCommand());
+        add(new MASUserCommand.LockSessionCommand());
+        add(new MASUserCommand.UnLockSessionCommand());
+        add(new MASUserCommand.UnLockSessionWithMessageCommand());
+        add(new MASUserCommand.RemoveSessionLockCommand());
 
 
         add(new MASApplicationCommand.GetIdentifierCommand());
@@ -77,7 +85,6 @@ public class MASPlugin extends CordovaPlugin {
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-
 
         /* Enable below for debugging.
         MAS.setConnectionListener(new MASConnectionListener() {
@@ -123,7 +130,7 @@ public class MASPlugin extends CordovaPlugin {
         }
     }
 
-    public static MASPlugin getCurrentInstance () {
+    public static MASPlugin getCurrentInstance() {
         return getMasPlugin();
     }
 
@@ -134,7 +141,5 @@ public class MASPlugin extends CordovaPlugin {
     public static void setMasPlugin(MASPlugin masPlugin) {
         MASPlugin.masPlugin = masPlugin;
     }
-
-
 }
 

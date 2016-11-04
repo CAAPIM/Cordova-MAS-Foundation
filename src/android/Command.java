@@ -84,6 +84,8 @@ public abstract class Command {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
             } catch (Exception ignore) {
             }
+        } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
+            errorCode = MAGErrorCode.UNKNOWN;
         } else {
             errorMessageDetail = throwable.getMessage();
         }
@@ -101,6 +103,7 @@ public abstract class Command {
             }
         } catch (JSONException ignore) {
         }
+
         return error;
     }
 
