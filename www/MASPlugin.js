@@ -464,10 +464,16 @@
                 return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
             },
             MASPopupUI: function(url, popupafterclose, onload) {
-                var template = "<div id='loginDiv' data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 570px; overflow: auto'>" + "</div>";
+                var onLoadOverloaded = function(){
+                     document.getElementById('loginDiv').hidden=false;
+                     onload();
+                };
+                $('#loginDiv').remove();
+                var template = "<div id='loginDiv' hidden data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 570px; overflow: auto'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
-                $('#loginDiv').load(url, onload);
+
+                $('#loginDiv').load(url, onLoadOverloaded);
                 $.mobile.activePage.find(".closePopup").bind("tap", function() {
                     $.mobile.activePage.find(".messagePopup").popup("close");
                 });
@@ -541,7 +547,9 @@
                 var errorMsgToDisplay = "";
                 var MAS = new MASPlugin.MAS();
                 MAS.completeAuthentication(function() {
-                    $.mobile.activePage.find(".messagePopup").popup("close");
+                    if (document.getElementById("CA-Username") !== null ) {
+                        $.mobile.activePage.find(".messagePopup").popup("close");
+                    }
                 }, function(error) {
                     if (typeof error !== 'undefined' && !isEmpty(error)) {
                         if (typeof error.errorCode !== 'undefined' && !isEmpty(error.errorCode) && !isNaN(error.errorCode)) {
@@ -583,6 +591,9 @@
              */
 
             MASOTPChannelSelectCallback: function(otpChannels) {
+             /*   if (document.getElementById("CA-Username") !== null ) {
+                    $('#loginDiv').remove();
+                } */
                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpChannelsPage, function() {
                     $('#loginDiv').remove();
                 }, function() {
