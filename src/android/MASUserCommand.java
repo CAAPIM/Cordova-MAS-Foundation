@@ -201,7 +201,7 @@ public class MASUserCommand {
                 return;
             }
 
-            MobileSsoFactory.getInstance().authenticate(username, password.toCharArray(), new MAGResultReceiver<JSONObject>() {
+          /*  MobileSsoFactory.getInstance().authenticate(username, password.toCharArray(), new MAGResultReceiver<JSONObject>() {
 
                 @Override
                 public void onSuccess(MAGResponse<JSONObject> response) {
@@ -221,6 +221,23 @@ public class MASUserCommand {
 
                 @Override
                 public void onRequestCancelled() {
+
+                }
+            });*/
+            MASUser.login(username, password, new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+                    MASUtil.getQrCode().stop();
+                }
+
+                @Override
+                public void onError(Throwable error) {
+                    Log.e(TAG, error.getMessage(), error);
+                    callbackContext.error(getError(error));
 
                 }
             });
