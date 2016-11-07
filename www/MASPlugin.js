@@ -306,6 +306,32 @@
          MASUser which has the interfaces mapped to the native MASUser class.
          */
         MASUser: function() {
+
+            this.isSessionLocked = function(successHandler, errorHandler) {
+
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isSessionLocked", []); 
+            };
+
+            this.lockSession = function(successHandler, errorHandler) {
+
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "lockSession", []); 
+            }
+
+            this.unlockSession = function(successHandler, errorHandler) {
+
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "unlockSession", []); 
+            }
+
+            this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
+
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "unlockSessionWithMessage", [message]); 
+            }
+
+            this.removeSessionLock = function(successHandler, errorHandler) {
+
+                return Cordova.exec(successHandler, errorHandler, "MASPlugin", "removeSessionLock", []); 
+            }
+
             /**
              Authenticates the user using the username and password.
              */
