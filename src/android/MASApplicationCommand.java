@@ -58,7 +58,7 @@ public abstract class MASApplicationCommand {
     public static class GetIdentifierCommand extends Command {
 
         @Override
-        void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
            /* MASApplication.setApplicationLauncher(new MASApplication.MASApplicationLauncher() {
                 @Override
                 public void onWebAppLaunch(MASApplication masApplication) {
@@ -69,7 +69,7 @@ public abstract class MASApplicationCommand {
         }
 
         @Override
-        String getAction() {
+        public String getAction() {
             return "getIdentifier";
         }
     }
@@ -77,7 +77,7 @@ public abstract class MASApplicationCommand {
     public static class GetNameCommand extends Command {
 
         @Override
-        void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
             try {
                 String appId = args.getString(0);
                 MASApplication masApplication = fetchCurrentApp(appId);
@@ -90,7 +90,7 @@ public abstract class MASApplicationCommand {
         }
 
         @Override
-        String getAction() {
+        public String getAction() {
             return "getName";
         }
     }
@@ -99,7 +99,7 @@ public abstract class MASApplicationCommand {
     public static class RetrieveEnterpriseAppsCommand extends Command {
 
         @Override
-        void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
 
             MASApplication.retrieveEnterpriseApps(new MASCallback<List<MASApplication>>() {
                 @Override
@@ -118,14 +118,14 @@ public abstract class MASApplicationCommand {
         }
 
         @Override
-        String getAction() {
+        public String getAction() {
             return "retrieveEnterpriseApps";
         }
     }
 
     public static class EnterpriseBrowserWebAppBackButtonHandlerCommand extends Command {
         @Override
-        void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
+        public void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
             MASPlugin.getCurrentInstance().cordova.getActivity().runOnUiThread(
                     new Runnable() {
                         @Override
@@ -138,7 +138,7 @@ public abstract class MASApplicationCommand {
         }
 
         @Override
-        String getAction() {
+        public String getAction() {
             return "enterpriseBrowserWebAppBackButtonHandler";
         }
     }
@@ -146,7 +146,7 @@ public abstract class MASApplicationCommand {
     public static class LaunchAppCommand extends Command {
 
         @Override
-        void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
+        public void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
             if (args.length() < 2) {
                 callbackContext.error("");
             }
@@ -254,7 +254,7 @@ public abstract class MASApplicationCommand {
         }
 
         @Override
-        String getAction() {
+        public String getAction() {
             return "launchApp";
         }
     }
