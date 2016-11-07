@@ -169,6 +169,8 @@
     CDVPluginResult *result;
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
+
+    [result setKeepCallbackAsBool:YES];
     
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
