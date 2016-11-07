@@ -84,6 +84,8 @@ public abstract class Command {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
             } catch (Exception ignore) {
             }
+        }else if(throwable != null && throwable instanceof MASCordovaException){
+            errorMessage=throwable.getMessage();
         } else {
             errorMessageDetail = throwable.getMessage();
         }
