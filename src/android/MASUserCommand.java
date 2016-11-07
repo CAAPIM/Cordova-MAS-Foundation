@@ -10,10 +10,6 @@ package com.ca.mas.cordova.core;
 import android.content.Context;
 import android.util.Log;
 
-import com.ca.mas.core.MAGResultReceiver;
-import com.ca.mas.core.MobileSsoFactory;
-import com.ca.mas.core.error.MAGError;
-import com.ca.mas.core.http.MAGResponse;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASUser;
