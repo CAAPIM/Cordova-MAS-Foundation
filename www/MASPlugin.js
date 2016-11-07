@@ -464,16 +464,16 @@
                 return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
             },
             MASPopupUI: function(url, popupafterclose, onload) {
-                var onLoadOverloaded = function(){
-                     document.getElementById('loginDiv').hidden=false;
+                var onLoadMakePopUpVisible = function(){
+                     document.getElementById('popUp').hidden=false;
                      onload();
                 };
-                $('#loginDiv').remove();
-                var template = "<div id='loginDiv' hidden data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 570px; overflow: auto'>" + "</div>";
+                $('#popUp').remove();
+                var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 570px; overflow: auto'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
 
-                $('#loginDiv').load(url, onLoadOverloaded);
+                $('#popUp').load(url, onLoadMakePopUpVisible);
                 $.mobile.activePage.find(".closePopup").bind("tap", function() {
                     $.mobile.activePage.find(".messagePopup").popup("close");
                 });
@@ -520,15 +520,15 @@
                 } else */if (result === "removeQRCode") {
                     document.getElementById('qr-code').style.display = 'none';
                 } else if (result === "qrCodeAuthorizationComplete") {
-                    $('#loginDiv').remove();
+                    $('#popUp').remove();
                 } else{
-                      if(pageToLoad === MASPlugin.MASConfig.loginPage && document.getElementById('loginDiv') === null){
+                      if(pageToLoad === MASPlugin.MASConfig.loginPage && document.getElementById('popUp') === null){
 
                            MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()
                            {
                                var MAS = new MASPlugin.MAS();
                                //MAS.initialize(function() {});
-                               $('#loginDiv').remove();
+                               $('#popUp').remove();
                            }, function() {
 
                                document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
@@ -591,11 +591,8 @@
              */
 
             MASOTPChannelSelectCallback: function(otpChannels) {
-             /*   if (document.getElementById("CA-Username") !== null ) {
-                    $('#loginDiv').remove();
-                } */
                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpChannelsPage, function() {
-                    $('#loginDiv').remove();
+                    $('#popUp').remove();
                 }, function() {
                     if (otpChannels.length > 1) {
                         for (i = 0; i < otpChannels.length; i++) {
@@ -614,10 +611,10 @@
                 var MAS = new MASPlugin.MAS();
                 MAS.generateAndSendOTP(
                     function(shouldValidateOTP) {
-                        $('#loginDiv').remove();
+                        $('#popUp').remove();
                         if ("true" == shouldValidateOTP) {
                             MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function() {
-                                $('#loginDiv').remove();
+                                $('#popUp').remove();
                             }, function() {});
                         }
                     },
@@ -642,7 +639,7 @@
              */
             MASOTPAuthenticationCallback: function(error) {
                 MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function() {
-                    $('#loginDiv').remove();
+                    $('#popUp').remove();
                 }, function() {
                     document.getElementById("CA-Title").innerHTML = error.errorMessage;
                 });

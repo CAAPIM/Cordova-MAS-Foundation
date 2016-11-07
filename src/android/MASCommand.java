@@ -480,10 +480,8 @@ public class MASCommand {
             try {
                 String filename = args.getString(0);
                 AssetManager mg = context.getResources().getAssets();
-
                 try {
                     mg.open(filename);
-
                 } catch (IOException e) {
                     MASCordovaException exception=new MASCordovaException("File not found",e);
                     Log.e(TAG, exception.getMessage(), exception);

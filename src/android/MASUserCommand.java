@@ -200,30 +200,6 @@ public class MASUserCommand {
                 callbackContext.error(getError(e));
                 return;
             }
-
-          /*  MobileSsoFactory.getInstance().authenticate(username, password.toCharArray(), new MAGResultReceiver<JSONObject>() {
-
-                @Override
-                public void onSuccess(MAGResponse<JSONObject> response) {
-                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
-                    pluginResult.setKeepCallback(true);
-                    callbackContext.sendPluginResult(pluginResult);
-                    // This call to getCurrent user is added as first call to this function returns some empty user.[DE230510]
-                    MASUser.getCurrentUser();
-                    MASUtil.getQrCode().stop();
-                }
-
-                @Override
-                public void onError(MAGError error) {
-                    Log.e(TAG, error.getMessage(), error);
-                    callbackContext.error(getError(error));
-                }
-
-                @Override
-                public void onRequestCancelled() {
-
-                }
-            });*/
             MASUser.login(username, password, new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
