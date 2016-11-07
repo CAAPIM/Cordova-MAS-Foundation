@@ -10,6 +10,7 @@ package com.ca.mas.cordova.core;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -477,6 +479,15 @@ public class MASCommand {
         public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
             try {
                 String filename = args.getString(0);
+                AssetManager mg = context.getResources().getAssets();
+                try {
+                    mg.open(filename);
+                } catch (IOException e) {
+                    MASCordovaException exception=new MASCordovaException("File not found",e);
+                    Log.e(TAG, exception.getMessage(), exception);
+                    callbackContext.error(getError(exception));
+                    return;
+                }
                 MAS.setConfigurationFileName(filename);
                 String result="Config file name is set";
                 callbackContext.success(result);

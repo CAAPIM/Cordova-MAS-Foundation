@@ -33,19 +33,18 @@ public abstract class Command {
 
     /**
      * Execute a unit of processing work to be performed.
-     *
      * @param context         The Application context
      * @param args            The Cordova.exec() arguments
      * @param callbackContext The callback context used when calling back into JavaScript
      */
-    abstract void execute(Context context, JSONArray args, CallbackContext callbackContext);
+    public abstract void execute(Context context, JSONArray args, CallbackContext callbackContext);
 
     /**
      * Return the action to execute
      *
      * @return The action to execute.
      */
-    abstract String getAction();
+    public abstract String getAction();
 
     /**
      * Transform the throwable to a JSON error, used when calling back into JavaScript when for error
@@ -84,8 +83,13 @@ public abstract class Command {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
             } catch (Exception ignore) {
             }
+
         } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
             errorCode = MAGErrorCode.UNKNOWN;
+
+        } else if(throwable != null && throwable instanceof MASCordovaException){
+            errorMessage=throwable.getMessage();
+
         } else {
             errorMessageDetail = throwable.getMessage();
         }
@@ -109,6 +113,16 @@ public abstract class Command {
 
     protected void success(CallbackContext callbackContext, boolean value) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, JSONObject resultData) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultData);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, Object resultData) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultData.toString());
         callbackContext.sendPluginResult(result);
     }
 
