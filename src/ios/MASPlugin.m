@@ -169,6 +169,8 @@
     CDVPluginResult *result;
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
+
+    [result setKeepCallbackAsBool:YES];
     
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
@@ -1517,7 +1519,7 @@
 {
         __block CDVPluginResult *result;
         __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
-        if([MAS gatewayIsReachable] && [MASApplication currentApplication])
+        if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
         {
             [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
                 _currentEnterpriseApps = objects;
@@ -1552,13 +1554,13 @@
         }
         else {
             
-            NSString *errorMessage = nil;
-            if (![MAS gatewayIsReachable])
-                errorMessage = @"Host is currently not reachable";
-            else
-                errorMessage = @"Application not initialized";
+            NSDictionary *errorInfo = nil;
+            if ([[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"])
+                errorInfo = @{@"errorMessage":@"Host is currently not reachable"};
+            else if (![MASApplication currentApplication])
+                errorInfo = @{@"errorMessage":@"Application not initialized"};
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
             
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
