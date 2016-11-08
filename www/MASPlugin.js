@@ -492,7 +492,9 @@
             },
             MASPopupUI: function(url, popupafterclose, onload) {
                 var onLoadMakePopUpVisible = function(){
-                     document.getElementById('popUp').hidden=false;
+                    if(document.getElementById('popUp') !== null){
+                        document.getElementById('popUp').hidden=false;
+                     }
                      onload();
                 };
                 $('#popUp').remove();
