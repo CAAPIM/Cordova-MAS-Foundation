@@ -952,6 +952,107 @@
     }
 }
 
+- (void)isSessionLocked:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                 messageAsBool:[[MASUser currentUser] isSessionLocked]];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)lockSession:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    [[MASUser currentUser] lockSessionWithCompletion:
+     ^(BOOL completed, NSError *error) {
+      
+         if (completed && !error) {
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                          messageAsBool:completed];
+         }
+         else if (error) {
+             
+             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                         @"errorMessage":[error localizedDescription],
+                                         @"errorInfo":[error userInfo]};
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                          messageAsDictionary:errorInfo];
+         }
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+     }];
+}
+
+- (void)unlockSession:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    [[MASUser currentUser] unlockSessionWithCompletion:
+     ^(BOOL completed, NSError *error) {
+      
+         if (completed && !error) {
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                          messageAsBool:completed];
+         }
+         else if (error) {
+             
+             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                         @"errorMessage":[error localizedDescription],
+                                         @"errorInfo":[error userInfo]};
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                          messageAsDictionary:errorInfo];
+         }
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+     }];
+}
+
+- (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    NSString *promptMessage = [command.arguments objectAtIndex:0];
+    [[MASUser currentUser] unlockSessionWithUserOperationPromptMessage:promptMessage
+                                                            completion:
+     ^(BOOL completed, NSError *error) {
+         
+         if (completed && !error) {
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                          messageAsBool:completed];
+         }
+         else if (error) {
+             
+             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                         @"errorMessage":[error localizedDescription],
+                                         @"errorInfo":[error userInfo]};
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                    messageAsDictionary:errorInfo];
+         }
+         
+         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+     }];
+}
+
+- (void)removeSessionLock:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    [[MASUser currentUser] removeSessionLock];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                 messageAsBool:YES];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command
 {

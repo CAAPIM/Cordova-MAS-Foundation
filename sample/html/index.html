@@ -463,6 +463,96 @@
                 });
             });
 
+            $("#isSessionLocked").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+
+                MASUser.isSessionLocked(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#lockSession").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+
+                MASUser.lockSession(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#unlockSession").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+
+                MASUser.unlockSession(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
+            $("#unlockSessionWithMessage").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+
+                MASUser.unlockSessionWithMessage(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, "My Message");
+            });
+
+            $("#removeSessionLock").bind("click",function(event,ui){
+                if($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MASUser = new MASPlugin.MASUser();
+
+                MASUser.removeSessionLock(function (result){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function (error){
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
+            });
+
             $("#isUserAuthenticated").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
 
@@ -1011,6 +1101,11 @@
             <li data-icon="false"><a href="#" id="isActive">MASUser isActive<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             -->
 
+            <li data-icon="false"><a href="#" id="isSessionLocked">MASUser isSessionLocked<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="lockSession">MASUser lockSession<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="unlockSession">MASUser unlockSession<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="unlockSessionWithMessage">MASUser unlockSessionWithMessage<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+            <li data-icon="false"><a href="#" id="removeSessionLock">MASUser removeSessionLock<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
