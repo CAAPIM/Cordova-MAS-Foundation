@@ -493,7 +493,10 @@ public class MASUserCommand {
                                             }
                                         });
                                     } else if (resultCode == RESULT_CANCELED) {
-                                        //TODO : Sunder/Mujeeb add the code to handle this scenario
+                                        String errMsg = "Security error has occurred.";
+                                        MASCordovaException exp = new MASCordovaException(errMsg);
+                                        Log.i(TAG, errMsg);
+                                        callbackContext.error(getError(exp));
                                     }
                                 }
                             }
