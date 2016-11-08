@@ -269,8 +269,7 @@
                 $(this).find("textarea.error").hide();
 
                 var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var defaultConfiguration = $("input[name='defaultConfiguration']").prop("checked");
+                var MAS = new MASPlugin.MAS();                
 
                 MAS.startWithDefaultConfiguration(function(result){
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -279,7 +278,7 @@
                 function (error){
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, defaultConfiguration);
+                }, false);
             });
 
             $("#startWithJSON").bind("click",function(event,ui){
