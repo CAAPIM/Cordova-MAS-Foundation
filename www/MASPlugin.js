@@ -483,12 +483,19 @@
             otpPage: "masui/mas-otp.html",
             otpChannelsPage: "masui/mas-otpchannel.html",
             enterpriseBrowserPage: "masui/mas-enterpriseBrowser.html",
+            popUpStyle: "position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); width:47%; height: 55%; overflow: auto",
             loginAuthRequestId: "",
             onBackKeyPressEvent: function() {
                 successHandler = function() {
                     document.removeEventListener("backbutton", MASPlugin.MASConfig.onBackKeyPressEvent, false);
                 };
                 return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
+            },
+            setPopUpStyle: function(style){
+                MASPlugin.MASConfig.popUpStyle=style;
+            },
+            getPopUpStyle: function(){
+                return MASPlugin.MASConfig.popUpStyle;
             },
             MASPopupUI: function(url, popupafterclose, onload) {
                 var onLoadMakePopUpVisible = function(){
@@ -498,7 +505,7 @@
                      onload();
                 };
                 $('#popUp').remove();
-                var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 570px; overflow: auto'>" + "</div>";
+                var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ MASPlugin.MASConfig.popUpStyle+"'>" + "</div>";
                 popupafterclose = popupafterclose ? popupafterclose : function() {};
                 $.mobile.activePage.append(template).trigger("create");
 
