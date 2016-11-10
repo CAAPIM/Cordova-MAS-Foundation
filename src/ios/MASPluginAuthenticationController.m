@@ -1,11 +1,11 @@
-//
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
 //  MASPluginAuthenticationController.m
-//
-//  Copyright (c) 2016 CA, Inc.
-//
-//  This software may be modified and distributed under the terms
-//  of the MIT license. See the LICENSE file for details.
-//
 
 #import "MASPluginAuthenticationController.h"
 

@@ -1,9 +1,14 @@
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
 //
 //  L7SMssoSDKPlugin.m
 //
 //  Created by Anthony Yu on 2013-11-15.
-//  Copyright (c) 2013 CA Technologies. All rights reserved.
-//
 //
 
 #import "L7SMssoSDKPlugin.h"
