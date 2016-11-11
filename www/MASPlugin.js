@@ -5,85 +5,41 @@
  *
  */
 
-    //  MASPlugin.js
+//  MASPlugin.js
 
-    //'use strict';
-    function isEmpty(val) {
-        if (typeof val !== 'undefined' && val) {
-            return false;
-        }
-        return true;
-    }
+    var MASPluginCallbacks = require("./MASPluginCallbacks");
 
     var MASPlugin = {
-        MASAuthenticationStatus: {
-            MASAuthenticationStatusNotLoggedIn: -1,
-            MASAuthenticationStatusLoginWithUser: 0,
-            MASAuthenticationStatusLoginAnonymously: 1
-        },
-        MASGrantFlow: {
-            MASGrantFlowUnknown: -1,
-            MASGrantFlowClientCredentials: 0,
-            MASGrantFlowPassword: 1,
-            MASGrantFlowCount: 2
-        },
-        MASRequestResponseType: {
-            /**
-             * Unknown encoding type.
-             */
-            MASRequestResponseTypeUnknown: -1,
-            /**
-             * Standard JSON encoding.
-             */
-            MASRequestResponseTypeJson: 0,
-            /**
-             * SCIM-specific JSON variant encoding.
-             */
-            MASRequestResponseTypeScimJson: 1,
-            /**
-             * Plain Text.
-             */
-            MASRequestResponseTypeTextPlain: 2,
-            /**
-             * Standard WWW Form URL encoding.
-             */
-            MASRequestResponseTypeWwwFormUrlEncoded: 3,
-            /**
-             * Standard XML encoding.
-             */
-            MASRequestResponseTypeXml: 4,
-            /**
-             * The total number of supported types.
-             */
-            MASRequestResponseTypeCount: 5
-        },
+        
         /**
          MAS which has the interfaces mapped to the native MAS class.
          */
         MAS: function() {
-            this.authorize = function(successHandler, errorHandler, code) {
-                Cordova.exec(successHandler, errorHandler, "MASPlugin", "authorizeQRCode", [code]);
-            };
-
+            
             /**
-            Initializes the MAS plugin. This includes setting of the various listeners required
-            for authenticating the user while registration of the application with the Gateway
-            and accessing various protected api. Any further initialization related setting will go here.
-            */
+             * Initializes the MAS plugin. This includes setting of the various listeners required
+             * for authenticating the user while registration of the application with the Gateway
+             * and accessing various protected api. Any further initialization related setting will go here.
+             */
             this.initialize = function(successHandler, errorHandler) {
-                Cordova.exec(MASPlugin.MASConfig.MASAuthenticationCallback, errorHandler, "MASPlugin", "setAuthenticationListener", []);
-                Cordova.exec(MASPlugin.MASConfig.MASOTPChannelSelectCallback, errorHandler, "MASPlugin", "setOTPChannelSelectorListener", []);
-                Cordova.exec(MASPlugin.MASConfig.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
+                
+                Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPlugin", "setAuthenticationListener", []);
+                
+                Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPlugin", "setOTPChannelSelectorListener", []);
+                
+                Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
+                
+                // TODO: Check for success or error
                 return successHandler("Initialization success !!");
             };
 
             /**
-            Use Native MASUI
-            */
+             * Use Native MASUI
+             */
             this.useNativeMASUI = function(successHandler, errorHandler) {
+                
                 Cordova.exec(successHandler, errorHandler, "MASPlugin", "useNativeMASUI", []);
             };
-
 
             /**
              * Set the authentication UI handling page by this plugin.
@@ -94,7 +50,9 @@
              *     "mas-login.html" is the default page.
              */
             this.setCustomLoginPage = function(successHandler, errorHandler, customPage) {
+                
                 if (customPage) {
+                    
                     $.ajax({
                         url: customPage,
                         success: function() {
@@ -108,13 +66,16 @@
                             });
                         }
                     });
-                } else {
+                } 
+                else 
+                {
                     MASPlugin.MASConfig.loginPage = "masui/mas-login.html";
                     return errorHandler({
                         errorMessage: "Can't find " + customPage
                     });
                 }
             };
+
             /**
              * Set the OTP Channels Selection UI handling page by this plugin.
              *
@@ -145,6 +106,7 @@
                     });
                 }
             };
+
             /**
              * Set the OTP UI handling page by this plugin.
              *
@@ -175,30 +137,46 @@
                     });
                 }
             };
+
             /**
              Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
              */
             this.grantFlow = function(successHandler, errorHandler, MASGrantFlow) {
+            
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setGrantFlow", [MASGrantFlow]);
             };
+
             /**
              Set the name of the configuration file.  This gives the ability to set the file's name to a custom value.
              */
             this.configFileName = function(successHandler, errorHandler, fileName) {
+             
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
             };
+
             /**
              Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
              */
             this.start = function(successHandler, errorHandler) {
+            
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "start", []);
             };
+
             this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration) {
+            
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithDefaultConfiguration", [defaultConfiguration]);
             };
+
             this.startWithJSON = function(successHandler, errorHandler, jsonObject) {
+             
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithJSON", [jsonObject]);
             };
+
+            this.authorize = function(successHandler, errorHandler, code) {
+            
+                Cordova.exec(successHandler, errorHandler, "MASPlugin", "authorizeQRCode", [code]);
+            };
+
             /**
              Completes the current user's authentication session validation.
              * @param successHandler user defined success callback
@@ -207,8 +185,10 @@
              * @param password user defined password
             */
             this.completeAuthentication = function(successHandler, errorHandler, username, password) {
+            
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "completeAuthentication", [username, password]);
             };
+
             /**
              Cancels the current user's authentication session validation.
              * @param successHandler user defined success callback
@@ -216,9 +196,12 @@
              * @param args user defined variable which is request Id in Android. It is not used in iOS
              */
             this.cancelAuthentication = function(successHandler, errorHandler, args) {
+            
                 $.mobile.activePage.find(".messagePopup").popup("close");
+             
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelAuthentication", [args]);
             };
+
             /**
              Request Server to generate and send OTP to the channels provided.
              * @param successHandler user defined success callback
@@ -229,6 +212,7 @@
                 //$.mobile.activePage.find(".messagePopup").popup("close");
                 return Cordova.exec(successHandler, errorHandler, "MASPlugin", "generateAndSendOTP", [channels]);
             };
+
             /**
              Cancels the current user's generating and sending OTP call.
              * @param successHandler user defined success callback
@@ -528,51 +512,7 @@
                 });
             },
 
-            /** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
-             * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
-             */
-            MASAuthenticationCallback: function(result) {
-                var pageToLoad = MASPlugin.MASConfig.loginPage;
-
-                if (typeof result !== 'undefined' && !isEmpty(result) &&
-                    typeof result.requestId !== 'undefined' && !isEmpty(result.requestId) &&
-                    result.requestType === "Login") {
-                    MASPlugin.MASConfig.loginAuthRequestId = result.requestId;
-                }
-
-                /*if (typeof result !== 'undefined' && !isEmpty(result) &&
-                    typeof result.requestType !== 'undefined' && !isEmpty(result.requestType) &&
-                    result.requestType === "OTP") {
-                    if (typeof result.isInvalidOtp !== 'undefined' && !isEmpty(result.isInvalidOtp) && result.isInvalidOtp == "true") {
-                        MASPlugin.MASConfig.MASOTPAuthenticationCallback(result);
-                    } else {
-                        if (result.channels == null) {
-                            console.log("Channel list is empty");
-                            return;
-                        }
-                        var channelsCSV = result.channels;
-                        var channels = channelsCSV.split(',');
-                        MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
-                    }
-                } else */if (result === "removeQRCode") {
-                    document.getElementById('qr-code').style.display = 'none';
-                } else if (result === "qrCodeAuthorizationComplete") {
-                    $('#popUp').remove();
-                } else{
-                      if(pageToLoad === MASPlugin.MASConfig.loginPage && document.getElementById('popUp') === null){
-
-                           MASPlugin.MASConfig.MASPopupUI(pageToLoad, function()
-                           {
-                               var MAS = new MASPlugin.MAS();
-                               //MAS.initialize(function() {});
-                               $('#popUp').remove();
-                           }, function() {
-
-                               document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
-                           });
-                      }
-                   }
-            },
+            
             /** Used to send the username and password to the server and setting div with id "errorMesg" with error message if error occurs.
              * @param username user defined username
              * @param password user defined password
@@ -621,25 +561,7 @@
                     $.mobile.activePage.find(".messagePopup").popup("close");
                 }, function(error) {}, MASPlugin.MASConfig.loginAuthRequestId);
             },
-            /**
-             * Callback which is used to prompt for the OTP provided channels
-             * @param otpChannels available channels array that will be recieved from server
-             * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
-             */
-
-            MASOTPChannelSelectCallback: function(otpChannels) {
-                MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpChannelsPage, function() {
-                    $('#popUp').remove();
-                }, function() {
-                    if (otpChannels.length > 1) {
-                        for (i = 0; i < otpChannels.length; i++) {
-                            if (document.getElementById(otpChannels[i])) {
-                                document.getElementById(otpChannels[i]).style.display = 'block';
-                            }
-                        }
-                    }
-                });
-            },
+            
             /**
              * Used to send the OTP channels to the server
              * @param otpChannels user defined channels array that will be passed to server
@@ -669,18 +591,7 @@
                         }
                     }, otpChannels);
             },
-            /**
-             * Callback for the OTP Listener
-             * @param error message that is recieved from server for invalid attempt
-             * Note: This has to be called from android if otp is invalid.
-             */
-            MASOTPAuthenticationCallback: function(error) {
-                MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, function() {
-                    $('#popUp').remove();
-                }, function() {
-                    document.getElementById("CA-Title").innerHTML = error.errorMessage;
-                });
-            },
+            
             /**
             * Used to send OTP for validation to the server
             @param otp user defined one time password that is passed to the server
