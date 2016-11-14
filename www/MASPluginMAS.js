@@ -200,8 +200,13 @@ var MASPluginMAS = function() {
         return Cordova.exec(                
             function() {
 
-                if (document.getElementById("CA-Username") !== null )
-                    $.mobile.activePage.find(".messagePopup").popup("close");
+                if (document.getElementById("CA-Username") !== null ) 
+                {
+                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                        $.mobile.activePage.find(".messagePopup").popup("close");
+                    else
+                        window.MASPopupUI.close();
+                }
 
                 successHandler(true);
             }, 
@@ -240,12 +245,19 @@ var MASPluginMAS = function() {
                         }
                         else {
                             
-                            $.mobile.activePage.find(".messagePopup").popup("close");
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                                $.mobile.activePage.find(".messagePopup").popup("close");
+                            else
+                                window.MASPopupUI.close();
                         }
                     }
                 } 
                 else {
-                    $.mobile.activePage.find(".messagePopup").popup("close");
+                    
+                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                        $.mobile.activePage.find(".messagePopup").popup("close");
+                    else
+                        window.MASPopupUI.close();
                 }
                 
                 errorHandler(error);
@@ -261,12 +273,19 @@ var MASPluginMAS = function() {
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
     
-        $.mobile.activePage.find(".messagePopup").popup("close");
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        else
+            window.MASPopupUI.close();
      
         return Cordova.exec(
             function() {                    
 
-                $.mobile.activePage.find(".messagePopup").popup("close");
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                    $.mobile.activePage.find(".messagePopup").popup("close");
+                else
+                    window.MASPopupUI.close();
+
                 successHandler(true);                    
             }, 
             errorHandler, "MASPlugin", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
@@ -284,14 +303,20 @@ var MASPluginMAS = function() {
             
             function(shouldValidateOTP) {
                 
-                $('#popUp').remove();
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                    $('#popUp').remove();
+                else
+                    window.MASPopupUI.close();                
                 
                 if ("true" == shouldValidateOTP) {
                     MASPluginUtils.MASPopupUI(
                         MASPluginConstants.MASOTPPage, 
                         function() {
                             
-                            $('#popUp').remove();
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                                $('#popUp').remove();
+                            else
+                                window.MASPopupUI.close();
                         }, 
                         function() {}
                     );
@@ -325,7 +350,10 @@ var MASPluginMAS = function() {
      */
     this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
         
-        $.mobile.activePage.find(".messagePopup").popup("close");
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        else
+            window.MASPopupUI.close();
         
         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelGenerateAndSendOTP", []);
     };
@@ -337,7 +365,10 @@ var MASPluginMAS = function() {
      */
     this.validateOTP = function(successHandler, errorHandler, otp) {
         
-        $.mobile.activePage.find(".messagePopup").popup("close");
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        else
+            window.MASPopupUI.close();
         
         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "validateOTP", [otp]);
     };
@@ -348,7 +379,10 @@ var MASPluginMAS = function() {
      */
     this.cancelOTPValidation = function(successHandler, errorHandler) {
         
-        $.mobile.activePage.find(".messagePopup").popup("close");
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        else
+            window.MASPopupUI.close();
         
         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelOTPValidation", []);
     };
@@ -359,7 +393,10 @@ var MASPluginMAS = function() {
      */
     this.closePopup = function() {
         
-        $.mobile.activePage.find(".messagePopup").popup("close");
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        else
+            window.MASPopupUI.close();
         
         return;
     };
