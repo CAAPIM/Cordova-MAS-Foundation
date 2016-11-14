@@ -355,13 +355,10 @@
         });
 
         if (checkArray.length) {
-            MASPlugin.MASConfig.MASSendOTPChannels(checkArray,
-                function(onError) {
-                     console.log(onError);
-                    //Handle error if errorMesg element does not exist
-                }
-                );
-            }
+
+            var MAS = new MASPlugin.MAS();
+            MAS.generateAndSendOTP(function() {}, function() {}, checkArray);        
+        }
         else
             alert("You have to select atleast one OTP channel");
     }

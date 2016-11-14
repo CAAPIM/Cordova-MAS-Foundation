@@ -1,5 +1,12 @@
-
-var MASPluginConstants = require("./MASPluginConstants");
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+ 
+var MASPluginConstants = require("./MASPluginConstants"),
+    MASPluginUtils = require("./MASPluginUtils");
 	
 var MASPluginCallbacks = {
 
@@ -10,8 +17,8 @@ var MASPluginCallbacks = {
         
         var pageToLoad = MASPluginConstants.MASLoginPage;
 
-        if (typeof result !== 'undefined' && !isEmpty(result) &&
-            typeof result.requestId !== 'undefined' && !isEmpty(result.requestId) &&
+        if (typeof result !== 'undefined' && !MASPluginUtils.isEmpty(result) &&
+            typeof result.requestId !== 'undefined' && !MASPluginUtils.isEmpty(result.requestId) &&
             result.requestType === "Login") 
         {
             MASPluginConstants.MASLoginAuthRequestId = result.requestId;
@@ -46,7 +53,7 @@ var MASPluginCallbacks = {
             if(pageToLoad === MASPluginConstants.MASLoginPage && 
             	document.getElementById('popUp') === null)
             {
-                MASPlugin.MASConfig.MASPopupUI(
+                MMASPluginUtils.MASPopupUI(
                 	pageToLoad, 
                 	function() { 
 
@@ -69,7 +76,7 @@ var MASPluginCallbacks = {
 
     MASOTPChannelSelectCallback: function(otpChannels) 
     {
-        MASPlugin.MASConfig.MASPopupUI(
+        MASPluginUtils.MASPopupUI(
         	MASPluginConstants.MASOTPChannelsPage, 
         	function() { $('#popUp').remove(); }, 
         	function() {
@@ -95,7 +102,7 @@ var MASPluginCallbacks = {
      */
     MASOTPAuthenticationCallback: function(error) 
     {
-        MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.otpPage, 
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage, 
        	function() {
 
             $('#popUp').remove();

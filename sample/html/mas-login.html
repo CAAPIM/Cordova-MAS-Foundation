@@ -80,7 +80,8 @@
         $("#close").on("click", function(e) {
             e.preventDefault();
 
-            MASPlugin.MASConfig.MASCancelLogin();
+            var MAS = new MASPlugin.MAS();
+            MAS.cancelAuthentication(function(){}, function(){});
         });
 
         function login(){
@@ -88,8 +89,11 @@
             var username = document.getElementById("CA-Username").value;
             var password = document.getElementById("CA-Password").value;
 
-            if (username && password)
-                MASPlugin.MASConfig.MASSendCredentials(username, password);
+            if (username && password) {
+
+                var MAS = new MASPlugin.MAS();
+                MAS.completeAuthentication(function(){},function() {}, username, password);
+            }
             else
               //  alert("Please enter valid credentials");
               document.getElementById("errorMesg").innerHTML="invalid request: Missing or duplicate parameters";
