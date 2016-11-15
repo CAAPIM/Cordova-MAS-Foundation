@@ -46,32 +46,27 @@ var MASPluginMAS = function() {
      */
     this.setCustomLoginPage = function(successHandler, errorHandler, customPage) {
         
+        MASPluginConstants.MASLoginPage = "masui/mas-login.html";
+
         if (customPage) {
             
             var xhr = new XMLHttpRequest();
         
             xhr.onload = function () {
 
-                if (this.status != 200) {
-                
-                    error({
-                         "text": this.statusText,
-                         "code": this.status
-                    });
+                if (this.response) {
 
-                    MASPluginConstants.MASLoginPage = "masui/mas-login.html";
-
-                    return;
-                }
-
-                MASPluginConstants.MASLoginPage = customPage;
+                    MASPluginConstants.MASLoginPage = customPage;
+                    return successHandler("Login page set to :" + MASPluginConstants.MASLoginPage);
+                }                
             };
         
             xhr.onerror = function (err) {
-                error(err);
+                
+                errorHandler(err);
             };
 
-            xhr.open('GET', customPage);
+            xhr.open('GET', customPage, true);
             xhr.send();    
         }                
         else 
@@ -99,26 +94,18 @@ var MASPluginMAS = function() {
         
             xhr.onload = function () {
 
-                if (this.status != 200) {
-                
-                    error({
-                         "text": this.statusText,
-                         "code": this.status
-                    });
+                if (this.response) {
 
-                    MASPluginConstants.MASOTPChannelsPage = "masui/mas-login.html";
-
-                    return;
-                }
-
-                MASPluginConstants.MASOTPChannelsPage = customPage;
+                    MASPluginConstants.MASOTPChannelsPage = customPage;
+                    return successHandler("OTP channels page set to :" + MASPluginConstants.MASOTPChannelsPage);
+                }                 
             };
         
             xhr.onerror = function (err) {
-                error(err);
+                errorHandler(err);
             };
 
-            xhr.open('GET', customPage);
+            xhr.open('GET', customPage, true);
             xhr.send();
         } 
         else 
@@ -146,26 +133,18 @@ var MASPluginMAS = function() {
         
             xhr.onload = function () {
 
-                if (this.status != 200) {
-                
-                    error({
-                         "text": this.statusText,
-                         "code": this.status
-                    });
+                if (this.response) {
 
-                    MASPluginConstants.MASOTPPage = "masui/mas-login.html";
-
-                    return;
-                }
-
-                MASPluginConstants.MASOTPPage = customPage;
+                    MASPluginConstants.MASOTPPage = customPage;
+                    return successHandler("OTP page set to :" + MASPluginConstants.MASOTPPage);
+                }                
             };
         
             xhr.onerror = function (err) {
-                error(err);
+                errorHandler(err);
             };
 
-            xhr.open('GET', customPage);
+            xhr.open('GET', customPage, true);
             xhr.send();
         } 
         else 
