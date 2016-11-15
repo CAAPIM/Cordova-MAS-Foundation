@@ -6,13 +6,11 @@
  */
 
 var MASPluginConstants = require("./MASPluginConstants"),
-    MASPopup = require("./lib/simple-popup");
-
-window.MASPopupUI = nil;
+    MASPopup = require("./PopupUI");
 
 var MASPluginUtils = {
 	
-	this.isEmpty = function(val) {
+	isEmpty: function(val) {
         
         if (typeof val !== 'undefined' && val) {
             
@@ -22,7 +20,7 @@ var MASPluginUtils = {
         return true;
     },
 
-    this.XHR = function(cfg)
+    XHR: function(cfg)
 	{
     	var xhr,
         url = cfg.url,
@@ -57,7 +55,7 @@ var MASPluginUtils = {
         xhr.send(null);
     },
 
-    this.onBackKeyPressEvent = function() {
+    onBackKeyPressEvent: function() {
             
         successHandler = function() {
             
@@ -67,19 +65,19 @@ var MASPluginUtils = {
         return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
     },
 
-    this.setPopUpStyle = function(style) {
+    setPopUpStyle: function(style) {
             
         MASPluginConstants.MASPopupStyle = style;
     },
 
-    this.getPopUpStyle = function(){
+    getPopUpStyle: function(){
         
         return MASPluginConstants.MASPopupStyle;
     },
 
-    this.createPopupDiv: function() {
+    createPopupDiv: function() {
 
-        if (typeof document.getElementsByClassName('popup-wrapper hide')[0] !== 'undefined') {
+        if (typeof document.getElementById('popup') !== 'undefined') {
 
             var iDiv = document.createElement('div');
             iDiv.id = 'popup';
@@ -117,9 +115,9 @@ var MASPluginUtils = {
             // Then append the whole thing onto the body
             document.getElementsByTagName('body')[0].appendChild(iDiv);
         }   
-    }
+    },
 
-    this.MASPopupUI: function(url, popupafterclose, onload) {
+    MASPopupUI: function(url, popupafterclose, onload) {
         
         if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
 
@@ -134,7 +132,7 @@ var MASPluginUtils = {
         
             $('#popUp').remove();
         
-            var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ MASPlugin.MASConfig.popUpStyle+"'>" + "</div>";
+            var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ MASPluginConstants.MASPopupStyle+"'>" + "</div>";
         
             popupafterclose = popupafterclose ? popupafterclose : function() {};
             
@@ -165,7 +163,7 @@ var MASPluginUtils = {
         }
         else {
 
-                createPopupDiv();
+                this.createPopupDiv();
 
                 var popupEl = document.getElementById('popup');
                 var popupBody = document.getElementById('popup-bdy');
@@ -180,6 +178,19 @@ var MASPluginUtils = {
                 xhr.onload = function () {
                     
                     popupBody.innerHTML = this.response;
+               
+                    var s = popupBody.getElementsByTagName('script');
+                    for (var i = 0; i < s.length ; i++) {
+                        var node=s[i], parent=node.parentElement, d = document.createElement('script');
+                        d.async=node.async;
+                        d.type = node.type;
+                        if(typeof node.src !== 'undefined' && node.src !== "")
+                            d.src=node.src;
+                        d.text = node.text;
+                        parent.insertBefore(d,node);
+                        parent.removeChild(node);
+                    }
+               
                     window.MASPopupUI.open();
                     
                     onload();

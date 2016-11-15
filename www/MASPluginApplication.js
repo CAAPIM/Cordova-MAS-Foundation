@@ -76,7 +76,7 @@ var MASPluginApplication = function() {
             
             var result = Cordova.exec(function(result) {
                 
-                MASPlugin.MASConfig.MASPopupUI(MASPlugin.MASConfig.enterpriseBrowserPage, function() {}, function() {
+                MASPluginUtils.MASPopupUI(MASPluginConstants.MASEnterpriseBrowserPage, function() {}, function() {
                     displayApps(result);
                     successHandler(true);
                 });

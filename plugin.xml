@@ -12,6 +12,43 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <js-module src="www/MASPlugin.js" name="MASPlugin">
         <clobbers target="MASPlugin" />
     </js-module>
+
+    <js-module src="www/MASPluginApplication.js" name="MASPluginApplication">
+        <clobbers target="MASPluginApplication" />
+    </js-module>
+
+    <js-module src="www/MASPluginAuthProviders.js" name="MASPluginAuthProviders">
+        <clobbers target="MASPluginAuthProviders" />
+    </js-module>
+
+    <js-module src="www/MASPluginCallbacks.js" name="MASPluginCallbacks">
+        <clobbers target="MASPluginCallbacks" />
+    </js-module>
+
+    <js-module src="www/MASPluginConstants.js" name="MASPluginConstants">
+        <clobbers target="MASPluginConstants" />
+    </js-module>
+
+    <js-module src="www/MASPluginDevice.js" name="MASPluginDevice">
+        <clobbers target="MASPluginDevice" />
+    </js-module>
+
+    <js-module src="www/MASPluginMAS.js" name="MASPluginMAS">
+        <clobbers target="MASPluginMAS" />
+    </js-module>
+
+    <js-module src="www/MASPluginUser.js" name="MASPluginUser">
+        <clobbers target="MASPluginUser" />
+    </js-module>
+
+    <js-module src="www/MASPluginUtils.js" name="MASPluginUtils">
+        <clobbers target="MASPluginUtils" />
+    </js-module>
+
+    <js-module src="www/simple-popup.js" name="PopupUI">
+        <clobbers target="PopupUI" />
+    </js-module>
+
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>

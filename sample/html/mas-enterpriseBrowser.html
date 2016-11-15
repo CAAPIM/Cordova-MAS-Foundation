@@ -30,21 +30,30 @@
         .appListItem{display: inline-block; width: 150px; height: 150px; margin-left: 20px; }
         </style>
     <script>
+        
         var apps;
-    function closePopup() {
-        var MAS = new MASPlugin.MAS();
-        MAS.closePopup();
-	}
-    function launchApp(appId) {
-        var MASApplication = new MASPlugin.MASApplication();
-        MASApplication.launchApp(function(){}, function(){}, appId);
-    }
-    function displayApps(apps){
-        for(var key in apps){
-                $(".appList").append("<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>");
+        
+        function closePopup() {
+            
+            var MAS = new MASPlugin.MAS();
+            MAS.closePopup();
+	    }
+    
+        function launchApp(appId) {
+            
+            var MASApplication = new MASPlugin.MASApplication();
+            MASApplication.launchApp(function(){}, function(){}, appId);
         }
-    }
-	</script>
+    
+        function displayApps(apps){
+            
+            for(var key in apps){
+
+                document.getElementsByClassName("appList")[0].innerHTML += "<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>";
+            }
+        }
+	
+    </script>
 
     </head>
 <body>

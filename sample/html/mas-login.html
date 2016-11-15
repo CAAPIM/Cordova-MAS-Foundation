@@ -45,14 +45,14 @@
                 <body>
                 <div  id= "errorMesg" style="color:red"> </div><br>
                 <div id="login-form">
-            <div><ul id="" class="form-header"><li>Sign In</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img></li></ul></div>
+            <div><ul id="" class="form-header"><li>Sign In</li><li id="close" onclick="close(); return false;"><img src="masui/img/close.png" class="close_button" id="close_button"></img></li></ul></div>
             <div class="user-image"><img src="masui/img/ca-logo.png"></img></div>
 
             <form class="form">
                 <ul class="login">
                     <li><input id="CA-Username" type="text" class="input" required placeholder="User Name"></li>
                     <li class="inline"><input id="CA-Password" type="password" class="input" required placeholder="User Password"></li>
-                    <li><input id="signin_button" class="btn" type="submit" value="SIGN IN"></li>
+                    <li><input id="signin_button" class="btn" type="submit" value="SIGN IN" onclick="login(); return false;"></li>
                 </ul>
             </form>
 
@@ -71,21 +71,20 @@
     </body>
     <script>
 
-        $("#signin_button").on("click", function(e) {
-            e.preventDefault();
+        document.getElementById("signin_button").addEventListener("click", function(event){
+            event.preventDefault();            
 
             login();
         });
 
-        $("#close").on("click", function(e) {
-            e.preventDefault();
+        document.getElementById("close").addEventListener("click", function(event){
+            event.preventDefault();
 
-            var MAS = new MASPlugin.MAS();
-            MAS.cancelAuthentication(function(){}, function(){});
+            close();
         });
 
-        function login(){
-
+        function login() {
+            
             var username = document.getElementById("CA-Username").value;
             var password = document.getElementById("CA-Password").value;
 
@@ -95,8 +94,13 @@
                 MAS.completeAuthentication(function(){},function() {}, username, password);
             }
             else
-              //  alert("Please enter valid credentials");
               document.getElementById("errorMesg").innerHTML="invalid request: Missing or duplicate parameters";
+        }
+
+        function close() {
+
+            var MAS = new MASPlugin.MAS();  
+            MAS.cancelAuthentication(function(){}, function(){}); 
         }
 
     </script>

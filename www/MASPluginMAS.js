@@ -48,21 +48,32 @@ var MASPluginMAS = function() {
         
         if (customPage) {
             
-            MASPluginFetch(
-                customPage,
-                function() {
+            var xhr = new XMLHttpRequest();
+        
+            xhr.onload = function () {
 
-                    MASPluginConstants.MASLoginPage = customPage;
-                    return successHandler("Login page set to :" + MASPluginConstants.MASLoginPage);
-                },
-                function() {
+                if (this.status != 200) {
+                
+                    error({
+                         "text": this.statusText,
+                         "code": this.status
+                    });
 
                     MASPluginConstants.MASLoginPage = "masui/mas-login.html";
-                    return errorHandler({
-                        errorMessage: "Can't find " + customPage
+
+                    return;
                 }
-            );                
-        } 
+
+                MASPluginConstants.MASLoginPage = customPage;
+            };
+        
+            xhr.onerror = function (err) {
+                error(err);
+            };
+
+            xhr.open('GET', customPage);
+            xhr.send();    
+        }                
         else 
         {
             MASPluginConstants.MASLoginPage = "masui/mas-login.html";
@@ -84,21 +95,31 @@ var MASPluginMAS = function() {
         
         if (customPage) {
             
-            MASPluginFetch(
-                customPage,
-                function() {
+            var xhr = new XMLHttpRequest();
+        
+            xhr.onload = function () {
 
-                    MASPluginConstants.MASOTPChannelsPage = customPage;
-                    return successHandler("OTP Channels page set to :" + MASPluginConstants.MASOTPChannelsPage); 
-                },
-                function() {
-
-                    MASPluginConstants.MASOTPChannelsPage = "mas-otpchannel.html";
-                    return errorHandler({
-                        errorMessage: "Can't find " + customPage
+                if (this.status != 200) {
+                
+                    error({
+                         "text": this.statusText,
+                         "code": this.status
                     });
+
+                    MASPluginConstants.MASOTPChannelsPage = "masui/mas-login.html";
+
+                    return;
                 }
-            );
+
+                MASPluginConstants.MASOTPChannelsPage = customPage;
+            };
+        
+            xhr.onerror = function (err) {
+                error(err);
+            };
+
+            xhr.open('GET', customPage);
+            xhr.send();
         } 
         else 
         {
@@ -121,21 +142,31 @@ var MASPluginMAS = function() {
         
         if (customPage) {
             
-            MASPluginFetch(
-                customPage,
-                function() {
+            var xhr = new XMLHttpRequest();
+        
+            xhr.onload = function () {
 
-                    MASPluginConstants.MASOTPPage = customPage;
-                    return successHandler("OTP page set to :" + MASPluginConstants.MASOTPPage);
-                },
-                function() {
-
-                    MASPluginConstants.MASOTPPage = "mas-otp.html";
-                    return errorHandler({
-                        errorMessage: "Can't find " + customPage
+                if (this.status != 200) {
+                
+                    error({
+                         "text": this.statusText,
+                         "code": this.status
                     });
+
+                    MASPluginConstants.MASOTPPage = "masui/mas-login.html";
+
+                    return;
                 }
-            );
+
+                MASPluginConstants.MASOTPPage = customPage;
+            };
+        
+            xhr.onerror = function (err) {
+                error(err);
+            };
+
+            xhr.open('GET', customPage);
+            xhr.send();
         } 
         else 
         {
@@ -434,6 +465,6 @@ var MASPluginMAS = function() {
     this.gatewayIsReachable = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "gatewayIsReachable", []);
     };
-}
+};
 
 module.exports = MASPluginMAS;

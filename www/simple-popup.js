@@ -13,7 +13,7 @@
     define([], factory);
   } else if (typeof exports === 'object') {
     // Node/CommonJS module
-    module.exports = PopupUI = factory();
+    module.exports = Popup = factory();
   } else {
     // Browser globals
     factory(global);
