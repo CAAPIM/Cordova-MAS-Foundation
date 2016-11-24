@@ -267,34 +267,39 @@
     </div>
 </body>
 <script>
-    $("#submit_otp").on("click", function(e) {
-        e.preventDefault();
+    
+    document.getElementById("submit_otp").addEventListener("click", function(event){
+        event.preventDefault();
 
         submit();
     });
 
-    $("#close").on("click", function(e) {
-        e.preventDefault();
+    document.getElementById("close").addEventListener("click", function(event){
+        event.preventDefault();
 
         var MAS = new MASPlugin.MAS();
-        MAS.cancelOTPValidation();
+        MAS.cancelOTPValidation(function(){}, function(){});
     });
 
     function submit() {
 
         var otp = document.getElementById("CA-OTP").value;
-        if (otp.trim())
-            MASPlugin.MASConfig.MASSendOTPCredentials(otp);
+        if (otp.trim()) {
+
+            var MAS = new MASPlugin.MAS();
+            MAS.validateOTP(function(){}, function(){}, otp);
+        }
         else
             alert("Please enter valid OTP");
     }
 
     function doOnOrientationChange()
     {
-        if($("#CA-OTP").is(":focus")) {
+        if(document.getElementById("CA-OTP") === document.activeElement) {
+            
             document.getElementById("CA-OTP").blur();
             document.getElementById("CA-OTP").focus();
-          }
+        }
     }
 
     window.addEventListener('orientationchange', doOnOrientationChange);
