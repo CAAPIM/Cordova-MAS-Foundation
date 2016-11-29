@@ -67,6 +67,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
                                          removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
                                 completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization
 {
+    //
+    // Set the login block for basic credentials and authorization with the available providers
+    //
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveAuthorizationCodeFromSessionSharing:)
                                                  name:MASDeviceDidReceiveAuthorizationCodeFromProximityLoginNotification
                                                object:nil];
@@ -119,6 +123,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 - (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password
 {
+    //
+    // Complete the authentication with a username and password
+    //
+    
     if (self.basicCredentialsBlock) {
         
         self.basicCredentialsBlock(userName, password, NO, nil);
@@ -130,6 +138,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 - (void)cancelAuthentication
 {
+    //
+    // Cancel the authentication
+    //
+    
     if (self.basicCredentialsBlock) {
         
         self.basicCredentialsBlock(nil, nil, YES, nil);
@@ -173,6 +185,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 - (void)removeQRCode:(NSNotification *)notification
 {
+    //
+    // Remove the QR code block
+    //
+    
     if (self.removeQRCodeBlock) {
         
         self.removeQRCodeBlock(YES, nil);
@@ -182,6 +198,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 }
 
 - (void)qrCodeCleanup {
+    
+    //
+    // Stop displaying QR code
+    //
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self
@@ -202,6 +222,9 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 
 
 - (void)authorizeQRCode:(NSString *)code completion:(MASCompletionErrorBlock) completion {
+    //
+    // Authorize the QR code
+    //
     
     [MASProximityLoginQRCode authorizeAuthenticateUrl:code completion:completion];
 }

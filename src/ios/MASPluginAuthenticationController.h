@@ -21,26 +21,34 @@
 #pragma mark - Lifecycle
 
 /**
- *  Singlenton instance of the MASPluginAuthenticationController
+ *  Singleton instance of the MASPluginAuthenticationController
  *
- *  @return Singlenton instance of the MASPluginAuthenticationController
+ *  @return Singleton instance of the MASPluginAuthenticationController
  */
 + (instancetype)sharedAuthController;
 
-
+/**
+ *  Set the login block with the available authentication providers
+ */
 - (NSDictionary *)setLoginBlocksWithAuthentiationProviders:(MASAuthenticationProviders *)providers
                                    basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
                                   authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
                                          removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
                                 completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization;
 
-
+/**
+ *  Complete Authentication with username and password
+ */
 - (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password;
 
-
+/**
+ *  Cancel the authentication request
+ */
 - (void)cancelAuthentication;
 
-
+/**
+ *  Authorize with QR code
+ */
 - (void)authorizeQRCode:(NSString *)code completion:(MASCompletionErrorBlock) completion;
 
 

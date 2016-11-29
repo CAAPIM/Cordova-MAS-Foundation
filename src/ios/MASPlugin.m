@@ -55,6 +55,11 @@
 
 - (void)setGrantFlow:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Set the grant flow
+    // Password or Client credentials
+    //
+    
     CDVPluginResult *result;
 
     NSNumber *grantFlowType = [NSNumber numberWithInteger:0];
@@ -79,6 +84,11 @@
 
 - (void)setConfigFileName:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Set the configuration file name
+    // Default is msso_config.json
+    //
+    
     CDVPluginResult *result;
 
     NSString *fileName = @"msso_config";
@@ -98,6 +108,10 @@
 
 - (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Set an authentication listener that waits for a user login call
+    //
+    
     __block CDVPluginResult *result;
     
     [MAS setUserLoginBlock:
@@ -105,6 +119,10 @@
        MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
          
          MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+         
+         //
+         // This is the block that gets called when a login call is made
+         //
          
          NSDictionary *resultDictionary =
             [MPAuthCntrl setLoginBlocksWithAuthentiationProviders:[MASAuthenticationProviders currentProviders]
@@ -133,6 +151,10 @@
 
 - (void)completeAuthentication:(CDVInvokedUrlCommand *)command
 {
+    //
+    // Complete the authentication process with credentials
+    //
+    
     CDVPluginResult *result;
     
     MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];    
@@ -146,6 +168,10 @@
 
 - (void)cancelAuthentication:(CDVInvokedUrlCommand *)command
 {
+    //
+    // Cancel the authentication process
+    //
+
     CDVPluginResult *result;
     
     MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
@@ -158,6 +184,10 @@
 
 - (void)completeAuthorization:(NSString *)callbackId {
     
+    //
+    // Complete the QR code authorization
+    //
+    
     CDVPluginResult *result;
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
@@ -168,6 +198,10 @@
 }
 
 - (void)removeQRCode:(NSString *)callbackId {
+    
+    //
+    // Remove the QR code
+    //
     
     CDVPluginResult *result;
     
@@ -180,6 +214,10 @@
 
 - (void)authorizeQRCode:(CDVInvokedUrlCommand *)command
 {
+    //
+    //  Authorize using QR code
+    //
+    
     __block CDVPluginResult *result;
     
     MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
@@ -206,6 +244,10 @@
 
 - (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Set the OTP Channel selection listener
+    //
+    
     __block CDVPluginResult *result;
     
     [MAS setOTPChannelSelectionBlock:
@@ -224,6 +266,10 @@
 
 - (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command {
     
+    //
+    // Generate the OTP
+    //
+    
     CDVPluginResult *result;
     
     if (self.otpGenerationBlock) {
@@ -238,6 +284,9 @@
 
 
 - (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command {
+    //
+    // Cancel the OTP request
+    //
     
     CDVPluginResult *result;
     
@@ -254,6 +303,10 @@
 
 - (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Set the OTP Authentication Listener which waits for an OTP request
+    //
+    
     __block CDVPluginResult *result;
     
     [MAS setOTPCredentialsBlock:^(MASOTPFetchCredentialsBlock otpBlock, NSError *otpError){
@@ -274,7 +327,10 @@
 
 
 - (void)validateOTP:(CDVInvokedUrlCommand*)command {
- 
+    //
+    // Validate the OTP
+    //
+    
     CDVPluginResult *result;
     
     if (self.otpBlock) {
@@ -289,6 +345,9 @@
 
 
 - (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command {
+    //
+    // Cancel the OTP Validation request
+    //
     
     CDVPluginResult *result;
     
@@ -305,6 +364,10 @@
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Start the MAS SDK
+    // Returns error info if it fails
+    //
     __block CDVPluginResult *result;
 
     [MAS start:^(BOOL completed, NSError *error) {
@@ -328,7 +391,11 @@
 
 - (void)startWithDefaultConfiguration:(CDVInvokedUrlCommand*)command
 {
-
+    //
+    // Start the MAS SDK with the default msso configuration
+    // Returns error info if it fails
+    //
+    
     __block CDVPluginResult *result;
 
     if ([command.arguments count] > 0 && [command.arguments count] == 1)
@@ -357,7 +424,11 @@
 
 - (void)startWithJSON:(CDVInvokedUrlCommand*)command
 {
-
+    //
+    // Start the MAS SDK with the a custom msso configuration
+    // Returns error info if it fails
+    //
+    
     __block CDVPluginResult *result;
 
     if ([command.arguments count] > 0 && [command.arguments count] == 1)
@@ -394,6 +465,10 @@
 
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Stop the MAS SDK
+    //
+    
     __block CDVPluginResult *result;
 
     [MAS stop:^(BOOL completed, NSError *error) {
@@ -418,6 +493,10 @@
 
 - (void)getFromPath:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Make a get call with parameters, headers, request type, response type
+    //
+    
     __block CDVPluginResult *result;
 
     NSString *path = @"";
@@ -526,6 +605,10 @@
 
 - (void)deleteFromPath:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Make a delete call with parameters, headers, request type and response type
+    //
+    
     __block CDVPluginResult *result;
 
     NSString *path = @"";
@@ -634,6 +717,10 @@
 
 - (void)postToPath:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Make a post call with parameters, headers, request type and response type
+    //
+
     __block CDVPluginResult *result;
 
     NSString *path = @"";
@@ -742,6 +829,10 @@
 
 - (void)putToPath:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Make a put call with parameters, headers, request type and response type
+    //
+    
     __block CDVPluginResult *result;
 
     NSString *path = @"";
@@ -850,6 +941,10 @@
 
 - (void)patchToPath:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Make a patch call with parameters, headers, request type and response type
+    //
+
     __block CDVPluginResult *result;
 
     NSString *path = @"";
@@ -956,6 +1051,9 @@
 }
 
 - (void)isSessionLocked:(CDVInvokedUrlCommand*)command {
+    //
+    // Check if session is locked
+    //
     
     CDVPluginResult *result;
     
@@ -966,6 +1064,9 @@
 }
 
 - (void)lockSession:(CDVInvokedUrlCommand*)command {
+    //
+    // Lock current session
+    //
     
     __block CDVPluginResult *result;
     
@@ -992,6 +1093,9 @@
 }
 
 - (void)unlockSession:(CDVInvokedUrlCommand*)command {
+    //
+    // Unlock current session
+    //
     
     __block CDVPluginResult *result;
     
@@ -1018,6 +1122,9 @@
 }
 
 - (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command {
+    //
+    // Unlock current session with a custom message
+    //
     
     __block CDVPluginResult *result;
     
@@ -1046,6 +1153,9 @@
 }
 
 - (void)removeSessionLock:(CDVInvokedUrlCommand*)command {
+    //
+    // Remove current session lock, if present
+    //
     
     CDVPluginResult *result;
     
@@ -1059,6 +1169,11 @@
 
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Login with username and password as parameters
+    // Returns error info if it fails
+    //
+    
     __block CDVPluginResult *result;
 
     NSString *userName = @"";
@@ -1103,6 +1218,11 @@
 
 - (void)deregister:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Deregister the device from the server
+    // Returns error info if it fails
+    //
+    
     __block CDVPluginResult *result;
 
     if ([MASDevice currentDevice])
@@ -1138,6 +1258,11 @@
 
 - (void)logoutUser:(CDVInvokedUrlCommand *)command
 {
+    //
+    // Logout the user
+    // Returns error info if it fails
+    //
+
     __block CDVPluginResult *result;
 
     if ([MASUser currentUser])
@@ -1171,6 +1296,10 @@
 
 - (void)getCurrentProviders:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get a list of login providers
+    //
+
 	CDVPluginResult *result;
 
     NSArray *listOfProviders = [[MASAuthenticationProviders currentProviders] providers];
@@ -1204,6 +1333,10 @@
 
 - (void)retrieveAuthenticationProviderForProximityLogin:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get a list of proximity providers
+    //
+    
 	CDVPluginResult *result;
 
 	MASAuthenticationProvider *proximityProvider = [[MASAuthenticationProviders currentProviders] retrieveAuthenticationProviderForProximityLogin];
@@ -1231,6 +1364,11 @@
 
 - (void)getCurrentDevice:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get details of the current device
+    // Returns device identifier
+    //
+    
     CDVPluginResult *result;
 
     if ([MASDevice currentDevice])
@@ -1253,6 +1391,10 @@
 
 - (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Checks if device is registered
+    //
+    
     CDVPluginResult *result;
 
     if ([MASDevice currentDevice])
@@ -1271,6 +1413,10 @@
 
 - (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Returns device identifier
+    //
+
     CDVPluginResult *result;
 
     if ([MASDevice currentDevice])
@@ -1289,6 +1435,10 @@
 
 - (void)isAuthenticated:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Checks if device is authenticated
+    //
+    
     CDVPluginResult *result;
 
     if ([MASUser currentUser])
@@ -1305,6 +1455,10 @@
 
 - (void)isActive:(CDVInvokedUrlCommand*)command
  {
+    //
+    // Checks if current user is active
+    //
+     
     CDVPluginResult *result;
 
     if ([MASUser currentUser])
@@ -1322,6 +1476,10 @@
 
 - (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Checks if application is authenticated
+    //
+    
     CDVPluginResult *result;
 
     if ([MASApplication currentApplication])
@@ -1338,6 +1496,10 @@
 
 - (void)launchApp:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Launches an enterprise app
+    //
+    
     CDVPluginResult *result;
     
     NSString *appId = [command.arguments objectAtIndex:0];
@@ -1392,6 +1554,10 @@
 
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Returns the authentication status
+    //
+    
     CDVPluginResult *result;
 
     if ([MASApplication currentApplication])
@@ -1410,6 +1576,10 @@
 
 - (void)getCurrentUser:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get the details of the current user
+    //
+    
     CDVPluginResult *result;
 
     if([MASUser currentUser])
@@ -1432,6 +1602,10 @@
 
 - (void)getUserName:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get the username of the current user
+    //
+    
     CDVPluginResult *result;
 
     if([MASUser currentUser])
@@ -1450,6 +1624,10 @@
 
 - (void)getName:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get name of current user
+    //
+    
     CDVPluginResult *result;
 
     if([MASUser currentUser])
@@ -1468,6 +1646,10 @@
 
 - (void)getAddressList:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get address of current user
+    //
+    
     CDVPluginResult *result;
 
     if([MASUser currentUser])
@@ -1486,6 +1668,10 @@
 
 - (void)getEmailList:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Get the email id of current user
+    //
+    
     CDVPluginResult *result;
 
     if([MASUser currentUser])
@@ -1504,6 +1690,10 @@
 
 - (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Check if gateway is reachable
+    //
+    
     CDVPluginResult *result;
 
     if ([MAS gatewayIsReachable])
@@ -1520,58 +1710,66 @@
     
 - (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command
 {
-        __block CDVPluginResult *result;
-        __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
-        if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
-        {
-            [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
-                _currentEnterpriseApps = objects;
-                if(error){
-                    
-                    NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                                @"errorMessage":[error localizedDescription],
-                                                @"errorInfo":[error userInfo]};
-                    
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-                }
-                else{
-                    //[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:objects];
-                    for(id object in _currentEnterpriseApps){
-                        MASApplication *application = object;
-                        NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
-                        [app setObject:application.name forKey:@"appName"];
-                        [app setObject:application.identifier forKey:@"identifier"];
-                        [app setObject:application.nativeUrl forKey:@"nativeUrl"];
-                        [app setObject:application.authUrl forKey:@"authUrl"];
-                        [app setObject:application.iconUrl forKey:@"iconUrl"];
-                        [enterpriseApps addObject:app];
-                    }
-                    
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:enterpriseApps];
-                }
-
-                [result setKeepCallbackAsBool:YES];
+    //
+    // Get the list of enterprise apps
+    //
+    
+    __block CDVPluginResult *result;
+    __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
+    if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
+    {
+        [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
+            _currentEnterpriseApps = objects;
+            if(error){
                 
-                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-            }];
-        }
-        else {
-            
-            NSDictionary *errorInfo = nil;
-            if ([[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"])
-                errorInfo = @{@"errorMessage":@"Host is currently not reachable"};
-            else if (![MASApplication currentApplication])
-                errorInfo = @{@"errorMessage":@"Application not initialized"};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[error userInfo]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+            }
+            else{
+                //[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:objects];
+                for(id object in _currentEnterpriseApps){
+                    MASApplication *application = object;
+                    NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
+                    [app setObject:application.name forKey:@"appName"];
+                    [app setObject:application.identifier forKey:@"identifier"];
+                    [app setObject:application.nativeUrl forKey:@"nativeUrl"];
+                    [app setObject:application.authUrl forKey:@"authUrl"];
+                    [app setObject:application.iconUrl forKey:@"iconUrl"];
+                    [enterpriseApps addObject:app];
+                }
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:enterpriseApps];
+            }
+
+            [result setKeepCallbackAsBool:YES];
             
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        }
+        }];
     }
+    else {
+        
+        NSDictionary *errorInfo = nil;
+        if ([[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"])
+            errorInfo = @{@"errorMessage":@"Host is currently not reachable"};
+        else if (![MASApplication currentApplication])
+            errorInfo = @{@"errorMessage":@"Application not initialized"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
 
 
 - (void)resetLocally:(CDVInvokedUrlCommand*)command
 {
+    //
+    // Reset cached data stored locally
+    //
+    
     CDVPluginResult *result;
 
     if ([MASDevice currentDevice])

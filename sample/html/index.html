@@ -62,10 +62,10 @@
                         var MAS = new MASPlugin.MAS();
                             
                         MAS.authorize(function(result){
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                            thisElement.removeClass("success").removeClass("failure").addClass("success");
                             displayResult(thisElement, result);
                         },function (error){
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
                             displayError(thisElement, error);
                         }, result.text );
                     },
@@ -87,17 +87,17 @@
                         var MAS = new MASPlugin.MAS();                                            
                         MAS.authorize(function(result) {
                                                           
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                            thisElement.removeClass("success").removeClass("failure").addClass("success");
                             displayResult(thisElement, result);
                         },function (error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
                             displayError(thisElement, error);
                         },info);
                     });
                }
                else {
 
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, "No QRCode Scanner plugin added !!");
                }
             });
@@ -110,10 +110,10 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.initialize(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -125,10 +125,10 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.useNativeMASUI(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -143,11 +143,11 @@
                 var loginPageName = $("input[name='loginPageName']").val();
 
                 MAS.setCustomLoginPage(function (result){
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
                     function (error){
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, loginPageName);
             });
@@ -163,11 +163,11 @@
                 var otpChannelsPageName = $("input[name='otpChannelsPageName']").val();
 
                 MAS.setCustomOTPChannelsPage(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, otpChannelsPageName);
             });
@@ -183,11 +183,11 @@
                 var otpPageName = $("input[name='otpPageName']").val();
 
                 MAS.setCustomOTPPage(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, otpPageName);
             });
@@ -200,11 +200,11 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.grantFlow(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
             });
@@ -217,11 +217,11 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.grantFlow(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
@@ -236,11 +236,11 @@
                 var configFileName = $("input[name='configName']").val();
 
                 MAS.configFileName(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }
                 , configFileName);
@@ -254,11 +254,11 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.start(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -272,11 +272,11 @@
                 var MAS = new MASPlugin.MAS();                
 
                 MAS.startWithDefaultConfiguration(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, false);
             });
@@ -291,11 +291,11 @@
                 var jsonObject = thisElement.find("input[name='jsonObject']").val() ? JSON.parse(thisElement.find("input[name='jsonObject']").val()) : null;
 
                 MAS.startWithJSON(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, jsonObject);
             });
@@ -308,11 +308,11 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.stop(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
@@ -325,11 +325,11 @@
                 var MASApplication = new MASPlugin.MASApplication();
 
                 MASApplication.initEnterpriseBrowser(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -343,11 +343,11 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.gatewayIsReachable(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -363,11 +363,11 @@
                 var password = $("input[name='userLoginPassword']").val();
 
                 MASUser.loginWithUsernameAndPassword(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 },username, password);
             });
@@ -378,11 +378,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.getUserName(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -393,11 +393,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.getName(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -408,11 +408,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.getAddressList(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -423,11 +423,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.getEmailList(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -438,11 +438,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.loginWithImplicitFlow(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -453,11 +453,11 @@
                 var thisElement = $(this);
                 var MASUser = new MASPlugin.MASUser();
                 MASUser.getCurrentUser(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -471,11 +471,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.isSessionLocked(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -489,11 +489,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.lockSession(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -507,11 +507,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.unlockSession(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -525,11 +525,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.unlockSessionWithMessage(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 }, "My Message");
             });
@@ -543,11 +543,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.removeSessionLock(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -561,11 +561,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.isAuthenticated(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -579,11 +579,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.isDeviceRegistered(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -597,11 +597,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.getCurrentDevice(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -615,11 +615,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.isActive(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -633,11 +633,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.getDeviceIdentifier(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -651,11 +651,11 @@
                 var MASUser = new MASPlugin.MASUser();
 
                 MASUser.logoutUser(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -669,11 +669,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.deregister(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -687,11 +687,11 @@
                 var MASDevice = new MASPlugin.MASDevice();
 
                 MASDevice.resetLocally(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -702,11 +702,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getIdentifier(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -718,11 +718,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getName(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 },ApplicationIdentifiersList[2]);
             });
@@ -733,11 +733,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getIconUrl(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -748,11 +748,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getAuthUrl(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             }); 
@@ -763,11 +763,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getNativeUri(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             }); 
@@ -778,11 +778,11 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.getCustom(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             }); 
@@ -793,12 +793,12 @@
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
                 MASApplication.retrieveEnterpriseApps(function(result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     ApplicationIdentifiersList=result;
                 },
                 function(error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
             });
@@ -821,7 +821,7 @@
            //     $.mobile.showPageLoadingMsg();
                 
                 MAS.getFromPath(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
               //      $.mobile.hidePageLoadingMsg();
@@ -832,7 +832,7 @@
                     if(returnedMsg!=null && returnedMsg!=undefined && returnedMsg!=""){
                         error.errorMessage=returnedMsg;
                     }
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
                  //   $.mobile.hidePageLoadingMsg();
@@ -857,13 +857,13 @@
              //   $.mobile.showPageLoadingMsg();
 
                 MAS.putToPath(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
               //      $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
                 //    $.mobile.hidePageLoadingMsg();
@@ -888,13 +888,13 @@
              //   $.mobile.showPageLoadingMsg();
 
                 MAS.postToPath(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
                 //    $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
                 //    $.mobile.hidePageLoadingMsg();
@@ -919,13 +919,13 @@
             //    $.mobile.showPageLoadingMsg();
 
                 MAS.deleteFromPath(function (result){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                     
               //      $.mobile.hidePageLoadingMsg();
                 },
                 function (error){
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                     
                //     $.mobile.hidePageLoadingMsg();
@@ -964,7 +964,7 @@
             function resetAction(element)
             {
                 element.find("textarea.error").hide();
-                element.removeClass("succes").removeClass("failure");
+                element.removeClass("success").removeClass("failure");
             }
 
             function displayResult(element, result)
