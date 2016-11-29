@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
@@ -52,6 +53,9 @@ public class MASCommand {
     private static CallbackContext OTP_AUTH_LISTENER_CALLBACK;
     private static CallbackContext OTP_CHANNEL_SELECT_LISTENER_CALLBACK;
 
+    /**
+     * {@link StartCommand} will initiate the MAS functionality and is required to be called before calling other MAS functions.
+     */
     public static class StartCommand extends Command {
 
         @Override
@@ -73,6 +77,9 @@ public class MASCommand {
 
     }
 
+    /**
+     * {@link GenerateAndSendOTPCommand} Request Server to generate and send OTP to the channels provided.
+     */
     public static class GenerateAndSendOTPCommand extends Command {
 
         @Override
@@ -112,6 +119,9 @@ public class MASCommand {
 
     }
 
+    /**
+     * {@link ValidateOtpCommand} will validate the passed OTP.
+     */
     public static class ValidateOtpCommand extends Command {
 
         @Override
@@ -132,7 +142,9 @@ public class MASCommand {
 
     }
 
-
+    /**
+     * {@link CancelGenerateAndSendOTPCommand} Cancels the current user's generating and sending OTP call.
+     */
     public static class CancelGenerateAndSendOTPCommand extends Command {
 
         @Override
@@ -153,6 +165,9 @@ public class MASCommand {
 
     }
 
+    /**
+     * {@link CancelOTPValidationCommand} Cancels the current user's authentication session validation.
+     */
     public static class CancelOTPValidationCommand extends Command {
 
         @Override
@@ -173,6 +188,10 @@ public class MASCommand {
     }
 
     /* to maintain consistency with IOS */
+
+    /**
+     * {@link setOTPChannelSelectorListenerCommand} sets the OTP channel listener to the passed callbackContext
+     */
     public static class setOTPChannelSelectorListenerCommand extends Command {
 
         @Override
@@ -188,6 +207,10 @@ public class MASCommand {
     }
 
     /* to maintain consistency with IOS */
+
+    /**
+     * {@link setOTPAuthenticationListenerCommand} sets the OTP Authentication listener callback to the passed callbackContext.
+     */
     public static class setOTPAuthenticationListenerCommand extends Command {
 
         @Override
@@ -202,7 +225,9 @@ public class MASCommand {
 
     }
 
-
+    /**
+     * {@link SetAuthenticationListenerCommand} will set the Authentication listener which will receive callbacks for AuthenticationRequest,OTP.
+     */
     public static class SetAuthenticationListenerCommand extends Command {
 
         @Override
@@ -306,7 +331,9 @@ public class MASCommand {
 
     }
 
-
+    /**
+     * {@link CancelRequestCommand} will cancel the request based on the requestId passed.
+     */
     public static class CancelRequestCommand extends Command {
 
         @Override
@@ -327,6 +354,10 @@ public class MASCommand {
         }
 
     }
+
+    /**
+     * {@link StartWithDefaultConfigurationCommand} initiates the MAS functionality by choosing to use the Default Configuration
+     */
 
     public static class StartWithDefaultConfigurationCommand extends Command {
 
@@ -349,6 +380,10 @@ public class MASCommand {
         }
 
     }
+
+    /**
+     * {@link GatewayIsReachableCommand} checks if the gateway is reachable.
+     */
 
     public static class GatewayIsReachableCommand extends Command {
 
@@ -380,6 +415,9 @@ public class MASCommand {
 
     }
 
+    /**
+     * {@link UseNativeMASUICommand} will set the native MASUI interfaces instead of html cordova pages for login, OTP and others.
+     */
     public static class UseNativeMASUICommand extends Command {
         private static DialogFragment getLoginFragment(long requestID, MASAuthenticationProviders providers) {
             try {
@@ -430,7 +468,9 @@ public class MASCommand {
 
     }
 
-
+    /**
+     * {@link StartWithJSONCommand} initites the MAS functionality by accepting a json as configuration parameters.
+     */
     public static class StartWithJSONCommand extends Command {
 
         @Override
@@ -452,6 +492,9 @@ public class MASCommand {
 
     }
 
+    /**
+     * {@link StopCommand} stops the MAS functionality.
+     */
     public static class StopCommand extends Command {
 
         @Override
@@ -472,6 +515,10 @@ public class MASCommand {
         }
 
     }
+
+    /**
+     * {@link SetConfigFileNameCommand} sets the config filename,if present,that is used to initiate MAS functionality.
+     */
 
     public static class SetConfigFileNameCommand extends Command {
 
@@ -503,6 +550,9 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link SetGrantFlowCommand} is used to set grant flow as password or client credentials
+     */
     public static class SetGrantFlowCommand extends Command {
 
         @Override
@@ -636,7 +686,9 @@ public class MASCommand {
 
     }
 
-
+    /**
+     * {@link GetFromPathCommand} Request method for an HTTP GET Call to the Gateway.
+     */
     public static class GetFromPathCommand extends InvokeCommand {
 
         @Override
@@ -651,6 +703,9 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link DeleteFromPathCommand} Request method for an HTTP DELETE Call to the Gateway.
+     */
     public static class DeleteFromPathCommand extends InvokeCommand {
 
         @Override
@@ -664,6 +719,9 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link PutToPathCommand} Request method for an HTTP PUT Call to the Gateway.
+     */
     public static class PutToPathCommand extends InvokeCommand {
 
         @Override
@@ -701,6 +759,9 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link PostToPathCommand} Request method for an HTTP POST Call to the Gateway.
+     */
     public static class PostToPathCommand extends InvokeCommand {
 
         @Override
