@@ -36,6 +36,10 @@ import java.util.List;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
+
+/**
+ * {@link MASApplicationCommand} contains {@link Command} implementations related to {@link MASApplication}
+ */
 public abstract class MASApplicationCommand {
 
     private static final String TAG = MASApplicationCommand.class.getCanonicalName();
@@ -54,6 +58,7 @@ public abstract class MASApplicationCommand {
         }
         return masApplication;
     }
+
 
     public static class GetIdentifierCommand extends Command {
 
@@ -95,6 +100,9 @@ public abstract class MASApplicationCommand {
         }
     }
 
+    /**
+     *{@link RetrieveEnterpriseAppsCommand} fetches the list of enterprise apps from the server and returns in the form of a jsonArray
+     */
 
     public static class RetrieveEnterpriseAppsCommand extends Command {
 
@@ -123,6 +131,9 @@ public abstract class MASApplicationCommand {
         }
     }
 
+    /**
+     * {@link EnterpriseBrowserWebAppBackButtonHandlerCommand}  handles the back button event in the android layer in case of enterprise Web view.
+     */
     public static class EnterpriseBrowserWebAppBackButtonHandlerCommand extends Command {
         @Override
         public void execute(final Context context, JSONArray args, final CallbackContext callbackContext) {
@@ -143,6 +154,9 @@ public abstract class MASApplicationCommand {
         }
     }
 
+    /**
+     * {@link LaunchAppCommand} launches the native or web app according to the passed value of appIdentifier.
+     */
     public static class LaunchAppCommand extends Command {
 
         @Override

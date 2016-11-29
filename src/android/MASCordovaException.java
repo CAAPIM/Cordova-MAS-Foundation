@@ -6,7 +6,9 @@
  */
 package com.ca.mas.cordova.core;
 
-
+/**
+ * This exception is thrown if cordova related error has to be thrown on cordova js layer.
+ */
 public class MASCordovaException extends Exception{
 
     public MASCordovaException(String detailMessage){

@@ -18,19 +18,34 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-
+/**
+ * Utilities class
+ */
 public class MASUtil {
     private static final String TAG = MASUtil.class.getCanonicalName();
     private static MASProximityLogin qrCode;
 
+    /**
+     *
+     * @return the already set MASProximityLoginQRCode qrCode
+     */
     public static MASProximityLogin getQrCode() {
         return qrCode;
     }
 
+    /**
+     *
+     * @param qrCode MASProximityLoginQRCode that is set
+     */
     public static void setQrCode(MASProximityLogin qrCode) {
         MASUtil.qrCode = qrCode;
     }
 
+    /**
+     * Convert list of MASApplications into json format.
+     * @param masApplications list of {@link MASApplication}
+     * @return jsonArray
+     */
     public static JSONArray convertMASApplicationListToJson(List<MASApplication> masApplications){
         JSONArray result=new JSONArray();
         try {
