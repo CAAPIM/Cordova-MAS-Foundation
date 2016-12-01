@@ -19,11 +19,16 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * {@link MASApplicationCommand} contains {@link Command} implementations related to {@link MASDevice}
+ */
 public class MASDeviceCommand {
 
     private static final String TAG = MASDeviceCommand.class.getCanonicalName();
 
-
+    /**
+     * {@link DeregisterCommand} used to deregister the already registered device
+     */
     public static class DeregisterCommand extends Command {
 
         @Override
@@ -51,6 +56,9 @@ public class MASDeviceCommand {
         }
     }
 
+    /**
+     * {@link IsRegisteredCommand} used to check if the device is already registered.
+     */
     public static class IsRegisteredCommand extends Command {
 
         @Override
@@ -75,7 +83,9 @@ public class MASDeviceCommand {
             return "isDeviceRegistered";
         }
     }
-
+    /**
+     * {@link ResetLocallyCommand} resets the device locally.
+     */
     public static class ResetLocallyCommand extends Command {
 
         @Override
@@ -98,6 +108,10 @@ public class MASDeviceCommand {
         }
     }
 
+    /**
+     * {@link GetDeviceIdentifierCommand} gets the identifier of the device.
+     */
+
     public static class GetDeviceIdentifierCommand extends Command {
 
         @Override
@@ -117,6 +131,9 @@ public class MASDeviceCommand {
             return "getDeviceIdentifier";
         }
     }
+    /**
+     * {@link GetCurrentDeviceCommand} gets the device's status and identifier.
+     */
 
     public static class GetCurrentDeviceCommand extends Command {
 

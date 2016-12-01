@@ -31,10 +31,16 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.ca.mas.foundation.MASUser.getCurrentUser;
 
+/**
+ * {@link MASUserCommand contains the {@link Command} implementations related to {@link MASUser}}
+ */
 public class MASUserCommand {
 
     private static final String TAG = MASUserCommand.class.getCanonicalName();
 
+    /**
+     * {@link LoginCommand} is used to login with provided username and password.
+     */
     public static class LoginCommand extends Command {
         @Override
         public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
@@ -68,6 +74,10 @@ public class MASUserCommand {
             return "loginWithUsernameAndPassword";
         }
     }
+
+    /**
+     * {@link AuthorizeCommand} is used to authorize the user with scanned url from the QRCode image
+     */
 
     public static class AuthorizeCommand extends Command {
 
@@ -104,6 +114,9 @@ public class MASUserCommand {
         }
     }
 
+    /**
+     * {@link LoginWithImplicitFlowCommand} is used to login implicitly without passing username and password
+     */
     //Not supported by iOS
     public static class LoginWithImplicitFlowCommand extends Command {
 
@@ -129,6 +142,10 @@ public class MASUserCommand {
             return "loginWithImplicitFlow";
         }
     }
+
+    /**
+     * {@link GetCurrentUserCommand} fetches the current MASUser and returns json string
+     */
 
     public static class GetCurrentUserCommand extends Command {
 
@@ -167,6 +184,10 @@ public class MASUserCommand {
         }
     }
 
+    /**
+     * {@link GetUserNameCommand} returns the current user's username
+     */
+
     public static class GetUserNameCommand extends Command {
 
         @Override
@@ -193,6 +214,10 @@ public class MASUserCommand {
             return "getUserName";
         }
     }
+
+    /**
+     * {@link CompleteAuthenticationCommand} is used to complete the authentication for the current user by providing username and password
+     */
 
     public static class CompleteAuthenticationCommand extends Command {
 
@@ -232,6 +257,9 @@ public class MASUserCommand {
         }
     }
 
+    /**
+     * {@link CancelAuthenticationCommand} cancels the login request already made
+     */
 
     public static class CancelAuthenticationCommand extends Command {
         @Override
@@ -257,6 +285,9 @@ public class MASUserCommand {
         }
     }
 
+   /** {@link LogoutUserCommand} log out the current logged in user
+    *
+    */
     public static class LogoutUserCommand extends Command {
 
         @Override
@@ -289,6 +320,10 @@ public class MASUserCommand {
         }
     }
 
+    /**
+     * {@link IsAuthenticatedCommand} sends the boolean status if the user is logged in or not
+     */
+
     public static class IsAuthenticatedCommand extends Command {
 
         @Override
@@ -315,7 +350,10 @@ public class MASUserCommand {
         }
     }
 
-    // Starting the fingerprint command zone...beware
+
+    /**
+     * {@link IsSessionLockedCommand} checks if the current User's session is locked?
+     */
     public static class IsSessionLockedCommand extends Command {
 
         @Override
@@ -340,6 +378,9 @@ public class MASUserCommand {
             return "isSessionLocked";
         }
     }
+    /**
+     * {@link LockSessionCommand} locks the current User's session
+     */
 
     public static class LockSessionCommand extends Command {
 
@@ -372,7 +413,9 @@ public class MASUserCommand {
         }
     }
 
-
+    /**
+     * {@link UnLockSessionCommand} unlocks the current user session through an intent which will prompt for the fingerprint authentication
+     */
     public static class UnLockSessionCommand extends Command {
 
         @Override
@@ -449,6 +492,10 @@ public class MASUserCommand {
             return "unlockSession";
         }
     }
+
+    /**
+     * {@link UnLockSessionWithMessageCommand} unlocks the current user session through an intent which will prompt for the fingerprint authentication and a message passed will be shown at the end.
+     */
 
     public static class UnLockSessionWithMessageCommand extends Command {
 
@@ -529,6 +576,9 @@ public class MASUserCommand {
         }
     }
 
+    /**
+     * {@link RemoveSessionLockCommand} will remove the session lock from the current user.
+     */
     public static class RemoveSessionLockCommand extends Command {
 
         @Override
