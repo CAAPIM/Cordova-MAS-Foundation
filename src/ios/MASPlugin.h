@@ -56,19 +56,53 @@
  */
 - (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Authorize the user using QR code
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
 
+/**
+ *  Set the OTP channel selection listener
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Generate a new OTP and send it to the selected channels
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Cancel the generate OTP request
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Set the OTP authentication listener
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Validate the OTP
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)validateOTP:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Cancel the OTP validation request
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command;
 
 /**
@@ -169,15 +203,40 @@
  */
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Check if session is locked
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)isSessionLocked:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Lock current session
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)lockSession:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Unlock current session
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 
 - (void)unlockSession:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Unlock current session with a custom message
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Remove current session lock,
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)removeSessionLock:(CDVInvokedUrlCommand*)command;
 
 /**
@@ -186,9 +245,6 @@
  *  @param command CDInvokedUrlCommand object
  */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
-
-
-
 
 /**
  *  Logs out currently authenticated user.
