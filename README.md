@@ -14,7 +14,6 @@ The MAS-Foundation-Cordova plugin provides the following features:
 * Fingerprint Sessions Lock
 * One-Time Password (OTP)
 * Proximity Login (QR Code)
-* Storage (Local and Private Cloud)
 
 *********************************************************
 
