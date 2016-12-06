@@ -110,6 +110,7 @@ var MASPluginCallbacks = {
         function() {
 
             document.getElementById("CA-Title").innerHTML = error.errorMessage;
+			document.getElementById("CA-Title").style.color = 'red';
         });
     }
 };
