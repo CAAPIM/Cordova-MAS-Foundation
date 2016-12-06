@@ -1088,6 +1088,7 @@
                      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                   messageAsDictionary:errorInfo];
                  }
+                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
              }];
         }
         else {
@@ -1096,7 +1097,7 @@
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
-            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
     }
     else {
@@ -1105,8 +1106,9 @@
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                messageAsDictionary:errorInfo];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+
 }
 
 - (void)unlockSession:(CDVInvokedUrlCommand*)command {
@@ -1135,6 +1137,7 @@
                      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                   messageAsDictionary:errorInfo];
                  }
+                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
              }];
         }
         else {
@@ -1143,6 +1146,7 @@
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
     }
     else {
@@ -1151,9 +1155,8 @@
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                messageAsDictionary:errorInfo];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
-    
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command {
@@ -1184,6 +1187,7 @@
                      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                             messageAsDictionary:errorInfo];
                  }
+                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
              }];
         }
         else {
@@ -1192,6 +1196,7 @@
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
     }
     else {
@@ -1200,9 +1205,8 @@
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                messageAsDictionary:errorInfo];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
-    
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)removeSessionLock:(CDVInvokedUrlCommand*)command {
