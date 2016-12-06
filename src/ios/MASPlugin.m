@@ -52,6 +52,32 @@
 
 }
 
+- (void)useNativeMASUI:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    SEL selector = NSSelectorFromString(@"setWillHandleAuthentication:");
+    if([MAS respondsToSelector:selector])
+    {
+        IMP imp = [MAS methodForSelector:selector];
+        __block void (*setWillHandleOTPAuthentication)(id, SEL, BOOL) = (void *)imp;
+        
+        setWillHandleOTPAuthentication([MAS class], selector, YES);
+    }
+    
+    selector = NSSelectorFromString(@"setWillHandleOTPAuthentication:");
+    if([MAS respondsToSelector:selector])
+    {
+        IMP imp = [MAS methodForSelector:selector];
+        __block void (*setWillHandleOTPAuthentication)(id, SEL, BOOL) = (void *)imp;
+        
+        setWillHandleOTPAuthentication([MAS class], selector, YES);
+    }
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Using native MASUI"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void)setGrantFlow:(CDVInvokedUrlCommand*)command
 {
@@ -113,6 +139,24 @@
     //
     
     __block CDVPluginResult *result;
+    
+    SEL selector = NSSelectorFromString(@"setWillHandleAuthentication:");
+    if([MAS respondsToSelector:selector])
+    {
+        IMP imp = [MAS methodForSelector:selector];
+        __block void (*setWillHandleOTPAuthentication)(id, SEL, BOOL) = (void *)imp;
+        
+        setWillHandleOTPAuthentication([MAS class], selector, NO);
+    }
+    
+    selector = NSSelectorFromString(@"setWillHandleOTPAuthentication:");
+    if([MAS respondsToSelector:selector])
+    {
+        IMP imp = [MAS methodForSelector:selector];
+        __block void (*setWillHandleOTPAuthentication)(id, SEL, BOOL) = (void *)imp;
+        
+        setWillHandleOTPAuthentication([MAS class], selector, NO);
+    }
     
     [MAS setUserLoginBlock:
      ^(MASBasicCredentialsBlock basicBlock,
