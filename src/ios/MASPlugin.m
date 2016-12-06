@@ -1069,27 +1069,44 @@
     //
     
     __block CDVPluginResult *result;
-    
-    [[MASUser currentUser] lockSessionWithCompletion:
-     ^(BOOL completed, NSError *error) {
-      
-         if (completed && !error) {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                          messageAsBool:completed];
-         }
-         else if (error) {
-             
-             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                         @"errorMessage":[error localizedDescription],
-                                         @"errorInfo":[error userInfo]};
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                          messageAsDictionary:errorInfo];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    if([MASUser currentUser]){
+        if(![[MASUser currentUser] isSessionLocked]) {
+            [[MASUser currentUser] lockSessionWithCompletion:
+             ^(BOOL completed, NSError *error) {
+              
+                 if (completed && !error) {
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                  messageAsBool:completed];
+                 }
+                 else if (error) {
+                     
+                     NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                 @"errorMessage":[error localizedDescription],
+                                                 @"errorInfo":[error userInfo]};
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                  messageAsDictionary:errorInfo];
+                 }
+             }];
+        }
+        else {
+            NSDictionary *errorInfo = @{@"errorMessage":@"Session already locked",
+                                        @"errorInfo":@"errorInfo"};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                   messageAsDictionary:errorInfo];
+            
+        }
+    }
+    else {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No session initialized",
+                                    @"errorInfo":@"errorInfo"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)unlockSession:(CDVInvokedUrlCommand*)command {
@@ -1098,27 +1115,45 @@
     //
     
     __block CDVPluginResult *result;
+
+    if([MASUser currentUser]){
+        if([[MASUser currentUser] isSessionLocked]) {
+            [[MASUser currentUser] unlockSessionWithCompletion:
+             ^(BOOL completed, NSError *error) {
+              
+                 if (completed && !error) {
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                  messageAsBool:completed];
+                 }
+                 else if (error) {
+                     
+                     NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                 @"errorMessage":[error localizedDescription],
+                                                 @"errorInfo":[error userInfo]};
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                  messageAsDictionary:errorInfo];
+                 }
+             }];
+        }
+        else {
+            NSDictionary *errorInfo = @{@"errorMessage":@"Session is not locked",
+                                        @"errorInfo":@"errorInfo"};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                   messageAsDictionary:errorInfo];
+        }
+    }
+    else {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No session initialized",
+                                    @"errorInfo":@"errorInfo"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
     
-    [[MASUser currentUser] unlockSessionWithCompletion:
-     ^(BOOL completed, NSError *error) {
-      
-         if (completed && !error) {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                          messageAsBool:completed];
-         }
-         else if (error) {
-             
-             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                         @"errorMessage":[error localizedDescription],
-                                         @"errorInfo":[error userInfo]};
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                          messageAsDictionary:errorInfo];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command {
@@ -1128,28 +1163,46 @@
     
     __block CDVPluginResult *result;
     
-    NSString *promptMessage = [command.arguments objectAtIndex:0];
-    [[MASUser currentUser] unlockSessionWithUserOperationPromptMessage:promptMessage
-                                                            completion:
-     ^(BOOL completed, NSError *error) {
-         
-         if (completed && !error) {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                          messageAsBool:completed];
-         }
-         else if (error) {
-             
-             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                         @"errorMessage":[error localizedDescription],
-                                         @"errorInfo":[error userInfo]};
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                    messageAsDictionary:errorInfo];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    if([MASUser currentUser]){
+        if([[MASUser currentUser] isSessionLocked]) {
+            NSString *promptMessage = [command.arguments objectAtIndex:0];
+            [[MASUser currentUser] unlockSessionWithUserOperationPromptMessage:promptMessage
+                                                                    completion:
+             ^(BOOL completed, NSError *error) {
+                 
+                 if (completed && !error) {
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                  messageAsBool:completed];
+                 }
+                 else if (error) {
+                     
+                     NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                 @"errorMessage":[error localizedDescription],
+                                                 @"errorInfo":[error userInfo]};
+                     
+                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                            messageAsDictionary:errorInfo];
+                 }
+             }];
+        }
+        else {
+            NSDictionary *errorInfo = @{@"errorMessage":@"Session is not locked",
+                                        @"errorInfo":@"errorInfo"};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                   messageAsDictionary:errorInfo];
+        }
+    }
+    else {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No session initialized",
+                                    @"errorInfo":@"errorInfo"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)removeSessionLock:(CDVInvokedUrlCommand*)command {
