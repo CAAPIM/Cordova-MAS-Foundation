@@ -109,8 +109,9 @@ var MASPluginCallbacks = {
         }, 
         function() {
 
-            document.getElementById("CA-Title").innerHTML = error.errorMessage;
-			document.getElementById("CA-Title").style.color = 'red';
+            if(error.errorMessage !== "Enter the OTP")
+                document.getElementById("CA-Title").style.color = "red";
+            document.getElementById("CA-Title").innerHTML = error.errorMessage;			
         });
     }
 };
