@@ -168,8 +168,40 @@ var MASPluginMAS = function() {
      Set the name of the configuration file.  This gives the ability to set the file's name to a custom value.
      */
     this.configFileName = function(successHandler, errorHandler, fileName) {
-     
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
+
+     	if (fileName) {
+            
+            var xhr = new XMLHttpRequest();
+        
+            xhr.onload = function () {
+
+                if (this.response) {
+                	if(fileName.endsWith(".json")){
+                		fileName = fileName.slice(0,-5);
+                	}
+                    return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
+                }                
+            };
+        
+            xhr.onerror = function (err) {
+            	return errorHandler({
+                	errorMessage: "Can't find " + fileName
+            	});
+            };
+            if(fileName.endsWith(".json")){
+            	xhr.open('GET', "../"+fileName, true);
+            }
+            else{
+            	xhr.open('GET', "../"+fileName+".json", true);
+            }
+            xhr.send();    
+        }                
+        else 
+        {
+            return errorHandler({
+                errorMessage: "Can't find the file"
+            });
+        }
     };
 
     /**

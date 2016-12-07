@@ -15,6 +15,14 @@
 
 @interface MASPlugin : CDVPlugin
 
+
+/**
+ *  Set whether Native MASUI should be used.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)useNativeMASUI:(CDVInvokedUrlCommand*)command;
+
 /**
  *  Set grant flow of MASFoundation
  *
