@@ -176,6 +176,9 @@ var MASPluginMAS = function() {
             xhr.onload = function () {
 
                 if (this.response) {
+                	if(fileName.endsWith(".json")){
+                		fileName = fileName.slice(0,-5);
+                	}
                     return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
                 }                
             };
@@ -185,8 +188,12 @@ var MASPluginMAS = function() {
                 	errorMessage: "Can't find " + fileName
             	});
             };
-
-            xhr.open('GET', "../"+fileName, true);
+            if(fileName.endsWith(".json")){
+            	xhr.open('GET', "../"+fileName, true);
+            }
+            else{
+            	xhr.open('GET', "../"+fileName+".json", true);
+            }
             xhr.send();    
         }                
         else 

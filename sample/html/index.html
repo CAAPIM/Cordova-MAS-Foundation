@@ -278,7 +278,7 @@
                 function (error){
                     thisElement.removeClass("success").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, false);
+                }, true);
             });
 
             $("#startWithJSON").bind("click",function(event,ui){
