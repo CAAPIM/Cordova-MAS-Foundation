@@ -1,39 +1,29 @@
-/*
- * Copyright (c) 2016 CA, Inc.
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  *
  */
 
-package com.ca.apim;
+package com.ca.mas.cordova.core;
 
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.util.Log;
-
-import com.ca.mas.foundation.MAS;
-import com.ca.mas.foundation.MASAuthenticationListener;
-import com.ca.mas.foundation.MASConnectionListener;
-import com.ca.mas.foundation.MASOtpAuthenticationHandler;
-import com.ca.mas.foundation.auth.MASAuthenticationProviders;
-import com.ca.mas.ui.MASLoginFragment;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.net.HttpURLConnection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MASPlugin extends CordovaPlugin {
 
     private static final String TAG = MASPlugin.class.getCanonicalName();
+    private static final Map<String, Command> commands = new HashMap<>();
+    private final static int FINGERPRINT_REQUEST_CODE = 0x1000;
 
-    private static final Map<String, Command> commands = new HashMap();
+    public static MASPlugin masPlugin;
 
     static {
         add(new MASCommand.StartCommand());
@@ -46,14 +36,45 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.DeleteFromPathCommand());
         add(new MASCommand.PostToPathCommand());
         add(new MASCommand.PutToPathCommand());
+        add(new MASCommand.CancelRequestCommand());
+        add(new MASCommand.SetAuthenticationListenerCommand());
+        add(new MASCommand.GenerateAndSendOTPCommand());
+        add(new MASCommand.ValidateOtpCommand());
+        add(new MASCommand.setOTPAuthenticationListenerCommand());
+        add(new MASCommand.setOTPChannelSelectorListenerCommand());
+        add(new MASCommand.CancelOTPValidationCommand());
+        add(new MASCommand.CancelGenerateAndSendOTPCommand());
+        add(new MASCommand.GatewayIsReachableCommand());
+        add(new MASCommand.UseNativeMASUICommand());
 
         add(new MASDeviceCommand.DeregisterCommand());
         add(new MASDeviceCommand.IsRegisteredCommand());
         add(new MASDeviceCommand.ResetLocallyCommand());
+        add(new MASDeviceCommand.GetDeviceIdentifierCommand());
+        add(new MASDeviceCommand.GetCurrentDeviceCommand());
 
         add(new MASUserCommand.LoginCommand());
         add(new MASUserCommand.LogoutUserCommand());
         add(new MASUserCommand.IsAuthenticatedCommand());
+        add(new MASUserCommand.LoginWithImplicitFlowCommand());
+        add(new MASUserCommand.GetCurrentUserCommand());
+        add(new MASUserCommand.CompleteAuthenticationCommand());
+        add(new MASUserCommand.CancelAuthenticationCommand());
+        add(new MASUserCommand.GetUserNameCommand());
+        add(new MASUserCommand.AuthorizeCommand());
+        // Fingerprint commands
+        add(new MASUserCommand.IsSessionLockedCommand());
+        add(new MASUserCommand.LockSessionCommand());
+        add(new MASUserCommand.UnLockSessionCommand());
+        add(new MASUserCommand.UnLockSessionWithMessageCommand());
+        add(new MASUserCommand.RemoveSessionLockCommand());
+
+
+        add(new MASApplicationCommand.GetIdentifierCommand());
+        add(new MASApplicationCommand.GetNameCommand());
+        add(new MASApplicationCommand.RetrieveEnterpriseAppsCommand());
+        add(new MASApplicationCommand.LaunchAppCommand());
+        add(new MASApplicationCommand.EnterpriseBrowserWebAppBackButtonHandlerCommand());
 
     }
 
@@ -64,19 +85,6 @@ public class MASPlugin extends CordovaPlugin {
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-        MAS.setAuthenticationListener(new MASAuthenticationListener() {
-            @Override
-            public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
-                DialogFragment loginFragment = MASLoginFragment.newInstance(requestId, providers);
-                loginFragment.show(((Activity)context).getFragmentManager(), "logonDialog");
-
-            }
-
-            @Override
-            public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
-                //ignore
-            }
-        });
 
         /* Enable below for debugging.
         MAS.setConnectionListener(new MASConnectionListener() {
@@ -106,7 +114,7 @@ public class MASPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-
+        masPlugin = this;
         Command command = commands.get(action);
         if (command != null) {
             try {
@@ -122,6 +130,16 @@ public class MASPlugin extends CordovaPlugin {
         }
     }
 
+    public static MASPlugin getCurrentInstance() {
+        return getMasPlugin();
+    }
 
+    public static MASPlugin getMasPlugin() {
+        return masPlugin;
+    }
+
+    public static void setMasPlugin(MASPlugin masPlugin) {
+        MASPlugin.masPlugin = masPlugin;
+    }
 }
 

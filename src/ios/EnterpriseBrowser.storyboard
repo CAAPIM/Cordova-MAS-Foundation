@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Title-->
+        <scene sceneID="gyi-K0-uRs">
+            <objects>
+                <viewController storyboardIdentifier="EBViewController" automaticallyAdjustsScrollViewInsets="NO" id="mjP-uI-mFn" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LEf-fV-R4V"/>
+                        <viewControllerLayoutGuide type="bottom" id="7Ey-gK-OzJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" restorationIdentifier="EBViewController" id="F1X-dj-7FQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7RP-z3-wod">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7RP-z3-wod" firstAttribute="centerX" secondItem="F1X-dj-7FQ" secondAttribute="centerX" id="5xJ-ax-8JD"/>
+                            <constraint firstItem="7RP-z3-wod" firstAttribute="leading" secondItem="F1X-dj-7FQ" secondAttribute="leading" id="VGK-yZ-pdr"/>
+                            <constraint firstItem="7RP-z3-wod" firstAttribute="bottom" secondItem="7Ey-gK-OzJ" secondAttribute="top" id="r0Q-wC-HJX"/>
+                            <constraint firstItem="7RP-z3-wod" firstAttribute="centerY" secondItem="F1X-dj-7FQ" secondAttribute="centerY" id="v1d-VP-Fq2"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems>
+                        <barButtonItem title="Back" id="lpW-z3-ZOs">
+                            <connections>
+                                <action selector="backButtonPressed:" destination="mjP-uI-mFn" id="Y56-bC-gy3"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qsk-XL-1am"/>
+                        <barButtonItem title="Forward" id="TrA-6v-7j6">
+                            <connections>
+                                <action selector="forwardButtonPressed:" destination="mjP-uI-mFn" id="O8J-oE-2WC"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Title" id="Ls7-tE-PMD">
+                        <barButtonItem key="leftBarButtonItem" title="Back" width="14" id="KgZ-aK-Ffj">
+                            <connections>
+                                <action selector="backViewController:" destination="mjP-uI-mFn" id="2HH-zt-xgl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="webView" destination="7RP-z3-wod" id="h1h-vu-ODA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oIn-v0-8i8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="64.799999999999997" y="139.880059970015"/>
+        </scene>
+    </scenes>
+</document>

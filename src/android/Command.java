@@ -1,14 +1,13 @@
-/*
- * Copyright (c) 2016 CA, Inc.
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  *
  */
 
-package com.ca.apim;
+package com.ca.mas.cordova.core;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ca.mas.core.client.ServerClient;
 import com.ca.mas.core.error.MAGErrorCode;
@@ -23,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -35,19 +33,18 @@ public abstract class Command {
 
     /**
      * Execute a unit of processing work to be performed.
-     *
      * @param context         The Application context
      * @param args            The Cordova.exec() arguments
      * @param callbackContext The callback context used when calling back into JavaScript
      */
-    abstract void execute(Context context, JSONArray args, CallbackContext callbackContext);
+    public abstract void execute(Context context, JSONArray args, CallbackContext callbackContext);
 
     /**
      * Return the action to execute
      *
      * @return The action to execute.
      */
-    abstract String getAction();
+    public abstract String getAction();
 
     /**
      * Transform the throwable to a JSON error, used when calling back into JavaScript when for error
@@ -58,7 +55,7 @@ public abstract class Command {
     protected JSONObject getError(Throwable throwable) {
         int errorCode = MAGErrorCode.UNKNOWN;
         String errorMessage = throwable.getMessage();
-
+        String errorMessageDetail = "";
         //Try to capture the root cause of the error
         if (throwable instanceof MAGException) {
             MAGException ex = (MAGException) throwable;
@@ -84,8 +81,17 @@ public abstract class Command {
             TargetApiException e = ((TargetApiException) throwable.getCause());
             try {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
-            } catch (IOException ignore) {
+            } catch (Exception ignore) {
             }
+
+        } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
+            errorCode = MAGErrorCode.UNKNOWN;
+
+        } else if(throwable != null && throwable instanceof MASCordovaException){
+            errorMessage=throwable.getMessage();
+
+        } else {
+            errorMessageDetail = throwable.getMessage();
         }
 
         JSONObject error = new JSONObject();
@@ -95,13 +101,28 @@ public abstract class Command {
             StringWriter errors = new StringWriter();
             throwable.printStackTrace(new PrintWriter(errors));
             error.put("errorInfo", errors.toString());
+            if (!"".equals(errorMessageDetail)) {
+                error.put("errorMessageDetail", errorMessageDetail);
+                error.put("errorMessage", "Internal Server Error");
+            }
         } catch (JSONException ignore) {
         }
+
         return error;
     }
 
     protected void success(CallbackContext callbackContext, boolean value) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, JSONObject resultData) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultData);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, Object resultData) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultData.toString());
         callbackContext.sendPluginResult(result);
     }
 
