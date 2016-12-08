@@ -1,4 +1,9 @@
-cordova.define("com.ca.apim-tests.tests", function(require, exports, module) {
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 
 
 /**
@@ -8,8 +13,20 @@ cordova.define("com.ca.apim-tests.tests", function(require, exports, module) {
  * test. As we found some issues related to time out to numerous async calls.
  */
 
-
 exports.defineManualTests = function(contentEl, createActionButton) {
+
+
+    createActionButton('MAS.initialize()', function() {
+            var name = 'MAS.initialize()';
+            var mas = new MASPlugin.MAS();
+            mas.initialize(startSuccessHandler, errorHandler);
+            function startSuccessHandler(result) {
+                console.log(name + ' Success: ' + result);
+            }
+            function errorHandler(error) {
+                console.log(name + ' Failed: ' + result);
+            }
+        });
 
     createActionButton('MAS.start()', function() {
             var name = 'MAS.start()';
@@ -74,11 +91,28 @@ exports.defineManualTests = function(contentEl, createActionButton) {
             }
         });
 
+
+    createActionButton('MAS.getFromPath() OTP', function() {
+            var name = 'MAS.getFromPath() OTP';
+            var mas = new MASPlugin.MAS();
+            var parameters = {"operation": "OTP"};
+            var headers = {"headerName" : "headerValue"};
+            mas.getFromPath(startSuccessHandler, errorHandler, '/otpProtected'
+                , parameters, headers, 0,  0);
+            function startSuccessHandler(result) {
+                console.log(name + ' - Success: ' + JSON.stringify(result));
+            }
+            function errorHandler(error) {
+                console.log(name + ' - Failed: ' + error.errorInfo);
+            }
+        });
+
+
     //MASUser
     createActionButton('MASUser.loginWithUsernameAndPassword()', function() {
             var name = 'MASUser.loginWithUsernameAndPassword()';
             var masUser = new MASPlugin.MASUser();
-            masUser.loginWithUsernameAndPassword(startSuccessHandler, errorHandler, 'sarek', '7layer');
+            masUser.loginWithUsernameAndPassword(startSuccessHandler, errorHandler, 'sunder', 'dost1234');
             function startSuccessHandler(result) {
                 console.log(name + ' Success: ' + result);
             }
@@ -125,10 +159,10 @@ exports.defineManualTests = function(contentEl, createActionButton) {
             }
         });
 
-     createActionButton('MASDevice.isRegistered()', function() {
-            var name = 'MASDevice.isRegistered()';
+     createActionButton('MASDevice.isDeviceRegistered()', function() {
+            var name = 'MASDevice.isDeviceRegistered()';
             var masDevice = new MASPlugin.MASDevice();
-            masDevice.isRegistered(startSuccessHandler, errorHandler);
+            masDevice.isDeviceRegistered(startSuccessHandler, errorHandler);
             function startSuccessHandler(result) {
                 console.log(name + ' - Success: ' + result);
             }
@@ -241,5 +275,3 @@ exports.defineManualTests = function(contentEl, createActionButton) {
                        });
     
 };
-
-});

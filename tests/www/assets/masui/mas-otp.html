@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <!--            <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet'>-->
+    <!--                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel='stylesheet'>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Ropa Sans', sans-serif;
+            color: #666
+        }
+
+        h1 {
+            font-size: 1em;
+            text-align: center;
+        }
+
+        h1,
+        p {
+            margin-bottom: 5px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .add1 {
+            margin: 0 auto;
+            width: 720px
+        }
+
+        li,
+        ul,
+        body {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        #login-form {
+            width: 350px;
+            background: #FFF;
+            margin: 50px auto;
+            background: #f1f1f1
+        }
+
+        .form-header {
+            display: table;
+            clear: both
+        }
+
+        .form-header li {
+            display:inline-block; 
+            line-height:40px; 
+            width:255px; 
+            margin:0 2px; 
+            text-align:center; 
+            background:#e8e8e8
+        }
+
+        .form-header li:nth-child(odd) {
+            padding-left: 40px;
+        }
+
+        .form-header li:nth-child(even) {
+            width:50px; margin:0 0;
+        }
+
+        .user-image {
+            padding: 20px 0;
+            text-align: center
+        }
+
+        .user {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            border: solid 8px #e1e1e1;
+            line-height: 100px;
+            color: #e1e1e1;
+            font-size: 50px
+        }
+
+        .form {
+            padding: 0 30px;
+            padding-bottom: 10px
+        }
+
+        .login li {
+            height: 35px;
+            line-height: 35px;
+            margin-bottom: 15px
+        }
+
+        .input {
+            border: solid 1px #e8e8e8;
+            outline: none;
+            background: #f8f8f8;
+            margin: 0 auto;
+            font-family: 'Ropa Sans', sans-serif;
+            font-size: 15px;
+            display: block;
+            height: 35px;
+            width: 268px;
+            padding: 0 10px;
+            border-radius: 3px;
+            transition: all .3s
+        }
+
+        .input:focus:invalid {
+            border-color: red
+        }
+
+        .input:focus:valid {
+            border-color: green
+        }
+
+        #check {
+            top: 2px;
+            position: relative
+        }
+
+        .inline:after {
+            display: table;
+            content: ''
+        }
+
+        .remember {
+            width: 45%;
+            float: left;
+            position: relative;
+            font-size: 14px
+        }
+
+        .remember a {
+            text-decoration: none;
+            color: #666
+        }
+
+        .remember:nth-child(2) {
+            text-align: right
+        }
+
+        .btn {
+            border: none;
+            outline: none;
+            background: #009966;
+            border-bottom: solid 4px #006666;
+            font-family: 'Ropa Sans', sans-serif;
+            margin: 0 auto;
+            display: block;
+            height: 40px;
+            width: 290px;
+            padding: 0 10px;
+            border-radius: 3px;
+            font-size: 16px;
+            color: #FFF
+        }
+
+        .social-login {
+            padding: 10px 30px;
+            background: #e8e8e8;
+            text-align: center
+        }
+
+        .social-login a {
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            width: 35px;
+            margin: 0 3px;
+            text-decoration: none;
+            color: #FFFFFF
+        }
+
+        .close_button {
+            width: 25%;
+        }
+
+        .form a i.fa {
+            line-height: 35px
+        }
+
+        .slicon {
+            display: block;
+            max-width: 35px;
+            max-height: 35px;
+            width: auto;
+            height: auto;
+        }
+
+        .fb {
+            background: #e8e8e8
+        }
+
+        .tw {
+            background: #e8e8e8
+        }
+
+        .gp {
+            background: #e8e8e8
+        }
+
+        .in {
+            background: #e8e8e8
+        }
+
+        .form-footer {
+            height: 40px;
+            line-height: 40px;
+            padding: 3px 35px;
+            text-align: right;
+            font-size: 14px
+        }
+
+        .form-footer a {
+            padding: 6px;
+            background: #006699;
+            border-radius: 3px;
+            margin-left: 4px;
+            color: #FFFFFF;
+            text-decoration: none
+        }
+
+        #powered {
+            padding: 10px;
+            font-size: 14px;
+            background: #eee;
+            text-align: center;
+            color: #999
+        }
+
+        #powered a {
+            text-decoration: none;
+            color: #666
+        }
+    </style>
+</head>
+
+<body>
+    <div id="errorMesg" style="color:red"> </div>
+    <br>
+    <div id="login-form">
+        <div>
+            <ul id="" class="form-header">
+                <li>One Time Password</li>
+                <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
+                </li>
+            </ul>
+        </div>
+        <div class="user-image"><img src="masui/img/ca-logo.png"></img>
+        </div>
+        <h1 id="CA-Title"><strong>Enter OTP</strong></h1>
+        <form class="form">
+            <ul class="login">
+                <li>
+                    <input id="CA-OTP" type="text" class="input" required placeholder="One Time Password">
+                </li>
+                <li>
+                    <input id="submit_otp" class="btn" type="submit" value="SUBMIT">
+                </li>
+            </ul>
+        </form>
+    </div>
+</body>
+<script>
+    $("#submit_otp").on("click", function(e) {
+        e.preventDefault();
+
+        submit();
+    });
+
+    $("#close").on("click", function(e) {
+        e.preventDefault();
+
+        var MAS = new MASPlugin.MAS();
+        MAS.cancelOTPValidation();
+    });
+
+    function submit() {
+
+        var otp = document.getElementById("CA-OTP").value;
+        if (otp.trim())
+            MASPlugin.MASConfig.MASSendOTPCredentials(otp);
+        else
+            alert("Please enter valid OTP");
+    }
+
+    function doOnOrientationChange()
+    {
+        if($("#CA-OTP").is(":focus")) {
+            document.getElementById("CA-OTP").blur();
+            document.getElementById("CA-OTP").focus();
+          }
+    }
+
+    window.addEventListener('orientationchange', doOnOrientationChange);
+
+</script>
+
+</html>
