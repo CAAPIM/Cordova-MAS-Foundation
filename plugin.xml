@@ -41,6 +41,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginUser" />
     </js-module>
 
+    <js-module src="www/MASPluginGroup.js" name="MASPluginGroup">
+        <clobbers target="MASPluginGroup" />
+    </js-module>
+
     <js-module src="www/MASPluginUtils.js" name="MASPluginUtils">
         <clobbers target="MASPluginUtils" />
     </js-module>
