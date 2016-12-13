@@ -68,6 +68,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         
         <header-file src="src/ios/MASPlugin.h" />
         <source-file src="src/ios/MASPlugin.m" />
+        <header-file src="src/ios/MASPluginUser.h" />
+        <source-file src="src/ios/MASPluginUser.m" />
         <header-file src="src/ios/MASPluginAuthenticationController.h" />
         <source-file src="src/ios/MASPluginAuthenticationController.m" />
         <header-file src="src/ios/WebViewController.h" />
