@@ -54,43 +54,45 @@ public class MASPluginUser extends CordovaPlugin {
         if (user == null) {
             Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
-            return false;
+            return true;
         }
         Log.i(TAG, action);
         if (action.equalsIgnoreCase("isAuthenticated")) {
-            return isAuthenticated(user, callbackContext);
-        } else if (action.equalsIgnoreCase("getCurrentUser")) {
-            return getCurrentUser(user, callbackContext);
+            isAuthenticated(user, callbackContext);
+        } else if (action.equalsIgnoreCase("currentUser")) {
+            getCurrentUser(user, callbackContext);
         } else if (action.equalsIgnoreCase("isSessionLocked")) {
-            return isSessionLocked(user, callbackContext);
+            isSessionLocked(user, callbackContext);
         } else if (action.equalsIgnoreCase("lockSession")) {
-            return lockSession(user, callbackContext);
+            lockSession(user, callbackContext);
         } else if (action.equalsIgnoreCase("unlockSession")) {
-            return unlockSession(user, callbackContext);
+            unlockSession(user, callbackContext);
         } else if (action.equalsIgnoreCase("unlockSessionWithMessage")) {
-            return unlockSessionWithMessage(user, callbackContext, args);
+            unlockSessionWithMessage(user, callbackContext, args);
         } else if (action.equalsIgnoreCase("removeSessionLock")) {
-            return removeSessionLock(user, callbackContext);
+            removeSessionLock(user, callbackContext);
         } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
-            return loginWithUsernameAndPassword(args, callbackContext);
+            loginWithUsernameAndPassword(args, callbackContext);
         } else if (action.equalsIgnoreCase("loginWithImplicitFlow")) {
-            return loginWithImplicitFlow(callbackContext);
-        } else if (action.equalsIgnoreCase("logoutUser")) {
-            return logoutUser(user, callbackContext);
+            loginWithImplicitFlow(callbackContext);
+        } else if (action.equalsIgnoreCase("logout")) {
+            logoutUser(user, callbackContext);
         } else if (action.equalsIgnoreCase("completeAuthentication")) {
-            return completeAuthentication(args, callbackContext);
+            completeAuthentication(args, callbackContext);
         } else if (action.equalsIgnoreCase("cancelAuthentication")) {
-            return cancelAuthentication(args, callbackContext);
+            cancelAuthentication(args, callbackContext);
         } else if (action.equalsIgnoreCase("authorizeQRCode")) {
-            return authorizeQRCode(args, callbackContext);
+            authorizeQRCode(args, callbackContext);
+        } else if (action.equalsIgnoreCase("requestUserInfo")) {
+            requestUserInfo(user, callbackContext);
         } else {
             callbackContext.error("Invalid action");
             return false;
         }
-
+        return true;
     }
 
-    private boolean isAuthenticated(MASUser masUser, final CallbackContext callbackContext) {
+    private void isAuthenticated(MASUser masUser, final CallbackContext callbackContext) {
         if (masUser.isAuthenticated()) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, true);
             callbackContext.sendPluginResult(result);
@@ -98,19 +100,17 @@ public class MASPluginUser extends CordovaPlugin {
             PluginResult result = new PluginResult(PluginResult.Status.OK, false);
             callbackContext.sendPluginResult(result);
         }
-        return true;
     }
 
-    private boolean getCurrentUser(MASUser masUser, final CallbackContext callbackContext) {
+    private void getCurrentUser(MASUser masUser, final CallbackContext callbackContext) {
         try {
             callbackContext.success(masUser.getAsJSONObject());
         } catch (JSONException jse) {
             callbackContext.error(jse.getLocalizedMessage());
         }
-        return true;
     }
 
-    private boolean isSessionLocked(MASUser masUser, final CallbackContext callbackContext) {
+    private void isSessionLocked(MASUser masUser, final CallbackContext callbackContext) {
         if (masUser.isSessionLocked()) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, true);
             callbackContext.sendPluginResult(result);
@@ -118,10 +118,9 @@ public class MASPluginUser extends CordovaPlugin {
             PluginResult result = new PluginResult(PluginResult.Status.OK, false);
             callbackContext.sendPluginResult(result);
         }
-        return true;
     }
 
-    private boolean lockSession(MASUser masUser, final CallbackContext callbackContext) {
+    private void lockSession(MASUser masUser, final CallbackContext callbackContext) {
         masUser.lockSession(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -135,11 +134,10 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
     @TargetApi(23)
-    private boolean unlockSession(MASUser masUser, final CallbackContext callbackContext) {
+    private void unlockSession(MASUser masUser, final CallbackContext callbackContext) {
         masUser.unlockSession(new MASSessionUnlockCallback<Void>() {
             @Override
             public void onUserAuthenticationRequired() {
@@ -198,11 +196,10 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
     @TargetApi(23)
-    private boolean unlockSessionWithMessage(MASUser masUser, final CallbackContext callbackContext, JSONArray args) {
+    private void unlockSessionWithMessage(MASUser masUser, final CallbackContext callbackContext, JSONArray args) {
         final String message = args.optString(0);
         masUser.unlockSession(new MASSessionUnlockCallback<Void>() {
             @Override
@@ -263,10 +260,9 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
-    private boolean removeSessionLock(MASUser masUser, final CallbackContext callbackContext) {
+    private void removeSessionLock(MASUser masUser, final CallbackContext callbackContext) {
         masUser.removeSessionLock(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -280,10 +276,9 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
-    private boolean loginWithUsernameAndPassword(final JSONArray args, final CallbackContext callbackContext) {
+    private void loginWithUsernameAndPassword(final JSONArray args, final CallbackContext callbackContext) {
         String username;
         String password;
         try {
@@ -291,7 +286,7 @@ public class MASPluginUser extends CordovaPlugin {
             password = args.getString(1);
         } catch (JSONException e) {
             callbackContext.error(command.getError(e));
-            return false;
+            return;
         }
 
         MASUser.login(username, password, new MASCallback<MASUser>() {
@@ -307,10 +302,9 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
-    private boolean completeAuthentication(final JSONArray args, final CallbackContext callbackContext) {
+    private void completeAuthentication(final JSONArray args, final CallbackContext callbackContext) {
         String username;
         String password;
         try {
@@ -318,7 +312,7 @@ public class MASPluginUser extends CordovaPlugin {
             password = args.getString(1);
         } catch (JSONException e) {
             callbackContext.error(command.getError(e));
-            return false;
+            return;
         }
         MASUser.login(username, password, new MASCallback<MASUser>() {
             @Override
@@ -337,15 +331,15 @@ public class MASPluginUser extends CordovaPlugin {
 
             }
         });
-        return true;
     }
 
-    private boolean cancelAuthentication(final JSONArray args, final CallbackContext callbackContext) {
+    private void cancelAuthentication(final JSONArray args, final CallbackContext callbackContext) {
         try {
             int requestId = args.getInt(0);
             if (requestId == 0) {
                 Log.e(TAG, "request Id is empty");
                 callbackContext.error("request Id is  empty");
+                return;
             }
             MASUtil.getQrCode().stop();
             MAS.cancelRequest(requestId);
@@ -353,18 +347,16 @@ public class MASPluginUser extends CordovaPlugin {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(command.getError(e));
-            return false;
         }
-        return true;
     }
 
-    private boolean authorizeQRCode(final JSONArray args, final CallbackContext callbackContext) {
+    private void authorizeQRCode(final JSONArray args, final CallbackContext callbackContext) {
         String url;
         try {
             url = args.getString(0);
         } catch (JSONException e) {
             callbackContext.error(command.getError(e));
-            return false;
+            return;
         }
 
         MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
@@ -381,10 +373,9 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(e));
             }
         });
-        return true;
     }
 
-    private boolean loginWithImplicitFlow(final CallbackContext callbackContext) {
+    private void loginWithImplicitFlow(final CallbackContext callbackContext) {
         MASUser.login(new MASCallback<MASUser>() {
             @Override
             public void onSuccess(MASUser masUser) {
@@ -398,10 +389,9 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
     }
 
-    private boolean logoutUser(MASUser masUser, final CallbackContext callbackContext) {
+    private void logoutUser(MASUser masUser, final CallbackContext callbackContext) {
         masUser.logout(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -415,6 +405,20 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
-        return true;
+    }
+
+    private void requestUserInfo(MASUser masUser, final CallbackContext callbackContext) {
+        masUser.requestUserInfo(new MASCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage(), throwable);
+                callbackContext.error(command.getError(throwable));
+            }
+        });
     }
 }
