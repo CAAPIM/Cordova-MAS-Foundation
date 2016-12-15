@@ -358,11 +358,12 @@
                 $(this).find("textarea.error").hide();
 
                 var thisElement = $(this);
-                var MASUser = new MASPlugin.MASUser();
+                //
+                                 var MASUser = new MASPlugin.MASUser();
                 var username = $("input[name='userLoginUsername']").val();
                 var password = $("input[name='userLoginPassword']").val();
 
-                MASUser.loginWithUsernameAndPassword(function(result){
+                MASPluginUser.loginWithUsernameAndPassword(function(result){
                     thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
@@ -451,8 +452,8 @@
                 if($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var MASUser = new MASPlugin.MASUser();
-                MASUser.getCurrentUser(function(result){
+                //var MASUser = new MASPlugin.MASUser();
+                MASPluginUser.currentUser(function(result){
                     thisElement.removeClass("success").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 },
@@ -461,7 +462,7 @@
                     displayError(thisElement, error);
                 });
             });
-
+            
             $("#isSessionLocked").bind("click",function(event,ui){
                 if($(event.target).context.tagName != 'A') return;
 

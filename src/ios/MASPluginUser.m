@@ -31,9 +31,19 @@
     if([MASUser currentUser])
     {
         NSDictionary *currentUser =
-        @{@"isAuthenticated":[NSNumber numberWithBool:[[MASUser currentUser] isAuthenticated]],
+        @{@"isCurrentUser":[NSNumber numberWithBool:[[MASUser currentUser] isCurrentUser]],
+          @"isAuthenticated":[NSNumber numberWithBool:[[MASUser currentUser] isAuthenticated]],
+          @"isSessionLocked":[NSNumber numberWithBool:[[MASUser currentUser] isSessionLocked]],
           @"userName":[[MASUser currentUser] userName],
-          @"active":[NSNumber numberWithBool:[[MASUser currentUser] active]]};
+          @"familyName":[[MASUser currentUser] familyName],
+          @"givenName":[[MASUser currentUser] givenName],
+          @"formattedName":[[MASUser currentUser] formattedName],
+          @"emailAddresses":[[MASUser currentUser] emailAddresses],
+          @"phoneNumbers":[[MASUser currentUser] addresses],
+          @"addresses":[[MASUser currentUser] userName],
+          @"photos":@"",
+          @"active":[NSNumber numberWithBool:[[MASUser currentUser] active]],
+          @"accessToken":[[MASUser currentUser] accessToken]};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK   messageAsDictionary:currentUser];
     }

@@ -5,7 +5,7 @@
  *
  */
 
-var MASPluginUser = function() {
+ var MASPluginUser = function() {
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Properties
@@ -14,76 +14,60 @@ var MASPluginUser = function() {
     /**
      *  Boolean indicator of whether the MASPluginUser object is currently authenticated user or not.
      */
-    const this.isCurrentUser;
+     this.isCurrentUser;
 
     /**
      *  Boolean indicator of whether the MASPluginUser object is authenticated or not
      */
-    const this.isAuthenticated;
+     this.isAuthenticated;
 
     /**
      *  Boolean indicator of whether the currently authenticated MASPluginUser object is locked or not
      */
-    const this.isSessionLocked;
+     this.isSessionLocked;
 
     /**
      *  String property of username
      */    
-    const this.userName;
+     this.userName;
 
     /**
      *  String property of the user's family name
      */    
-    const this.familyName;
+     this.familyName;
 
     /**
      *  String property of the user's given name
      */    
-    const this.givenName;
+     this.givenName;
 
     /**
      *  String property of the user's full name
      */    
-    const this.formattedName;
-    
+     this.formattedName;
+
     /**
      *  String property of the user's email address
      */    
-    const this.emailAddresses;
+     this.emailAddresses;
 
     /**
      *  String property of the user's phone number
      */    
-    const this.phoneNumbers;
+     this.phoneNumbers;
 
     /**
      *  String property of the user's address
      */    
-    const this.addresses;
-    
-    const this.photos;
+     this.addresses;
 
-    const this.groups;
+     this.photos;
 
-    const this.active;
+     this.groups;
 
-    const this.accessToken;
+     this.active;
 
-
-    ///------------------------------------------------------------------------------------------------------------------
-    /// @name Current User
-    ///------------------------------------------------------------------------------------------------------------------
-
-    /**
-     *  The authenticated user for the application, if any. nil returned if none.
-     *  This is a singleton object.
-     *
-     *  @return Returns a singleton 'MASPluginUser' object.
-     */
-    MASPluginUser.currentUser = function(successHandler, errorHandler) {
-
-        Cordova.exec(successHandler, errorHandler, "MASPluginUser", "currentUser", []);
-    };
+     this.accessToken;
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Current User - Lock/Unlock Session
@@ -113,19 +97,6 @@ var MASPluginUser = function() {
     /// @name Authentication
     ///-----------------------------------------------------------------------------------------------------------------
 
-    /**
-     Authenticates the user using the username and password.
-     */
-    MASPluginUser.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password) {
-        
-        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "loginWithUsernameAndPassword", [username, password]);
-    };
-
-    MASPluginUser.loginWithAuthorizationCode = function(successHandler, errorHandler, authorizationCode){
-
-        Cordova.exec(successHandler, errorHandler, "MASPluginUser", "loginWithAuthorizationCode", [authorizationCode]);
-    };
-    
     this.requestUserInfo = function(successHandler, errorHandler){
 
         Cordova.exec(successHandler, errorHandler, "MASPluginUser", "requestUserInfo", []);
@@ -134,10 +105,62 @@ var MASPluginUser = function() {
     /**
      log off user.
      */
-    this.logout = function(successHandler, errorHandler) {
-        
+     this.logout = function(successHandler, errorHandler) {
+
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "logout", []);
     };
 }
 
-module.exports = MASPluginUser;
+///------------------------------------------------------------------------------------------------------------------
+/// @name Current User
+///------------------------------------------------------------------------------------------------------------------
+
+/**
+ *  The authenticated user for the application, if any. nil returned if none.
+ *  This is a singleton object.
+ *
+ *  @return Returns a singleton 'MASPluginUser' object.
+ */
+ MASPluginUser.currentUser = function(successHandler, errorHandler) {
+
+    Cordova.exec(function(result) {
+
+        var currentUser = Object.create(MASPluginUser);
+        currentUser.isCurrentUser = result.isCurrentUser;
+        currentUser.isAuthenticated = result.isAuthenticated;
+        currentUser.isSessionLocked = result.isSessionLocked;
+        currentUser.userName = result.userName;
+        currentUser.familyName = result.familyName;
+        currentUser.givenName = result.givenName;
+        currentUser.formattedName = result.formattedName;
+        currentUser.emailAddresses = result.emailAddresses;
+        currentUser.phoneNumbers = result.phoneNumbers;
+        currentUser.addresses = result.addresses;
+        currentUser.photos = result.photos;
+        currentUser.active = result.active;
+        currentUser.accessToken = result.accessToken;
+
+        successHandler(currentUser);
+
+    }, errorHandler, "MASPluginUser", "currentUser", []);
+};
+
+//------------------------------------------------------------------------------------------------------------------
+/// @name Authentication
+///-----------------------------------------------------------------------------------------------------------------
+
+/**
+ Authenticates the user using the username and password.
+ */
+ MASPluginUser.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password) {
+
+    return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "loginWithUsernameAndPassword", [username, password]);
+};
+
+MASPluginUser.loginWithAuthorizationCode = function(successHandler, errorHandler, authorizationCode){
+
+    Cordova.exec(successHandler, errorHandler, "MASPluginUser", "loginWithAuthorizationCode", [authorizationCode]);
+};
+
+
+    module.exports = MASPluginUser;
