@@ -64,6 +64,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASPlugin" >
                 <param name="ios-package" value="MASPlugin"/>
             </feature>
+			<feature name="MASPluginUser" >
+                <param name="ios-package" value="MASPluginUser"/>
+            </feature>
         </config-file>
         
         <header-file src="src/ios/MASPlugin.h" />
@@ -84,6 +87,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASPlugin" >
                 <param name="android-package" value="com.ca.mas.cordova.core.MASPlugin"/>
             </feature>
+			<feature name="MASPluginUser" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginUser"/>
+            </feature>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -97,7 +103,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/android/MASUserCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />        
+        <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />
+		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
 
         <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
