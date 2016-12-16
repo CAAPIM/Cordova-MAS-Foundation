@@ -11,7 +11,6 @@ import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
 import com.ca.mas.foundation.MASSessionUnlockCallback;
 import com.ca.mas.foundation.MASUser;
-import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -75,8 +74,6 @@ public class MASPluginUser extends CordovaPlugin {
             completeAuthentication(args, callbackContext);
         } else if (action.equalsIgnoreCase("cancelAuthentication")) {
             cancelAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("authorizeQRCode")) {
-            authorizeQRCode(args, callbackContext);
         } else if (action.equalsIgnoreCase("requestUserInfo")) {
             requestUserInfo(callbackContext);
         } else {
@@ -106,7 +103,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  Fetches the current logged in MASUser and returns as json object
+     * Fetches the current logged in MASUser and returns as json object
      */
     private void getCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
@@ -123,7 +120,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  checks if the current User's session is locked?
+     * checks if the current User's session is locked?
      */
     private void isSessionLocked(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
@@ -142,7 +139,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  locks the current User's session
+     * locks the current User's session
      */
     private void lockSession(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
@@ -167,7 +164,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  unlocks the current User's session
+     * unlocks the current User's session
      */
     @TargetApi(23)
     private void unlockSession(final CallbackContext callbackContext) {
@@ -238,7 +235,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  unlocks the current User's session with a promt message provided by user
+     * unlocks the current User's session with a promt message provided by user
      */
     @TargetApi(23)
     private void unlockSessionWithMessage(final CallbackContext callbackContext, JSONArray args) {
@@ -311,7 +308,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  removes any existing session lock for the logged in current user
+     * removes any existing session lock for the logged in current user
      */
     private void removeSessionLock(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
@@ -336,7 +333,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  is used to login with provided username and password.
+     * is used to login with provided username and password.
      */
     private void loginWithUsernameAndPassword(final JSONArray args, final CallbackContext callbackContext) {
         String username;
@@ -365,7 +362,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  is used to complete the authentication for the current user by providing username and password
+     * is used to complete the authentication for the current user by providing username and password
      */
     private void completeAuthentication(final JSONArray args, final CallbackContext callbackContext) {
         String username;
@@ -396,7 +393,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  cancels the login request already made i.e. remove the request from the queue
+     * cancels the login request already made i.e. remove the request from the queue
      */
     private void cancelAuthentication(final JSONArray args, final CallbackContext callbackContext) {
         try {
@@ -416,35 +413,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  is used to authorize the user with scanned url from the QRCode image
-     */
-    private void authorizeQRCode(final JSONArray args, final CallbackContext callbackContext) {
-        String url;
-        try {
-            url = args.getString(0);
-        } catch (JSONException e) {
-            callbackContext.error(command.getError(e));
-            return;
-        }
-
-        MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                String msg = "QR Code authorized successfully!";
-                callbackContext.success(msg);
-            }
-
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, e.getMessage(), e);
-                callbackContext.error(command.getError(e));
-            }
-        });
-    }
-
-    /**
-     *   is used to login implicitly without passing username and password
+     * is used to login implicitly without passing username and password
      */
     private void loginWithImplicitFlow(final CallbackContext callbackContext) {
         MASUser.login(new MASCallback<MASUser>() {
@@ -463,7 +432,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  logs out the current logged in user
+     * logs out the current logged in user
      */
     private void logoutUser(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
@@ -488,7 +457,7 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     *  Fetches the present logged in user's profile from server and stores in the local data store
+     * Fetches the present logged in user's profile from server and stores in the local data store
      */
     private void requestUserInfo(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();

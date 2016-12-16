@@ -799,5 +799,41 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link MASUserCommand.AuthorizeCommand} is used to authorize the user with scanned url from the QRCode image
+     */
+    public static class AuthorizeCommand extends Command {
 
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            String url;
+            try {
+                url = (String) args.get(0);
+            } catch (JSONException e) {
+                callbackContext.error(getError(e));
+                return;
+            }
+
+            MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    String msg = "QR Code authorized successfully!";
+                    callbackContext.success(msg);
+                }
+
+
+                @Override
+                public void onError(Throwable e) {
+                    //context.showMessage(e.getMessage(), Toast.LENGTH_LONG);
+                    Log.e(TAG, e.getMessage(), e);
+                    callbackContext.error(getError(e));
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "authorizeQRCode";
+        }
+    }
 }
