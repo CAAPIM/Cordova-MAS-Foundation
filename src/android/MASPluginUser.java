@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
 import com.ca.mas.foundation.MASSessionUnlockCallback;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.identity.user.MASAddress;
+import com.ca.mas.identity.user.MASEmail;
+import com.ca.mas.identity.user.MASPhone;
+import com.ca.mas.identity.user.MASPhoto;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -18,6 +21,10 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -49,9 +56,10 @@ public class MASPluginUser extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        Log.i(TAG, action);
         if (action.equalsIgnoreCase("isAuthenticated")) {
             isAuthenticated(callbackContext);
+        } else if (action.equalsIgnoreCase("isCurrentUser")) {
+            isCurrentUser(callbackContext);
         } else if (action.equalsIgnoreCase("currentUser")) {
             getCurrentUser(callbackContext);
         } else if (action.equalsIgnoreCase("isSessionLocked")) {
@@ -66,14 +74,8 @@ public class MASPluginUser extends CordovaPlugin {
             removeSessionLock(callbackContext);
         } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
             loginWithUsernameAndPassword(args, callbackContext);
-        } else if (action.equalsIgnoreCase("loginWithImplicitFlow")) {
-            loginWithImplicitFlow(callbackContext);
-        } else if (action.equalsIgnoreCase("logout")) {
+        } else if (action.equalsIgnoreCase("logoutUser")) {
             logoutUser(callbackContext);
-        } else if (action.equalsIgnoreCase("completeAuthentication")) {
-            completeAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelAuthentication")) {
-            cancelAuthentication(args, callbackContext);
         } else if (action.equalsIgnoreCase("requestUserInfo")) {
             requestUserInfo(callbackContext);
         } else {
@@ -103,6 +105,25 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
+     * Checks the boolean status if the user is current user
+     */
+    private void isCurrentUser(CallbackContext callbackContext) {
+        MASUser masUser = MASUser.getCurrentUser();
+        if (masUser == null) {
+            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            callbackContext.error(command.getError(e));
+            return;
+        }
+        if (masUser.isCurrentUser()) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+            callbackContext.sendPluginResult(result);
+        } else {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, false);
+            callbackContext.sendPluginResult(result);
+        }
+    }
+
+    /**
      * Fetches the current logged in MASUser and returns as json object
      */
     private void getCurrentUser(CallbackContext callbackContext) {
@@ -112,8 +133,10 @@ public class MASPluginUser extends CordovaPlugin {
             callbackContext.error(command.getError(e));
             return;
         }
+
         try {
-            callbackContext.success(masUser.getAsJSONObject());
+            //callbackContext.success(masUser.getAsJSONObject());
+            callbackContext.success(convertUserToJSModel(masUser));
         } catch (JSONException jse) {
             callbackContext.error(jse.getLocalizedMessage());
         }
@@ -362,76 +385,6 @@ public class MASPluginUser extends CordovaPlugin {
     }
 
     /**
-     * is used to complete the authentication for the current user by providing username and password
-     */
-    private void completeAuthentication(final JSONArray args, final CallbackContext callbackContext) {
-        String username;
-        String password;
-        try {
-            username = args.getString(0);
-            password = args.getString(1);
-        } catch (JSONException e) {
-            callbackContext.error(command.getError(e));
-            return;
-        }
-        MASUser.login(username, password, new MASCallback<MASUser>() {
-            @Override
-            public void onSuccess(MASUser masUser) {
-                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
-                pluginResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(pluginResult);
-                MASUtil.getQrCode().stop();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                Log.e(TAG, error.getMessage(), error);
-                callbackContext.error(command.getError(error));
-
-            }
-        });
-    }
-
-    /**
-     * cancels the login request already made i.e. remove the request from the queue
-     */
-    private void cancelAuthentication(final JSONArray args, final CallbackContext callbackContext) {
-        try {
-            int requestId = args.getInt(0);
-            if (requestId == 0) {
-                Log.e(TAG, "request Id is empty");
-                callbackContext.error("request Id is  empty");
-                return;
-            }
-            MASUtil.getQrCode().stop();
-            MAS.cancelRequest(requestId);
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-            callbackContext.error(command.getError(e));
-        }
-    }
-
-    /**
-     * is used to login implicitly without passing username and password
-     */
-    private void loginWithImplicitFlow(final CallbackContext callbackContext) {
-        MASUser.login(new MASCallback<MASUser>() {
-            @Override
-            public void onSuccess(MASUser masUser) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-                callbackContext.sendPluginResult(result);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
-            }
-        });
-    }
-
-    /**
      * logs out the current logged in user
      */
     private void logoutUser(final CallbackContext callbackContext) {
@@ -478,5 +431,48 @@ public class MASPluginUser extends CordovaPlugin {
                 callbackContext.error(command.getError(throwable));
             }
         });
+    }
+
+    private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException{
+        JSONObject map = new JSONObject();
+        map.put("userName", masUser.getUserName());
+        map.put("displayName", masUser.getDisplayName());
+        map.put("givenName", masUser.getName().getGivenName());
+        map.put("familyName", masUser.getName().getFamilyName());
+        map.put("formattedName", masUser.getName().getFormatted());
+
+        map.put("active", masUser.isActive());
+
+        Map<String, String> emailMap = new HashMap<String, String>();
+        for (MASEmail email : masUser.getEmailList()) {
+            emailMap.put(email.getType(), email.getValue()); // TODO: How to set primary flag
+        }
+        map.put("emailAddresses", emailMap);
+
+        Map<String, JSONObject> addressMap = new HashMap<String, JSONObject>();
+        for (MASAddress address : masUser.getAddressList()) {
+            try {
+                addressMap.put(address.getType(), address.getAsJSONObject());// TODO : Breakdown complex type
+            } catch (JSONException jce) {
+
+            }
+        }
+        map.put("addresses", addressMap);
+
+        Map<String, String> phoneMap = new HashMap<String, String>();
+        for (MASPhone phone : masUser.getPhoneList()) {
+            phoneMap.put(phone.getType(), phone.getValue()); // TODO: How to set primary flag
+        }
+        map.put("phoneNumbers", phoneMap);
+
+        Map<String, String> photoMap = new HashMap<String, String>();
+        for (MASPhoto photo : masUser.getPhotoList()) {
+            photoMap.put(photo.getType(), photo.getValue());
+        }
+        map.put("photos", photoMap);
+
+        map.put("groups", masUser.getGroupList());
+
+        return map;
     }
 }

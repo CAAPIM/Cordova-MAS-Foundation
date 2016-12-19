@@ -396,7 +396,7 @@
 
                     MASPluginUser.currentUser(function(result){
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result.fullName);
+                        displayResult(thisElement, result.formattedName);
                     },
                     function(error){
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
@@ -1141,6 +1141,7 @@
                     <ul data-role="listview" data-theme="b">
                         <li data-icon="false"><a href="#" id="getCurrentUser">MASUser getCurrentUser<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                         <li data-icon="false"><a href="#" id="getUsername">MASUser getUsername<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                        <li data-icon="false"><a href="#" id="getName">MASUser getFullName<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                         <li data-icon="false"><a href="#" id="isSessionLocked">MASUser isSessionLocked<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                         <li data-icon="false"><a href="#" id="lockSession">MASUser lockSession<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                         <li data-icon="false"><a href="#" id="unlockSession">MASUser unlockSession<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
