@@ -24,6 +24,81 @@
 @implementation MASPluginUser
 
 
+///--------------------------------------
+/// @name Properties
+///--------------------------------------
+
+# pragma mark - Properties
+
+- (void)isCurrentUser:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                     messageAsBool:[[MASUser currentUser] isCurrentUser]];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user available"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)isAuthenticated:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                     messageAsBool:[[MASUser currentUser] isAuthenticated]];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user available"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)isSessionLocked:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                     messageAsBool:[[MASUser currentUser] isSessionLocked]];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user available"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+///--------------------------------------
+/// @name Current User
+///--------------------------------------
+
+# pragma mark - Current User
+
 - (void)currentUser:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
@@ -34,16 +109,27 @@
         @{@"isCurrentUser":[NSNumber numberWithBool:[[MASUser currentUser] isCurrentUser]],
           @"isAuthenticated":[NSNumber numberWithBool:[[MASUser currentUser] isAuthenticated]],
           @"isSessionLocked":[NSNumber numberWithBool:[[MASUser currentUser] isSessionLocked]],
-          @"userName":[[MASUser currentUser] userName],
-          @"familyName":[[MASUser currentUser] familyName],
-          @"givenName":[[MASUser currentUser] givenName],
-          @"formattedName":[[MASUser currentUser] formattedName],
-          @"emailAddresses":[[MASUser currentUser] emailAddresses],
-          @"phoneNumbers":[[MASUser currentUser] addresses],
-          @"addresses":[[MASUser currentUser] userName],
+          @"userName":
+              ([[MASUser currentUser] userName] ? [[MASUser currentUser] userName] : @""),
+          @"familyName":
+              ([[MASUser currentUser] familyName] ? [[MASUser currentUser] familyName] : @""),
+          @"givenName":
+              ([[MASUser currentUser] givenName] ? [[MASUser currentUser] givenName] : @""),
+          @"formattedName":
+              ([[MASUser currentUser] formattedName] ? [[MASUser currentUser] formattedName] : @""),
+          @"emailAddresses":
+              ([[MASUser currentUser] emailAddresses] ?
+               [[MASUser currentUser] emailAddresses] : [NSDictionary dictionary]),
+          @"phoneNumbers":
+              ([[MASUser currentUser] phoneNumbers] ?
+               [[MASUser currentUser] phoneNumbers] : [NSDictionary dictionary]),
+          @"addresses":
+              ([[MASUser currentUser] addresses] ?
+               [[MASUser currentUser] addresses] : [NSDictionary dictionary]),
           @"photos":@"",
           @"active":[NSNumber numberWithBool:[[MASUser currentUser] active]],
-          @"accessToken":[[MASUser currentUser] accessToken]};
+          @"accessToken":
+              ([[MASUser currentUser] accessToken] ? [[MASUser currentUser] accessToken] : @"")};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK   messageAsDictionary:currentUser];
     }

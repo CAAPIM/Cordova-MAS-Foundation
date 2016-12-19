@@ -8,6 +8,8 @@
 var MASPluginUtils = require("./MASPluginUtils"),
     MASPluginConstants = require("./MASPluginConstants"),
     MASPluginCallbacks = require("./MASPluginCallbacks");
+
+var MASPluginUser = require("./MASPluginUser");
     
 var MASPluginMAS = function() {
     

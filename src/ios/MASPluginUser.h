@@ -18,6 +18,24 @@
 
 
 ///--------------------------------------
+/// @name Properties
+///--------------------------------------
+
+# pragma mark - Properties
+
+- (void)isCurrentUser:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)isSessionLocked:(CDVInvokedUrlCommand*)command;
+
+
+
+///--------------------------------------
 /// @name Current User
 ///--------------------------------------
 
