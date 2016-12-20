@@ -128,6 +128,11 @@ public class MASPluginUser extends CordovaPlugin {
      */
     private void getCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
+        try {
+            Log.i(TAG, "CurrUser::" + masUser.getAsJSONObject().toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         if (masUser == null) {
             Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
@@ -433,45 +438,54 @@ public class MASPluginUser extends CordovaPlugin {
         });
     }
 
-    private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException{
+    private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException {
         JSONObject map = new JSONObject();
+
         map.put("userName", masUser.getUserName());
         map.put("displayName", masUser.getDisplayName());
         map.put("givenName", masUser.getName().getGivenName());
         map.put("familyName", masUser.getName().getFamilyName());
-        map.put("formattedName", masUser.getName().getFormatted());
+        map.put("formattedName", masUser.getName().getGivenName() + " " + masUser.getName().getFamilyName());
 
         map.put("active", masUser.isActive());
 
         Map<String, String> emailMap = new HashMap<String, String>();
-        for (MASEmail email : masUser.getEmailList()) {
-            emailMap.put(email.getType(), email.getValue()); // TODO: How to set primary flag
+        if (masUser.getEmailList() != null && !masUser.getEmailList().isEmpty()) {
+            for (MASEmail email : masUser.getEmailList()) {
+                emailMap.put(email.getType(), email.getValue()); // TODO: How to set primary flag
+            }
         }
         map.put("emailAddresses", emailMap);
 
         Map<String, JSONObject> addressMap = new HashMap<String, JSONObject>();
-        for (MASAddress address : masUser.getAddressList()) {
-            try {
-                addressMap.put(address.getType(), address.getAsJSONObject());// TODO : Breakdown complex type
-            } catch (JSONException jce) {
-
+        if (masUser.getAddressList() != null && !masUser.getAddressList().isEmpty()) {
+            for (MASAddress address : masUser.getAddressList()) {
+                try {
+                    addressMap.put(address.getType(), address.getAsJSONObject());// TODO : Breakdown complex type
+                } catch (JSONException jce) {
+                }
             }
         }
         map.put("addresses", addressMap);
 
         Map<String, String> phoneMap = new HashMap<String, String>();
-        for (MASPhone phone : masUser.getPhoneList()) {
-            phoneMap.put(phone.getType(), phone.getValue()); // TODO: How to set primary flag
+        if (masUser.getPhoneList() != null && !masUser.getPhoneList().isEmpty()) {
+            for (MASPhone phone : masUser.getPhoneList()) {
+                phoneMap.put(phone.getType(), phone.getValue()); // TODO: How to set primary flag
+            }
         }
         map.put("phoneNumbers", phoneMap);
 
         Map<String, String> photoMap = new HashMap<String, String>();
-        for (MASPhoto photo : masUser.getPhotoList()) {
-            photoMap.put(photo.getType(), photo.getValue());
+        if (masUser.getPhotoList() != null && !masUser.getPhotoList().isEmpty()) {
+            for (MASPhoto photo : masUser.getPhotoList()) {
+                photoMap.put(photo.getType(), photo.getValue());
+            }
         }
         map.put("photos", photoMap);
-
-        map.put("groups", masUser.getGroupList());
+        if (masUser.getGroupList() != null && !masUser.getGroupList().isEmpty()) {
+            map.put("groups", masUser.getGroupList());
+        }
 
         return map;
     }
