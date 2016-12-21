@@ -126,7 +126,9 @@
           @"addresses":
               ([[MASUser currentUser] addresses] ?
                [[MASUser currentUser] addresses] : [NSDictionary dictionary]),
-          @"photos":@"",
+          @"photos":
+              ([[MASUser currentUser] photos] ?
+               [self photosWithImgSrc:[[MASUser currentUser] photos]] : [NSDictionary dictionary]),
           @"active":[NSNumber numberWithBool:[[MASUser currentUser] active]],
           @"accessToken":
               ([[MASUser currentUser] accessToken] ? [[MASUser currentUser] accessToken] : @"")};
@@ -524,6 +526,32 @@
         
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
+}
+
+
+///--------------------------------------
+/// @name Utility
+///--------------------------------------
+
+# pragma mark - Utility
+
+- (NSDictionary *)photosWithImgSrc:(NSDictionary*)uiimagePhotos {
+    
+    NSMutableDictionary *photosImgSrc = [NSMutableDictionary dictionary];
+    
+    if (uiimagePhotos && [[uiimagePhotos allKeys] count]) {
+        
+        for (NSString *key in [uiimagePhotos allKeys]) {
+            
+            NSString *base64String = @"data:image/png;base64,";
+            NSData *pngData = UIImagePNGRepresentation([uiimagePhotos objectForKey:key]);
+            base64String =
+                [base64String stringByAppendingString:[pngData base64EncodedStringWithOptions:0]];
+            [photosImgSrc setObject:base64String forKey:key];
+        }
+    }
+    
+    return photosImgSrc;
 }
 
 
