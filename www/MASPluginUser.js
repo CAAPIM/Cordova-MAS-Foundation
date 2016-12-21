@@ -5,88 +5,145 @@
  *
  */
 
-var MASPluginUser = function() {
+ var MASPluginUser = function(masPluginUser) {
 
-    this.isSessionLocked = function(successHandler, errorHandler) {
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
+    //console.log(JSON.stringify(masPluginUser));
+    /**
+     *  String property of username
+     */
 
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isSessionLocked", []); 
-    };
+    this.userName = masPluginUser.userName;
 
+    /**
+     *  String property of the user's family name
+     */
+     this.familyName = masPluginUser.familyName;
+
+    /**
+     *  String property of the user's given name
+     */
+     this.givenName = masPluginUser.givenName;
+
+    /**
+     *  String property of the user's full name
+     */    
+     this.formattedName = masPluginUser.formattedName;
+
+    /**
+     *  String property of the user's email address
+     */    
+     this.emailAddresses = masPluginUser.emailAddresses;
+
+    /**
+     *  String property of the user's phone number
+     */    
+     this.phoneNumbers = masPluginUser.phoneNumbers;
+
+    /**
+     *  String property of the user's address
+     */    
+     this.addresses = masPluginUser.addresses;
+
+     this.photos = masPluginUser.photos;
+
+     this.groups = masPluginUser.groups;
+
+     this.active = masPluginUser.active;
+
+     /**
+     *  Boolean indicator of whether the MASPluginUser object is currently authenticated user or not.
+     */
+     this.isCurrentUser = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isCurrentUser", []);
+     };
+
+    /**
+     *  Boolean indicator of whether the MASPluginUser object is authenticated or not
+     */
+     this.isAuthenticated = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isAuthenticated", []);
+     };
+
+    /**
+     *  Boolean indicator of whether the currently authenticated MASPluginUser object is locked or not
+     */
+     this.isSessionLocked = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isSessionLocked", []);
+     };
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Current User - Lock/Unlock Session
+    ///------------------------------------------------------------------------------------------------------------------
+    
     this.lockSession = function(successHandler, errorHandler) {
-
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "lockSession", []); 
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "lockSession", []);
     }
 
     this.unlockSession = function(successHandler, errorHandler) {
-
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "unlockSession", []); 
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSession", []);
     }
 
     this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
-
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "unlockSessionWithMessage", [message]); 
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSessionWithMessage", [message]);
     }
 
     this.removeSessionLock = function(successHandler, errorHandler) {
-
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "removeSessionLock", []); 
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "removeSessionLock", []);
     }
 
-    /**
-     Authenticates the user using the username and password.
-     */
-    this.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "loginWithUsernameAndPassword", [username, password]);
-    };
-    /**
-     * Performs an implicit login by calling an endpoint that requires authentication.
-     */
-    this.loginWithImplicitFlow = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "loginWithImplicitFlow", []);
-    };
     /**
      log off user.
      */
-    this.logoutUser = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "logoutUser", []);
+     this.logout = function(successHandler, errorHandler) {
+        return Cordova.exec(function(result) {
+            delete MASPluginUser.sharedCurrUser;
+            successHandler(result);            
+        }, errorHandler, "MASPluginUser", "logoutUser", []);
     };
-    /**
-     *
-     */
-    this.getCurrentUser = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getCurrentUser", []);
-    };
-
-    this.getUserName = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getUserName", []);
-    };
-    /**
-    Commented as they are related to SCIM as in Android, so Android implentation is not yet added.
-   this.getName = function(successHandler, errorHandler)
-    {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getName", []);
-    }
-
-    this.getAddressList = function(successHandler, errorHandler)
-    {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getAddressList", []);
-    }
-
-    this.getEmailList = function(successHandler, errorHandler)
-    {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getEmailList", []);
-    }
-
-    this.isActive = function(successHandler, errorHandler)
-    {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isActive", []);
-    }
-    */
-
-    this.isAuthenticated = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "isAuthenticated", []);
-    };
-
 }
+
+///------------------------------------------------------------------------------------------------------------------
+/// @name Current User
+///------------------------------------------------------------------------------------------------------------------
+
+MASPluginUser.sharedCurrUser;
+
+/**
+ *  The authenticated user for the application, if any. nil returned if none.
+ *  This is a singleton object.
+ *
+ *  @return Returns a singleton 'MASPluginUser' object.
+ */
+
+ MASPluginUser.currentUser = function(successHandler, errorHandler) {
+    Cordova.exec(function(masPluginUser) {
+        if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
+            MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
+        }else {
+            delete MASPluginUser.sharedCurrUser;
+            MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
+        }
+        successHandler(MASPluginUser.sharedCurrUser);
+    }, errorHandler, "MASPluginUser", "currentUser", []);
+};
+
+//------------------------------------------------------------------------------------------------------------------
+/// @name Authentication
+///-----------------------------------------------------------------------------------------------------------------
+
+/**
+ Authenticates the user using the username and password.
+ */
+ MASPluginUser.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithUsernameAndPassword", [username, password]);
+};
 
 module.exports = MASPluginUser;

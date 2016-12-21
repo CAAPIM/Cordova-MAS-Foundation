@@ -7,6 +7,10 @@
 
 var MASPluginGroup = function() {
 
+	///------------------------------------------------------------------------------------------------------------------
+	/// @name Properties
+	///------------------------------------------------------------------------------------------------------------------
+
 	this.groupName = function(successHandler, errorHandler) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginGroup", "groupName", []);
@@ -21,6 +25,10 @@ var MASPluginGroup = function() {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginGroup", "members", []);
 	};
+
+	///------------------------------------------------------------------------------------------------------------------
+	/// @name Lifecycle
+	///------------------------------------------------------------------------------------------------------------------
 
 	this.initWithInfo = function(successHandler, errorHandler, info) {
 

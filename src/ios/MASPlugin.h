@@ -211,55 +211,6 @@
  */
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
-/**
- *  Check if session is locked
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)isSessionLocked:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Lock current session
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)lockSession:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Unlock current session
- *
- *  @param command CDInvokedUrlCommand object
- */
-
-- (void)unlockSession:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Unlock current session with a custom message
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)unlockSessionWithMessage:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Remove current session lock,
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)removeSessionLock:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Authenticates a user with given username and password.
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Logs out currently authenticated user.
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
 /**
   *  Gets current device information
@@ -306,13 +257,6 @@
 - (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command;
 
 /**
- *  Boolean property of user authentication status
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)isAuthenticated:(CDVInvokedUrlCommand*)command;
-
-/**
  *  Boolean property of the application authentication status (primarily for client credential authentication.)
  *
  *  @param command CDInvokedUrlCommand object
@@ -334,59 +278,11 @@
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
 /**
- *  The authenticated user for the application, if any.
- *  This is a singleton object.
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)getCurrentUser:(CDVInvokedUrlCommand*)command;
-
-/**
- *   The username of the current user.
- *   This is a singleton object.
- *
- *   @param command CDInvokedUrlCommand object
- */
-- (void)getUserName:(CDVInvokedUrlCommand*)command;
-
-/**
- *   The username of the current user.
- *   This is a singleton object.
- *
- *   @param command CDInvokedUrlCommand object
- */
-- (void)getName:(CDVInvokedUrlCommand*)command;
-
-/**
- *   The address of the current user.
- *   This is a singleton object.
- *
- *   @param command CDInvokedUrlCommand object
- */
-- (void)getAddressList:(CDVInvokedUrlCommand*)command;
-
-/**
- *   The email address of the current user.
- *   This is a singleton object.
- *
- *   @param command CDInvokedUrlCommand object
- */
-- (void)getEmailList:(CDVInvokedUrlCommand*)command;
-
-/**
   *  Boolean value of gateway reachability
   *
   *  @param command CDInvokedUrlCommand object
   */
 - (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
-
-/**
-  *  Boolean value that tells whether the user is active or not
-  *
-  *  @param command CDVInvokedUrlCommand object
-  *
-  */
-- (void)isActive:(CDVInvokedUrlCommand*)command;
 
 /**
   *  Retrieves the list of enterprise apps

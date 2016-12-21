@@ -27,6 +27,7 @@ import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
+import com.ca.mas.foundation.MASUser;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.foundation.auth.MASProximityLogin;
 import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
@@ -799,5 +800,111 @@ public class MASCommand {
         }
     }
 
+    /**
+     * {@link AuthorizeCommand} is used to authorize the user with scanned url from the QRCode image
+     */
+    public static class AuthorizeCommand extends Command {
 
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            String url;
+            try {
+                url = (String) args.get(0);
+            } catch (JSONException e) {
+                callbackContext.error(getError(e));
+                return;
+            }
+
+            MASProximityLoginQRCode.authorize(url, new MASCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    String msg = "QR Code authorized successfully!";
+                    callbackContext.success(msg);
+                }
+
+
+                @Override
+                public void onError(Throwable e) {
+                    //context.showMessage(e.getMessage(), Toast.LENGTH_LONG);
+                    Log.e(TAG, e.getMessage(), e);
+                    callbackContext.error(getError(e));
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "authorizeQRCode";
+        }
+    }
+
+    /**
+     * {@link CompleteAuthenticationCommand} is used to complete the authentication for the current user by providing username and password
+     */
+
+    public static class CompleteAuthenticationCommand extends Command {
+
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            String username;
+            String password;
+            try {
+                username = (String) args.get(0);
+                password = (String) args.get(1);
+            } catch (JSONException e) {
+                callbackContext.error(getError(e));
+                return;
+            }
+            MASUser.login(username, password, new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+                    MASUtil.getQrCode().stop();
+                }
+
+                @Override
+                public void onError(Throwable error) {
+                    Log.e(TAG, error.getMessage(), error);
+                    callbackContext.error(getError(error));
+
+                }
+            });
+        }
+
+        @Override
+        public String getAction() {
+            return "completeAuthentication";
+        }
+    }
+
+    /**
+     * {@link CancelAuthenticationCommand} cancels the login request already made
+     */
+
+    public static class CancelAuthenticationCommand extends Command {
+        @Override
+        public void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
+            try {
+                int requestId = args.getInt(0);
+                if (requestId == 0) {
+                    Log.e(TAG, "request Id is empty");
+                    callbackContext.error("request Id is  empty");
+                }
+                MASUtil.getQrCode().stop();
+                MAS.cancelRequest(requestId);
+                success(callbackContext, true);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                callbackContext.error(getError(e));
+            }
+        }
+
+        @Override
+        public String getAction() {
+            return "cancelAuthentication";
+        }
+    }
 }

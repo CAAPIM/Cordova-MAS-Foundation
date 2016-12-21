@@ -46,6 +46,9 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASCommand.CancelGenerateAndSendOTPCommand());
         add(new MASCommand.GatewayIsReachableCommand());
         add(new MASCommand.UseNativeMASUICommand());
+        add(new MASCommand.AuthorizeCommand());
+        add(new MASCommand.CompleteAuthenticationCommand());
+        add(new MASCommand.CancelAuthenticationCommand());
 
         add(new MASDeviceCommand.DeregisterCommand());
         add(new MASDeviceCommand.IsRegisteredCommand());
@@ -56,12 +59,9 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASUserCommand.LoginCommand());
         add(new MASUserCommand.LogoutUserCommand());
         add(new MASUserCommand.IsAuthenticatedCommand());
-        add(new MASUserCommand.LoginWithImplicitFlowCommand());
         add(new MASUserCommand.GetCurrentUserCommand());
-        add(new MASUserCommand.CompleteAuthenticationCommand());
-        add(new MASUserCommand.CancelAuthenticationCommand());
         add(new MASUserCommand.GetUserNameCommand());
-        add(new MASUserCommand.AuthorizeCommand());
+
         // Fingerprint commands
         add(new MASUserCommand.IsSessionLockedCommand());
         add(new MASUserCommand.LockSessionCommand());
@@ -142,4 +142,3 @@ public class MASPlugin extends CordovaPlugin {
         MASPlugin.masPlugin = masPlugin;
     }
 }
-
