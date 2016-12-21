@@ -91,7 +91,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void isAuthenticated(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -110,7 +110,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void isCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -129,7 +129,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void getCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -147,7 +147,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void isSessionLocked(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -166,7 +166,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void lockSession(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -192,7 +192,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void unlockSession(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -263,7 +263,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void unlockSessionWithMessage(final CallbackContext callbackContext, JSONArray args) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -335,7 +335,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void removeSessionLock(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
@@ -389,8 +389,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void logoutUser(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.success("User Already Logged off");
             return;
         }
         masUser.logout(new MASCallback<Void>() {
@@ -414,7 +413,7 @@ public class MASPluginUser extends CordovaPlugin {
     private void requestUserInfo(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
             return;
         }
