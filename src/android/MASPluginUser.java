@@ -128,11 +128,6 @@ public class MASPluginUser extends CordovaPlugin {
      */
     private void getCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
-        try {
-            Log.i(TAG, "CurrUser::" + masUser.getAsJSONObject().toString());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         if (masUser == null) {
             Exception e = new Exception(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(command.getError(e));
@@ -140,7 +135,6 @@ public class MASPluginUser extends CordovaPlugin {
         }
 
         try {
-            //callbackContext.success(masUser.getAsJSONObject());
             callbackContext.success(convertUserToJSModel(masUser));
         } catch (JSONException jse) {
             callbackContext.error(jse.getLocalizedMessage());
@@ -440,7 +434,6 @@ public class MASPluginUser extends CordovaPlugin {
 
     private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException {
         JSONObject map = new JSONObject();
-
         map.put("userName", masUser.getUserName());
         map.put("displayName", masUser.getDisplayName());
         map.put("givenName", masUser.getName().getGivenName());
@@ -452,7 +445,7 @@ public class MASPluginUser extends CordovaPlugin {
         Map<String, String> emailMap = new HashMap<String, String>();
         if (masUser.getEmailList() != null && !masUser.getEmailList().isEmpty()) {
             for (MASEmail email : masUser.getEmailList()) {
-                emailMap.put(email.getType(), email.getValue()); // TODO: How to set primary flag
+                emailMap.put(email.getType(), email.getValue());
             }
         }
         map.put("emailAddresses", emailMap);
@@ -461,7 +454,7 @@ public class MASPluginUser extends CordovaPlugin {
         if (masUser.getAddressList() != null && !masUser.getAddressList().isEmpty()) {
             for (MASAddress address : masUser.getAddressList()) {
                 try {
-                    addressMap.put(address.getType(), address.getAsJSONObject());// TODO : Breakdown complex type
+                    addressMap.put(address.getType(), address.getAsJSONObject());
                 } catch (JSONException jce) {
                 }
             }
@@ -471,7 +464,7 @@ public class MASPluginUser extends CordovaPlugin {
         Map<String, String> phoneMap = new HashMap<String, String>();
         if (masUser.getPhoneList() != null && !masUser.getPhoneList().isEmpty()) {
             for (MASPhone phone : masUser.getPhoneList()) {
-                phoneMap.put(phone.getType(), phone.getValue()); // TODO: How to set primary flag
+                phoneMap.put(phone.getType(), phone.getValue());
             }
         }
         map.put("phoneNumbers", phoneMap);
