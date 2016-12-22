@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 package com.ca.mas.cordova.core;
 
 import android.annotation.TargetApi;
@@ -8,12 +14,14 @@ import android.util.Log;
 
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
+import com.ca.mas.foundation.MASGroup;
 import com.ca.mas.foundation.MASSessionUnlockCallback;
 import com.ca.mas.foundation.MASUser;
 import com.ca.mas.identity.user.MASAddress;
 import com.ca.mas.identity.user.MASEmail;
 import com.ca.mas.identity.user.MASPhone;
 import com.ca.mas.identity.user.MASPhoto;
+import com.ca.mas.identity.util.IdentityConsts;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -22,9 +30,6 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -433,23 +438,30 @@ public class MASPluginUser extends CordovaPlugin {
 
     private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException {
         JSONObject map = new JSONObject();
-        map.put("userName", masUser.getUserName());
-        map.put("displayName", masUser.getDisplayName());
-        map.put("givenName", masUser.getName().getGivenName());
-        map.put("familyName", masUser.getName().getFamilyName());
+        map.put(IdentityConsts.KEY_USERNAME, masUser.getUserName());
+        map.put(IdentityConsts.KEY_DISPLAY_NAME, masUser.getDisplayName());
+        map.put(IdentityConsts.KEY_GIVEN_NAME, masUser.getName().getGivenName());
+        map.put(IdentityConsts.KEY_FAMILY_NAME, masUser.getName().getFamilyName());
         map.put("formattedName", masUser.getName().getGivenName() + " " + masUser.getName().getFamilyName());
+        if (masUser.getMeta() != null && masUser.getMeta().getLocation() != null) {
+            map.put(IdentityConsts.KEY_REFERENCE, masUser.getMeta().getLocation());
+        }
 
         map.put("active", masUser.isActive());
 
-        Map<String, String> emailMap = new HashMap<String, String>();
+        // Loading the email addresses
+        JSONArray emailArray = new JSONArray();
         if (masUser.getEmailList() != null && !masUser.getEmailList().isEmpty()) {
             for (MASEmail email : masUser.getEmailList()) {
-                emailMap.put(email.getType(), email.getValue());
+                JSONObject obj = new JSONObject();
+                obj.put(email.getType(), email.getValue());
+                emailArray.put(obj);
             }
         }
-        map.put("emailAddresses", emailMap);
+        map.put("emailAddresses", emailArray);
 
-        Map<String, JSONObject> addressMap = new HashMap<String, JSONObject>();
+        // Loading the personal addresses
+        JSONObject addressMap = new JSONObject();
         if (masUser.getAddressList() != null && !masUser.getAddressList().isEmpty()) {
             for (MASAddress address : masUser.getAddressList()) {
                 try {
@@ -458,27 +470,39 @@ public class MASPluginUser extends CordovaPlugin {
                 }
             }
         }
-        map.put("addresses", addressMap);
+        map.put(IdentityConsts.KEY_ADDRS, addressMap);
 
-        Map<String, String> phoneMap = new HashMap<String, String>();
+        // Loading the phone numbers
+        JSONArray phoneArray = new JSONArray();
         if (masUser.getPhoneList() != null && !masUser.getPhoneList().isEmpty()) {
             for (MASPhone phone : masUser.getPhoneList()) {
-                phoneMap.put(phone.getType(), phone.getValue());
+                JSONObject obj = new JSONObject();
+                obj.put(phone.getType(), phone.getValue());
+                phoneArray.put(obj);
             }
         }
-        map.put("phoneNumbers", phoneMap);
+        map.put(IdentityConsts.KEY_PHONE_NUMBERS, phoneArray);
 
-        Map<String, String> photoMap = new HashMap<String, String>();
+        // Loading the photos
+        JSONObject photoMap = new JSONObject();
         if (masUser.getPhotoList() != null && !masUser.getPhotoList().isEmpty()) {
             for (MASPhoto photo : masUser.getPhotoList()) {
                 photoMap.put(photo.getType(), photo.getValue());
             }
         }
-        map.put("photos", photoMap);
-        if (masUser.getGroupList() != null && !masUser.getGroupList().isEmpty()) {
-            map.put("groups", masUser.getGroupList());
-        }
+        map.put(IdentityConsts.KEY_PHOTOS, photoMap);
 
+        JSONArray groupArray = new JSONArray();
+        if (masUser.getGroupList() != null && !masUser.getGroupList().isEmpty()) {
+            for (MASGroup group : masUser.getGroupList()) {
+                JSONObject obj = new JSONObject();
+                obj.put(IdentityConsts.KEY_VALUE, group.getValue());
+                obj.put(IdentityConsts.KEY_DISPLAY, group.getGroupName());// TODO:Never getting populated in SDK end
+                obj.put(IdentityConsts.KEY_REFERENCE, group.getReference());
+                groupArray.put(obj);
+            }
+        }
+        map.put(IdentityConsts.KEY_GROUPS, groupArray);
         return map;
     }
 }
