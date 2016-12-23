@@ -100,7 +100,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASUserCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />

@@ -56,20 +56,6 @@ public class MASPlugin extends CordovaPlugin {
         add(new MASDeviceCommand.GetDeviceIdentifierCommand());
         add(new MASDeviceCommand.GetCurrentDeviceCommand());
 
-        add(new MASUserCommand.LoginCommand());
-        add(new MASUserCommand.LogoutUserCommand());
-        add(new MASUserCommand.IsAuthenticatedCommand());
-        add(new MASUserCommand.GetCurrentUserCommand());
-        add(new MASUserCommand.GetUserNameCommand());
-
-        // Fingerprint commands
-        add(new MASUserCommand.IsSessionLockedCommand());
-        add(new MASUserCommand.LockSessionCommand());
-        add(new MASUserCommand.UnLockSessionCommand());
-        add(new MASUserCommand.UnLockSessionWithMessageCommand());
-        add(new MASUserCommand.RemoveSessionLockCommand());
-
-
         add(new MASApplicationCommand.GetIdentifierCommand());
         add(new MASApplicationCommand.GetNameCommand());
         add(new MASApplicationCommand.RetrieveEnterpriseAppsCommand());
