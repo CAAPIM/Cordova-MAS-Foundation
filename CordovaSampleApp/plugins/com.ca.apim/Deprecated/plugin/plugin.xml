@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+xmlns:android="http://schemas.android.com/apk/res/android"
+           id="com.l7tech.msso"
+      version="3.0.0">
+    <name>Mag</name>
+    <description>Cordova L7 MAG Plugin</description>
+    <license>CA Technologies Ltd.</license>
+    <keywords>cordova,l7tech, CA Technologies</keywords>
+
+    <js-module src="www/L7SMssoSDKPlugin.js" name="L7SMssoSDKPlugin">
+        <clobbers target="L7SMssoSDKPlugin" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="com.l7tech.msso.L7SMssoSDKPlugin" >
+                <param name="android-package" value="com.l7tech.msso.L7SMssoSDKPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.ca.mas.core.gui.LogonActivity"
+                  android:theme="@android:style/Theme.Holo.Light.Dialog"
+                  android:label="Log On to Example App"
+                  android:windowSoftInputMode="stateVisible"
+                  android:exported="false">
+                <intent-filter>
+                    <action android:name="com.ca.mas.core.service.action.OBTAIN_CREDENTIALS"/>
+                    <category android:name="android.intent.category.DEFAULT"/>
+                </intent-filter>
+            </activity>
+            <activity android:name="com.ca.mas.core.gui.SocialLoginActivity"
+                  android:theme="@android:style/Theme.Holo.Light"
+                  android:windowSoftInputMode="stateVisible"
+                  android:exported="false">
+            </activity>
+            <service android:name="com.ca.mas.core.service.MssoService"
+                 android:exported="false">
+            </service>
+        </config-file>
+
+        <source-file src="src/android/com/l7tech/msso/L7SMssoSDKPlugin.java" target-dir="src/com/l7tech/msso" />
+        <source-file src="src/android/com/l7tech/msso/L7SMssoSDKPluginException.java" target-dir="src/com/l7tech/msso" />
+    </platform>
+    
+    <platform name="ios" >
+        <config-file target="config.xml" parent="/*" >
+            <feature name="com.l7tech.msso.L7SMssoSDKPlugin" >
+                <param name="ios-package" value="L7SMssoSDKPlugin"/>
+            </feature>
+        </config-file>
+        
+        <header-file src="src/ios/L7SMssoSDKPlugin.h" />
+        <source-file src="src/ios/L7SMssoSDKPlugin.m" />
+        
+    </platform>
+
+
+</plugin>
+

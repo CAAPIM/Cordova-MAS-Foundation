@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script>
+
+    <title>Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    
+
+	
+	<style>
+	
+	body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.logo{
+  vertical-align: middle;
+}
+
+	</style>
+
+
+  </head>
+
+  <body onload="onBodyLoad();">
+	<div  id= "errorMesg" style="color:red"> </div><br>
+    <div class="container" style="max-width:60%">
+		<img class="logo" width=100px src="img/ca-logo.png">
+    <br><br>
+    <h3>Enter your username and password</h3>
+		<form class="form-signin">
+			<label for="CA-Username" class="sr-only">Username</label>
+			<input type="text" id="CA-Username" class="form-control" placeholder="Username" value="sangharsh" required autofocus>
+			<br>
+			<label for="CA-Password" class="sr-only">Password</label>
+			<input type="password" id="CA-Password" class="form-control" placeholder="Password" value="dost1234" required>
+		</form>	
+		<button type="button" class="btn btn-primary btn-md" onclick="sendCredentials()">Login</button>
+	</div>
+    <script>
+        function onBodyLoad()
+        {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+    
+        function onDeviceReady() {
+            
+        }
+    
+        function sendCredentials(){
+            
+            var MAS = new MASPlugin.MAS();
+            var username = document.getElementById("CA-Username").value;
+            var password = document.getElementById("CA-Password").value;
+            Cordova.exec(function (){},function (){}, "com.ca.apim.MASPlugin", "setUserLoginBlock", [username,password]);
+            var iframe = document.getElementById('ifrm');
+            iframe.parentNode.removeChild(iframe);
+        }
+    </script>
+  </body>
+</html>

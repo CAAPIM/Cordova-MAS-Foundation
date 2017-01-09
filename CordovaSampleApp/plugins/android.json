@@ -1,0 +1,18 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.ca.layer7.L7SMssoPhoneGapDemo"
+        },
+        "com.ca.apim": {
+            "PACKAGE_NAME": "com.ca.layer7.L7SMssoPhoneGapDemo"
+        }
+    },
+    "dependent_plugins": {}
+}

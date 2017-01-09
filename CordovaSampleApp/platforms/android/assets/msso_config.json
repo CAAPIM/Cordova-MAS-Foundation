@@ -1,0 +1,52 @@
+{
+  "server": {
+    "hostname": "magm.ca.com",
+    "port": 8443,
+    "prefix": "blr",
+    "server_certs": [
+      [
+        "-----BEGIN CERTIFICATE-----","MIIC8TCCAdmgAwIBAgIJAOkKbBFgBJ4NMA0GCSqGSIb3DQEBDAUAMBYxFDASBgNVBAMTC21hZ20u","Y2EuY29tMB4XDTE2MDcxOTE0NDQyOFoXDTI2MDcxNzE0NDQyOFowFjEUMBIGA1UEAxMLbWFnbS5j","YS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCMDYRDQZpGrrGFz6y4ueeeXHTB","jTpP7ojyQsSyBaK9JnxBZAxey6uxrmDfZcephiUZtVWjWVB/hhkn/3VCbtAur6Lqo3Ih/iqACz1c","B9kPxZcDJGsrsPyy8PpQcfeCIztXik8r2stu7LLXz6r9s9zNzV8wWux+Dl77Hj3KnF+lG/UIBUq+","fz2zfjdHU9W4uSz7b3L7vLEmX+nV+icnWByqwogcKAUJXkqbK/HsjR4wsEetqKwZTxJDutjhVcQV","1UCWHXNDKWANxxVCbD0UCpWMh691Q5I3M7Klhid8C7Au3AKSPzzdZ+b6CD5l58OU2ztARrq9Nx4Y","GoAgWb14SwnvAgMBAAGjQjBAMB0GA1UdDgQWBBRaA4lYGxRnjg2Bvmt2u5IVA1S6zzAfBgNVHSME","GDAWgBRaA4lYGxRnjg2Bvmt2u5IVA1S6zzANBgkqhkiG9w0BAQwFAAOCAQEAFlr2eBS0HYlYUzLV","GX36INM9j7LC0B8VdDpezhbS4gERAN82nHaZDwOK4HIHuHzPTLmUOeyGIKGspnMrqYOWc4d6qUNU","AlNmH9L0N6NfMAY0ifAu4gpWaion73ZZIYDWt/40Ww7n++f/zEDtxxKifSyg+tFbvFnicNtqvQ0k","yKhnj4Sq1C8nTXOtjQrz+PZlNrwOJ1r3bU5JH9fwO+JSrRfQ7HGxEYGyIMLt+pRnaOsGUYAukuUv","4Y3WddSgdOTV0YgYwsQyQXdVyGGN2CemTxRi85kiIAh4965JaX16J2qZCYh5hk/ANCsdUFo4YQmm","LEufERhYbjpTVH/+XXLxBw==","-----END CERTIFICATE-----"
+      ]
+    ]
+  },
+  "oauth": {
+    "client": {
+      "organization": "CA Inc",
+      "description": "What is the app used for?",
+      "client_name": "MAG_Android_Sample_App",
+      "client_type": "confidential",
+      "registered_by": "admin",
+      "client_custom": {},
+      "client_ids": [
+
+        {
+          "client_id": "76c65085-a475-4fab-9ab3-1dff5902ef02",
+          "client_secret":"",
+          "scope": "openid msso phone profile address email  msso_client_register msso_register mas_messaging mas_storage mas_identity mas_identity_retrieve_users mas_identity_create_users mas_identity_update_users mas_identity_delete_users mas_identity_retrieve_groups mas_identity_create_groups mas_identity_update_groups mas_identity_delete_groups",
+          "redirect_uri": "https://android.ssosdk.ca.com/android",
+          "environment": "ALL",
+          "status": "ENABLED",
+          "registered_by": "admin",
+          "service_ids": "",
+          "account_plan_mapping_ids": "",
+          "client_key_custom": {}
+        }
+      ]
+    },
+    "system_endpoints": {
+      "authorization_endpoint_path": "/auth/oauth/v2/authorize",
+      "token_endpoint_path": "/auth/oauth/v2/token",
+      "token_revocation_endpoint_path": "/auth/oauth/v2/token/revoke",
+      "usersession_logout_endpoint_path": "/connect/session/logout",
+      "usersession_status_endpoint_path": "/connect/session/status"
+    },
+    "oauth_protected_endpoints": {
+      "userinfo_endpoint_path": "/openid/connect/v1/userinfo"
+    }
+  },"mag": { "system_endpoints": { "device_register_endpoint_path": "/connect/device/register", "device_client_register_endpoint_path": "/connect/device/register/client", "device_remove_endpoint_path": "/connect/device/remove", "client_credential_init_endpoint_path": "/connect/client/initialize", "authenticate_otp_endpoint_path": "/auth/generateOTP" }, "oauth_protected_endpoints": { "enterprise_browser_endpoint_path": "/connect/enterprise/browser", "device_list_endpoint_path": "/connect/device/list" }, "mobile_sdk": { "sso_enabled": true, "location_enabled": true, "location_provider": "network", "msisdn_enabled": true, "enable_public_key_pinning": false, "trusted_public_pki":false, "trusted_cert_pinned_public_key_hashes" :[], "client_cert_rsa_keybits": 1024 }, "ble":{ "msso_ble_service_uuid":"980c2f36-bde3-11e4-8dfc-aa07a5b093db", "msso_ble_characteristic_uuid":"980c34cc-bde3-11e4-8dfc-aa07a5b093db", "msso_ble_rssi": -35 } },
+  "custom": {
+    "oauth_demo_protected_api_endpoint_path":"/oauth/v2/protectedapi/foo",
+    "mag_demo_products_endpoint_path":"/protected/resource/products"
+  }
+}
+ 
