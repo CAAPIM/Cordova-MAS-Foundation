@@ -287,6 +287,10 @@ var MASPluginMAS = function() {
                             errorMsgToDisplay = "Username or Password invalid";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
                         }
+						else if (errorCodeLastDigits === 105) {
+                            errorMsgToDisplay = "Device registration error. The device has already been registered.";
+                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                        }
                         else {
                             
                             if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
