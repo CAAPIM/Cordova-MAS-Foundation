@@ -14,6 +14,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -49,6 +50,8 @@ import java.util.Map;
 public class MASCommand {
 
     private static final String TAG = MASCommand.class.getCanonicalName();
+    private static final String REQUEST_CANCELLATION_MSG_KEY = "REQUEST_CANCELLATION_MSG_KEY";
+
     private static MASOtpAuthenticationHandler masOtpAuthenticationHandlerStatic;
     private static CallbackContext AUTH_LISTENER_CALLBACK;
     private static CallbackContext OTP_AUTH_LISTENER_CALLBACK;
@@ -654,10 +657,16 @@ public class MASCommand {
                     public void onError(Throwable throwable) {
                         if (throwable instanceof  MAS.RequestCancelledException) {
                             JSONObject error = new JSONObject();
+                            String errorMessage = "Request Cancelled";
+
                             try {
-                                error.put("errorMessage", "Request Cancelled");
-                            }catch (JSONException ignore){
-                                Log.e(TAG, ignore.getMessage(), ignore);
+                                if ((((MAS.RequestCancelledException) throwable).getData() != null &&
+                                        ((MAS.RequestCancelledException) throwable).getData().get(REQUEST_CANCELLATION_MSG_KEY) != null)) {
+                                    errorMessage =(String) ((MAS.RequestCancelledException) throwable).getData().get(REQUEST_CANCELLATION_MSG_KEY);
+                                }
+                                error.put("errorMessage", errorMessage);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                             callbackContext.error(error);
                         } else
@@ -893,8 +902,17 @@ public class MASCommand {
                     Log.e(TAG, "request Id is empty");
                     callbackContext.error("request Id is  empty");
                 }
+                String cancellationMessage = "Request cancelled";
+                try {
+                    if (args.getString(1) != null && args.getString(1) != "null" )
+                        cancellationMessage = args.getString(1);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 MASUtil.getQrCode().stop();
-                MAS.cancelRequest(requestId);
+                Bundle bundle = new Bundle();
+                bundle.putString(REQUEST_CANCELLATION_MSG_KEY, cancellationMessage);
+                MAS.cancelRequest(requestId, bundle);
                 success(callbackContext, true);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
