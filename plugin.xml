@@ -109,6 +109,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
         <framework src="com.google.zxing:core:3.2.0" /> 
         <framework src="com.android.support:appcompat-v7:23+" />
+        <framework src="com.android.support:design:24.2.1" />
+        <framework src="com.android.support:gridlayout-v7:24.2.1" />
     </platform>
 </plugin>
 
