@@ -6,9 +6,9 @@
 
 package com.ca.mas.cordova.core;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
+import com.ca.mas.core.service.MssoIntents;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
@@ -45,8 +46,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MASPlugin extends MASCordovaPlugin {
-    private static final String TAG = MASPlugin.class.getCanonicalName();
+public class MASPluginMAS extends MASCordovaPlugin {
+    private static final String TAG = MASPluginMAS.class.getCanonicalName();
     private Context mContext = null;
     private static final String REQUEST_CANCELLATION_MSG_KEY = "REQUEST_CANCELLATION_MSG_KEY";
 
@@ -245,7 +246,7 @@ public class MASPlugin extends MASCordovaPlugin {
                             }
                         };
                         MASUtil.setQrCode(qrcode);
-                        boolean init = qrcode.init((Activity) context, requestId, masAuthenticationProviders);
+                        boolean init = qrcode.init(MASPluginMAS.this.cordova.getActivity(), requestId, masAuthenticationProviders);
                         String encodedImage = "";
                         if (init) {
                             ImageView image = (ImageView) qrcode.render();
@@ -321,7 +322,7 @@ public class MASPlugin extends MASCordovaPlugin {
             masOtpAuthenticationHandlerStatic.deliver(channelResult.toString(), new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
-                    success(callbackContext, "success", false);
+                    success(callbackContext, "true", false);
                 }
 
                 @Override
@@ -398,9 +399,9 @@ public class MASPlugin extends MASCordovaPlugin {
         MAS.setAuthenticationListener(new MASAuthenticationListener() {
             @Override
             public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
-                android.app.DialogFragment loginFragment = getLoginFragment(requestId, providers);
-                if (loginFragment != null) {
-                    loginFragment.show(((Activity) context).getFragmentManager(), "logonDialog");
+                Intent loginIntent = getLoginIntent(mContext, requestId, providers);
+                if (loginIntent != null) {
+                    mContext.startActivity(loginIntent);
                 }
             }
 
@@ -408,7 +409,7 @@ public class MASPlugin extends MASCordovaPlugin {
             public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
                 android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
                 if (otpFragment != null) {
-                    otpFragment.show(((Activity) context).getFragmentManager(), "OTPDialog");
+                    otpFragment.show(MASPluginMAS.this.cordova.getActivity().getFragmentManager(), "OTPDialog");
                 }
             }
         });
@@ -485,10 +486,14 @@ public class MASPlugin extends MASCordovaPlugin {
         }
     }
 
-    private DialogFragment getLoginFragment(long requestID, MASAuthenticationProviders providers) {
+    private Intent getLoginIntent(Context context, long requestID, MASAuthenticationProviders providers) {
         try {
-            Class<?> c = Class.forName("com.ca.mas.ui.MASLoginFragment");
-            return (DialogFragment) c.getMethod("newInstance", long.class, MASAuthenticationProviders.class).invoke(null, requestID, providers);
+            Class<?> c = Class.forName("com.ca.mas.ui.MASLoginActivity");
+            Intent loginIntent = new Intent(context, c);
+            loginIntent.putExtra(MssoIntents.EXTRA_AUTH_PROVIDERS, providers);
+            loginIntent.putExtra(MssoIntents.EXTRA_REQUEST_ID, requestID);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            return loginIntent;
         } catch (Exception e) {
             return null;
         }
@@ -496,7 +501,7 @@ public class MASPlugin extends MASCordovaPlugin {
 
     private DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
         try {
-            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpSelectDeliveryChannelFragment");
+            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpDialogFragment");
             return (DialogFragment) c.getMethod("newInstance", MASOtpAuthenticationHandler.class).invoke(null, handler);
         } catch (Exception e) {
             return null;

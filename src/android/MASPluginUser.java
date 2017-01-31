@@ -247,7 +247,7 @@ public class MASPluginUser extends MASCordovaPlugin {
                 if (intent != null) {
                     cordova.startActivityForResult(MASPluginUser.this, intent, FINGERPRINT_REQUEST_CODE);
                 }
-                cordova.setActivityResultCallback(new MASPlugin() {
+                cordova.setActivityResultCallback(new MASPluginUser() {
                     @Override
                     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
                         super.onActivityResult(requestCode, resultCode, intent);
