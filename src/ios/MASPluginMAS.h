@@ -6,14 +6,14 @@
  */
 
 //
-//  MASPlugin.h
+//  MASPluginMAS.h
 //
 
 #import <Cordova/CDV.h>
 
 
 
-@interface MASPlugin : CDVPlugin
+@interface MASPluginMAS : CDVPlugin
 
 
 /**

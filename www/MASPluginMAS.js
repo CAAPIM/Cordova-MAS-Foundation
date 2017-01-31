@@ -19,9 +19,12 @@ var MASPluginMAS = function() {
      * and accessing various protected api. Any further initialization related setting will go here.
      */
     this.initialize = function(successHandler, errorHandler) {
-        Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPlugin", "setAuthenticationListener", []);
-        Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPlugin", "setOTPChannelSelectorListener", []);
-        Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
+        
+        Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPluginMAS", "setAuthenticationListener", []);
+        
+        Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPluginMAS", "setOTPChannelSelectorListener", []);
+        
+        Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPluginMAS", "setOTPAuthenticationListener", []);
         
         // TODO: Check for success or error
         return successHandler("Initialization success !!");
@@ -31,7 +34,8 @@ var MASPluginMAS = function() {
      * Use Native MASUI
      */
     this.useNativeMASUI = function(successHandler, errorHandler) {
-        Cordova.exec(successHandler, errorHandler, "MASPlugin", "useNativeMASUI", []);
+        
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "useNativeMASUI", []);
     };
 
     /**
@@ -129,7 +133,8 @@ var MASPluginMAS = function() {
      Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
      */
     this.grantFlow = function(successHandler, errorHandler, MASGrantFlow) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setGrantFlow", [MASGrantFlow]);
+    
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setGrantFlow", [MASGrantFlow]);
     };
 
     /**
@@ -143,7 +148,7 @@ var MASPluginMAS = function() {
                 	if(fileName.endsWith(".json")){
                 		fileName = fileName.slice(0,-5);
                 	}
-                    return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
+                    return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setConfigFileName", [fileName]);
                 }                
             };
         
@@ -167,19 +172,23 @@ var MASPluginMAS = function() {
      Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
      */
     this.start = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "start", []);
+    
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "start", []);
     };
 
     this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithDefaultConfiguration", [defaultConfiguration]);
+    
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithDefaultConfiguration", [defaultConfiguration]);
     };
 
     this.startWithJSON = function(successHandler, errorHandler, jsonObject) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithJSON", [jsonObject]);
+     
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithJSON", [jsonObject]);
     };
 
     this.authorize = function(successHandler, errorHandler, code) {
-        Cordova.exec(successHandler, errorHandler, "MASPlugin", "authorizeQRCode", [code]);
+    
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
     };
 
     /**
@@ -245,7 +254,7 @@ var MASPluginMAS = function() {
                 }
                 errorHandler(error);
             }, 
-            "MASPlugin", "completeAuthentication", [username, password]);
+            "MASPluginMAS", "completeAuthentication", [username, password]);
     };
 
     /**
@@ -270,7 +279,7 @@ var MASPluginMAS = function() {
                 }
                 successHandler(true);                    
             }, 
-            errorHandler, "MASPlugin", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
+            errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
     };
 
     /**
@@ -312,7 +321,7 @@ var MASPluginMAS = function() {
                 }else{
                     errorHandler(error);
                 }
-            }, "MASPlugin", "generateAndSendOTP", [channels]);
+            }, "MASPluginMAS", "generateAndSendOTP", [channels]);
     };
 
     /**
@@ -326,7 +335,8 @@ var MASPluginMAS = function() {
         }else{
             window.MASPopupUI.close();
         }
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelGenerateAndSendOTP", []);
+                
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
     /**
      Validate the entered OTP.
@@ -340,7 +350,8 @@ var MASPluginMAS = function() {
         }else{
             window.MASPopupUI.close();
         }
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "validateOTP", [otp]);
+        
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
     };
     /**
      Cancels the current user's authentication session validation.
@@ -353,7 +364,8 @@ var MASPluginMAS = function() {
         }else{
             window.MASPopupUI.close();
         }
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelOTPValidation", []);
+        
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
     };
     /**
      Closes an existing popup.
@@ -372,35 +384,35 @@ var MASPluginMAS = function() {
      getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
      */
     this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
     /**
      deleteFromPath does the HTTP DELTE call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
      */
     this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
     /**
      putToPath does the HTTP PUT call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
      */
     this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
     /**
      postToPath does the HTTP POST call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
      */
     this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
     /**
      Stops the lifecycle of all MAS processes.
      */
     this.stop = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "stop", []);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "stop", []);
     };
 
     this.gatewayIsReachable = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "gatewayIsReachable", []);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "gatewayIsReachable", []);
     };
 };
 

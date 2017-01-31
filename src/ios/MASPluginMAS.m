@@ -6,11 +6,11 @@
  */
 
 //
-//  MASPlugin.m
+//  MASPluginMAS.m
 //
 
 
-#import "MASPlugin.h"
+#import "MASPluginMAS.h"
 
 #import "MASPluginAuthenticationController.h"
 
@@ -25,7 +25,7 @@
 #import "WebViewController.h"
 
 
-@interface MASPlugin()
+@interface MASPluginMAS()
 
 
 ///--------------------------------------
@@ -45,7 +45,7 @@
 @end
 
 
-@implementation MASPlugin
+@implementation MASPluginMAS
 
 - (void)pluginInitialize
 {
