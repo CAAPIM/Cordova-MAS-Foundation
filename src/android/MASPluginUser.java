@@ -2,7 +2,6 @@
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
- *
  */
 package com.ca.mas.cordova.core;
 
@@ -25,8 +24,6 @@ import com.ca.mas.identity.util.IdentityConsts;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,25 +35,12 @@ import static android.app.Activity.RESULT_OK;
  * Created by trima09 on 12/13/2016.
  */
 
-public class MASPluginUser extends CordovaPlugin {
+public class MASPluginUser extends MASCordovaPlugin {
     private static final String TAG = MASPluginUser.class.getCanonicalName();
-
-    private Command command = null;
 
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-        command = new Command() {
-            @Override
-            public void execute(Context context, JSONArray args, CallbackContext callbackContext) {
-                return;
-            }
-
-            @Override
-            public String getAction() {
-                return null;
-            }
-        };
     }
 
     @Override
@@ -97,16 +81,10 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
-        if (masUser.isAuthenticated()) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-            callbackContext.sendPluginResult(result);
-        } else {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, false);
-            callbackContext.sendPluginResult(result);
-        }
+        success(callbackContext, masUser.isAuthenticated(), false);
     }
 
     /**
@@ -116,16 +94,10 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
-        if (masUser.isCurrentUser()) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-            callbackContext.sendPluginResult(result);
-        } else {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, false);
-            callbackContext.sendPluginResult(result);
-        }
+        success(callbackContext, masUser.isCurrentUser(), false);
     }
 
     /**
@@ -135,12 +107,12 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
 
         try {
-            callbackContext.success(convertUserToJSModel(masUser));
+            success(callbackContext, convertUserToJSModel(masUser), false);
         } catch (JSONException jse) {
             callbackContext.error(jse.getLocalizedMessage());
         }
@@ -153,16 +125,10 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
-        if (masUser.isSessionLocked()) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-            callbackContext.sendPluginResult(result);
-        } else {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, false);
-            callbackContext.sendPluginResult(result);
-        }
+        success(callbackContext, masUser.isSessionLocked(), false);
     }
 
     /**
@@ -172,20 +138,20 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
         masUser.lockSession(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Session lock complete";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -198,20 +164,20 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
         masUser.unlockSession(new MASSessionUnlockCallback<Void>() {
             @Override
             public void onUserAuthenticationRequired() {
                 final int FINGERPRINT_REQUEST_CODE = 0x1000;
-                CordovaInterface cordova = (CordovaInterface) MASPlugin.getMasPlugin().cordova;
+                CordovaInterface cordova = (CordovaInterface) MASPluginUser.this.cordova;
                 KeyguardManager keyguardManager = (KeyguardManager) cordova.getActivity().getSystemService(Context.KEYGUARD_SERVICE);
                 Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
                 if (intent != null) {
-                    cordova.startActivityForResult(MASPlugin.getMasPlugin(), intent, FINGERPRINT_REQUEST_CODE);
+                    cordova.startActivityForResult(MASPluginUser.this, intent, FINGERPRINT_REQUEST_CODE);
                 }
-                cordova.setActivityResultCallback(new MASPlugin() {
+                cordova.setActivityResultCallback(new MASPluginUser() {
                     @Override
                     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
                         super.onActivityResult(requestCode, resultCode, intent);
@@ -225,38 +191,36 @@ public class MASPluginUser extends CordovaPlugin {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         String result = "Session unlock complete";
-                                        callbackContext.success(result);
+                                        success(callbackContext, result, false);
                                     }
 
                                     @Override
                                     public void onError(Throwable throwable) {
                                         Log.e(TAG, throwable.getMessage(), throwable);
-                                        callbackContext.error(command.getError(throwable));
+                                        callbackContext.error(getError(throwable));
                                     }
                                 });
                             } else if (resultCode == RESULT_CANCELED) {
                                 String errMsg = "Security error has occurred.";
                                 MASCordovaException exp = new MASCordovaException(errMsg);
                                 Log.i(TAG, errMsg);
-                                callbackContext.error(command.getError(exp));
+                                callbackContext.error(getError(exp));
                             }
                         }
                     }
                 });
-
-
             }
 
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Session unlock complete";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -269,7 +233,7 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
         final String message = args.optString(0);
@@ -277,11 +241,11 @@ public class MASPluginUser extends CordovaPlugin {
             @Override
             public void onUserAuthenticationRequired() {
                 final int FINGERPRINT_REQUEST_CODE = 0x1000;
-                CordovaInterface cordova = (CordovaInterface) MASPlugin.getMasPlugin().cordova;
+                CordovaInterface cordova = (CordovaInterface) MASPluginUser.this.cordova;
                 KeyguardManager keyguardManager = (KeyguardManager) cordova.getActivity().getSystemService(Context.KEYGUARD_SERVICE);
                 Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, message);
                 if (intent != null) {
-                    cordova.startActivityForResult(MASPlugin.getMasPlugin(), intent, FINGERPRINT_REQUEST_CODE);
+                    cordova.startActivityForResult(MASPluginUser.this, intent, FINGERPRINT_REQUEST_CODE);
                 }
                 cordova.setActivityResultCallback(new MASPlugin() {
                     @Override
@@ -298,20 +262,20 @@ public class MASPluginUser extends CordovaPlugin {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         String result = "Session unlock complete";
-                                        callbackContext.success(result);
+                                        success(callbackContext, result, false);
                                     }
 
                                     @Override
                                     public void onError(Throwable throwable) {
                                         Log.e(TAG, throwable.getMessage(), throwable);
-                                        callbackContext.error(command.getError(throwable));
+                                        callbackContext.error(getError(throwable));
                                     }
                                 });
                             } else if (resultCode == RESULT_CANCELED) {
                                 String errMsg = "Security error has occurred.";
                                 MASCordovaException exp = new MASCordovaException(errMsg);
                                 Log.i(TAG, errMsg);
-                                callbackContext.error(command.getError(exp));
+                                callbackContext.error(getError(exp));
                             }
                         }
                     }
@@ -323,13 +287,13 @@ public class MASPluginUser extends CordovaPlugin {
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Session unlock complete";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -341,20 +305,20 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
         masUser.removeSessionLock(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Session lock removed";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -369,21 +333,21 @@ public class MASPluginUser extends CordovaPlugin {
             username = args.getString(0);
             password = args.getString(1);
         } catch (JSONException e) {
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
 
-        MASUser.login(username, password, new MASCallback<MASUser>() {
+        MASUser.login(username, password.toCharArray(), new MASCallback<MASUser>() {
             @Override
             public void onSuccess(MASUser masUser) {
                 String result = "Login with username and password complete";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -401,13 +365,13 @@ public class MASPluginUser extends CordovaPlugin {
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Logoff user complete";
-                callbackContext.success(result);
+                success(callbackContext, result, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }
@@ -419,19 +383,19 @@ public class MASPluginUser extends CordovaPlugin {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(command.getError(e));
+            callbackContext.error(getError(e));
             return;
         }
         masUser.requestUserInfo(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                success(callbackContext, true, false);
             }
 
             @Override
             public void onError(Throwable throwable) {
                 Log.e(TAG, throwable.getMessage(), throwable);
-                callbackContext.error(command.getError(throwable));
+                callbackContext.error(getError(throwable));
             }
         });
     }

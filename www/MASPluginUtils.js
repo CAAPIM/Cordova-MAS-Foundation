@@ -9,19 +9,14 @@ var MASPluginConstants = require("./MASPluginConstants"),
     MASPopup = require("./PopupUI");
 
 var MASPluginUtils = {
-	
-	isEmpty: function(val) {
-        
+    isEmpty: function(val) {
         if (typeof val !== 'undefined' && val) {
-            
             return false;
         }
-        
         return true;
     },
 
-    XHR: function(cfg)
-	{
+    XHR: function(cfg){
     	var xhr,
         url = cfg.url,
         method = cfg.method || 'GET',
@@ -29,23 +24,16 @@ var MASPluginUtils = {
         failure = cfg.failure || function () {};
 		
         try {
-         
             xhr = new XMLHttpRequest();
-        } 
-        catch (e) {
-         
+        }catch (e){
             xhr = new ActiveXObject("Msxml2.XMLHTTP");
         }
 	
-        xhr.onreadystatechange = function ()
-        {
-            if (xhr.readyState == 4) 
-            {
+        xhr.onreadystatechange = function (){
+            if (xhr.readyState == 4){
                 if (xhr.status == 200) {
                     success.call(null, xhr);
-                } 
-                else {
-                
+                }else{
                     failure.call(null, xhr);
                 }
             }
@@ -56,29 +44,22 @@ var MASPluginUtils = {
     },
 
     onBackKeyPressEvent: function() {
-            
         successHandler = function() {
-            
             document.removeEventListener("backbutton", MASPluginUtils.onBackKeyPressEvent, false);
         };
-
         return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
     },
 
     setPopUpStyle: function(style) {
-            
         MASPluginConstants.MASPopupStyle = style;
     },
 
     getPopUpStyle: function(){
-        
         return MASPluginConstants.MASPopupStyle;
     },
 
     createPopupDiv: function() {
-
         if (typeof document.getElementById('popup') !== 'undefined') {
-
             var iDiv = document.createElement('div');
             iDiv.id = 'popup';
             iDiv.className = 'popup-wrapper hide';
@@ -118,87 +99,68 @@ var MASPluginUtils = {
     },
 
     MASPopupUI: function(url, popupafterclose, onload) {
-        
         if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-
             var onLoadMakePopUpVisible = function() {
-            
                 if(document.getElementById('popUp') !== null) {
                     document.getElementById('popUp').hidden=false;
                 }
-            
                 onload();
             };
         
             $('#popUp').remove();
-        
             var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ MASPluginConstants.MASPopupStyle+"'>" + "</div>";
-        
             popupafterclose = popupafterclose ? popupafterclose : function() {};
-            
-            $.mobile.activePage.append(template).trigger("create");        
-
-            $('#popUp').load(url, onLoadMakePopUpVisible);        
-
-            $.mobile.activePage.find(".closePopup").bind("tap", function() {            
+            $.mobile.activePage.append(template).trigger("create");
+            $('#popUp').load(url, onLoadMakePopUpVisible);
+            $.mobile.activePage.find(".closePopup").bind("tap", function() {
                 $.mobile.activePage.find(".messagePopup").popup("close");
             });           
 
             $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
-                
                 popupafterclose: function() {
-                    
-                    $('body').off('touchmove');                    
+                    $('body').off('touchmove');
                     $(this).unbind("popupafterclose").remove();                    
                     popupafterclose();
                 }
             });
             
             $(".messagePopup").on({
-                
-                popupbeforeposition: function() {                    
+                popupbeforeposition: function() {
                     $('.ui-popup-screen').off();
                 }
             });
-        }
-        else {
+        }else{
+            this.createPopupDiv();
+            var popupEl = document.getElementById('popup');
+            var popupBody = document.getElementById('popup-bdy');
 
-                this.createPopupDiv();
+            window.MASPopupUI = new Popup(popupEl, {
+                 width: 500,
+                 height: 500
+            });
 
-                var popupEl = document.getElementById('popup');
-                var popupBody = document.getElementById('popup-bdy');
-
-                window.MASPopupUI = new Popup(popupEl, {
-                    width: 500,
-                    height: 500
-                });
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.onload = function () {
-                    
-                    popupBody.innerHTML = this.response;
-               
-                    var s = popupBody.getElementsByTagName('script');
-                    for (var i = 0; i < s.length ; i++) {
-                        var node=s[i], parent=node.parentElement, d = document.createElement('script');
-                        d.async=node.async;
-                        d.type = node.type;
-                        if(typeof node.src !== 'undefined' && node.src !== "")
-                            d.src=node.src;
-                        d.text = node.text;
-                        parent.insertBefore(d,node);
-                        parent.removeChild(node);
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                popupBody.innerHTML = this.response;
+                var s = popupBody.getElementsByTagName('script');
+                for (var i = 0; i < s.length ; i++) {
+                    var node=s[i], parent=node.parentElement, d = document.createElement('script');
+                    d.async=node.async;
+                    d.type = node.type;
+                    if(typeof node.src !== 'undefined' && node.src !== ""){
+                        d.src=node.src;
                     }
-               
-                    window.MASPopupUI.open();
-                    
-                    onload();
-                };
+                    d.text = node.text;
+                    parent.insertBefore(d,node);
+                    parent.removeChild(node);
+                }
+                window.MASPopupUI.open();
+                onload();
+            };
 
-                xhr.open('GET', url, true);
-                xhr.send();
-        }        
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
     }
 };
 

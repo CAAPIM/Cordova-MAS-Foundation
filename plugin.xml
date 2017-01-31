@@ -90,25 +90,33 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			<feature name="MASPluginUser" >
                 <param name="android-package" value="com.ca.mas.cordova.core.MASPluginUser"/>
             </feature>
+			<feature name="MASPluginDevice" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginDevice"/>
+            </feature>
+			<feature name="MASPluginApplication" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginApplication"/>
+            </feature>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.INTERNET"/>
         </config-file>
 
-        <source-file src="src/android/Command.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPluginDevice.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPluginApplication.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASCordovaPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />
-		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
+
 
         <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
         <framework src="com.google.zxing:core:3.2.0" /> 
-        <framework src="com.android.support:appcompat-v7:23+" />
+        <framework src="com.android.support:appcompat-v7:24.2.1" />
+		<framework src="com.android.support:design:24.2.1" />
+        <framework src="com.android.support:gridlayout-v7:24.2.1" />
     </platform>
 </plugin>
 
