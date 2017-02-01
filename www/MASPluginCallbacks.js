@@ -10,6 +10,7 @@ var MASPluginConstants = require("./MASPluginConstants"),
 	
 var MASPluginCallbacks = {
 
+
 	/** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
      * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
      */
@@ -68,12 +69,12 @@ var MASPluginCallbacks = {
         }
     },
 
+
     /**
      * Callback which is used to prompt for the OTP provided channels
      * @param otpChannels available channels array that will be recieved from server
      * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
      */
-
     MASOTPChannelSelectCallback: function(otpChannels) 
     {
         MASPluginUtils.MASPopupUI(
@@ -94,6 +95,7 @@ var MASPluginCallbacks = {
         	}
         );
     },	
+
 
     /**
      * Callback for the OTP Listener

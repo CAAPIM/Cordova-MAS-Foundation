@@ -7,31 +7,16 @@
 
 var MASPluginDevice = function() {
 
-    /**
-    * Fetches a device's registration state and identifier as JSON string.
-    */
-    this.getCurrentDevice = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getCurrentDevice", []);
-    };
     
-    /**
-    * Deregisters a device from MAG server i.e. remove all registration info of this device on server
-    */
-    this.deregister = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "deregister", []);
-    };
-
-    /**
-    * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed.
-    */
-    this.resetLocally = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "resetLocally", []);
-    };
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
 
     /**
     * This API returns a boolean state of device's current registration status on MAG server.
     */
     this.isDeviceRegistered = function(successHandler, errorHandler) {
+        
         return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "isDeviceRegistered", []);
     };
 
@@ -39,8 +24,38 @@ var MASPluginDevice = function() {
     *  Fetches the current devices's identifier which is registered in MAG server.
     */
     this.getDeviceIdentifier = function(successHandler, errorHandler) {
+        
         return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getDeviceIdentifier", []);
     };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Current Device
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+    * Fetches a device's registration state and identifier as JSON string.
+    */
+    this.getCurrentDevice = function(successHandler, errorHandler) {
+        
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getCurrentDevice", []);
+    };
+    
+    /**
+    * Deregisters a device from MAG server i.e. remove all registration info of this device on server
+    */
+    this.deregister = function(successHandler, errorHandler) {
+        
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "deregister", []);
+    };
+
+    /**
+    * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed.
+    */
+    this.resetLocally = function(successHandler, errorHandler) {
+        
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "resetLocally", []);
+    };    
 }
 
 module.exports = MASPluginDevice;

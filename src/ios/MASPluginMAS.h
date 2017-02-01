@@ -16,12 +16,21 @@
 @interface MASPluginMAS : CDVPlugin
 
 
+
+///--------------------------------------
+/// @name Properties
+///--------------------------------------
+
+# pragma mark - Properties
+
 /**
- *  Set whether Native MASUI should be used.
+ *  Set configuration JSON file name to MASFoundation.  File name without extention should be passed as parameter.
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)useNativeMASUI:(CDVInvokedUrlCommand*)command;
+- (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  *  Set grant flow of MASFoundation
@@ -33,13 +42,19 @@
 
 
 /**
- *  Set configuration JSON file name to MASFoundation.  File name without extention should be passed as parameter.
+ *  Set whether Native MASUI should be used.
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)setConfigFileName:(CDVInvokedUrlCommand*)command;
+- (void)useNativeMASUI:(CDVInvokedUrlCommand*)command;
 
 
+
+///--------------------------------------
+/// @name Authentication Listeners
+///--------------------------------------
+
+# pragma mark - Authentication Listeners
 
 /**
  *  Set a user login block to handle the case where the type set in 'setDeviceRegistrationType:(MASDeviceRegistrationType)'
@@ -64,12 +79,13 @@
  */
 - (void)cancelAuthentication:(CDVInvokedUrlCommand*)command;
 
-/**
- *  Authorize the user using QR code
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
+
+
+///--------------------------------------
+/// @name OTP Listeners
+///--------------------------------------
+
+# pragma mark - OTP Listeners
 
 /**
  *  Set the OTP channel selection listener
@@ -78,12 +94,16 @@
  */
 - (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command;
 
+
+
 /**
  *  Generate a new OTP and send it to the selected channels
  *
  *  @param command CDInvokedUrlCommand object
  */
 - (void)generateAndSendOTP:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  *  Cancel the generate OTP request
@@ -92,12 +112,16 @@
  */
 - (void)cancelGenerateAndSendOTP:(CDVInvokedUrlCommand*)command;
 
+
+
 /**
  *  Set the OTP authentication listener
  *
  *  @param command CDInvokedUrlCommand object
  */
 - (void)setOTPAuthenticationListener:(CDVInvokedUrlCommand*)command;
+
+
 
 /**
  *  Validate the OTP
@@ -106,12 +130,21 @@
  */
 - (void)validateOTP:(CDVInvokedUrlCommand*)command;
 
+
+
 /**
  *  Cancel the OTP validation request
  *
  *  @param command CDInvokedUrlCommand object
  */
 - (void)cancelOTPValidation:(CDVInvokedUrlCommand*)command;
+
+
+///--------------------------------------
+/// @name Start & Stop
+///--------------------------------------
+
+# pragma mark - Start & Stop
 
 /**
  *  Starts the lifecycle of the MAS processes.
@@ -160,6 +193,36 @@
 
 
 /**
+ *  Stops the lifecycle of all MAS processes.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)stop:(CDVInvokedUrlCommand*)command;
+
+
+
+///--------------------------------------
+/// @name Gateway Monitoring
+///--------------------------------------
+
+# pragma mark - Gateway Monitoring
+
+/**
+ *  Boolean value of gateway reachability
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
+
+
+
+///--------------------------------------
+/// @name HTTP Requests
+///--------------------------------------
+
+# pragma mark - HTTP Requests
+
+/**
  *  Request method for an HTTP GET call to the Gateway.
  *
  *  @param command CDInvokedUrlCommand object
@@ -204,99 +267,19 @@
 
 
 
+///--------------------------------------
+/// @name Proximity Login
+///--------------------------------------
+
+# pragma mark - Proximity Login
+
 /**
- *  Stops the lifecycle of all MAS processes.
+ *  Authorize the user using QR code
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)stop:(CDVInvokedUrlCommand*)command;
+- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
 
 
-/**
-  *  Gets current device information
-  *
-  *  @param command CDInvokedUrlCommand object
-  */
-- (void)getCurrentDevice:(CDVInvokedUrlCommand*)command;
-
-/**
- *  De-register the currently registered device and clears out all keychain information from local and shared keychain storage.
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)deregister:(CDVInvokedUrlCommand*)command;
-
-/**
- *
- *  Returns the authentication provider for proximity login
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)retrieveAuthenticationProviderForProximityLogin:(CDVInvokedUrlCommand*)command;
-
-/**
- *
- *  Returns the list of current providers
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)getCurrentProviders:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Boolean property of device registration status
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Returns the device identifier
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Boolean property of the application authentication status (primarily for client credential authentication.)
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Launches a native app with a given URI
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)launchApp:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Enumeration value of authentication status.
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
-
-/**
-  *  Boolean value of gateway reachability
-  *
-  *  @param command CDInvokedUrlCommand object
-  */
-- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command;
-
-/**
-  *  Retrieves the list of enterprise apps
-  *
-  *  @param command CDVInvokedUrlCommand object
-  *
-*/
-- (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Reset local keychain storage
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)resetLocally:(CDVInvokedUrlCommand*)command;
 
 @end
