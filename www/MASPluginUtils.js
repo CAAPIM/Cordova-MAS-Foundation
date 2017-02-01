@@ -47,7 +47,7 @@ var MASPluginUtils = {
         successHandler = function() {
             document.removeEventListener("backbutton", MASPluginUtils.onBackKeyPressEvent, false);
         };
-        return Cordova.exec(successHandler, function() {}, "MASPlugin", "enterpriseBrowserWebAppBackButtonHandler", []);
+        return Cordova.exec(successHandler, function() {}, "MASPluginApplication", "enterpriseBrowserWebAppBackButtonHandler", []);
     },
 
     setPopUpStyle: function(style) {

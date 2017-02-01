@@ -6,6 +6,7 @@
 
 package com.ca.mas.cordova.core;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -399,9 +400,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
         MAS.setAuthenticationListener(new MASAuthenticationListener() {
             @Override
             public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders providers) {
-                Intent loginIntent = getLoginIntent(mContext, requestId, providers);
+                Intent loginIntent = getLoginIntent(context, requestId, providers);
                 if (loginIntent != null) {
-                    mContext.startActivity(loginIntent);
+                    ((Activity) context).startActivity(loginIntent);
                 }
             }
 
@@ -409,11 +410,33 @@ public class MASPluginMAS extends MASCordovaPlugin {
             public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
                 android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
                 if (otpFragment != null) {
-                    otpFragment.show(MASPluginMAS.this.cordova.getActivity().getFragmentManager(), "OTPDialog");
+                    otpFragment.show(((Activity) mContext).getFragmentManager(), "OTPDialog");
+                    //otpFragment.show(MASPluginMAS.this.cordova.getActivity().getFragmentManager(), "OTPDialog");
                 }
             }
         });
         success(callbackContext, true, false);
+    }
+
+    private Intent getLoginIntent(Context context, long requestID, MASAuthenticationProviders providers) {
+        try {
+            Class<?> c = Class.forName("com.ca.mas.ui.MASLoginActivity");
+            Intent loginIntent = new Intent(context, c);
+            loginIntent.putExtra(MssoIntents.EXTRA_AUTH_PROVIDERS, providers);
+            loginIntent.putExtra(MssoIntents.EXTRA_REQUEST_ID, requestID);
+            return loginIntent;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
+        try {
+            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpDialogFragment");
+            return (DialogFragment) c.getMethod("newInstance", MASOtpAuthenticationHandler.class).invoke(null, handler);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private void authorizeQRCode(final JSONArray args, final CallbackContext callbackContext) {
@@ -483,28 +506,6 @@ public class MASPluginMAS extends MASCordovaPlugin {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));
-        }
-    }
-
-    private Intent getLoginIntent(Context context, long requestID, MASAuthenticationProviders providers) {
-        try {
-            Class<?> c = Class.forName("com.ca.mas.ui.MASLoginActivity");
-            Intent loginIntent = new Intent(context, c);
-            loginIntent.putExtra(MssoIntents.EXTRA_AUTH_PROVIDERS, providers);
-            loginIntent.putExtra(MssoIntents.EXTRA_REQUEST_ID, requestID);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            return loginIntent;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
-        try {
-            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpDialogFragment");
-            return (DialogFragment) c.getMethod("newInstance", MASOtpAuthenticationHandler.class).invoke(null, handler);
-        } catch (Exception e) {
-            return null;
         }
     }
 

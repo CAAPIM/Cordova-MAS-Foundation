@@ -112,6 +112,7 @@ public class MASPluginApplication extends MASCordovaPlugin {
                     public void run() {
                         if (ENTERPRISE_BROWSER_WEBVIEW != null) {
                             ((ViewGroup) ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
+                            ENTERPRISE_BROWSER_WEBVIEW.destroy();
                             success(callbackContext, false);
                         }
                     }
@@ -151,7 +152,7 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                                 return new WebViewClient() {
                                                     @Override
                                                     public void onReceivedSslError(WebView webView, final SslErrorHandler handler, SslError error) {
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(MASPluginApplication.this.cordova.getActivity().getApplicationContext());
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(webView.getContext());
                                                         AlertDialog ad = builder.create();
                                                         String message;
                                                         switch (error.getPrimaryError()) {
