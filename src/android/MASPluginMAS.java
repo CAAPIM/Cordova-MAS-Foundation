@@ -7,7 +7,6 @@
 package com.ca.mas.cordova.core;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -60,7 +59,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
-        mContext = this.cordova.getActivity().getApplicationContext();
+        mContext = webView.getContext();
     }
 
     @Override
@@ -247,7 +246,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             }
                         };
                         MASUtil.setQrCode(qrcode);
-                        boolean init = qrcode.init(MASPluginMAS.this.cordova.getActivity(), requestId, masAuthenticationProviders);
+                        boolean init = qrcode.init((Activity) context, requestId, masAuthenticationProviders);
                         String encodedImage = "";
                         if (init) {
                             ImageView image = (ImageView) qrcode.render();
@@ -341,7 +340,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             String otp = args.getString(0);
             masOtpAuthenticationHandlerStatic.proceed(mContext, otp);
-            success(callbackContext, true, false);// TODO: Recheck
+            success(callbackContext, true, false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));
@@ -408,10 +407,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
 
             @Override
             public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler handler) {
-                android.app.DialogFragment otpFragment = getOtpSelectDeliveryChannelFragment(handler);
-                if (otpFragment != null) {
-                    otpFragment.show(((Activity) mContext).getFragmentManager(), "OTPDialog");
-                    //otpFragment.show(MASPluginMAS.this.cordova.getActivity().getFragmentManager(), "OTPDialog");
+                Intent otpIntent = getOtpIntent(context, handler);
+                if (otpIntent != null) {
+                    ((Activity) context).startActivity(otpIntent);
                 }
             }
         });
@@ -430,10 +428,12 @@ public class MASPluginMAS extends MASCordovaPlugin {
         }
     }
 
-    private DialogFragment getOtpSelectDeliveryChannelFragment(MASOtpAuthenticationHandler handler) {
+    private Intent getOtpIntent(Context context, MASOtpAuthenticationHandler handler) {
         try {
-            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpDialogFragment");
-            return (DialogFragment) c.getMethod("newInstance", MASOtpAuthenticationHandler.class).invoke(null, handler);
+            Class<?> c = Class.forName("com.ca.mas.ui.otp.MASOtpActivity");
+            Intent otpIntent = new Intent(context, c);
+            otpIntent.putExtra(MssoIntents.EXTRA_OTP_HANDLER, handler);
+            return otpIntent;
         } catch (Exception e) {
             return null;
         }
