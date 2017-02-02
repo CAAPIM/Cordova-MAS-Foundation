@@ -61,11 +61,23 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
-            <feature name="MASPlugin" >
-                <param name="ios-package" value="MASPlugin"/>
+            <feature name="MASPluginMAS" >
+                <param name="ios-package" value="MASPluginMAS"/>
             </feature>
 			<feature name="MASPluginUser" >
                 <param name="ios-package" value="MASPluginUser"/>
+            </feature>
+            <feature name="MASPluginGroup" >
+                <param name="ios-package" value="MASPluginGroup"/>
+            </feature>
+            <feature name="MASPluginDevice" >
+                <param name="ios-package" value="MASPluginDevice"/>
+            </feature>
+            <feature name="MASPluginApplication" >
+                <param name="ios-package" value="MASPluginApplication"/>
+            </feature>
+            <feature name="MASPluginAuthProviders" >
+                <param name="ios-package" value="MASPluginAuthProviders"/>
             </feature>
         </config-file>
         
