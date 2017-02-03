@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Build;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -113,8 +115,8 @@ public class MASPluginApplication extends MASCordovaPlugin {
                         if (ENTERPRISE_BROWSER_WEBVIEW != null) {
                             ((ViewGroup) ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
                             ENTERPRISE_BROWSER_WEBVIEW.destroy();
-                            success(callbackContext, false);
                         }
+                        success(callbackContext, false);
                     }
                 }
         );
@@ -140,6 +142,25 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                     @Override
                                     public void run() {
                                         final WebView web = new WebView(MASPluginApplication.this.cordova.getActivity());
+                                        web.setOnKeyListener(new View.OnKeyListener() {
+                                            @Override
+                                            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                                    switch (keyCode) {
+                                                        case KeyEvent.KEYCODE_BACK:
+                                                            if (ENTERPRISE_BROWSER_WEBVIEW != null &&
+                                                                    ENTERPRISE_BROWSER_WEBVIEW.canGoBack()) {
+                                                                ((ViewGroup) ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
+                                                                ENTERPRISE_BROWSER_WEBVIEW.destroy();
+                                                                ENTERPRISE_BROWSER_WEBVIEW = null;
+                                                            }
+                                                            return true;
+                                                    }
+
+                                                }
+                                                return false;
+                                            }
+                                        });
                                         ENTERPRISE_BROWSER_WEBVIEW = web;
                                         LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.MarginLayoutParams
                                                 (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
