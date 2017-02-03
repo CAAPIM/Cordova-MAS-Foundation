@@ -1,13 +1,4 @@
-/**
- * Copyright (c) 2016 CA, Inc. All rights reserved.
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- *
- */
-
 package com.ca.mas.cordova.core;
-
-import android.content.Context;
 
 import com.ca.mas.core.client.ServerClient;
 import com.ca.mas.core.error.MAGErrorCode;
@@ -17,6 +8,7 @@ import com.ca.mas.core.error.MAGServerException;
 import com.ca.mas.core.error.TargetApiException;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,25 +18,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * A {@link Command} encapsulates an action of work to be performed by a function call of Javascript,
- * {@link Command} implementations should be designed thread-safe.
+ * Created by trima09 on 27/01/2017.
  */
-public abstract class Command {
 
-    /**
-     * Execute a unit of processing work to be performed.
-     * @param context         The Application context
-     * @param args            The Cordova.exec() arguments
-     * @param callbackContext The callback context used when calling back into JavaScript
-     */
-    public abstract void execute(Context context, JSONArray args, CallbackContext callbackContext);
-
-    /**
-     * Return the action to execute
-     *
-     * @return The action to execute.
-     */
-    public abstract String getAction();
+public class MASCordovaPlugin extends CordovaPlugin {
 
     /**
      * Transform the throwable to a JSON error, used when calling back into JavaScript when for error
@@ -87,8 +64,8 @@ public abstract class Command {
         } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
             errorCode = MAGErrorCode.UNKNOWN;
 
-        } else if(throwable != null && throwable instanceof MASCordovaException){
-            errorMessage=throwable.getMessage();
+        } else if (throwable != null && throwable instanceof MASCordovaException) {
+            errorMessage = throwable.getMessage();
 
         } else {
             errorMessageDetail = throwable.getMessage();
@@ -111,18 +88,39 @@ public abstract class Command {
         return error;
     }
 
-    protected void success(CallbackContext callbackContext, boolean value) {
+    protected void success(CallbackContext callbackContext, boolean setKeepCallback) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK);
+        result.setKeepCallback(setKeepCallback);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, boolean value, boolean setKeepCallback) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+        result.setKeepCallback(setKeepCallback);
         callbackContext.sendPluginResult(result);
     }
 
-    protected void success(CallbackContext callbackContext, JSONObject resultData) {
+    protected void success(CallbackContext callbackContext, JSONObject resultData, boolean setKeepCallback) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, resultData);
+        result.setKeepCallback(setKeepCallback);
         callbackContext.sendPluginResult(result);
     }
 
-    protected void success(CallbackContext callbackContext, Object resultData) {
-        PluginResult result = new PluginResult(PluginResult.Status.OK, resultData.toString());
+    protected void success(CallbackContext callbackContext, JSONArray resultDataArray, boolean setKeepCallback) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultDataArray);
+        result.setKeepCallback(setKeepCallback);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, String resultString, boolean setKeepCallback) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, resultString);
+        result.setKeepCallback(setKeepCallback);
+        callbackContext.sendPluginResult(result);
+    }
+
+    protected void success(CallbackContext callbackContext, byte[] binary, boolean setKeepCallback) {
+        PluginResult result = new PluginResult(PluginResult.Status.OK, binary);
+        result.setKeepCallback(setKeepCallback);
         callbackContext.sendPluginResult(result);
     }
 

@@ -7,6 +7,7 @@
 
 var MASPluginMAS = require("./MASPluginMAS"),
     MASPluginUser = require("./MASPluginUser"),
+    MASPluginGroup = require("./MASPluginGroup"),
     MASPluginDevice = require("./MASPluginDevice"),
     MASPluginApplication = require("./MASPluginApplication"),
     MASPluginAuthProviders = require("./MASPluginAuthProviders");
@@ -29,7 +30,12 @@ var MASPlugin = {
     /**
      MASUser which has the interfaces mapped to the native MASUser class.
      */
-    MASUser: MASPluginUser,    
+    MASUser: MASPluginUser,
+
+    /**
+     MASGroup which has the interfaces mapped to the native MASGroup class.
+     */
+    MASGroup: MASPluginGroup,    
 
     /**
      MASDevice which has the interfaces mapped to the native MASDevice class.

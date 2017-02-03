@@ -13,7 +13,7 @@
 //
 
 #import "WebViewController.h"
-#import "MASPlugin.h"
+#import "MASPluginMAS.h"
 
 @interface WebViewController ()<UIScrollViewDelegate, UINavigationBarDelegate, UIGestureRecognizerDelegate, UIWebViewDelegate>{
     BOOL _hideStatusBar;

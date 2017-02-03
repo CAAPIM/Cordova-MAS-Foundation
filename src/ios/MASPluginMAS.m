@@ -6,11 +6,11 @@
  */
 
 //
-//  MASPlugin.m
+//  MASPluginMAS.m
 //
 
 
-#import "MASPlugin.h"
+#import "MASPluginMAS.h"
 
 #import "MASPluginAuthenticationController.h"
 
@@ -25,14 +25,14 @@
 #import "WebViewController.h"
 
 
-@interface MASPlugin()
+@interface MASPluginMAS()
 
 
 ///--------------------------------------
-/// @name Properties
+/// @name Private Properties
 ///-------------------------------------
 
-# pragma mark - Properties
+# pragma mark - Private Properties
 
 @property (nonatomic, copy) MASOTPGenerationBlock otpGenerationBlock;
 
@@ -45,12 +45,67 @@
 @end
 
 
-@implementation MASPlugin
+@implementation MASPluginMAS
 
-- (void)pluginInitialize
+
+///--------------------------------------
+/// @name Properties
+///--------------------------------------
+
+# pragma mark - Properties
+
+- (void)setConfigFileName:(CDVInvokedUrlCommand*)command
 {
-
+    //
+    // Set the configuration file name
+    // Default is msso_config.json
+    //
+    
+    CDVPluginResult *result;
+    
+    NSString *fileName = @"msso_config";
+    
+    if (command.arguments.count>0) {
+        
+        fileName = [command.arguments objectAtIndex:0];
+    }
+    
+    [MAS setConfigurationFileName:fileName];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Config file name is set"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
+
+
+- (void)setGrantFlow:(CDVInvokedUrlCommand*)command
+{
+    //
+    // Set the grant flow
+    // Password or Client credentials
+    //
+    
+    CDVPluginResult *result;
+    
+    NSNumber *grantFlowType = [NSNumber numberWithInteger:0];
+    
+    MASGrantFlow grantFlow;
+    
+    if (command.arguments.count>0) {
+        
+        grantFlowType = [command.arguments objectAtIndex:0];
+    }
+    
+    grantFlow = [grantFlowType integerValue];
+    
+    [MAS setGrantFlow:grantFlow];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Grant flow is set"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    
+}
+
 
 - (void)useNativeMASUI:(CDVInvokedUrlCommand*)command
 {
@@ -79,58 +134,12 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)setGrantFlow:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Set the grant flow
-    // Password or Client credentials
-    //
-    
-    CDVPluginResult *result;
 
-    NSNumber *grantFlowType = [NSNumber numberWithInteger:0];
+///--------------------------------------
+/// @name Authentication Listeners
+///--------------------------------------
 
-    MASGrantFlow grantFlow;
-
-    if (command.arguments.count>0) {
-
-        grantFlowType = [command.arguments objectAtIndex:0];
-    }
-
-    grantFlow = [grantFlowType integerValue];
-
-    [MAS setGrantFlow:grantFlow];
-
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Grant flow is set"];
-
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
-}
-
-
-- (void)setConfigFileName:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Set the configuration file name
-    // Default is msso_config.json
-    //
-    
-    CDVPluginResult *result;
-
-    NSString *fileName = @"msso_config";
-
-    if (command.arguments.count>0) {
-
-        fileName = [command.arguments objectAtIndex:0];
-    }
-
-    [MAS setConfigurationFileName:fileName];
-
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Config file name is set"];
-
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
+# pragma mark - Authentication Listeners
 
 - (void)setAuthenticationListener:(CDVInvokedUrlCommand*)command
 {
@@ -226,65 +235,12 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)completeAuthorization:(NSString *)callbackId {
-    
-    //
-    // Complete the QR code authorization
-    //
-    
-    CDVPluginResult *result;
-    
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
 
-    [result setKeepCallbackAsBool:YES];
-    
-    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-}
+///--------------------------------------
+/// @name OTP Listeners
+///--------------------------------------
 
-- (void)removeQRCode:(NSString *)callbackId {
-    
-    //
-    // Remove the QR code
-    //
-    
-    CDVPluginResult *result;
-    
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
-
-    [result setKeepCallbackAsBool:YES];
-    
-    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-}
-
-- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command
-{
-    //
-    //  Authorize using QR code
-    //
-    
-    __block CDVPluginResult *result;
-    
-    MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
-    [MPAuthCntrl authorizeQRCode:command.arguments[0]
-                      completion:^(BOOL completed, NSError *error) {
-        
-        if (!completed && error) {
-            
-            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                        @"errorMessage":[error localizedDescription]};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        }
-        else {
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                       messageAsString:@"QRCode authorized successfully !!"];
-        }
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
-}
-
+# pragma mark - OTP Listeners
 
 - (void)setOTPChannelSelectorListener:(CDVInvokedUrlCommand*)command
 {
@@ -296,7 +252,7 @@
     
     [MAS setOTPChannelSelectionBlock:
      ^(NSArray *supportedOTPChannels, MASOTPGenerationBlock otpGenerationBlock){
-        
+         
          self.otpGenerationBlock = otpGenerationBlock;
          
          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:supportedOTPChannels];
@@ -304,7 +260,7 @@
          [result setKeepCallbackAsBool:YES];
          
          [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+     }];
 }
 
 
@@ -354,18 +310,18 @@
     __block CDVPluginResult *result;
     
     [MAS setOTPCredentialsBlock:^(MASOTPFetchCredentialsBlock otpBlock, NSError *otpError){
-         
-         self.otpBlock = otpBlock;
         
-         NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[otpError code]],
+        self.otpBlock = otpBlock;
+        
+        NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[otpError code]],
                                     @"errorMessage":[otpError localizedDescription],
                                     @"errorInfo":[otpError userInfo]};
         
-         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:errorInfo];
-         
-         [result setKeepCallbackAsBool:YES];
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:errorInfo];
+        
+        [result setKeepCallbackAsBool:YES];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
@@ -406,6 +362,12 @@
 }
 
 
+///--------------------------------------
+/// @name Start & Stop
+///--------------------------------------
+
+# pragma mark - Start & Stop
+
 - (void)start:(CDVInvokedUrlCommand*)command
 {
     //
@@ -413,21 +375,21 @@
     // Returns error info if it fails
     //
     __block CDVPluginResult *result;
-
+    
     [MAS start:^(BOOL completed, NSError *error) {
         if (error) {
-
+            
             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                         @"errorMessage":[error localizedDescription],
                                         @"errorInfo":[error userInfo]};
-
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+            
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
-
+        
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
-
+        
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
@@ -441,25 +403,25 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     if ([command.arguments count] > 0 && [command.arguments count] == 1)
     {
         BOOL defaultConfiguration = [[command.arguments objectAtIndex:0] boolValue];
-
+        
         [MAS startWithDefaultConfiguration:defaultConfiguration completion:^(BOOL completed, NSError *error) {
             if (error) {
-
+                
                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                             @"errorMessage":[error localizedDescription],
                                             @"errorInfo":[error userInfo]};
-
+                
                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                
                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             }
-
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
-
+            
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }];
     }
@@ -474,25 +436,25 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     if ([command.arguments count] > 0 && [command.arguments count] == 1)
     {
         NSDictionary *jsonObject = [[command.arguments objectAtIndex:0] isKindOfClass:[NSNull class]] ? nil : [command.arguments objectAtIndex:0];
-
+        
         [MAS startWithJSON:jsonObject completion:^(BOOL completed, NSError *error) {
             if (error) {
-
+                
                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                             @"errorMessage":[error localizedDescription],
                                             @"errorInfo":[error userInfo]};
-
+                
                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                
                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             }
-
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
-
+            
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }];
     }
@@ -514,26 +476,59 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     [MAS stop:^(BOOL completed, NSError *error) {
-
+        
         if (error) {
-
+            
             NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                         @"errorMessage":[error localizedDescription],
                                         @"errorInfo":[error userInfo]};
-
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+            
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }
-
+        
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Stop complete"];
-
+        
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
+
+///--------------------------------------
+/// @name Gateway Monitoring
+///--------------------------------------
+
+# pragma mark - Gateway Monitoring
+
+- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command
+{
+    //
+    // Check if gateway is reachable
+    //
+    
+    CDVPluginResult *result;
+    
+    if ([MAS gatewayIsReachable])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[MAS gatewayIsReachable]];
+    }
+    else {
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+///--------------------------------------
+/// @name HTTP Requests
+///--------------------------------------
+
+# pragma mark - HTTP Requests
 
 - (void)getFromPath:(CDVInvokedUrlCommand*)command
 {
@@ -542,20 +537,20 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     NSString *path = @"";
     NSDictionary *parametersInfo = nil;
     NSDictionary *headersInfo = nil;
     MASRequestResponseType requestType = MASRequestResponseTypeJson;
     MASRequestResponseType responseType = MASRequestResponseTypeJson;
-
+    
     if (command.arguments.count>0 && command.arguments.count==5)
     {
         //
         // Path
         //
         path = [command.arguments objectAtIndex:0];
-
+        
         //
         // parameters
         //
@@ -563,7 +558,7 @@
         {
             parametersInfo = [command.arguments objectAtIndex:1];
         }
-
+        
         //
         // headers
         //
@@ -571,39 +566,39 @@
         {
             headersInfo = [command.arguments objectAtIndex:2];
         }
-
+        
         //
         // request type
         //
         if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
             requestType = [[command.arguments objectAtIndex:3] intValue];
         }
-
+        
         //
         // response type
         //
         if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
             responseType = [[command.arguments objectAtIndex:4] intValue];
         }
-
+        
         [MAS getFrom:path
       withParameters:parametersInfo
           andHeaders:headersInfo
          requestType:requestType
         responseType:responseType
           completion:^(NSDictionary *responseInfo, NSError *error) {
-
+              
               //
               // Error case
               //
               if (error) {
-
+                  
                   //
                   // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
                   // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
                   //
                   NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
-
+                  
                   //
                   // Only for the case where userInfo object contains response body, and the data type is NSData
                   //
@@ -611,18 +606,18 @@
                   {
                       errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
                   }
-
+                  
                   NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                               @"errorMessage":[error localizedDescription],
                                               @"errorInfo":errorUserInfoCopy};
-
+                  
                   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                  
                   return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
               }
-
+              
               NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
-
+              
               //
               // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
               // Check if the response body is NSData type, and convert it into NSString.
@@ -630,18 +625,18 @@
               if ([responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
               {
                   NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
-
+                  
                   [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
                   [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
               }
               else {
                   newResult = [responseInfo mutableCopy];
               }
-
+              
               result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
-
+              
               return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+              
           }];
     }
 }
@@ -654,20 +649,20 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     NSString *path = @"";
     NSDictionary *parametersInfo = @{};
     NSDictionary *headersInfo = @{};
     MASRequestResponseType requestType = MASRequestResponseTypeJson;
     MASRequestResponseType responseType = MASRequestResponseTypeJson;
-
+    
     if (command.arguments.count>0 && command.arguments.count==5)
     {
         //
         // Path
         //
         path = [command.arguments objectAtIndex:0];
-
+        
         //
         // parameters
         //
@@ -675,7 +670,7 @@
         {
             parametersInfo = [command.arguments objectAtIndex:1];
         }
-
+        
         //
         // headers
         //
@@ -683,39 +678,39 @@
         {
             headersInfo = [command.arguments objectAtIndex:2];
         }
-
+        
         //
         // request type
         //
         if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
             requestType = [[command.arguments objectAtIndex:3] intValue];
         }
-
+        
         //
         // response type
         //
         if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
             responseType = [[command.arguments objectAtIndex:4] intValue];
         }
-
+        
         [MAS deleteFrom:path
          withParameters:parametersInfo
              andHeaders:headersInfo
             requestType:requestType
            responseType:responseType
              completion:^(NSDictionary *responseInfo, NSError *error) {
-
+                 
                  //
                  // Error case
                  //
                  if (error) {
-
+                     
                      //
                      // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
                      // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
                      //
                      NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
-
+                     
                      //
                      // Only for the case where userInfo object contains response body, and the data type is NSData
                      //
@@ -723,18 +718,18 @@
                      {
                          errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
                      }
-
+                     
                      NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                                  @"errorMessage":[error localizedDescription],
                                                  @"errorInfo":errorUserInfoCopy};
-
+                     
                      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                     
                      return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
                  }
-
+                 
                  NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
-
+                 
                  //
                  // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
                  // Check if the response body is NSData type, and convert it into NSString.
@@ -742,18 +737,18 @@
                  if ([responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
                  {
                      NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
-
+                     
                      [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
                      [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
                  }
                  else {
                      newResult = [responseInfo mutableCopy];
                  }
-
+                 
                  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
-
+                 
                  return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+                 
              }];
     }
 }
@@ -764,22 +759,22 @@
     //
     // Make a post call with parameters, headers, request type and response type
     //
-
+    
     __block CDVPluginResult *result;
-
+    
     NSString *path = @"";
     NSDictionary *parametersInfo = @{};
     NSDictionary *headersInfo = @{};
     MASRequestResponseType requestType = MASRequestResponseTypeJson;
     MASRequestResponseType responseType = MASRequestResponseTypeJson;
-
+    
     if (command.arguments.count>0 && command.arguments.count==5)
     {
         //
         // Path
         //
         path = [command.arguments objectAtIndex:0];
-
+        
         //
         // parameters
         //
@@ -787,7 +782,7 @@
         {
             parametersInfo = [command.arguments objectAtIndex:1];
         }
-
+        
         //
         // headers
         //
@@ -795,39 +790,39 @@
         {
             headersInfo = [command.arguments objectAtIndex:2];
         }
-
+        
         //
         // request type
         //
         if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
             requestType = [[command.arguments objectAtIndex:3] intValue];
         }
-
+        
         //
         // response type
         //
         if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
             responseType = [[command.arguments objectAtIndex:4] intValue];
         }
-
+        
         [MAS postTo:path
      withParameters:parametersInfo
          andHeaders:headersInfo
         requestType:requestType
        responseType:responseType
          completion:^(NSDictionary *responseInfo, NSError *error) {
-
+             
              //
              // Error case
              //
              if (error) {
-
+                 
                  //
                  // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
                  // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
                  //
                  NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
-
+                 
                  //
                  // Only for the case where userInfo object contains response body, and the data type is NSData
                  //
@@ -835,18 +830,18 @@
                  {
                      errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
                  }
-
+                 
                  NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                              @"errorMessage":[error localizedDescription],
                                              @"errorInfo":errorUserInfoCopy};
-
+                 
                  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                 
                  return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
              }
-
+             
              NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
-
+             
              //
              // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
              // Check if the response body is NSData type, and convert it into NSString.
@@ -854,18 +849,18 @@
              if ([responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
              {
                  NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
-
+                 
                  [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
                  [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
              }
              else {
                  newResult = [responseInfo mutableCopy];
              }
-
+             
              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
-
+             
              return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+             
          }];
     }
 }
@@ -878,20 +873,20 @@
     //
     
     __block CDVPluginResult *result;
-
+    
     NSString *path = @"";
     NSDictionary *parametersInfo = @{};
     NSDictionary *headersInfo = @{};
     MASRequestResponseType requestType = MASRequestResponseTypeJson;
     MASRequestResponseType responseType = MASRequestResponseTypeJson;
-
+    
     if (command.arguments.count>0 && command.arguments.count==5)
     {
         //
         // Path
         //
         path = [command.arguments objectAtIndex:0];
-
+        
         //
         // parameters
         //
@@ -899,7 +894,7 @@
         {
             parametersInfo = [command.arguments objectAtIndex:1];
         }
-
+        
         //
         // headers
         //
@@ -907,39 +902,39 @@
         {
             headersInfo = [command.arguments objectAtIndex:2];
         }
-
+        
         //
         // request type
         //
         if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
             requestType = [[command.arguments objectAtIndex:3] intValue];
         }
-
+        
         //
         // response type
         //
         if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
             responseType = [[command.arguments objectAtIndex:4] intValue];
         }
-
+        
         [MAS putTo:path
     withParameters:parametersInfo
         andHeaders:headersInfo
        requestType:requestType
       responseType:responseType
         completion:^(NSDictionary *responseInfo, NSError *error) {
-
+            
             //
             // Error case
             //
             if (error) {
-
+                
                 //
                 // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
                 // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
                 //
                 NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
-
+                
                 //
                 // Only for the case where userInfo object contains response body, and the data type is NSData
                 //
@@ -947,18 +942,18 @@
                 {
                     errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
                 }
-
+                
                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                             @"errorMessage":[error localizedDescription],
                                             @"errorInfo":errorUserInfoCopy};
-
+                
                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                
                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             }
-
+            
             NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
-
+            
             //
             // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
             // Check if the response body is NSData type, and convert it into NSString.
@@ -966,18 +961,18 @@
             if ([responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
             {
                 NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
-
+                
                 [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
                 [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
             }
             else {
                 newResult = [responseInfo mutableCopy];
             }
-
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
-
+            
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+            
         }];
     }
 }
@@ -988,22 +983,22 @@
     //
     // Make a patch call with parameters, headers, request type and response type
     //
-
+    
     __block CDVPluginResult *result;
-
+    
     NSString *path = @"";
     NSDictionary *parametersInfo = @{};
     NSDictionary *headersInfo = @{};
     MASRequestResponseType requestType = MASRequestResponseTypeJson;
     MASRequestResponseType responseType = MASRequestResponseTypeJson;
-
+    
     if (command.arguments.count>0 && command.arguments.count==5)
     {
         //
         // Path
         //
         path = [command.arguments objectAtIndex:0];
-
+        
         //
         // parameters
         //
@@ -1011,7 +1006,7 @@
         {
             parametersInfo = [command.arguments objectAtIndex:1];
         }
-
+        
         //
         // headers
         //
@@ -1019,39 +1014,39 @@
         {
             headersInfo = [command.arguments objectAtIndex:2];
         }
-
+        
         //
         // request type
         //
         if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
             requestType = [[command.arguments objectAtIndex:3] intValue];
         }
-
+        
         //
         // response type
         //
         if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
             responseType = [[command.arguments objectAtIndex:4] intValue];
         }
-
+        
         [MAS patchTo:path
       withParameters:parametersInfo
           andHeaders:headersInfo
          requestType:requestType
         responseType:responseType
           completion:^(NSDictionary *responseInfo, NSError *error) {
-
+              
               //
               // Error case
               //
               if (error) {
-
+                  
                   //
                   // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
                   // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
                   //
                   NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
-
+                  
                   //
                   // Only for the case where userInfo object contains response body, and the data type is NSData
                   //
@@ -1059,18 +1054,18 @@
                   {
                       errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
                   }
-
+                  
                   NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
                                               @"errorMessage":[error localizedDescription],
                                               @"errorInfo":errorUserInfoCopy};
-
+                  
                   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
+                  
                   return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
               }
-
+              
               NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
-
+              
               //
               // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
               // Check if the response body is NSData type, and convert it into NSString.
@@ -1078,398 +1073,88 @@
               if ([responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
               {
                   NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
-
+                  
                   [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
                   [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
               }
               else {
                   newResult = [responseInfo mutableCopy];
               }
-
+              
               result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
-
+              
               return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+              
           }];
     }
 }
 
-- (void)deregister:(CDVInvokedUrlCommand*)command
+
+///--------------------------------------
+/// @name Proximity Login
+///--------------------------------------
+
+# pragma mark - Proximity Login
+
+- (void)authorizeQRCode:(CDVInvokedUrlCommand *)command
 {
     //
-    // Deregister the device from the server
-    // Returns error info if it fails
+    //  Authorize using QR code
     //
     
     __block CDVPluginResult *result;
-
-    if ([MASDevice currentDevice])
-    {
-        [[MASDevice currentDevice] deregisterWithCompletion:^(BOOL completed, NSError *error) {
-
-            if (error) {
-
-                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
-                                            @"errorMessage":[error localizedDescription],
-                                            @"errorInfo":[error userInfo]};
-
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
-                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-            }
-
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Deregister complete"];
-
-            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        }];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-
-- (void)getCurrentProviders:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Get a list of login providers
-    //
-
-    CDVPluginResult *result;
-
-    NSArray *listOfProviders = [[MASAuthenticationProviders currentProviders] providers];
-    NSMutableArray *providersJson = nil;
-    if(listOfProviders) {
-        for(id object in listOfProviders)
-        {
-            MASAuthenticationProvider *provider = object;
-            NSMutableDictionary *entry = [[NSMutableDictionary alloc] init];
-            
-            [entry setObject:[provider identifier] forKey:@"identifier"];
-            [entry setObject:[provider authenticationUrl] forKey:@"authUrl"];
-            [entry setObject:[provider pollUrl] forKey:@"pollUrl"];
-            [entry setObject:[NSNumber numberWithBool:[provider isGoogle]] forKey:@"isGoogle"];
-            [entry setObject:[NSNumber numberWithBool:[provider isFacebook]] forKey:@"isFacebook"];
-            [entry setObject:[NSNumber numberWithBool:[provider isLinkedIn]] forKey:@"isLinkedIn"];
-            [entry setObject:[NSNumber numberWithBool:[provider isQrCode]] forKey:@"isQrCode"];
-            [entry setObject:[NSNumber numberWithBool:[provider isEnterprise]] forKey:@"isEnterprise"];
-            [entry setObject:[NSNumber numberWithBool:[provider isSalesforce]] forKey:@"isSalesforce"];
-            [providersJson addObject:entry];
-        }
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:providersJson];
-    }
-    else {
-        NSDictionary *errorInfo = @{@"errorMessage":@"No providers found"};
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)retrieveAuthenticationProviderForProximityLogin:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Get a list of proximity providers
-    //
     
-    CDVPluginResult *result;
+    MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+    [MPAuthCntrl authorizeQRCode:command.arguments[0]
+                      completion:^(BOOL completed, NSError *error) {
+                          
+                          if (!completed && error) {
+                              
+                              NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                          @"errorMessage":[error localizedDescription]};
+                              
+                              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                          }
+                          else {
+                              
+                              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                         messageAsString:@"QRCode authorized successfully !!"];
+                          }
+                          
+                          return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                      }];
+}
 
-    MASAuthenticationProvider *proximityProvider = [[MASAuthenticationProviders currentProviders] retrieveAuthenticationProviderForProximityLogin];
-    NSMutableDictionary *entry = [[NSMutableDictionary alloc] init];
-    if(proximityProvider){
-        [entry setObject:[proximityProvider identifier] forKey:@"identifier"];
-        [entry setObject:[proximityProvider authenticationUrl] forKey:@"authUrl"];
-        [entry setObject:[proximityProvider pollUrl] forKey:@"pollUrl"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isGoogle]] forKey:@"isGoogle"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isFacebook]] forKey:@"isFacebook"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isLinkedIn]] forKey:@"isLinkedIn"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isQrCode]] forKey:@"isQrCode"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isEnterprise]] forKey:@"isEnterprise"];
-        [entry setObject:[NSNumber numberWithBool:[proximityProvider isSalesforce]] forKey:@"isSalesforce"];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:entry];
-    }
+
+- (void)completeAuthorization:(NSString *)callbackId {
     
-    else {
-        NSDictionary *errorInfo = @{@"errorMessage":@"No proximity provider found"};
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)getCurrentDevice:(CDVInvokedUrlCommand*)command
-{
     //
-    // Get details of the current device
-    // Returns device identifier
-    //
-    
-    CDVPluginResult *result;
-
-    if ([MASDevice currentDevice])
-    {
-        NSDictionary *currentDevice = @{@"isRegistered": [NSNumber numberWithBool:[[MASDevice currentDevice] isRegistered]],
-                                          @"identifier":[[MASDevice currentDevice] identifier]};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:currentDevice];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"No device found"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-
-- (void)isDeviceRegistered:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Checks if device is registered
-    //
-    
-    CDVPluginResult *result;
-
-    if ([MASDevice currentDevice])
-    {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASDevice currentDevice]isRegistered]];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Returns device identifier
-    //
-
-    CDVPluginResult *result;
-
-    if ([MASDevice currentDevice])
-    {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[MASDevice currentDevice]identifier]];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Checks if application is authenticated
-    //
-    
-    CDVPluginResult *result;
-
-    if ([MASApplication currentApplication])
-    {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[[MASApplication currentApplication] isAuthenticated]];
-    }
-    else {
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)launchApp:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Launches an enterprise app
+    // Complete the QR code authorization
     //
     
     CDVPluginResult *result;
     
-    NSString *appId = [command.arguments objectAtIndex:0];
-    NSString *appUrl = nil;
-    MASApplication *app = nil;
-    MASApplication *currentApp = nil;
-    for(app in _currentEnterpriseApps){
-        if([app.identifier isEqualToString:appId]){
-            currentApp = app;
-        }
-    }
-    if([currentApp.nativeUrl length]) {
-        
-        appUrl = currentApp.nativeUrl;
-        BOOL canOpenUrl = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appUrl]];
-        if (canOpenUrl)
-        {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appUrl]];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-        }
-        else {
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
-        }
-    }
-    else if ([currentApp.authUrl length]) {
-        
-        if (![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"]) {
-            
-            UIStoryboard*  sb = [UIStoryboard storyboardWithName:@"EnterpriseBrowser"
-                                                          bundle:nil];
-            WebViewController* vc = [sb instantiateViewControllerWithIdentifier:@"EBViewController"];
-            vc.app = currentApp;
-            
-            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-            
-            [self.viewController presentViewController:nc animated:YES completion:nil];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-        }
-        else {
-        
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Host is currently not reachable"];
-        }
-    }
-    else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
-    }
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
+
+    [result setKeepCallbackAsBool:YES];
     
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 
-- (void)authenticationStatus:(CDVInvokedUrlCommand*)command
-{
+- (void)removeQRCode:(NSString *)callbackId {
+    
     //
-    // Returns the authentication status
+    // Remove the QR code
     //
     
     CDVPluginResult *result;
-
-    if ([MASApplication currentApplication])
-    {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:[[MASApplication currentApplication] authenticationStatus]];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-- (void)gatewayIsReachable:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Check if gateway is reachable
-    //
     
-    CDVPluginResult *result;
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
 
-    if ([MAS gatewayIsReachable])
-    {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[MAS gatewayIsReachable]];
-    }
-    else {
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];       
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
+    [result setKeepCallbackAsBool:YES];
     
-- (void)retrieveEnterpriseApps:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Get the list of enterprise apps
-    //
-    
-    __block CDVPluginResult *result;
-    __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
-    if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
-    {
-        [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
-            _currentEnterpriseApps = objects;
-            if(error){
-                
-                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                            @"errorMessage":[error localizedDescription],
-                                            @"errorInfo":[error userInfo]};
-                
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-            }
-            else{
-                //[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:objects];
-                for(id object in _currentEnterpriseApps){
-                    MASApplication *application = object;
-                    NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
-                    [app setObject:application.name forKey:@"appName"];
-                    [app setObject:application.identifier forKey:@"identifier"];
-                    [app setObject:application.nativeUrl forKey:@"nativeUrl"];
-                    [app setObject:application.authUrl forKey:@"authUrl"];
-                    [app setObject:application.iconUrl forKey:@"iconUrl"];
-                    [enterpriseApps addObject:app];
-                }
-                
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:enterpriseApps];
-            }
-
-            [result setKeepCallbackAsBool:YES];
-            
-            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = nil;
-        if ([[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"])
-            errorInfo = @{@"errorMessage":@"Host is currently not reachable"};
-        else if (![MASApplication currentApplication])
-            errorInfo = @{@"errorMessage":@"Application not initialized"};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-
-- (void)resetLocally:(CDVInvokedUrlCommand*)command
-{
-    //
-    // Reset cached data stored locally
-    //
-    
-    CDVPluginResult *result;
-
-    if ([MASDevice currentDevice])
-    {
-        [[MASDevice currentDevice] resetLocally];
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-    }
-    else {
-
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
-
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-    }
-
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 

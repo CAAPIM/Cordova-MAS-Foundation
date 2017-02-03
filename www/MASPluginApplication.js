@@ -10,80 +10,84 @@ var MASPluginUtils = require("./MASPluginUtils"),
  
 var MASPluginApplication = function() {
 
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Constants
+    ///------------------------------------------------------------------------------------------------------------------
+
     this.MASAuthenticationStatus = {
-        
         /**
          *  MASAuthenticationStatusNotLoggedIn represents that the app has not been authenticated.
          */    
         MASAuthenticationStatusNotLoggedIn: -1,
-        
         /**
          *  MASAuthenticationStatusLoginWithUser represents that the app has been authenticated with user.
          */
         MASAuthenticationStatusLoginWithUser: 0,
-
         /**
          *  MASAuthenticationStatusLoginAnonymously represents that the app has been authenticated with client credentials.
          */ 
         MASAuthenticationStatusLoginAnonymously: 1
-    },
-        
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
+
+    this.isApplicationAuthenticated = function(successHandler, errorHandler) {
+
+        return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "isApplicationAuthenticated", []);
+    };
+    
+    this.authenticationStatus  = function(successHandler, errorHandler) {
+
+        return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "authenticationStatus", []);
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Enterprise App
+    ///------------------------------------------------------------------------------------------------------------------
+
     /**
-     this.getIdentifier = function(successHandler, errorHandler)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getIdentifier",[]);
-     };
-     
-     this.getName = function(successHandler, errorHandler,args)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getName",[args]);
-     };
-     
-     this.getIconUrl = function(successHandler, errorHandler)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getIconUrl",[]);
-     };
-     
-     this.getAuthUrl = function(successHandler, errorHandler)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getAuthUrl",[]);
-     };
-     
-     this.getNativeUri = function(successHandler, errorHandler)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getNativeUri",[]);
-     };
-     
-     this.getCustom = function(successHandler, errorHandler)
-     {
-         return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getCustom",[]);
-     };
-     */
-
-        this.retrieveEnterpriseApps = function(successHandler, errorHandler) {
-         
-            return Cordova.exec(successHandler, errorHandler, "MASPlugin", "retrieveEnterpriseApps", []);
-        };
-
-        this.launchApp = function(successHandler, errorHandler, appId) {
+    * Launches the selected Enterprise App
+    */
+    this.launchApp = function(successHandler, errorHandler, appId) {
             
-            document.addEventListener("backbutton", MASPluginUtils.onBackKeyPressEvent, false);
+        document.addEventListener("backbutton", MASPluginUtils.onBackKeyPressEvent, false);
             
-            return Cordova.exec(successHandler, errorHandler, "MASPlugin", "launchApp", [appId]);
-        };
-        
-        this.initEnterpriseBrowser = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "launchApp", [appId]);
+    };
+
+
+    /**
+    * Retrieves all the enterprise apps in form of JSON from the server. It includes both native and web apps.
+    */
+    this.retrieveEnterpriseApps = function(successHandler, errorHandler) {
+            
+        return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "retrieveEnterpriseApps", []);
+    };
+    
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Enterprise Browser
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+    * Initializes the Enterprise Browser window and populates it with the native and web apps registered in the server.
+    */
+    this.initEnterpriseBrowser = function(successHandler, errorHandler) {
             
             var result = Cordova.exec(function(result) {
-                
                 MASPluginUtils.MASPopupUI(MASPluginConstants.MASEnterpriseBrowserPage, function() {}, function() {
                     displayApps(result);
                     successHandler(true);
                 });
-            }, errorHandler, "MASPlugin", "retrieveEnterpriseApps", []);
+            }, errorHandler, "MASPluginApplication", "retrieveEnterpriseApps", []);
             
             return result;
-        };
-    }
+    };
+}
 
 module.exports = MASPluginApplication;

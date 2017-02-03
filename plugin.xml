@@ -61,18 +61,38 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
-            <feature name="MASPlugin" >
-                <param name="ios-package" value="MASPlugin"/>
+            <feature name="MASPluginMAS" >
+                <param name="ios-package" value="MASPluginMAS"/>
             </feature>
 			<feature name="MASPluginUser" >
                 <param name="ios-package" value="MASPluginUser"/>
             </feature>
+            <feature name="MASPluginGroup" >
+                <param name="ios-package" value="MASPluginGroup"/>
+            </feature>
+            <feature name="MASPluginDevice" >
+                <param name="ios-package" value="MASPluginDevice"/>
+            </feature>
+            <feature name="MASPluginApplication" >
+                <param name="ios-package" value="MASPluginApplication"/>
+            </feature>
+            <feature name="MASPluginAuthProviders" >
+                <param name="ios-package" value="MASPluginAuthProviders"/>
+            </feature>
         </config-file>
         
-        <header-file src="src/ios/MASPlugin.h" />
-        <source-file src="src/ios/MASPlugin.m" />
+        <header-file src="src/ios/MASPluginMAS.h" />
+        <source-file src="src/ios/MASPluginMAS.m" />
         <header-file src="src/ios/MASPluginUser.h" />
         <source-file src="src/ios/MASPluginUser.m" />
+        <header-file src="src/ios/MASPluginGroup.h" />
+        <source-file src="src/ios/MASPluginGroup.m" />
+        <header-file src="src/ios/MASPluginDevice.h" />
+        <source-file src="src/ios/MASPluginDevice.m" />
+        <header-file src="src/ios/MASPluginApplication.h" />
+        <source-file src="src/ios/MASPluginApplication.m" />
+        <header-file src="src/ios/MASPluginAuthProviders.h" />
+        <source-file src="src/ios/MASPluginAuthProviders.m" />
         <header-file src="src/ios/MASPluginAuthenticationController.h" />
         <source-file src="src/ios/MASPluginAuthenticationController.m" />
         <header-file src="src/ios/WebViewController.h" />
@@ -84,11 +104,17 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- Android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="MASPlugin" >
-                <param name="android-package" value="com.ca.mas.cordova.core.MASPlugin"/>
+            <feature name="MASPluginMAS" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginMAS"/>
             </feature>
 			<feature name="MASPluginUser" >
                 <param name="android-package" value="com.ca.mas.cordova.core.MASPluginUser"/>
+            </feature>
+			<feature name="MASPluginDevice" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginDevice"/>
+            </feature>
+			<feature name="MASPluginApplication" >
+                <param name="android-package" value="com.ca.mas.cordova.core.MASPluginApplication"/>
             </feature>
         </config-file>
 
@@ -96,20 +122,20 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.INTERNET"/>
         </config-file>
 
-        <source-file src="src/android/Command.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASCommand.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASDeviceCommand.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
-        <source-file src="src/android/MASApplicationCommand.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
+		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPluginDevice.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASPluginApplication.java" target-dir="src/com/ca/mas/cordova/core" />
+        <source-file src="src/android/MASCordovaPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />
-		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
+
 
         <framework src="com.madgag:scprov-jdk15on:1.47.0.2" />
         <framework src="com.madgag:sc-light-jdk15on:1.47.0.2" />
         <framework src="com.google.zxing:core:3.2.0" /> 
-        <framework src="com.android.support:appcompat-v7:23+" />
-        <framework src="com.android.support:design:24.2.1" />
+        <framework src="com.android.support:appcompat-v7:24.2.1" />
+		<framework src="com.android.support:design:24.2.1" />
         <framework src="com.android.support:gridlayout-v7:24.2.1" />
     </platform>
 </plugin>

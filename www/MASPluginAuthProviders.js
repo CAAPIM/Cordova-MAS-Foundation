@@ -7,14 +7,16 @@
 
 var MASPluginAuthProviders = function() {
     
+
     this.getCurrentProviders = function(successHandler, errorHandler) {
     
-        return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "getCurrentProviders", []);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginAuthProviders", "getCurrentProviders", []);
     };
+
 
     this.retrieveAuthenticationProviderForProximityLogin = function(successHandler, errorHandler) {
     
-        return Cordova.exec(successHandler, errorHandler, "com.ca.apim.MASPlugin", "retrieveAuthenticationProviderForProximityLogin", []);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginAuthProviders", "retrieveAuthenticationProviderForProximityLogin", []);
     };
 }
 
