@@ -171,10 +171,16 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                             protected WebViewClient getWebViewClient() {
                                                 final WebViewClient webViewClient = super.getWebViewClient();
                                                 return new WebViewClient() {
+                                                    private boolean sslErrorAlreadyReceived = false;
+
                                                     @Override
                                                     public void onReceivedSslError(WebView webView, final SslErrorHandler handler, SslError error) {
+                                                        if (sslErrorAlreadyReceived) {
+                                                            return;
+                                                        }
+                                                        sslErrorAlreadyReceived = true;
                                                         AlertDialog.Builder builder = new AlertDialog.Builder(webView.getContext());
-                                                        AlertDialog ad = builder.create();
+                                                        final AlertDialog ad = builder.create();
                                                         String message;
                                                         switch (error.getPrimaryError()) {
                                                             case SslError.SSL_UNTRUSTED:
@@ -209,6 +215,12 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 handler.cancel();
+                                                                if (ENTERPRISE_BROWSER_WEBVIEW != null) {
+                                                                    ((ViewGroup) ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
+                                                                    ENTERPRISE_BROWSER_WEBVIEW.destroy();
+                                                                    ENTERPRISE_BROWSER_WEBVIEW = null;
+
+                                                                }
                                                             }
                                                         });
                                                         ad.show();
