@@ -2,6 +2,7 @@
 
 ### Bug fixes
 - An Enterprise browser webapp on back button press will now go back to Enterprise Browser base view (Android only). [DE273428]
+- On cancelling the SSL error verify dialog screen goes blank. Fixed to move back to EB window (Android only). [DE273690]
 - Improved Error handling.
 
 ### New features
