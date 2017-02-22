@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MASPluginCallbacks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MASPluginCallbacks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+ 
+var MASPluginConstants = require("./MASPluginConstants"),
+    MASPluginUtils = require("./MASPluginUtils");
+	
+var MASPluginCallbacks = {
+
+
+	/** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
+     * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
+     */
+    MASAuthenticationCallback: function(result) {
+        
+        var pageToLoad = MASPluginConstants.MASLoginPage;
+
+        if (typeof result !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(result) &amp;&amp;
+            typeof result.requestId !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(result.requestId) &amp;&amp;
+            result.requestType === "Login") 
+        {
+            MASPluginConstants.MASLoginAuthRequestId = result.requestId;
+        }
+
+        /*if (typeof result !== 'undefined' &amp;&amp; !isEmpty(result) &amp;&amp;
+            typeof result.requestType !== 'undefined' &amp;&amp; !isEmpty(result.requestType) &amp;&amp;
+            result.requestType === "OTP") {
+            if (typeof result.isInvalidOtp !== 'undefined' &amp;&amp; !isEmpty(result.isInvalidOtp) &amp;&amp; result.isInvalidOtp == "true") {
+                MASPlugin.MASConfig.MASOTPAuthenticationCallback(result);
+            } else {
+                if (result.channels == null) {
+                    console.log("Channel list is empty");
+                    return;
+                }
+                var channelsCSV = result.channels;
+                var channels = channelsCSV.split(',');
+                MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
+            }
+        } else */
+
+        if (result === "removeQRCode") 
+        {
+            document.getElementById('qr-code').style.display = 'none';
+        } 
+        else if (result === "qrCodeAuthorizationComplete") 
+        {
+            $('#popUp').remove();
+        } 
+        else
+        {
+            if(pageToLoad === MASPluginConstants.MASLoginPage &amp;&amp; 
+            	document.getElementById('popUp') === null)
+            {
+                MASPluginUtils.MASPopupUI(
+                	pageToLoad, 
+                	function() { 
+
+                		$('#popUp').remove(); 
+                	}, 
+                	function() {
+
+                		document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"]; 
+                	}
+                );
+            }
+        }
+    },
+
+
+    /**
+     * Callback which is used to prompt for the OTP provided channels
+     * @param otpChannels available channels array that will be recieved from server
+     * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
+     */
+    MASOTPChannelSelectCallback: function(otpChannels) 
+    {
+        MASPluginUtils.MASPopupUI(
+        	MASPluginConstants.MASOTPChannelsPage, 
+        	function() { $('#popUp').remove(); }, 
+        	function() {
+            
+            	if (otpChannels.length > 1) 
+            	{              
+                	for (i = 0; i &lt; otpChannels.length; i++) 
+                	{                 
+                    	if (document.getElementById(otpChannels[i])) 
+                    	{
+                        	document.getElementById(otpChannels[i]).style.display = 'block';
+                    	}
+                	}
+            	}
+        	}
+        );
+    },	
+
+
+    /**
+     * Callback for the OTP Listener
+     * @param error message that is recieved from server for invalid attempt
+     * Note: This has to be called from android if otp is invalid.
+     */
+    MASOTPAuthenticationCallback: function(error) 
+    {
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage, 
+       	function() {
+
+            $('#popUp').remove();
+        }, 
+        function() {
+
+            if(error.errorMessage !== "Enter the OTP")
+                document.getElementById("CA-Title").style.color = "red";
+            document.getElementById("CA-Title").innerHTML = error.errorMessage;			
+        });
+    }
+};
+
+module.exports = MASPluginCallbacks;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#MASPluginConstants">MASPluginConstants</a></li><li><a href="global.html#MASPluginMAS">MASPluginMAS</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Wed Feb 22 2017 14:40:05 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MASPluginUser.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MASPluginUser.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* *
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
+ var MASPluginUser = function(masPluginUser) {
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
+    //console.log(JSON.stringify(masPluginUser));
+    /**
+     *  The username of the user
+     *  @member {string}
+     */
+
+    this.userName = masPluginUser.userName;
+
+    /**
+     *  The family name of the user
+     *  @member {string}
+     */
+     this.familyName = masPluginUser.familyName;
+
+    /**
+     *  The given name of the user
+     *  @member {string}
+     */
+     this.givenName = masPluginUser.givenName;
+
+    /**
+     *  The formatted name of the user
+     *  @member {string}
+     */   
+     this.formattedName = masPluginUser.formattedName;
+
+    /**
+     *  List of the email addresses of the user
+     *  @member {array}
+     */  
+     this.emailAddresses = masPluginUser.emailAddresses;
+
+    /**
+     *  List of the phone numbers of the user
+     *  @member {array}
+     */    
+     this.phoneNumbers = masPluginUser.phoneNumbers;
+
+    /**
+     *  List of the addresses of the user
+     *  @member {array}
+     */ 
+     this.addresses = masPluginUser.addresses;
+
+     /**
+     *  Returns base64 string of the user's photo
+     *  @member {string}
+     */ 
+     this.photos = masPluginUser.photos;
+
+     /**
+     *  List of the groups the user is in
+     *  @member {array}
+     */ 
+     this.groups = masPluginUser.groups;
+
+     /**
+     *  Checks if the user is active
+     *  @member {bool}
+     */ 
+     this.active = masPluginUser.active;
+
+     /**
+     *  Boolean indicator of whether the MASPluginUser object is currently authenticated user or not.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.isCurrentUser = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isCurrentUser", []);
+     };
+
+    /**
+     *  Boolean indicator of whether the MASPluginUser object is authenticated or not
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.isAuthenticated = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isAuthenticated", []);
+     };
+
+    /**
+     *  Boolean indicator of whether the currently authenticated MASPluginUser object is locked or not
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.isSessionLocked = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isSessionLocked", []);
+     };
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Current User - Lock/Unlock Session
+    ///------------------------------------------------------------------------------------------------------------------
+    
+    /**
+     *  Locks the current session 
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+    this.lockSession = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "lockSession", []);
+    }
+
+    /**
+     *  Unlocks the current session 
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+    this.unlockSession = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSession", []);
+    }
+
+    /**
+     *  Unlocks the current session with a message to the user 
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     *  @param {string} message message to the user
+     */
+    this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSessionWithMessage", [message]);
+    }
+
+    /**
+     *  Removes the session lock 
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+    this.removeSessionLock = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "removeSessionLock", []);
+    }
+
+    /**
+     log off user.
+     */
+     this.logout = function(successHandler, errorHandler) {
+        return Cordova.exec(function(result) {
+            delete MASPluginUser.sharedCurrUser;
+            successHandler(result);            
+        }, errorHandler, "MASPluginUser", "logoutUser", []);
+    };
+}
+
+///------------------------------------------------------------------------------------------------------------------
+/// @name Current User
+///------------------------------------------------------------------------------------------------------------------
+
+MASPluginUser.sharedCurrUser;
+
+/**
+ *  The authenticated user for the application, if any. nil returned if none
+ *  This is a singleton object.
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @return Returns a singleton 'MASPluginUser' object.
+ */
+
+ MASPluginUser.currentUser = function(successHandler, errorHandler) {
+    Cordova.exec(function(masPluginUser) {
+        if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
+            MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
+        }else {
+            delete MASPluginUser.sharedCurrUser;
+            MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
+        }
+        successHandler(MASPluginUser.sharedCurrUser);
+    }, errorHandler, "MASPluginUser", "currentUser", []);
+};
+
+//------------------------------------------------------------------------------------------------------------------
+/// @name Authentication
+///-----------------------------------------------------------------------------------------------------------------
+
+/**
+ Authenticates the user using the username and password
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithUsernameAndPassword = function(successHandler, errorHandler, username, password) {
+    return Cordova.exec(function(result) {
+        if (result &amp;&amp; typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithUsernameAndPassword", [username, password]);
+};
+
+module.exports = MASPluginUser;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#MASPluginConstants">MASPluginConstants</a></li><li><a href="global.html#MASPluginMAS">MASPluginMAS</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Wed Feb 22 2017 14:40:05 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
