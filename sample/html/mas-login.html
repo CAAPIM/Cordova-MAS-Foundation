@@ -56,15 +56,22 @@
                 </ul>
             </form>
 
-            <!-- <div class="social-login">
-                <a href="" class="fb"><img class="slicon" src="img/facebook.png"></img></a>
-                <a href="" class="tw"><img class="slicon" src="img/twitter.png"></img></a>
-                <a href="" class="gp"><img class="slicon" src="img/gplus.png"></img></a>
-                <a href="" class="in"><img class="slicon" src="img/linkedin.png"></img></a>
-            </div> -->
-
+            <div id="social" class="social-login">
+                <table border="0">
+                    <tr>
+                        <td><button onClick="socialLogin('facebook');"><img id="ifacebook" class="silicon" src="img/facebook_disabled.png"/>Facebook</button></td>
+                        <td><button onClick="socialLogin('google');"><img id="igoogle" class="silicon" src="img/google_disabled.png"/>Google</button></td>
+                        <td><button onClick="socialLogin('salesforce');"><img id="isalesforce" class="silicon" src="img/salesforce_disabled.png"/>Salesforce</button></td>
+                    </tr>
+                    <tr>
+                        <td><button onClick="socialLogin('linkedin');"><img id="ilinkedin" class="silicon" src="img/linkedin_disabled.png"/>LinkedIn</button></td>
+                        <td><button onClick="socialLogin('enterprise');"><img id="ienterprise" class="silicon" src="img/enterprise_disabled.png"/>Enterprise</button></td>
+                        <!--td><button onClick="socialLogin('qrcode');"><img id="iqrcode" class="silicon" src="img/qrcode.png"/>QR Code</button></td-->
+                    </tr>
+                </table>
+            </div>
             <div class="qrcode">
-                <a href="" class="qr"><img class="medicon" id="qr-code" src=""></img></a>
+                <a href="" class="qr"><img class="medicon" id="qr-code" src=""/></a>
             </div>
 
         </div>
@@ -95,6 +102,11 @@
             }
             else
               document.getElementById("errorMesg").innerHTML="invalid request: Missing or duplicate parameters";
+        }
+
+        function socialLogin(provider){
+            var MAS = new MASPlugin.MAS();
+            MAS.doSocialLogin(function(){},function() {}, provider);
         }
 
         function close() {

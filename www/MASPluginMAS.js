@@ -301,6 +301,21 @@ var MASPluginMAS = function() {
             "MASPluginMAS", "completeAuthentication", [username, password]);
     };
 
+    this.doSocialLogin = function(successHandler,errorHandler,provider){
+        return Cordova.exec(function() {
+                                            if (document.getElementById("CA-Username") !== null ){
+                                                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
+                                                    $.mobile.activePage.find(".messagePopup").popup("close");
+                                                }
+                                                else {
+                                                    window.MASPopupUI.close();
+                                                }
+                                            }
+
+                                            successHandler(true);
+                                        }, errorHandler, "MASPluginMAS", "doSocialLogin", [provider]);
+    }
+
 
     /**
      Cancels the current user's authentication session validation.

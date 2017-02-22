@@ -29,9 +29,11 @@ import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.foundation.auth.MASAuthenticationProvider;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.foundation.auth.MASProximityLogin;
 import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
+import com.ca.mas.ui.MASCustomTabs;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -110,6 +112,8 @@ public class MASPluginMAS extends MASCordovaPlugin {
             postToPath(args, callbackContext);
         } else if (action.equalsIgnoreCase("putToPath")) {
             putToPath(args, callbackContext);
+        } else if (action.equalsIgnoreCase("doSocialLogin")) {
+            doSocialLogin(args, callbackContext);
         } else {
             callbackContext.error("Invalid action");
             return false;
@@ -246,6 +250,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             }
                         };
                         MASUtil.setQrCode(qrcode);
+                        JSONArray providerIds = MASUtil.setAuthenticationProviders(masAuthenticationProviders);
                         boolean init = qrcode.init((Activity) context, requestId, masAuthenticationProviders);
                         String encodedImage = "";
                         if (init) {
@@ -259,6 +264,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                         jsonObject.put("requestType", "Login");
                         jsonObject.put("requestId", requestId);
                         jsonObject.put("qrCodeImageBase64", encodedImage);
+                        jsonObject.put("providers", providerIds);
                         qrcode.start();
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage(), e);
@@ -340,7 +346,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             String otp = args.getString(0);
             masOtpAuthenticationHandlerStatic.proceed(mContext, otp);
-            success(callbackContext, true, false);
+            success(callbackContext, true, false);// TODO: Recheck
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));
@@ -486,6 +492,29 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 Log.e(TAG, error.getMessage(), error);
                 callbackContext.error(getError(error));
 
+            }
+        });
+    }
+
+    private void doSocialLogin(final JSONArray args, final CallbackContext callbackContext) {
+        String providerName = null;
+        try {
+            providerName = (String) args.get(0);
+        } catch (JSONException e) {
+            callbackContext.error(getError(new MASCordovaException("Invalid provider name provided")));
+            return;
+        }
+
+        MASAuthenticationProvider provider = MASUtil.getProvider(providerName);
+        MASCustomTabs.socialLogin(mContext, provider, new MASCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                success(callbackContext, true, false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callbackContext.error(getError(e));
             }
         });
     }
