@@ -1,4 +1,4 @@
-/**
+/* *
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -13,7 +13,9 @@ var MASPluginDevice = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-    * This API returns a boolean state of device's current registration status on MAG server.
+    *   This API returns a boolean state of device's current registration status on MAG server
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
     */
     this.isDeviceRegistered = function(successHandler, errorHandler) {
         
@@ -21,7 +23,9 @@ var MASPluginDevice = function() {
     };
 
     /**
-    *  Fetches the current devices's identifier which is registered in MAG server.
+    *  Fetches the current devices's identifier which is registered in MAG server
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
     */
     this.getDeviceIdentifier = function(successHandler, errorHandler) {
         
@@ -34,7 +38,9 @@ var MASPluginDevice = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-    * Fetches a device's registration state and identifier as JSON string.
+    * Fetches a device's registration state and identifier as JSON string
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
     */
     this.getCurrentDevice = function(successHandler, errorHandler) {
         
@@ -43,6 +49,8 @@ var MASPluginDevice = function() {
     
     /**
     * Deregisters a device from MAG server i.e. remove all registration info of this device on server
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
     */
     this.deregister = function(successHandler, errorHandler) {
         
@@ -50,7 +58,9 @@ var MASPluginDevice = function() {
     };
 
     /**
-    * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed.
+    * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
     */
     this.resetLocally = function(successHandler, errorHandler) {
         
