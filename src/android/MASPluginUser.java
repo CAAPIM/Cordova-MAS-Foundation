@@ -114,7 +114,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         if (masUser == null && retryOnNull) {
             for(int i = 0; i < 60 ; i++) {
                 try {
-                    wait(100);
+                    Thread.sleep(100); 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
