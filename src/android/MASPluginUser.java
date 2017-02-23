@@ -50,7 +50,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         } else if (action.equalsIgnoreCase("isCurrentUser")) {
             isCurrentUser(callbackContext);
         } else if (action.equalsIgnoreCase("currentUser")) {
-            getCurrentUser(callbackContext);
+            getCurrentUser(args, callbackContext);
         } else if (action.equalsIgnoreCase("isSessionLocked")) {
             isSessionLocked(callbackContext);
         } else if (action.equalsIgnoreCase("lockSession")) {
@@ -103,9 +103,28 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * Fetches the current logged in MASUser and returns as json object
      */
-    private void getCurrentUser(CallbackContext callbackContext) {
+    private void getCurrentUser(final JSONArray args,CallbackContext callbackContext) {
+        boolean retryOnNull = false;
+        try {
+            retryOnNull = args.getBoolean(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         MASUser masUser = MASUser.getCurrentUser();
-        if (masUser == null) {
+        if (masUser == null && retryOnNull) {
+            for(int i = 0; i < 60 ; i++) {
+                try {
+                    wait(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                masUser = MASUser.getCurrentUser();
+                if (masUser != null) {
+                    break;
+                }
+            }
+        }
+        if (masUser == null ) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(getError(e));
             return;
