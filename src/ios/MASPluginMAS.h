@@ -280,6 +280,15 @@
  */
 - (void)authorizeQRCode:(CDVInvokedUrlCommand *)command;
 
+    
+///--------------------------------------
+/// @name Social Login
+///--------------------------------------
+    
+# pragma mark - Social Login
+    
+- (void)doSocialLogin:(CDVInvokedUrlCommand *)command;
+    
 
 
 @end
