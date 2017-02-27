@@ -12,7 +12,7 @@
 #import <SafariServices/SafariServices.h>
 
 
-static NSString *const MASCurrentAuthProviderIdentifiers = @"idps";
+static NSString *const MASCurrentAuthProviderIdentifiers = @"providers";
 static NSString *const MASQRCodeImageBase64String = @"qrCodeImageBase64";
 static NSString *const MASUIAuthenticationProviderQrCodeImageKey = @"qrcode";
 static MASPluginAuthenticationController *_sharedAuthController = nil;
