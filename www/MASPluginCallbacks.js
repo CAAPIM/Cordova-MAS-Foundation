@@ -69,6 +69,7 @@ var MASPluginCallbacks = {
                                 var p = providers[i];
                                 if(p !== 'qrcode'){
                                     document.getElementById('i'+p).src = "img/"+p+"_enabled.png";
+                                    document.getElementById('l'+p).className = "enabled";
                                 }
                             }
                 	    }
