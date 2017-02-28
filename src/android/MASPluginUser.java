@@ -417,8 +417,12 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONArray emailArray = new JSONArray();
         if (masUser.getEmailList() != null && !masUser.getEmailList().isEmpty()) {
             for (MASEmail email : masUser.getEmailList()) {
+                if (email == null) {
+                    continue;
+                }
                 JSONObject obj = new JSONObject();
-                obj.put(email.getType(), email.getValue());
+                String emailType = (email.getType() == null || email.getType().isEmpty()) ? "work" : email.getType();
+                obj.put(emailType, email.getValue());
                 emailArray.put(obj);
             }
         }
@@ -428,8 +432,12 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONObject addressMap = new JSONObject();
         if (masUser.getAddressList() != null && !masUser.getAddressList().isEmpty()) {
             for (MASAddress address : masUser.getAddressList()) {
+                if(address == null){
+                    continue;
+                }
                 try {
-                    addressMap.put(address.getType(), address.getAsJSONObject());
+                    String addressType = (address.getType() == null || address.getType().isEmpty()) ? "work" : address.getType();
+                    addressMap.put(addressType, address.getAsJSONObject());
                 } catch (JSONException jce) {
                 }
             }
@@ -440,8 +448,12 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONArray phoneArray = new JSONArray();
         if (masUser.getPhoneList() != null && !masUser.getPhoneList().isEmpty()) {
             for (MASPhone phone : masUser.getPhoneList()) {
+                if(phone == null){
+                    continue;
+                }
                 JSONObject obj = new JSONObject();
-                obj.put(phone.getType(), phone.getValue());
+                String phoneType = (phone.getType() == null || phone.getType().isEmpty()) ? "work" : phone.getType();
+                obj.put(phoneType, phone.getValue());
                 phoneArray.put(obj);
             }
         }
@@ -451,7 +463,11 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONObject photoMap = new JSONObject();
         if (masUser.getPhotoList() != null && !masUser.getPhotoList().isEmpty()) {
             for (MASPhoto photo : masUser.getPhotoList()) {
-                photoMap.put(photo.getType(), photo.getValue());
+                if(photo == null){
+                    continue;
+                }
+                String photoType = (photo.getType() == null || photo.getType().isEmpty()) ? "thumbnail" : photo.getType();
+                photoMap.put(photoType, photo.getValue());
             }
         }
         map.put(IdentityConsts.KEY_PHOTOS, photoMap);
