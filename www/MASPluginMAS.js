@@ -356,7 +356,7 @@ var MASPluginMAS = function() {
      Request Server to generate and send OTP to the channels provided.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @channels {array} user defined variable which is an array of channels where the OTP is to be delivered.
+     * @param {array} channels user defined variable which is an array of channels where the OTP is to be delivered.
      */
     this.generateAndSendOTP = function(successHandler, errorHandler, channels) {
         
