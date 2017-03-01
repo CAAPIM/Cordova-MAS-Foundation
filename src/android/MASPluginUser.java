@@ -50,7 +50,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         } else if (action.equalsIgnoreCase("isCurrentUser")) {
             isCurrentUser(callbackContext);
         } else if (action.equalsIgnoreCase("currentUser")) {
-            getCurrentUser(args, callbackContext);
+            getCurrentUser( callbackContext);
         } else if (action.equalsIgnoreCase("isSessionLocked")) {
             isSessionLocked(callbackContext);
         } else if (action.equalsIgnoreCase("lockSession")) {
