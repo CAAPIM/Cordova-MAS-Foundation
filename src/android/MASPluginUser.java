@@ -50,7 +50,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         } else if (action.equalsIgnoreCase("isCurrentUser")) {
             isCurrentUser(callbackContext);
         } else if (action.equalsIgnoreCase("currentUser")) {
-            getCurrentUser(args, callbackContext);
+            getCurrentUser( callbackContext);
         } else if (action.equalsIgnoreCase("isSessionLocked")) {
             isSessionLocked(callbackContext);
         } else if (action.equalsIgnoreCase("lockSession")) {
@@ -62,7 +62,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         } else if (action.equalsIgnoreCase("removeSessionLock")) {
             removeSessionLock(callbackContext);
         } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
-            loginWithUsernameAndPassword(callbackContext);
+            loginWithUsernameAndPassword(args, callbackContext);
         } else if (action.equalsIgnoreCase("logoutUser")) {
             logoutUser(callbackContext);
         } else if (action.equalsIgnoreCase("requestUserInfo")) {
