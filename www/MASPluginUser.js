@@ -166,6 +166,7 @@ MASPluginUser.sharedCurrUser;
  */
 
  MASPluginUser.currentUser = function(successHandler, errorHandler) {
+ 
     Cordova.exec(function(masPluginUser) {
         if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
@@ -174,7 +175,7 @@ MASPluginUser.sharedCurrUser;
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
         }
         successHandler(MASPluginUser.sharedCurrUser);
-    }, errorHandler, "MASPluginUser", "currentUser", []);
+    }, errorHandler, "MASPluginUser", "currentUser");
 };
 
 //------------------------------------------------------------------------------------------------------------------
