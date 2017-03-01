@@ -312,18 +312,27 @@ var MASPluginMAS = function() {
     };
 
     this.doSocialLogin = function(successHandler,errorHandler,provider){
-        return Cordova.exec(function() {
-                                            if (document.getElementById("CA-Username") !== null ){
+        return Cordova.exec(function() {                                                                                            
                                                 if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
                                                     $.mobile.activePage.find(".messagePopup").popup("close");
                                                 }
                                                 else {
                                                     window.MASPopupUI.close();
-                                                }
-                                            }
+                                                }                                            
 
                                             successHandler(true);
-                                        }, errorHandler, "MASPluginMAS", "doSocialLogin", [provider]);
+                                        }, function(errorInfo) {
+
+                                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
+                                                    $.mobile.activePage.find(".messagePopup").popup("close");
+                                                }
+                                                else {
+                                                    window.MASPopupUI.close();
+                                                }
+                                                
+                                            errorHandler(errorInfo);
+
+                                        }, "MASPluginMAS", "doSocialLogin", [provider]);
     }
 
 
