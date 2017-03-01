@@ -118,10 +118,8 @@ MASPluginUser.sharedCurrUser;
  *  @return Returns a singleton 'MASPluginUser' object.
  */
 
- MASPluginUser.currentUser = function(successHandler, errorHandler, retryOnNull) {
- if (!retryOnNull) {
-    retryOnNull = false;
- }
+ MASPluginUser.currentUser = function(successHandler, errorHandler) {
+ 
     Cordova.exec(function(masPluginUser) {
         if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
@@ -130,7 +128,7 @@ MASPluginUser.sharedCurrUser;
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
         }
         successHandler(MASPluginUser.sharedCurrUser);
-    }, errorHandler, "MASPluginUser", "currentUser", [retryOnNull]);
+    }, errorHandler, "MASPluginUser", "currentUser");
 };
 
 //------------------------------------------------------------------------------------------------------------------

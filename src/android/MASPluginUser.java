@@ -103,15 +103,15 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * Fetches the current logged in MASUser and returns as json object
      */
-    private void getCurrentUser(final JSONArray args,CallbackContext callbackContext) {
-        boolean retryOnNull = false;
+    private void getCurrentUser(CallbackContext callbackContext) {
+        /*boolean retryOnNull = false;
         try {
             retryOnNull = args.getBoolean(0);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         MASUser masUser = MASUser.getCurrentUser();
-        if (masUser == null && retryOnNull) {
+        if (masUser == null ) {
             for(int i = 0; i < 60 ; i++) {
                 try {
                     Thread.sleep(100); 
