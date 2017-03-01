@@ -62,7 +62,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         } else if (action.equalsIgnoreCase("removeSessionLock")) {
             removeSessionLock(callbackContext);
         } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
-            loginWithUsernameAndPassword(args, callbackContext);
+            loginWithUsernameAndPassword(callbackContext);
         } else if (action.equalsIgnoreCase("logoutUser")) {
             logoutUser(callbackContext);
         } else if (action.equalsIgnoreCase("requestUserInfo")) {
