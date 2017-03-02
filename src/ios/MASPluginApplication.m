@@ -149,6 +149,16 @@
     
     __block CDVPluginResult *result;
     __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
+
+    if ([MAS MASState] == MASStateNotInitialized || [MAS MASState] == MASStateDidStop) {
+     
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK Not Initialized !!"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+    
     if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
     {
         [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
