@@ -519,7 +519,8 @@
         }
         else {
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsBool:NO];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                   messageAsDictionary:errorInfo];
         }
         
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
