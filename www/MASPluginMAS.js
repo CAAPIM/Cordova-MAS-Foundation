@@ -21,7 +21,7 @@ var MASPluginMAS = function() {
     /**
      * Initializes the MAS plugin. This includes setting of the various listeners required
      * for authenticating the user while registration of the application with the Gateway
-     * and accessing various protected api. Any further initialization related setting will go here
+     * and accessing various protected API. Any further initialization related setting will go here
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      */
@@ -39,7 +39,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     * Set the authentication UI handling page by this plugin.
+     * Sets the authentication UI handling page
      *
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
@@ -76,7 +76,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     * Set the OTP Channels Selection UI handling page by this plugin.
+     * Sets the OTP Channels Selection UI handling page
      *
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
@@ -111,7 +111,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     * Set the OTP UI handling page by this plugin.
+     * Sets the OTP UI handling page
      *
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
@@ -157,7 +157,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     Set the name of the configuration file.  This gives the ability to set the file's name to a custom value.
+     Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {string} fileName 
@@ -201,7 +201,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed
+     Sets the device registration type as MASDeviceRegistrationType. This should be set before MAS start is called
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {MASGrantFlow} MASGrantFlow 
@@ -316,7 +316,7 @@ var MASPluginMAS = function() {
      Cancels the current user's authentication session validation.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param args user defined variable which is request Id in Android. It is not used in iOS
+     * @param args user defined variable which is request ID in Android. It is not used in iOS
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
         
@@ -353,7 +353,7 @@ var MASPluginMAS = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-     Request Server to generate and send OTP to the channels provided.
+     Requests server to generate and send OTP to the channels provided.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {array} channels user defined variable which is an array of channels where the OTP is to be delivered.
@@ -436,10 +436,10 @@ var MASPluginMAS = function() {
 
 
     /**
-     Validate the entered OTP.
+     Validates the entered OTP.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param {string} otp user defined one time password that is to be verified
+     * @param {string} otp user defined one-time password that is to be verified
      */
     this.validateOTP = function(successHandler, errorHandler, otp) {
         
@@ -457,7 +457,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     Cancels the current user's authentication session validation.
+     Cancels the authentication validation session of the user
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      */
@@ -480,7 +480,7 @@ var MASPluginMAS = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-     Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
+     Starts the lifecycle of the MAS processes. This includes the registration of the application on the Gateway, if the network is available.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      */
@@ -490,7 +490,7 @@ var MASPluginMAS = function() {
     };
 
     /**
-     Starts the lifecycle of the MAS processes with a specified default configuration. This includes the registration of the application to the Gateway, if the network is available.
+     Starts the lifecycle of the MAS processes with a specified default configuration. This includes the registration of the application on the Gateway, if the network is available.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {array} defaultConfiguration
@@ -501,7 +501,7 @@ var MASPluginMAS = function() {
     };
 
     /**
-     Starts the lifecycle of the MAS processes with a specified msso_config.json. This includes the registration of the application to the Gateway, if the network is available.
+     Starts the lifecycle of the MAS processes with a specified msso_config.json. This includes the registration of the application on the Gateway, if the network is available.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {jsonObject} jsonObject
@@ -527,7 +527,7 @@ var MASPluginMAS = function() {
     /// @name Gateway monitoring
     ///------------------------------------------------------------------------------------------------------------------
     /**
-     Checks if the gateway is reachable
+     Checks whether the Gateway is reachable
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      */
@@ -542,10 +542,10 @@ var MASPluginMAS = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-     getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+     Calls the HTTP GET method from the gateway. This requires at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param {string} path path to the url
+     * @param {string} path URL path
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request 
@@ -558,10 +558,10 @@ var MASPluginMAS = function() {
 
 
     /**
-     deleteFromPath does the HTTP DELTE call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+     Calls the HTTP DELTE method from the Gateway. It requires at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param {string} path path to the url
+     * @param {string} path URL path
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request 
@@ -574,7 +574,7 @@ var MASPluginMAS = function() {
 
 
     /**
-     putToPath does the HTTP PUT call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+     Calls the HTTP POST method from the Gateway. This expects at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      * @param {string} path path to the url
