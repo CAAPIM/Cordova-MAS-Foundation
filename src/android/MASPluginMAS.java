@@ -66,57 +66,61 @@ public class MASPluginMAS extends MASCordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("start")) {
-            start(args, callbackContext);
-        } else if (action.equalsIgnoreCase("startWithDefaultConfiguration")) {
-            startWithDefaultConfiguration(args, callbackContext);
-        } else if (action.equalsIgnoreCase("startWithJSON")) {
-            startWithJSON(args, callbackContext);
-        } else if (action.equalsIgnoreCase("stop")) {
-            stop(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setConfigFileName")) {
-            setConfigFileName(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setGrantFlow")) {
-            setGrantFlow(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelRequest")) {
-            cancelRequest(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setAuthenticationListener")) {
-            setAuthenticationListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("generateAndSendOTP")) {
-            generateAndSendOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("validateOTP")) {
-            validateOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setOTPAuthenticationListener")) {
-            setOTPAuthenticationListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setOTPChannelSelectorListener")) {
-            setOTPChannelSelectorListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelOTPValidation")) {
-            cancelOTPValidation(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelGenerateAndSendOTP")) {
-            cancelGenerateAndSendOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("gatewayIsReachable")) {
-            gatewayIsReachable(args, callbackContext);
-        } else if (action.equalsIgnoreCase("useNativeMASUI")) {
-            useNativeMASUI(args, callbackContext);
-        } else if (action.equalsIgnoreCase("authorizeQRCode")) {
-            authorizeQRCode(args, callbackContext);
-        } else if (action.equalsIgnoreCase("completeAuthentication")) {
-            completeAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelAuthentication")) {
-            cancelAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("getFromPath")) {
-            getFromPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("deleteFromPath")) {
-            deleteFromPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("postToPath")) {
-            postToPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("putToPath")) {
-            putToPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("doSocialLogin")) {
-            doSocialLogin(args, callbackContext);
-        } else {
-            callbackContext.error("Invalid action");
-            return false;
+        try {
+            if (action.equalsIgnoreCase("start")) {
+                start(args, callbackContext);
+            } else if (action.equalsIgnoreCase("startWithDefaultConfiguration")) {
+                startWithDefaultConfiguration(args, callbackContext);
+            } else if (action.equalsIgnoreCase("startWithJSON")) {
+                startWithJSON(args, callbackContext);
+            } else if (action.equalsIgnoreCase("stop")) {
+                stop(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setConfigFileName")) {
+                setConfigFileName(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setGrantFlow")) {
+                setGrantFlow(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelRequest")) {
+                cancelRequest(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setAuthenticationListener")) {
+                setAuthenticationListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("generateAndSendOTP")) {
+                generateAndSendOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("validateOTP")) {
+                validateOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setOTPAuthenticationListener")) {
+                setOTPAuthenticationListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setOTPChannelSelectorListener")) {
+                setOTPChannelSelectorListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelOTPValidation")) {
+                cancelOTPValidation(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelGenerateAndSendOTP")) {
+                cancelGenerateAndSendOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("gatewayIsReachable")) {
+                gatewayIsReachable(args, callbackContext);
+            } else if (action.equalsIgnoreCase("useNativeMASUI")) {
+                useNativeMASUI(args, callbackContext);
+            } else if (action.equalsIgnoreCase("authorizeQRCode")) {
+                authorizeQRCode(args, callbackContext);
+            } else if (action.equalsIgnoreCase("completeAuthentication")) {
+                completeAuthentication(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelAuthentication")) {
+                cancelAuthentication(args, callbackContext);
+            } else if (action.equalsIgnoreCase("getFromPath")) {
+                getFromPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("deleteFromPath")) {
+                deleteFromPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("postToPath")) {
+                postToPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("putToPath")) {
+                putToPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("doSocialLogin")) {
+                doSocialLogin(args, callbackContext);
+            } else {
+                callbackContext.error("Invalid action");
+                return false;
+            }
+        } catch (Throwable th) {
+            callbackContext.error(getError(th));
         }
         return true;
     }

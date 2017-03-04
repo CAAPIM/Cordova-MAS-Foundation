@@ -25,19 +25,23 @@ public class MASPluginDevice extends MASCordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("deregister")) {
-            deregister(args, callbackContext);
-        } else if (action.equalsIgnoreCase("isDeviceRegistered")) {
-            isDeviceRegistered(args, callbackContext);
-        } else if (action.equalsIgnoreCase("resetLocally")) {
-            resetLocally(args, callbackContext);
-        } else if (action.equalsIgnoreCase("getDeviceIdentifier")) {
-            getDeviceIdentifier(args, callbackContext);
-        } else if (action.equalsIgnoreCase("getCurrentDevice")) {
-            getCurrentDevice(args, callbackContext);
-        } else {
-            callbackContext.error("Invalid action");
-            return false;
+        try {
+            if (action.equalsIgnoreCase("deregister")) {
+                deregister(args, callbackContext);
+            } else if (action.equalsIgnoreCase("isDeviceRegistered")) {
+                isDeviceRegistered(args, callbackContext);
+            } else if (action.equalsIgnoreCase("resetLocally")) {
+                resetLocally(args, callbackContext);
+            } else if (action.equalsIgnoreCase("getDeviceIdentifier")) {
+                getDeviceIdentifier(args, callbackContext);
+            } else if (action.equalsIgnoreCase("getCurrentDevice")) {
+                getCurrentDevice(args, callbackContext);
+            } else {
+                callbackContext.error("Invalid action");
+                return false;
+            }
+        }catch (Throwable th){
+            callbackContext.error(getError(th));
         }
         return true;
     }

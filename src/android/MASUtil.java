@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Utilities class
@@ -28,6 +29,7 @@ public class MASUtil {
     private static final String TAG = MASUtil.class.getCanonicalName();
     private static MASProximityLogin qrCode;
     private static Map<String, MASAuthenticationProvider> _providerMap = new HashMap<String, MASAuthenticationProvider>();
+    private static final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock();
 
     /**
      * @return the already set MASProximityLoginQRCode qrCode
@@ -75,21 +77,26 @@ public class MASUtil {
      * @param providers list of {@link MASAuthenticationProviders}
      * @return _ids Array of providers supported at server
      */
-    public static synchronized JSONArray setAuthenticationProviders(MASAuthenticationProviders providers) {
+    public static JSONArray setAuthenticationProviders(MASAuthenticationProviders providers) {
         JSONArray array = new JSONArray();
         _providerMap.clear();
         List<MASAuthenticationProvider> masProviders = providers.getProviders();
         String idp = providers.getIdp();
-        for (MASAuthenticationProvider p : masProviders) {
-            String identifier = p.getIdentifier();
-            if (identifier.equalsIgnoreCase("qrcode")) {
-                continue;
-            }
-            if ((idp.equalsIgnoreCase("all") || idp.equalsIgnoreCase(identifier)) && !p.isProximityLogin()) {
-                array.put(identifier);
-                _providerMap.put(identifier, p);
+        try {
+            _lock.writeLock().lock();
+            for (MASAuthenticationProvider p : masProviders) {
+                String identifier = p.getIdentifier();
+                if (identifier.equalsIgnoreCase("qrcode")) {
+                    continue;
+                }
+                if ((idp.equalsIgnoreCase("all") || idp.equalsIgnoreCase(identifier)) && !p.isProximityLogin()) {
+                    array.put(identifier);
+                    _providerMap.put(identifier, p);
 
+                }
             }
+        } finally {
+            _lock.writeLock().unlock();
         }
         return array;
     }
@@ -101,6 +108,11 @@ public class MASUtil {
      * @return MASAuthenticationProvider
      */
     public static MASAuthenticationProvider getProvider(String identifier) {
-        return _providerMap.get(identifier);
+        try {
+            _lock.readLock().lock();
+            return _providerMap.get(identifier);
+        } finally {
+            _lock.readLock().unlock();
+        }
     }
 }

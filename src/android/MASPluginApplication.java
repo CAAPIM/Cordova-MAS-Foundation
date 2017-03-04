@@ -49,17 +49,22 @@ public class MASPluginApplication extends MASCordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("getName")) {
-            getName(args, callbackContext);
-        } else if (action.equalsIgnoreCase("retrieveEnterpriseApps")) {
-            retrieveEnterpriseApps(args, callbackContext);
-        } else if (action.equalsIgnoreCase("enterpriseBrowserWebAppBackButtonHandler")) {
-            enterpriseBrowserWebAppBackButtonHandler(args, callbackContext);
-        } else if (action.equalsIgnoreCase("launchApp")) {
-            launchApp(args, callbackContext);
-        } else {
-            callbackContext.error("Invalid action");
-            return false;
+        try {
+            if (action.equalsIgnoreCase("getName")) {
+                getName(args, callbackContext);
+            } else if (action.equalsIgnoreCase("retrieveEnterpriseApps")) {
+                retrieveEnterpriseApps(args, callbackContext);
+            } else if (action.equalsIgnoreCase("enterpriseBrowserWebAppBackButtonHandler")) {
+                enterpriseBrowserWebAppBackButtonHandler(args, callbackContext);
+            } else if (action.equalsIgnoreCase("launchApp")) {
+                launchApp(args, callbackContext);
+            } else {
+                callbackContext.error("Invalid action");
+                return false;
+            }
+        } catch (Throwable th) {
+            callbackContext.error(getError(th));
+
         }
         return true;
     }

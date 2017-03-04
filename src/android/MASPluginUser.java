@@ -45,31 +45,35 @@ public class MASPluginUser extends MASCordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("isAuthenticated")) {
-            isAuthenticated(callbackContext);
-        } else if (action.equalsIgnoreCase("isCurrentUser")) {
-            isCurrentUser(callbackContext);
-        } else if (action.equalsIgnoreCase("currentUser")) {
-            getCurrentUser( callbackContext);
-        } else if (action.equalsIgnoreCase("isSessionLocked")) {
-            isSessionLocked(callbackContext);
-        } else if (action.equalsIgnoreCase("lockSession")) {
-            lockSession(callbackContext);
-        } else if (action.equalsIgnoreCase("unlockSession")) {
-            unlockSession(callbackContext);
-        } else if (action.equalsIgnoreCase("unlockSessionWithMessage")) {
-            unlockSessionWithMessage(callbackContext, args);
-        } else if (action.equalsIgnoreCase("removeSessionLock")) {
-            removeSessionLock(callbackContext);
-        } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
-            loginWithUsernameAndPassword(args, callbackContext);
-        } else if (action.equalsIgnoreCase("logoutUser")) {
-            logoutUser(callbackContext);
-        } else if (action.equalsIgnoreCase("requestUserInfo")) {
-            requestUserInfo(callbackContext);
-        } else {
-            callbackContext.error("Invalid action");
-            return false;
+        try {
+            if (action.equalsIgnoreCase("isAuthenticated")) {
+                isAuthenticated(callbackContext);
+            } else if (action.equalsIgnoreCase("isCurrentUser")) {
+                isCurrentUser(callbackContext);
+            } else if (action.equalsIgnoreCase("currentUser")) {
+                getCurrentUser(callbackContext);
+            } else if (action.equalsIgnoreCase("isSessionLocked")) {
+                isSessionLocked(callbackContext);
+            } else if (action.equalsIgnoreCase("lockSession")) {
+                lockSession(callbackContext);
+            } else if (action.equalsIgnoreCase("unlockSession")) {
+                unlockSession(callbackContext);
+            } else if (action.equalsIgnoreCase("unlockSessionWithMessage")) {
+                unlockSessionWithMessage(callbackContext, args);
+            } else if (action.equalsIgnoreCase("removeSessionLock")) {
+                removeSessionLock(callbackContext);
+            } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
+                loginWithUsernameAndPassword(args, callbackContext);
+            } else if (action.equalsIgnoreCase("logoutUser")) {
+                logoutUser(callbackContext);
+            } else if (action.equalsIgnoreCase("requestUserInfo")) {
+                requestUserInfo(callbackContext);
+            } else {
+                callbackContext.error("Invalid action");
+                return false;
+            }
+        } catch (Throwable th) {
+            callbackContext.error(getError(th));
         }
         return true;
     }
@@ -111,10 +115,10 @@ public class MASPluginUser extends MASCordovaPlugin {
             e.printStackTrace();
         }*/
         MASUser masUser = MASUser.getCurrentUser();
-        if (masUser == null ) {
-            for(int i = 0; i < 60 ; i++) {
+        if (masUser == null) {
+            for (int i = 0; i < 60; i++) {
                 try {
-                    Thread.sleep(100); 
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -124,7 +128,7 @@ public class MASPluginUser extends MASCordovaPlugin {
                 }
             }
         }
-        if (masUser == null ) {
+        if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(getError(e));
             return;
@@ -451,7 +455,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONObject addressMap = new JSONObject();
         if (masUser.getAddressList() != null && !masUser.getAddressList().isEmpty()) {
             for (MASAddress address : masUser.getAddressList()) {
-                if(address == null){
+                if (address == null) {
                     continue;
                 }
                 try {
@@ -467,7 +471,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONArray phoneArray = new JSONArray();
         if (masUser.getPhoneList() != null && !masUser.getPhoneList().isEmpty()) {
             for (MASPhone phone : masUser.getPhoneList()) {
-                if(phone == null){
+                if (phone == null) {
                     continue;
                 }
                 JSONObject obj = new JSONObject();
@@ -482,7 +486,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         JSONObject photoMap = new JSONObject();
         if (masUser.getPhotoList() != null && !masUser.getPhotoList().isEmpty()) {
             for (MASPhoto photo : masUser.getPhotoList()) {
-                if(photo == null){
+                if (photo == null) {
                     continue;
                 }
                 String photoType = (photo.getType() == null || photo.getType().isEmpty()) ? "thumbnail" : photo.getType();
