@@ -108,7 +108,12 @@ var MASPluginUtils = {
             };
         
             $('#popUp').remove();
-            var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ MASPluginConstants.MASPopupStyle+"'>" + "</div>";
+
+            var popupStyle = MASPluginConstants.MASPopupLoginStyle;
+             if(url === "masui/mas-otp.html" || url === "masui/mas-otpchannel.html")
+               popupStyle = MASPluginConstants.MASPopupOTPStyle;
+
+            var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ popupStyle+"'>" + "</div>";
             popupafterclose = popupafterclose ? popupafterclose : function() {};
             $.mobile.activePage.append(template).trigger("create");
             $('#popUp').load(url, onLoadMakePopUpVisible);
