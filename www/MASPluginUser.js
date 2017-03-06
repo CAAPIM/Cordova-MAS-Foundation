@@ -37,31 +37,31 @@
      this.formattedName = masPluginUser.formattedName;
 
     /**
-     *  List of the email addresses of the user
+     *  Lists of the email addresses of the user
      *  @member {array}
      */  
      this.emailAddresses = masPluginUser.emailAddresses;
 
     /**
-     *  List of the phone numbers of the user
+     *  Lists of the phone numbers of the user
      *  @member {array}
      */    
      this.phoneNumbers = masPluginUser.phoneNumbers;
 
     /**
-     *  List of the addresses of the user
+     *  Lists of the addresses of the user
      *  @member {array}
      */ 
      this.addresses = masPluginUser.addresses;
 
      /**
-     *  Returns base64 string of the user's photo
+     *  Returns the base64 string of the user's photo
      *  @member {string}
      */ 
      this.photos = masPluginUser.photos;
 
      /**
-     *  List of the groups the user is in
+     *  List of the groups the user is a part of
      *  @member {array}
      */ 
      this.groups = masPluginUser.groups;
@@ -73,7 +73,8 @@
      this.active = masPluginUser.active;
 
      /**
-     *  Boolean indicator of whether the MASPluginUser object is currently authenticated user or not.
+     *  Boolean indicator that specifies whether the MASPluginUser object is the current user.
+
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
@@ -82,7 +83,7 @@
      };
 
     /**
-     *  Boolean indicator of whether the MASPluginUser object is authenticated or not
+     *  Boolean indicator that specifies whether the MASPluginUser object is authenticated
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
@@ -91,7 +92,7 @@
      };
 
     /**
-     *  Boolean indicator of whether the currently authenticated MASPluginUser object is locked or not
+     *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
@@ -141,7 +142,7 @@
     }
 
     /**
-     log off user.
+     Logs off the user.
      */
      this.logout = function(successHandler, errorHandler) {
         return Cordova.exec(function(result) {
