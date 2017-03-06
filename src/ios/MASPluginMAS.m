@@ -519,6 +519,8 @@
         }
         else {
             
+            NSDictionary *errorInfo = @{@"errorMessage":[error localizedDescription]};
+
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
         }
