@@ -127,7 +127,7 @@ public class MASPluginApplication extends MASCordovaPlugin {
         );
     }
 
-    /**
+/**
      * Launches the selected Enterprise App
      */
     private void launchApp(final JSONArray args, final CallbackContext callbackContext) {
@@ -177,15 +177,30 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                                 final WebViewClient webViewClient = super.getWebViewClient();
                                                 return new WebViewClient() {
                                                     private boolean sslErrorAlreadyReceived = false;
+                                                    private boolean sslErrorDeclined = false;
+
+                                                    /*
+                                                    For parity with native sdk. Some url are showing 2 ssl error dialogs.
+                                                    On cancel of one dialog the other dialog should be dismissed automatically.
+                                                    This variable stores a reference to the 1st alert dialog
+                                                     */
+                                                    private AlertDialog firstAlertDialog = null;
 
                                                     @Override
                                                     public void onReceivedSslError(WebView webView, final SslErrorHandler handler, SslError error) {
-                                                        if (sslErrorAlreadyReceived) {
+                                                        if (sslErrorAlreadyReceived && sslErrorDeclined) {
+                                                            handler.cancel();
+                                                            if (firstAlertDialog != null) {
+                                                                firstAlertDialog.dismiss();
+                                                            }
                                                             return;
                                                         }
                                                         sslErrorAlreadyReceived = true;
                                                         AlertDialog.Builder builder = new AlertDialog.Builder(webView.getContext());
                                                         final AlertDialog ad = builder.create();
+
+                                                        if (firstAlertDialog == null)
+                                                            firstAlertDialog = ad;
                                                         String message;
                                                         switch (error.getPrimaryError()) {
                                                             case SslError.SSL_UNTRUSTED:
@@ -219,9 +234,12 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                                         ad.setButton(BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
+                                                                sslErrorDeclined = true;
                                                                 handler.cancel();
                                                                 if (ENTERPRISE_BROWSER_WEBVIEW != null) {
                                                                     ((ViewGroup) ENTERPRISE_BROWSER_WEBVIEW.getParent()).removeView(ENTERPRISE_BROWSER_WEBVIEW);
+                                                                    if (firstAlertDialog != null)
+                                                                        firstAlertDialog.dismiss();
                                                                     ENTERPRISE_BROWSER_WEBVIEW.destroy();
                                                                     ENTERPRISE_BROWSER_WEBVIEW = null;
 
@@ -229,6 +247,7 @@ public class MASPluginApplication extends MASCordovaPlugin {
                                                             }
                                                         });
                                                         ad.show();
+
                                                     }
 
                                                     @SuppressWarnings("deprecation")
@@ -265,7 +284,6 @@ public class MASPluginApplication extends MASCordovaPlugin {
             callbackContext.error(getError(e));
         }
     }
-
 
     private MASApplication fetchCurrentApp(String appIdentifier) {
         for (MASApplication application : masApplications) {
