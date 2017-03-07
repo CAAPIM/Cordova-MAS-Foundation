@@ -13,7 +13,7 @@ var MASPluginDevice = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-    *   This API returns a boolean state of device's current registration status on MAG server
+    *   Boolean state of device registration status on MAG server
     *   @param {function} successHandler user defined success callback
     *   @param {function} errorHandler user defined error callback
     */
@@ -23,7 +23,7 @@ var MASPluginDevice = function() {
     };
 
     /**
-    *  Fetches the current devices's identifier which is registered in MAG server
+    *  Fetches the device identifier registered in MAG server
     *   @param {function} successHandler user defined success callback
     *   @param {function} errorHandler user defined error callback
     */
@@ -38,7 +38,7 @@ var MASPluginDevice = function() {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-    * Fetches a device's registration state and identifier as JSON string
+    * Fetches the device registration state and identifier as JSON string
     *   @param {function} successHandler user defined success callback
     *   @param {function} errorHandler user defined error callback
     */
@@ -48,7 +48,7 @@ var MASPluginDevice = function() {
     };
     
     /**
-    * Deregisters a device from MAG server i.e. remove all registration info of this device on server
+    * Deregisters a device from MAG server i.e. remove all registration information of this device from server
     *   @param {function} successHandler user defined success callback
     *   @param {function} errorHandler user defined error callback
     */
@@ -58,7 +58,7 @@ var MASPluginDevice = function() {
     };
 
     /**
-    * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed
+    * Resets all the local cache of the device for the app i.e. all  tokens, credentials, states are flushed
     *   @param {function} successHandler user defined success callback
     *   @param {function} errorHandler user defined error callback
     */
