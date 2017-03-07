@@ -25,7 +25,7 @@ var MASPluginGroup = function() {
 	this.owner;
 
 	/**
-	*	The list of the members of the group
+	*	Lists the members of the group
 	*	@member {array}
 	*/
 	this.members;
@@ -36,7 +36,7 @@ var MASPluginGroup = function() {
 	///------------------------------------------------------------------------------------------------------------------
 
 	/**
-	*	Creates a new group with specified information
+	*	Creates a new group with the specified information
 	* 	@param {function} successHandler user defined success callback
 	* 	@param {function} errorHandler user defined error callback
 	* 	@param {dictionary} info
