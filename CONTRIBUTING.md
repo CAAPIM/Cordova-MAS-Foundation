@@ -45,5 +45,5 @@ By contributing to CA Mobile App Services SDK, you agree that your contributions
 
  [community]: https://communities.ca.com/community/ca-api-management-community/content?filterID=contentstatus%5Bpublished%5D~category%5Bca-mobile-api-gateway%5D
  [license-link]: /LICENSE
- [cla]: https://www.clahub.com/agreements/CAAPIM/MAS-Foundation-Cordova
+ [cla]: https://www.clahub.com/agreements/CAAPIM/Cordova-MAS-Foundation
  [casupport]: https://support.ca.com/irj/portal/implsvcnewcase
