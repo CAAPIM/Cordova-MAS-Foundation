@@ -16,7 +16,9 @@ var MASPluginConstants = {
   MASEnterpriseBrowserPage: "masui/mas-enterpriseBrowser.html",
 
   //MASPopupStyle: "position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); width:47%; height: 55%; overflow: auto",
-  MASPopupStyle: "position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 500px; overflow: auto",
+  MASPopupLoginStyle: "position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 100%; width:100%; overflow: auto",
+
+  MASPopupOTPStyle: "position: fixed; top: 50%; left:50%; transform: translate(-50%, -50%); height: 500px; overflow: auto",
 
   MASLoginAuthRequestId: "",
 

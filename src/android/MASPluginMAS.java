@@ -29,9 +29,11 @@ import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.foundation.auth.MASAuthenticationProvider;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.foundation.auth.MASProximityLogin;
 import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
+import com.ca.mas.ui.MASCustomTabs;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -64,55 +66,61 @@ public class MASPluginMAS extends MASCordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("start")) {
-            start(args, callbackContext);
-        } else if (action.equalsIgnoreCase("startWithDefaultConfiguration")) {
-            startWithDefaultConfiguration(args, callbackContext);
-        } else if (action.equalsIgnoreCase("startWithJSON")) {
-            startWithJSON(args, callbackContext);
-        } else if (action.equalsIgnoreCase("stop")) {
-            stop(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setConfigFileName")) {
-            setConfigFileName(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setGrantFlow")) {
-            setGrantFlow(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelRequest")) {
-            cancelRequest(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setAuthenticationListener")) {
-            setAuthenticationListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("generateAndSendOTP")) {
-            generateAndSendOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("validateOTP")) {
-            validateOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setOTPAuthenticationListener")) {
-            setOTPAuthenticationListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("setOTPChannelSelectorListener")) {
-            setOTPChannelSelectorListener(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelOTPValidation")) {
-            cancelOTPValidation(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelGenerateAndSendOTP")) {
-            cancelGenerateAndSendOTP(args, callbackContext);
-        } else if (action.equalsIgnoreCase("gatewayIsReachable")) {
-            gatewayIsReachable(args, callbackContext);
-        } else if (action.equalsIgnoreCase("useNativeMASUI")) {
-            useNativeMASUI(args, callbackContext);
-        } else if (action.equalsIgnoreCase("authorizeQRCode")) {
-            authorizeQRCode(args, callbackContext);
-        } else if (action.equalsIgnoreCase("completeAuthentication")) {
-            completeAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("cancelAuthentication")) {
-            cancelAuthentication(args, callbackContext);
-        } else if (action.equalsIgnoreCase("getFromPath")) {
-            getFromPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("deleteFromPath")) {
-            deleteFromPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("postToPath")) {
-            postToPath(args, callbackContext);
-        } else if (action.equalsIgnoreCase("putToPath")) {
-            putToPath(args, callbackContext);
-        } else {
-            callbackContext.error("Invalid action");
-            return false;
+        try {
+            if (action.equalsIgnoreCase("start")) {
+                start(args, callbackContext);
+            } else if (action.equalsIgnoreCase("startWithDefaultConfiguration")) {
+                startWithDefaultConfiguration(args, callbackContext);
+            } else if (action.equalsIgnoreCase("startWithJSON")) {
+                startWithJSON(args, callbackContext);
+            } else if (action.equalsIgnoreCase("stop")) {
+                stop(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setConfigFileName")) {
+                setConfigFileName(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setGrantFlow")) {
+                setGrantFlow(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelRequest")) {
+                cancelRequest(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setAuthenticationListener")) {
+                setAuthenticationListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("generateAndSendOTP")) {
+                generateAndSendOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("validateOTP")) {
+                validateOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setOTPAuthenticationListener")) {
+                setOTPAuthenticationListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setOTPChannelSelectorListener")) {
+                setOTPChannelSelectorListener(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelOTPValidation")) {
+                cancelOTPValidation(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelGenerateAndSendOTP")) {
+                cancelGenerateAndSendOTP(args, callbackContext);
+            } else if (action.equalsIgnoreCase("gatewayIsReachable")) {
+                gatewayIsReachable(args, callbackContext);
+            } else if (action.equalsIgnoreCase("useNativeMASUI")) {
+                useNativeMASUI(args, callbackContext);
+            } else if (action.equalsIgnoreCase("authorizeQRCode")) {
+                authorizeQRCode(args, callbackContext);
+            } else if (action.equalsIgnoreCase("completeAuthentication")) {
+                completeAuthentication(args, callbackContext);
+            } else if (action.equalsIgnoreCase("cancelAuthentication")) {
+                cancelAuthentication(args, callbackContext);
+            } else if (action.equalsIgnoreCase("getFromPath")) {
+                getFromPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("deleteFromPath")) {
+                deleteFromPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("postToPath")) {
+                postToPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("putToPath")) {
+                putToPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("doSocialLogin")) {
+                doSocialLogin(args, callbackContext);
+            } else {
+                callbackContext.error("Invalid action");
+                return false;
+            }
+        } catch (Throwable th) {
+            callbackContext.error(getError(th));
         }
         return true;
     }
@@ -246,6 +254,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             }
                         };
                         MASUtil.setQrCode(qrcode);
+                        JSONArray providerIds = MASUtil.setAuthenticationProviders(masAuthenticationProviders);
                         boolean init = qrcode.init((Activity) context, requestId, masAuthenticationProviders);
                         String encodedImage = "";
                         if (init) {
@@ -259,6 +268,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                         jsonObject.put("requestType", "Login");
                         jsonObject.put("requestId", requestId);
                         jsonObject.put("qrCodeImageBase64", encodedImage);
+                        jsonObject.put("providers", providerIds);
                         qrcode.start();
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage(), e);
@@ -340,7 +350,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             String otp = args.getString(0);
             masOtpAuthenticationHandlerStatic.proceed(mContext, otp);
-            success(callbackContext, true, false);
+            success(callbackContext, true, false);// TODO: Recheck
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));
@@ -486,6 +496,29 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 Log.e(TAG, error.getMessage(), error);
                 callbackContext.error(getError(error));
 
+            }
+        });
+    }
+
+    private void doSocialLogin(final JSONArray args, final CallbackContext callbackContext) {
+        String providerName = null;
+        try {
+            providerName = (String) args.get(0);
+        } catch (JSONException e) {
+            callbackContext.error(getError(new MASCordovaException("Invalid provider name provided")));
+            return;
+        }
+
+        MASAuthenticationProvider provider = MASUtil.getProvider(providerName);
+        MASCustomTabs.socialLogin(mContext, provider, new MASCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                success(callbackContext, true, false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callbackContext.error(getError(e));
             }
         });
     }

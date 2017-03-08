@@ -4,15 +4,14 @@
  * of the MIT license. See the LICENSE file for details.
  *
  */
-
 var MASPluginUtils = require("./MASPluginUtils"),
     MASPluginConstants = require("./MASPluginConstants"),
     MASPluginCallbacks = require("./MASPluginCallbacks");
 
 var MASPluginUser = require("./MASPluginUser");
-    
+
 var MASPluginMAS = function() {
-    
+
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Properties
@@ -26,13 +25,9 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.initialize = function(successHandler, errorHandler) {
-        
         Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPluginMAS", "setAuthenticationListener", []);
-        
         Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPluginMAS", "setOTPChannelSelectorListener", []);
-        
         Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPluginMAS", "setOTPAuthenticationListener", []);
-        
         // TODO: Check for success or error
         return successHandler("Initialization success !!");
     };
@@ -47,30 +42,27 @@ var MASPluginMAS = function() {
      *     "mas-login.html" is the default page.
      */
     this.setCustomLoginPage = function(successHandler, errorHandler, customPage) {
-        
         MASPluginConstants.MASLoginPage = "masui/mas-login.html";
-        
         if (customPage) {
-            
             var xhr = new XMLHttpRequest();
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (this.response) {
                     MASPluginConstants.MASLoginPage = customPage;
                     return successHandler("Login page set to :" + MASPluginConstants.MASLoginPage);
-                }                
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
-            xhr.send();    
-        }
-        else {
-            
+            xhr.send();
+        } else {
             MASPluginConstants.MASLoginPage = "masui/mas-login.html";
-            return errorHandler({errorMessage: "Can't find " + customPage});
+            return errorHandler({
+                errorMessage: "Can't find " + customPage
+            });
         }
     };
 
@@ -84,28 +76,26 @@ var MASPluginMAS = function() {
      *     "mas-otpchannel.html" is the default page.
      */
     this.setCustomOTPChannelsPage = function(successHandler, errorHandler, customPage) {
-        
         if (customPage) {
-            
             var xhr = new XMLHttpRequest();
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (this.response) {
                     MASPluginConstants.MASOTPChannelsPage = customPage;
                     return successHandler("OTP channels page set to :" + MASPluginConstants.MASOTPChannelsPage);
-                }                 
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
             xhr.send();
-        }
-        else {
-            
+        } else {
             MASPluginConstants.MASOTPChannelsPage = "mas-otpchannel.html";
-            return errorHandler({errorMessage: "Can't find " + customPage});
+            return errorHandler({
+                errorMessage: "Can't find " + customPage
+            });
         }
     };
 
@@ -119,28 +109,26 @@ var MASPluginMAS = function() {
      *     "mas-otp.html" is the default page.
      */
     this.setCustomOTPPage = function(successHandler, errorHandler, customPage) {
-        
         if (customPage) {
-        
             var xhr = new XMLHttpRequest();
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (this.response) {
                     MASPluginConstants.MASOTPPage = customPage;
                     return successHandler("OTP page set to :" + MASPluginConstants.MASOTPPage);
-                }                
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
             xhr.send();
-        }
-        else {
-            
+        } else {
             MASPluginConstants.MASOTPPage = "mas-otp.html";
-            return errorHandler({errorMessage: "Can't find " + customPage});
+            return errorHandler({
+                errorMessage: "Can't find " + customPage
+            });
         }
     };
 
@@ -151,7 +139,6 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.useNativeMASUI = function(successHandler, errorHandler) {
-        
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "useNativeMASUI", []);
     };
 
@@ -160,54 +147,47 @@ var MASPluginMAS = function() {
      Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param {string} fileName 
+     * @param {string} fileName
      */
     this.configFileName = function(successHandler, errorHandler, fileName) {
-        
         if (fileName) {
-        
             var xhr = new XMLHttpRequest();
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (this.response) {
-                    if(fileName.endsWith(".json")){
-                        fileName = fileName.slice(0,-5);
+                    if (fileName.endsWith(".json")) {
+                        fileName = fileName.slice(0, -5);
                     }
                     return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setConfigFileName", [fileName]);
-                }                
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 return errorHandler({
                     errorMessage: "Can't find " + fileName
                 });
             };
-            
-            if(fileName.endsWith(".json")){
-                
-                xhr.open('GET', "../"+fileName, true);
+
+            if (fileName.endsWith(".json")) {
+                xhr.open('GET', "../" + fileName, true);
+            } else {
+                xhr.open('GET', "../" + fileName + ".json", true);
             }
-            else {
-                
-                xhr.open('GET', "../"+fileName+".json", true);
-            }
-           
-            xhr.send();    
+            xhr.send();
+        } else {
+            return errorHandler({
+                errorMessage: "Can't find the file"
+            });
         }
-        else {
-            
-            return errorHandler({errorMessage: "Can't find the file"});
-        }
-    };    
+    };
 
 
     /**
      Sets the device registration type as MASDeviceRegistrationType. This should be set before MAS start is called
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-     * @param {MASGrantFlow} MASGrantFlow 
+     * @param {MASGrantFlow} MASGrantFlow
      */
     this.grantFlow = function(successHandler, errorHandler, MASGrantFlow) {
-    
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setGrantFlow", [MASGrantFlow]);
     };
 
@@ -227,89 +207,86 @@ var MASPluginMAS = function() {
         if (document.getElementById("errorMesg"))
             document.getElementById("errorMesg").innerHTML = "";
 
-        return Cordova.exec(                
+        return Cordova.exec(
             function() {
-                if (document.getElementById("CA-Username") !== null ){
-                    
-                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-                        
+                if (document.getElementById("CA-Username") !== null) {
+                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                         $.mobile.activePage.find(".messagePopup").popup("close");
-                    }
-                    else {
-                        
+                    } else {
                         window.MASPopupUI.close();
                     }
                 }
-
                 successHandler(true);
-            }, 
+            },
             function(error) {
-                
                 if (typeof error !== 'undefined' && !MASPluginUtils.isEmpty(error)) {
-                    
-                    if (typeof error.errorCode !== 'undefined' && 
-                        !MASPluginUtils.isEmpty(error.errorCode) && 
+                    if (typeof error.errorCode !== 'undefined' &&
+                        !MASPluginUtils.isEmpty(error.errorCode) &&
                         !isNaN(error.errorCode)) {
-                        
+
                         var returnedError = "";
                         var errorMsgToDisplay = "";
                         var errorCodeLastDigits = error.errorCode % 1000;
-                                                    
+
                         try {
-                            
                             if (typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
                                 returnedError = JSON.parse(error.errorMessage);
                             }
-                        }
-                        catch (e) {
+                        } catch (e) {
 
                         }
 
                         if (errorCodeLastDigits === 103) {
-                            
                             errorMsgToDisplay = "invalid request: Missing or duplicate parameters";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        }
-                        else if (errorCodeLastDigits === 202) {
-                        
+                        } else if (errorCodeLastDigits === 202) {
                             errorMsgToDisplay = "Username or Password invalid";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        }
-                        else if (errorCodeLastDigits === 105) {
-                        
+                        } else if (errorCodeLastDigits === 105) {
                             errorMsgToDisplay = "Device registration error. The device has already been registered.";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        }
-                        else {
-                        
-                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-                                
+                        } else if (errorCodeLastDigits === 107) {
+                            errorMsgToDisplay = "The given mag-identifier is either invalid or points to an unknown device.";
+                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                        } else {
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                                 $.mobile.activePage.find(".messagePopup").popup("close");
-                            }
-                            else {
-                                
+                            } else {
                                 window.MASPopupUI.close();
                             }
                         }
                     }
-                }
-                else {
-                    
-                    if (typeof jQuery !== 'undefined' && 
+                } else {
+
+                    if (typeof jQuery !== 'undefined' &&
                         typeof $.mobile !== 'undefined') {
-                        
                         $.mobile.activePage.find(".messagePopup").popup("close");
-                    }
-                    else {
-                        
+                    } else {
                         window.MASPopupUI.close();
                     }
                 }
-                
                 errorHandler(error);
-            }, 
+            },
             "MASPluginMAS", "completeAuthentication", [username, password]);
     };
+
+    this.doSocialLogin = function(successHandler, errorHandler, provider) {
+        return Cordova.exec(function() {
+            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+            } else {
+                window.MASPopupUI.close();
+            }
+            successHandler(true);
+        }, function(errorInfo) {
+            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+            } else {
+                window.MASPopupUI.close();
+            }
+            errorHandler(errorInfo);
+        }, "MASPluginMAS", "doSocialLogin", [provider]);
+    }
 
 
     /**
@@ -319,35 +296,25 @@ var MASPluginMAS = function() {
      * @param args user defined variable which is request ID in Android. It is not used in iOS
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-            
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        }
-        else {
-            
+        } else {
             window.MASPopupUI.close();
         }
-     
-        return Cordova.exec(
-            
-            function() {                    
-                
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-                
+
+		return Cordova.exec(
+            function() {
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                     $.mobile.activePage.find(".messagePopup").popup("close");
-                }
-                else {
-                    
+                } else {
                     window.MASPopupUI.close();
                 }
-
-                successHandler(true);                    
-            }, 
+                successHandler(true);
+            },
             errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
     };
 
-    
+
     ///------------------------------------------------------------------------------------------------------------------
     /// @name One Time Password callbacks
     ///------------------------------------------------------------------------------------------------------------------
@@ -359,58 +326,39 @@ var MASPluginMAS = function() {
      * @param {array} channels user defined variable which is an array of channels where the OTP is to be delivered.
      */
     this.generateAndSendOTP = function(successHandler, errorHandler, channels) {
-        
         return Cordova.exec(
-            
             function(shouldValidateOTP) {
-                
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-                
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                     $('#popUp').remove();
-                }
-                else {
-                    
-                    window.MASPopupUI.close();                
+                } else {
+                    window.MASPopupUI.close();
                 }
 
                 if ("true" == shouldValidateOTP) {
-                
                     MASPluginUtils.MASPopupUI(
-                        MASPluginConstants.MASOTPPage, 
+                        MASPluginConstants.MASOTPPage,
                         function() {
-                 
-                           if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-                 
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                                 $('#popUp').remove();
-                           }
-                           else {
-                           
+                            } else {
                                 window.MASPopupUI.close();
-                           }
-                        }, 
+                            }
+                        },
                         function() {}
                     );
                 }
             },
             function(error) {
-                
                 if (document.getElementById("errorMesg")) {
-                
                     var errorMsgToDisplay = "Internal Server Error.";
-                
                     if (typeof error !== 'undefined' && !MASPluginUtils.isEmpty(error) &&
-                
-                        typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)){
-                        errorMsgToDisplay = error.errorMessage;
+                       typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                       errorMsgToDisplay = error.errorMessage;
                     }
-                
                     document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                }
-                else {
-                    
+                } else {
                     errorHandler(error);
                 }
-
             }, "MASPluginMAS", "generateAndSendOTP", [channels]);
     };
 
@@ -421,16 +369,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-        
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        }
-        else { 
-            
+        } else {
             window.MASPopupUI.close();
         }
-                
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
 
@@ -442,16 +385,11 @@ var MASPluginMAS = function() {
      * @param {string} otp user defined one-time password that is to be verified
      */
     this.validateOTP = function(successHandler, errorHandler, otp) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-        
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        }
-        else {
-            
+        } else {
             window.MASPopupUI.close();
         }
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
     };
 
@@ -462,16 +400,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelOTPValidation = function(successHandler, errorHandler) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-        
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        }
-        else {
-            
+        } else {
             window.MASPopupUI.close();
         }
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
     };
 
@@ -485,7 +418,6 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.start = function(successHandler, errorHandler) {
-    
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "start", []);
     };
 
@@ -496,7 +428,6 @@ var MASPluginMAS = function() {
      * @param {array} defaultConfiguration
      */
     this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration) {
-    
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithDefaultConfiguration", [defaultConfiguration]);
     };
 
@@ -507,7 +438,6 @@ var MASPluginMAS = function() {
      * @param {jsonObject} jsonObject
      */
     this.startWithJSON = function(successHandler, errorHandler, jsonObject) {
-     
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithJSON", [jsonObject]);
     };
 
@@ -518,7 +448,6 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.stop = function(successHandler, errorHandler) {
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "stop", []);
     };
 
@@ -532,11 +461,10 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.gatewayIsReachable = function(successHandler, errorHandler) {
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "gatewayIsReachable", []);
     };
 
-    
+
     ///------------------------------------------------------------------------------------------------------------------
     /// @name HTTP Requests
     ///------------------------------------------------------------------------------------------------------------------
@@ -548,11 +476,10 @@ var MASPluginMAS = function() {
      * @param {string} path URL path
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
-     * @param {string} requestType specifies the request type of the request 
+     * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
     this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
 
@@ -564,11 +491,10 @@ var MASPluginMAS = function() {
      * @param {string} path URL path
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
-     * @param {string} requestType specifies the request type of the request 
+     * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
     this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
 
@@ -580,11 +506,10 @@ var MASPluginMAS = function() {
      * @param {string} path path to the url
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
-     * @param {string} requestType specifies the request type of the request 
+     * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
     this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-      
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
 
@@ -596,11 +521,10 @@ var MASPluginMAS = function() {
      * @param {string} path path to the url
      * @param {string} parametersInfo parameters to be passed along with the request
      * @param {string} headersInfo headers of the request
-     * @param {string} requestType specifies the request type of the request 
+     * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
     this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
 
@@ -609,13 +533,12 @@ var MASPluginMAS = function() {
     /// @name Proximity Login
     ///------------------------------------------------------------------------------------------------------------------
     /**
-    *   Authorizes with a QR code
-    *   @param {function} successHandler user defined success callback
-    *   @param {function} errorHandler user defined error callback
-    *   @param {string} code code extracted by the QR code scanner
-    */ 
+     *   Authorizes with a QR code
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} code code extracted by the QR code scanner
+     */
     this.authorize = function(successHandler, errorHandler, code) {
-    
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
     };
 
@@ -628,15 +551,11 @@ var MASPluginMAS = function() {
      Closes an existing popup.
      */
     this.closePopup = function() {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined'){
-        
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        }
-        else {
+        } else {
             window.MASPopupUI.close();
         }
-
         return;
     };
 };

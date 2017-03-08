@@ -61,8 +61,24 @@ var MASPluginCallbacks = {
                 		$('#popUp').remove(); 
                 	}, 
                 	function() {
+                		document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
 
-                		document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"]; 
+                		var providers = result["providers"];
+                		if(typeof providers !== 'undefined' & !MASPluginUtils.isEmpty(providers)) {
+                            
+                            for(var i=0; i < providers.length; i++) {
+                                
+                                var p = providers[i];
+                                if(p !== 'qrcode') {
+                                    
+                                    if(document.getElementById('i'+p))
+                                        document.getElementById('i'+p).src = "img/"+p+"_enabled.png";
+                                    
+                                    if(document.getElementById('l'+p))
+                                        document.getElementById('l'+p).className = "enabled";
+                                }
+                            }
+                	    }
                 	}
                 );
             }
