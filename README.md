@@ -40,14 +40,16 @@ An annotated comment for validateOTP method is as follows:
   * @param {function} successHandler user defined success callback
   * @param {function} errorHandler user defined error callback
   * @param {string} otp user defined one-time password to verify
-  */```   
+  */
+```   
 **Param** – Specifies a parameter.
 **{string}**  – Specifies the return type of the method.
 **otp** – Specifies the variable name.
 **user defined one-time password to verify** – Describes the method.
 
 Compile the JSDoc reference document as follows:
-```jsdoc www/ -d jsdocs
+```
+jsdoc www/ -d jsdocs
 ```
 where “www/” is the location of the js file, and “-d jsdocs” is the location where the generated reference documents are placed.
 
