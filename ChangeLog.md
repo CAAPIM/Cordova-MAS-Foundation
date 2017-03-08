@@ -12,7 +12,7 @@
 - Provided MASUI support for new Login and OTP screens, to be in sync with native SDK (Android only). [US298706]
 - MASUser APIs made instance specific. This would now require an instance of MASUser to be created to access its state variable.[US298706]
 - Change in Javascript files and index to call different native Cordova Plugins as per the flow.[US298706]
-- Added Reference Documentation for Cordova APIs [304202]
+- Added Reference Documentation for Cordova APIs [US304202]
 
 ### Deprecated classes
 
