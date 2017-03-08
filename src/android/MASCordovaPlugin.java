@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 package com.ca.mas.cordova.core;
 
 import com.ca.mas.core.client.ServerClient;
@@ -6,6 +12,8 @@ import com.ca.mas.core.error.MAGException;
 import com.ca.mas.core.error.MAGRuntimeException;
 import com.ca.mas.core.error.MAGServerException;
 import com.ca.mas.core.error.TargetApiException;
+import com.ca.mas.foundation.MAS;
+import com.ca.mas.foundation.MASConstants;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -60,14 +68,14 @@ public class MASCordovaPlugin extends CordovaPlugin {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
             } catch (Exception ignore) {
             }
-
+            errorMessage = e.getMessage();
         } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
             errorCode = MAGErrorCode.UNKNOWN;
-
         } else if (throwable != null && throwable instanceof MASCordovaException) {
             errorMessage = throwable.getMessage();
-
-        } else {
+        } else if ((throwable instanceof NullPointerException || throwable instanceof IllegalStateException) && (MAS.getContext() == null || MAS.getState(this.cordova.getActivity().getApplicationContext()) != MASConstants.MAS_STATE_STARTED)) {
+            errorMessageDetail = "Mobile SSO has not been initialized.";
+        }else {
             errorMessageDetail = throwable.getMessage();
         }
 
@@ -123,5 +131,4 @@ public class MASCordovaPlugin extends CordovaPlugin {
         result.setKeepCallback(setKeepCallback);
         callbackContext.sendPluginResult(result);
     }
-
 }

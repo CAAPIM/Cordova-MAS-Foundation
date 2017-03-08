@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 //
 //  MASPluginApplication.m
 //  FoundationTest
@@ -149,6 +155,16 @@
     
     __block CDVPluginResult *result;
     __block NSMutableArray *enterpriseApps = [[NSMutableArray alloc] init];
+
+    if ([MAS MASState] == MASStateNotInitialized || [MAS MASState] == MASStateDidStop) {
+     
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK Not Initialized !!"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+    
     if(![[MAS gatewayMonitoringStatusAsString] isEqualToString:@"Not Reachable"] && [MASApplication currentApplication])
     {
         [[MASApplication currentApplication] retrieveEnterpriseApps:^(NSArray *objects, NSError * error){
