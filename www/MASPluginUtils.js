@@ -140,8 +140,8 @@ var MASPluginUtils = {
             var popupBody = document.getElementById('popup-bdy');
 
             window.MASPopupUI = new Popup(popupEl, {
-                 width: 500,
-                 height: 500
+                 width: window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,
+                 height: window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight
             });
 
             var xhr = new XMLHttpRequest();
