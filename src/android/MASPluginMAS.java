@@ -242,6 +242,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             @Override
                             protected void onAuthCodeReceived(String code) {
                                 super.onAuthCodeReceived(code);
+                                MASUser.login(null);
                                 String data = "qrCodeAuthorizationComplete";
                                 success(AUTH_LISTENER_CALLBACK, data, true);
                             }
