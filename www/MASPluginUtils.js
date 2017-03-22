@@ -138,6 +138,8 @@ var MASPluginUtils = {
             this.createPopupDiv();
             var popupEl = document.getElementById('popup');
             var popupBody = document.getElementById('popup-bdy');
+                popupEl.style.backgroundColor = "white";
+                popupBody.style.backgroundColor = "white";
 
             window.MASPopupUI = new Popup(popupEl, {
                  width: window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,
