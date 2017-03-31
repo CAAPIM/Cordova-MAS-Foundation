@@ -214,6 +214,7 @@ var MASPluginMAS = function() {
                         $.mobile.activePage.find(".messagePopup").popup("close");
                     } else {
                         window.MASPopupUI.close();
+                            document.getElementById('popup').remove();
                     }
                 }
                 successHandler(true);
@@ -253,6 +254,7 @@ var MASPluginMAS = function() {
                                 $.mobile.activePage.find(".messagePopup").popup("close");
                             } else {
                                 window.MASPopupUI.close();
+                                    document.getElementById('popup').remove();
                             }
                         }
                     }
@@ -263,6 +265,7 @@ var MASPluginMAS = function() {
                         $.mobile.activePage.find(".messagePopup").popup("close");
                     } else {
                         window.MASPopupUI.close();
+                            document.getElementById('popup').remove();
                     }
                 }
                 errorHandler(error);
@@ -276,6 +279,7 @@ var MASPluginMAS = function() {
                 $.mobile.activePage.find(".messagePopup").popup("close");
             } else {
                 window.MASPopupUI.close();
+                    document.getElementById('popup').remove();
             }
             successHandler(true);
         }, function(errorInfo) {
@@ -283,6 +287,7 @@ var MASPluginMAS = function() {
                 $.mobile.activePage.find(".messagePopup").popup("close");
             } else {
                 window.MASPopupUI.close();
+                    document.getElementById('popup').remove();
             }
             errorHandler(errorInfo);
         }, "MASPluginMAS", "doSocialLogin", [provider]);
@@ -300,6 +305,7 @@ var MASPluginMAS = function() {
             $.mobile.activePage.find(".messagePopup").popup("close");
         } else {
             window.MASPopupUI.close();
+                document.getElementById('popup').remove();
         }
 
 		return Cordova.exec(
@@ -308,6 +314,7 @@ var MASPluginMAS = function() {
                     $.mobile.activePage.find(".messagePopup").popup("close");
                 } else {
                     window.MASPopupUI.close();
+                        document.getElementById('popup').remove();
                 }
                 successHandler(true);
             },
@@ -332,6 +339,7 @@ var MASPluginMAS = function() {
                     $('#popUp').remove();
                 } else {
                     window.MASPopupUI.close();
+                        document.getElementById('popup').remove();
                 }
 
                 if ("true" == shouldValidateOTP) {
@@ -342,6 +350,7 @@ var MASPluginMAS = function() {
                                 $('#popUp').remove();
                             } else {
                                 window.MASPopupUI.close();
+                                    document.getElementById('popup').remove();
                             }
                         },
                         function() {}
@@ -373,6 +382,7 @@ var MASPluginMAS = function() {
             $.mobile.activePage.find(".messagePopup").popup("close");
         } else {
             window.MASPopupUI.close();
+                document.getElementById('popup').remove();
         }
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
@@ -389,6 +399,7 @@ var MASPluginMAS = function() {
             $.mobile.activePage.find(".messagePopup").popup("close");
         } else {
             window.MASPopupUI.close();
+                document.getElementById('popup').remove();
         }
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
     };
@@ -404,6 +415,7 @@ var MASPluginMAS = function() {
             $.mobile.activePage.find(".messagePopup").popup("close");
         } else {
             window.MASPopupUI.close();
+                document.getElementById('popup').remove();
         }
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
     };
@@ -555,6 +567,7 @@ var MASPluginMAS = function() {
             $.mobile.activePage.find(".messagePopup").popup("close");
         } else {
             window.MASPopupUI.close();
+                document.getElementById('popup').remove();
         }
         return;
     };

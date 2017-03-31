@@ -52,7 +52,7 @@ var MASPluginCallbacks = {
         else
         {
             if(pageToLoad === MASPluginConstants.MASLoginPage && 
-            	document.getElementById('popUp') === null)
+            	document.getElementById('popUp') === null && document.getElementById('popup') === null)
             {
                 MASPluginUtils.MASPopupUI(
                 	pageToLoad, 
