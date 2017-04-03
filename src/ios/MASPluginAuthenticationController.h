@@ -52,5 +52,16 @@
 - (void)authorizeQRCode:(NSString *)code completion:(MASCompletionErrorBlock) completion;
 
 
+///--------------------------------------
+/// @name Social Login
+///--------------------------------------
+    
+# pragma mark - Social Login
+    
+- (void)doSocialLoginWith:(NSString *)authProviderId
+        topViewController:(UIViewController *)tvc
+               completion:(MASCompletionErrorBlock _Nullable)completion;
+
+
 
 @end

@@ -1,76 +1,64 @@
-/**
+/*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  *
  */
-
 var MASPluginUtils = require("./MASPluginUtils"),
     MASPluginConstants = require("./MASPluginConstants"),
     MASPluginCallbacks = require("./MASPluginCallbacks");
-    
+
+var MASPluginUser = require("./MASPluginUser");
+
 var MASPluginMAS = function() {
-    
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
+
     /**
      * Initializes the MAS plugin. This includes setting of the various listeners required
      * for authenticating the user while registration of the application with the Gateway
-     * and accessing various protected api. Any further initialization related setting will go here.
+     * and accessing various protected API. Any further initialization related setting will go here
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
      */
     this.initialize = function(successHandler, errorHandler) {
-        
-        Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPlugin", "setAuthenticationListener", []);
-        
-        Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPlugin", "setOTPChannelSelectorListener", []);
-        
-        Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPlugin", "setOTPAuthenticationListener", []);
-        
+        Cordova.exec(MASPluginCallbacks.MASAuthenticationCallback, errorHandler, "MASPluginMAS", "setAuthenticationListener", []);
+        Cordova.exec(MASPluginCallbacks.MASOTPChannelSelectCallback, errorHandler, "MASPluginMAS", "setOTPChannelSelectorListener", []);
+        Cordova.exec(MASPluginCallbacks.MASOTPAuthenticationCallback, errorHandler, "MASPluginMAS", "setOTPAuthenticationListener", []);
         // TODO: Check for success or error
         return successHandler("Initialization success !!");
     };
 
-    /**
-     * Use Native MASUI
-     */
-    this.useNativeMASUI = function(successHandler, errorHandler) {
-        
-        Cordova.exec(successHandler, errorHandler, "MASPlugin", "useNativeMASUI", []);
-    };
 
     /**
-     * Set the authentication UI handling page by this plugin.
+     * Sets the authentication UI handling page
      *
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param customPage user defined page if you want the plugin to use it.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} customPage user defined page if you want the plugin to use it.
      *     "mas-login.html" is the default page.
      */
     this.setCustomLoginPage = function(successHandler, errorHandler, customPage) {
-        
         MASPluginConstants.MASLoginPage = "masui/mas-login.html";
-
         if (customPage) {
-            
             var xhr = new XMLHttpRequest();
-        
-            xhr.onload = function () {
-
+            xhr.onload = function() {
                 if (this.response) {
-
                     MASPluginConstants.MASLoginPage = customPage;
                     return successHandler("Login page set to :" + MASPluginConstants.MASLoginPage);
-                }                
+                }
             };
-        
-            xhr.onerror = function (err) {
-                
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
-            xhr.send();    
-        }                
-        else 
-        {
+            xhr.send();
+        } else {
             MASPluginConstants.MASLoginPage = "masui/mas-login.html";
             return errorHandler({
                 errorMessage: "Can't find " + customPage
@@ -78,38 +66,32 @@ var MASPluginMAS = function() {
         }
     };
 
+
     /**
-     * Set the OTP Channels Selection UI handling page by this plugin.
+     * Sets the OTP Channels Selection UI handling page
      *
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param customPage user defined page if you want the plugin to use it.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} customPage user defined page if you want the plugin to use it.
      *     "mas-otpchannel.html" is the default page.
      */
     this.setCustomOTPChannelsPage = function(successHandler, errorHandler, customPage) {
-        
         if (customPage) {
-            
             var xhr = new XMLHttpRequest();
-        
-            xhr.onload = function () {
-
+            xhr.onload = function() {
                 if (this.response) {
-
                     MASPluginConstants.MASOTPChannelsPage = customPage;
                     return successHandler("OTP channels page set to :" + MASPluginConstants.MASOTPChannelsPage);
-                }                 
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
             xhr.send();
-        } 
-        else 
-        {
+        } else {
             MASPluginConstants.MASOTPChannelsPage = "mas-otpchannel.html";
             return errorHandler({
                 errorMessage: "Can't find " + customPage
@@ -117,38 +99,32 @@ var MASPluginMAS = function() {
         }
     };
 
+
     /**
-     * Set the OTP UI handling page by this plugin.
+     * Sets the OTP UI handling page
      *
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param customPage user defined page if you want the plugin to use it.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} customPage user defined page if you want the plugin to use it.
      *     "mas-otp.html" is the default page.
      */
     this.setCustomOTPPage = function(successHandler, errorHandler, customPage) {
-        
         if (customPage) {
-            
             var xhr = new XMLHttpRequest();
-        
-            xhr.onload = function () {
-
+            xhr.onload = function() {
                 if (this.response) {
-
                     MASPluginConstants.MASOTPPage = customPage;
                     return successHandler("OTP page set to :" + MASPluginConstants.MASOTPPage);
-                }                
+                }
             };
-        
-            xhr.onerror = function (err) {
+
+            xhr.onerror = function(err) {
                 errorHandler(err);
             };
 
             xhr.open('GET', customPage, true);
             xhr.send();
-        } 
-        else 
-        {
+        } else {
             MASPluginConstants.MASOTPPage = "mas-otp.html";
             return errorHandler({
                 errorMessage: "Can't find " + customPage
@@ -156,325 +132,444 @@ var MASPluginMAS = function() {
         }
     };
 
+
     /**
-     Sets the device registration type MASDeviceRegistrationType. This should be set before MAS start is executed.
+     * Use Native MASUI
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
      */
-    this.grantFlow = function(successHandler, errorHandler, MASGrantFlow) {
-    
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setGrantFlow", [MASGrantFlow]);
+    this.useNativeMASUI = function(successHandler, errorHandler) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "useNativeMASUI", []);
     };
 
+
     /**
-     Set the name of the configuration file.  This gives the ability to set the file's name to a custom value.
+     Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} fileName
      */
     this.configFileName = function(successHandler, errorHandler, fileName) {
-
-     	if (fileName) {
-            
+        if (fileName) {
             var xhr = new XMLHttpRequest();
-        
-            xhr.onload = function () {
-
+            xhr.onload = function() {
                 if (this.response) {
-                	if(fileName.endsWith(".json")){
-                		fileName = fileName.slice(0,-5);
-                	}
-                    return Cordova.exec(successHandler, errorHandler, "MASPlugin", "setConfigFileName", [fileName]);
-                }                
+                    if (fileName.endsWith(".json")) {
+                        fileName = fileName.slice(0, -5);
+                    }
+                    return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setConfigFileName", [fileName]);
+                }
             };
-        
-            xhr.onerror = function (err) {
-            	return errorHandler({
-                	errorMessage: "Can't find " + fileName
-            	});
+
+            xhr.onerror = function(err) {
+                return errorHandler({
+                    errorMessage: "Can't find " + fileName
+                });
             };
-            if(fileName.endsWith(".json")){
-            	xhr.open('GET', "../"+fileName, true);
+
+            if (fileName.endsWith(".json")) {
+                xhr.open('GET', "../" + fileName, true);
+            } else {
+                xhr.open('GET', "../" + fileName + ".json", true);
             }
-            else{
-            	xhr.open('GET', "../"+fileName+".json", true);
-            }
-            xhr.send();    
-        }                
-        else 
-        {
+            xhr.send();
+        } else {
             return errorHandler({
                 errorMessage: "Can't find the file"
             });
         }
     };
 
+
     /**
-     Starts the lifecycle of the MAS processes. This includes the registration of the application to the Gateway, if the network is available.
+     Sets the device registration type as MASDeviceRegistrationType. This should be set before MAS start is called
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {MASGrantFlow} MASGrantFlow
      */
-    this.start = function(successHandler, errorHandler) {
-    
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "start", []);
+    this.grantFlow = function(successHandler, errorHandler, MASGrantFlow) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setGrantFlow", [MASGrantFlow]);
     };
 
-    this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration) {
-    
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithDefaultConfiguration", [defaultConfiguration]);
-    };
 
-    this.startWithJSON = function(successHandler, errorHandler, jsonObject) {
-     
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "startWithJSON", [jsonObject]);
-    };
-
-    this.authorize = function(successHandler, errorHandler, code) {
-    
-        Cordova.exec(successHandler, errorHandler, "MASPlugin", "authorizeQRCode", [code]);
-    };
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Authentication callbacks
+    ///------------------------------------------------------------------------------------------------------------------
 
     /**
      Completes the current user's authentication session validation.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param username user defined username
-     * @param password user defined password
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} username user defined username
+     * @param {string} password user defined password
     */
     this.completeAuthentication = function(successHandler, errorHandler, username, password) {
-    
-        if (document.getElementById("errorMesg")) 
+        if (document.getElementById("errorMesg"))
             document.getElementById("errorMesg").innerHTML = "";
 
-        return Cordova.exec(                
+        return Cordova.exec(
             function() {
-
-                if (document.getElementById("CA-Username") !== null ) 
-                {
-                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                if (document.getElementById("CA-Username") !== null) {
+                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                         $.mobile.activePage.find(".messagePopup").popup("close");
-                    else
+                    } else {
                         window.MASPopupUI.close();
+                            document.getElementById('popup').remove();
+                    }
                 }
-
                 successHandler(true);
-            }, 
+            },
             function(error) {
-                
                 if (typeof error !== 'undefined' && !MASPluginUtils.isEmpty(error)) {
-                    
-                    if (typeof error.errorCode !== 'undefined' && 
-                        !MASPluginUtils.isEmpty(error.errorCode) && !isNaN(error.errorCode)) {
-                    
+                    if (typeof error.errorCode !== 'undefined' &&
+                        !MASPluginUtils.isEmpty(error.errorCode) &&
+                        !isNaN(error.errorCode)) {
+
                         var returnedError = "";
                         var errorMsgToDisplay = "";
                         var errorCodeLastDigits = error.errorCode % 1000;
-                                                    
-                        try {
-                           
-                            if (typeof error.errorMessage !== 'undefined' && 
-                                !MASPluginUtils.isEmpty(error.errorMessage)) {
 
+                        try {
+                            if (typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
                                 returnedError = JSON.parse(error.errorMessage);
                             }
-                        } 
-                        catch (e) {
+                        } catch (e) {
 
                         }
 
                         if (errorCodeLastDigits === 103) {
-                            
                             errorMsgToDisplay = "invalid request: Missing or duplicate parameters";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        } 
-                        else if (errorCodeLastDigits === 202) {
-                            
+                        } else if (errorCodeLastDigits === 202) {
                             errorMsgToDisplay = "Username or Password invalid";
                             document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        }
-                        else {
-                            
-                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                        } else if (errorCodeLastDigits === 105) {
+                            errorMsgToDisplay = "Device registration error. The device has already been registered.";
+                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                        } else if (errorCodeLastDigits === 107) {
+                            errorMsgToDisplay = "The given mag-identifier is either invalid or points to an unknown device.";
+                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+                        } else {
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                                 $.mobile.activePage.find(".messagePopup").popup("close");
-                            else
+                            } else {
                                 window.MASPopupUI.close();
+                                    document.getElementById('popup').remove();
+                            }
                         }
                     }
-                } 
-                else {
-                    
-                    if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                } else {
+
+                    if (typeof jQuery !== 'undefined' &&
+                        typeof $.mobile !== 'undefined') {
                         $.mobile.activePage.find(".messagePopup").popup("close");
-                    else
+                    } else {
                         window.MASPopupUI.close();
+                            document.getElementById('popup').remove();
+                    }
                 }
-                
                 errorHandler(error);
-            }, 
-            "MASPlugin", "completeAuthentication", [username, password]);
+            },
+            "MASPluginMAS", "completeAuthentication", [username, password]);
     };
+
+    this.doSocialLogin = function(successHandler, errorHandler, provider) {
+        return Cordova.exec(function() {
+            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+            } else {
+                window.MASPopupUI.close();
+                    document.getElementById('popup').remove();
+            }
+            successHandler(true);
+        }, function(errorInfo) {
+            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+            } else {
+                window.MASPopupUI.close();
+                    document.getElementById('popup').remove();
+            }
+            errorHandler(errorInfo);
+        }, "MASPluginMAS", "doSocialLogin", [provider]);
+    }
+
 
     /**
      Cancels the current user's authentication session validation.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param args user defined variable which is request Id in Android. It is not used in iOS
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param args user defined variable which is request ID in Android. It is not used in iOS
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
-    
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        else
+        } else {
             window.MASPopupUI.close();
-     
-        return Cordova.exec(
-            function() {                    
+                document.getElementById('popup').remove();
+        }
 
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+		return Cordova.exec(
+            function() {
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                     $.mobile.activePage.find(".messagePopup").popup("close");
-                else
+                } else {
                     window.MASPopupUI.close();
-
-                successHandler(true);                    
-            }, 
-            errorHandler, "MASPlugin", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
+                        document.getElementById('popup').remove();
+                }
+                successHandler(true);
+            },
+            errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
     };
 
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name One Time Password callbacks
+    ///------------------------------------------------------------------------------------------------------------------
+
     /**
-     Request Server to generate and send OTP to the channels provided.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @channels user defined variable which is an array of channels where the OTP is to be delivered.
+     Requests server to generate and send OTP to the channels provided.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {array} channels user defined variable which is an array of channels where the OTP is to be delivered.
      */
     this.generateAndSendOTP = function(successHandler, errorHandler, channels) {
-
         return Cordova.exec(
-            
             function(shouldValidateOTP) {
-                
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                     $('#popUp').remove();
-                else
-                    window.MASPopupUI.close();                
-                
+                } else {
+                    window.MASPopupUI.close();
+                        document.getElementById('popup').remove();
+                }
+
                 if ("true" == shouldValidateOTP) {
                     MASPluginUtils.MASPopupUI(
-                        MASPluginConstants.MASOTPPage, 
+                        MASPluginConstants.MASOTPPage,
                         function() {
-                            
-                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
                                 $('#popUp').remove();
-                            else
+                            } else {
                                 window.MASPopupUI.close();
-                        }, 
+                                    document.getElementById('popup').remove();
+                            }
+                        },
                         function() {}
                     );
                 }
             },
             function(error) {
-
                 if (document.getElementById("errorMesg")) {
-
                     var errorMsgToDisplay = "Internal Server Error.";
-                    
                     if (typeof error !== 'undefined' && !MASPluginUtils.isEmpty(error) &&
-                        typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) 
-                    {
-                        errorMsgToDisplay = error.errorMessage;
+                       typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                       errorMsgToDisplay = error.errorMessage;
                     }
-
                     document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                } 
-                else {
-
+                } else {
                     errorHandler(error);
                 }
-            }, "MASPlugin", "generateAndSendOTP", [channels]);
+            }, "MASPluginMAS", "generateAndSendOTP", [channels]);
     };
+
 
     /**
      Cancels the current user's generating and sending OTP call.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
      */
     this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
-        else
+        } else {
             window.MASPopupUI.close();
-        
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelGenerateAndSendOTP", []);
-    };
-    /**
-     Validate the entered OTP.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     * @param otp user defined one time password that is to be verified
-     */
-    this.validateOTP = function(successHandler, errorHandler, otp) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        else
-            window.MASPopupUI.close();
-        
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "validateOTP", [otp]);
-    };
-    /**
-     Cancels the current user's authentication session validation.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     */
-    this.cancelOTPValidation = function(successHandler, errorHandler) {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        else
-            window.MASPopupUI.close();
-        
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "cancelOTPValidation", []);
-    };
-    /**
-     Closes an existing popup.
-     * @param successHandler user defined success callback
-     * @param errorHandler user defined error callback
-     */
-    this.closePopup = function() {
-        
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined')
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        else
-            window.MASPopupUI.close();
-        
-        return;
-    };
-    /**
-     getFromPath does the HTTP GET call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
-     */
-    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
-    };
-    /**
-     deleteFromPath does the HTTP DELTE call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
-     */
-    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
-    };
-    /**
-     putToPath does the HTTP PUT call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
-     */
-    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
-    };
-    /**
-     postToPath does the HTTP POST call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
-     */
-    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
-    };
-    /**
-     Stops the lifecycle of all MAS processes.
-     */
-    this.stop = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "stop", []);
+                document.getElementById('popup').remove();
+        }
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
 
+
+    /**
+     Validates the entered OTP.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} otp user defined one-time password that is to be verified
+     */
+    this.validateOTP = function(successHandler, errorHandler, otp) {
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+                document.getElementById('popup').remove();
+        }
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
+    };
+
+
+    /**
+     Cancels the authentication validation session of the user
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.cancelOTPValidation = function(successHandler, errorHandler) {
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+                document.getElementById('popup').remove();
+        }
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
+    };
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Start & Stop
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+     Starts the lifecycle of the MAS processes. This includes the registration of the application on the Gateway, if the network is available.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.start = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "start", []);
+    };
+
+    /**
+     Starts the lifecycle of the MAS processes with a specified default configuration. This includes the registration of the application on the Gateway, if the network is available.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {array} defaultConfiguration
+     */
+    this.startWithDefaultConfiguration = function(successHandler, errorHandler, defaultConfiguration) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithDefaultConfiguration", [defaultConfiguration]);
+    };
+
+    /**
+     Starts the lifecycle of the MAS processes with a specified msso_config.json. This includes the registration of the application on the Gateway, if the network is available.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {jsonObject} jsonObject
+     */
+    this.startWithJSON = function(successHandler, errorHandler, jsonObject) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithJSON", [jsonObject]);
+    };
+
+
+    /**
+     Stops the lifecycle of all MAS processes.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.stop = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "stop", []);
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Gateway monitoring
+    ///------------------------------------------------------------------------------------------------------------------
+    /**
+     Checks whether the Gateway is reachable
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
     this.gatewayIsReachable = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPlugin", "gatewayIsReachable", []);
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "gatewayIsReachable", []);
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name HTTP Requests
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+     Calls the HTTP GET method from the gateway. This requires at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} path URL path
+     * @param {string} parametersInfo parameters to be passed along with the request
+     * @param {string} headersInfo headers of the request
+     * @param {string} requestType specifies the request type of the request
+     * @param {string} responseType specifies the response type of the request
+     */
+    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    };
+
+
+    /**
+     Calls the HTTP DELTE method from the Gateway. It requires at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} path URL path
+     * @param {string} parametersInfo parameters to be passed along with the request
+     * @param {string} headersInfo headers of the request
+     * @param {string} requestType specifies the request type of the request
+     * @param {string} responseType specifies the response type of the request
+     */
+    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    };
+
+
+    /**
+     Calls the HTTP POST method from the Gateway. This expects at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType are not present, then it is set to the default JSON type
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} path path to the url
+     * @param {string} parametersInfo parameters to be passed along with the request
+     * @param {string} headersInfo headers of the request
+     * @param {string} requestType specifies the request type of the request
+     * @param {string} responseType specifies the response type of the request
+     */
+    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    };
+
+
+    /**
+     postToPath does the HTTP POST call from the gateway. This expects atleast three mandatry parameters as shown in the the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present then it is set to the Default Type to JSON.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {string} path path to the url
+     * @param {string} parametersInfo parameters to be passed along with the request
+     * @param {string} headersInfo headers of the request
+     * @param {string} requestType specifies the request type of the request
+     * @param {string} responseType specifies the response type of the request
+     */
+    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Proximity Login
+    ///------------------------------------------------------------------------------------------------------------------
+    /**
+     *   Authorizes with a QR code
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} code code extracted by the QR code scanner
+     */
+    this.authorize = function(successHandler, errorHandler, code) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
+    };
+
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Utility
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+     Closes an existing popup.
+     */
+    this.closePopup = function() {
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+                document.getElementById('popup').remove();
+        }
+        return;
     };
 };
 
