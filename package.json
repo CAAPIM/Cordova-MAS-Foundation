@@ -1,0 +1,30 @@
+{
+  "name": "cordova-plugin-mas-core",
+  "version": "1.0.0",
+  "description": "Cordova MAS Plugin",
+  "cordova": {
+    "id": "cordova-plugin-mas-core",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CAAPIM/MAS-Foundation-Cordova.git"
+  },
+  "keywords": [
+    "cordova",
+    "MAS",
+    "CA Technologies",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "MOhammed Mujeeb Kaladgi",
+  "license": "CA Technologies Ltd.",
+  "bugs": {
+    "url": "https://github.com/CAAPIM/MAS-Foundation-Cordova/issues"
+  },
+  "homepage": "https://github.com/CAAPIM/MAS-Foundation-Cordova#readme"
+}
