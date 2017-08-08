@@ -71,12 +71,6 @@
      *  @member {bool}
      */ 
      this.active = masPluginUser.active;
-     
-     /**
-     *  Accesstoken
-     *  @member {string}
-     */ 
-     this.accessToken = masPluginUser.accessToken;
 
      /**
      *  Boolean indicator that specifies whether the MASPluginUser object is the current user.
@@ -95,6 +89,15 @@
      */
      this.isAuthenticated = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isAuthenticated", []);
+     };
+
+    /**
+     *  String accessToken value of the Current logged in user.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.getAccessToken = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
      };
 
     /**
@@ -212,7 +215,7 @@ MASPluginUser.sharedCurrUser;
  *  @param {string} idToken The id_token for the user.
  *  @param {string} tokenType Token type of id_token.
  */
- MASPluginUser.loginWithUsernameAndPassword = function(successHandler, errorHandler, idToken, tokenType) {
+ MASPluginUser.loginWithIdTokenAndTokenType = function(successHandler, errorHandler, idToken, tokenType) {
     return Cordova.exec(function(result) {
         if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
             MASPluginUser.currentUser(function(){}, function(){});
