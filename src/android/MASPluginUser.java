@@ -14,6 +14,7 @@ import android.util.Log;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
 import com.ca.mas.foundation.MASGroup;
+import com.ca.mas.foundation.MASIdToken;
 import com.ca.mas.foundation.MASSessionUnlockCallback;
 import com.ca.mas.foundation.MASUser;
 import com.ca.mas.identity.user.MASAddress;
@@ -50,6 +51,8 @@ public class MASPluginUser extends MASCordovaPlugin {
                 isAuthenticated(callbackContext);
             } else if (action.equalsIgnoreCase("isCurrentUser")) {
                 isCurrentUser(callbackContext);
+            } else if (action.equalsIgnoreCase("getAccessToken")) {
+                getAccessToken(callbackContext);
             } else if (action.equalsIgnoreCase("currentUser")) {
                 getCurrentUser(callbackContext);
             } else if (action.equalsIgnoreCase("isSessionLocked")) {
@@ -64,6 +67,8 @@ public class MASPluginUser extends MASCordovaPlugin {
                 removeSessionLock(callbackContext);
             } else if (action.equalsIgnoreCase("loginWithUsernameAndPassword")) {
                 loginWithUsernameAndPassword(args, callbackContext);
+            } else if (action.equalsIgnoreCase("loginWithIdTokenAndTokenType")) {
+                loginWithIdTokenAndTokenType(args, callbackContext);
             } else if (action.equalsIgnoreCase("logoutUser")) {
                 logoutUser(callbackContext);
             } else if (action.equalsIgnoreCase("requestUserInfo")) {
@@ -102,6 +107,19 @@ public class MASPluginUser extends MASCordovaPlugin {
             return;
         }
         success(callbackContext, masUser.isCurrentUser(), false);
+    }
+
+    /**
+     * Retreives the logged in user's access token
+     */
+    private void getAccessToken(CallbackContext callbackContext) {
+        MASUser masUser = MASUser.getCurrentUser();
+        if (masUser == null) {
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            callbackContext.error(getError(e));
+            return;
+        }
+        success(callbackContext, masUser.getAccessToken(), false);
     }
 
     /**
@@ -364,6 +382,36 @@ public class MASPluginUser extends MASCordovaPlugin {
             @Override
             public void onSuccess(MASUser masUser) {
                 String result = "Login with username and password complete";
+                success(callbackContext, result, false);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage(), throwable);
+                callbackContext.error(getError(throwable));
+            }
+        });
+    }
+
+    /**
+     * is used to login with an IDToken and IDTokenType
+     */
+    private void loginWithIdTokenAndTokenType(final JSONArray args, final CallbackContext callbackContext) {
+        String idToken;
+        String idTokenType;
+        try {
+            idToken = args.getString(0);
+            idTokenType = args.getString(1);
+        } catch (JSONException e) {
+            callbackContext.error(getError(e));
+            return;
+        }
+        MASIdToken masIdToken = new MASIdToken.Builder().value(idToken).type(idTokenType).build();
+
+        MASUser.login(masIdToken, new MASCallback<MASUser>() {
+            @Override
+            public void onSuccess(MASUser masUser) {
+                String result = "Login with idToken complete";
                 success(callbackContext, result, false);
             }
 

@@ -31,6 +31,10 @@
 
 
 
+- (void)getAccessToken:(CDVInvokedUrlCommand*)command;
+
+
+
 - (void)isSessionLocked:(CDVInvokedUrlCommand*)command;
 
 
@@ -95,6 +99,9 @@
 
 
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
+
+
+- (void)loginWithIdTokenAndTokenType:(CDVInvokedUrlCommand*)command;
 
 
 - (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command;

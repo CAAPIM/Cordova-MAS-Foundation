@@ -1,3 +1,19 @@
+# Version 1.5
+
+### Bug fixes
+
+- None
+
+### New features
+
+- Exposed API to get accessToken in MASPluginUser.
+- Exposed API for loginWithIdToken in MASPluginUser.
+
+### Deprecated classes
+
+- None.
+
+
 # Version 1.4
 
 ### Bug fixes

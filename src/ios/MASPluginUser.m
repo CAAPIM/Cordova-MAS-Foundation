@@ -72,6 +72,27 @@
 }
 
 
+- (void)getAccessToken:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    if([MASUser currentUser])
+    {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                     messageAsString:[[MASUser currentUser] accessToken]];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user available"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
 - (void)isSessionLocked:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
@@ -387,6 +408,50 @@
             }
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Login with username and password complete"];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:1000],
+                                    @"errorMessage":@"Invalid parameters. Please provide the valid inputs.",
+                                    @"errorInfo":[NSDictionary dictionary]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        
+    }
+}
+
+
+- (void)loginWithIdTokenAndTokenType:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *idToken = @"";
+    NSString *tokenType = @"";
+    
+    if (command.arguments.count>=2) {
+        
+        idToken = [command.arguments objectAtIndex:0];
+        tokenType = [command.arguments objectAtIndex:1];
+        
+        [MASUser loginWithIdToken:idToken tokenType:tokenType completion:^(BOOL completed, NSError *error) {
+            
+            if (error) {
+                
+                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[error userInfo]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Login with idToken and tokenType complete"];
             
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }];

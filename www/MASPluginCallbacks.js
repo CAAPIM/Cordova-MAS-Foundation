@@ -72,7 +72,7 @@ var MASPluginCallbacks = {
                                 if(p !== 'qrcode') {
                                     
                                     if(document.getElementById('i'+p))
-                                        document.getElementById('i'+p).src = "img/"+p+"_enabled.png";
+                                        document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
                                     
                                     if(document.getElementById('l'+p))
                                         document.getElementById('l'+p).className = "enabled";
