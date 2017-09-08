@@ -71,11 +71,14 @@ var MASPluginCallbacks = {
                                 var p = providers[i];
                                 if(p !== 'qrcode') {
                                     
-                                    if(document.getElementById('i'+p))
+                                    if(document.getElementById('i'+p)) {
+                                        
                                         document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
-                                    
-                                    if(document.getElementById('l'+p))
                                         document.getElementById('l'+p).className = "enabled";
+                                          
+                                        if(p === 'salesforce')
+                                          document.getElementById('i'+p).style.backgroundColor = "#1798c1";
+                                    }
                                 }
                             }
                 	    }
