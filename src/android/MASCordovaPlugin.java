@@ -14,6 +14,7 @@ import com.ca.mas.core.error.MAGServerException;
 import com.ca.mas.core.error.TargetApiException;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASConstants;
+import com.ca.mas.foundation.MASException;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -34,10 +35,19 @@ public class MASCordovaPlugin extends CordovaPlugin {
     /**
      * Transform the throwable to a JSON error, used when calling back into JavaScript when for error
      *
-     * @param throwable The Throwable object to format.
+     * @param error The Throwable object to format.
      * @return A JSON Object to represent the error
      */
-    protected JSONObject getError(Throwable throwable) {
+    protected JSONObject getError(Throwable error) {
+        String rootCauseErrorMessage = null;
+        if (error instanceof MASException) {
+            if (((MASException) error).getRootCause() != null) {
+                rootCauseErrorMessage = ((MASException) error).getRootCause().getMessage();
+            }
+        }
+        return getError(error, rootCauseErrorMessage);
+    }
+    protected JSONObject getError(Throwable throwable, String rootCauseErrorMessage) {
         int errorCode = MAGErrorCode.UNKNOWN;
         String errorMessage = throwable.getMessage();
         String errorMessageDetail = "";
@@ -89,6 +99,11 @@ public class MASCordovaPlugin extends CordovaPlugin {
             if (!"".equals(errorMessageDetail)) {
                 error.put("errorMessageDetail", errorMessageDetail);
                 error.put("errorMessage", "Internal Server Error");
+            }
+
+            //If root cause message is available then set that as the error message 
+            if (rootCauseErrorMessage != null ) {
+                error.put("errorMessage", rootCauseErrorMessage);
             }
         } catch (JSONException ignore) {
         }

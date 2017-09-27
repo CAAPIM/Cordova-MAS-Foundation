@@ -92,6 +92,15 @@
      };
 
     /**
+     *  String accessToken value of the Current logged in user.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.getAccessToken = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
+     };
+
+    /**
      *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
@@ -197,6 +206,22 @@ MASPluginUser.sharedCurrUser;
          }
         successHandler(result);
     }, errorHandler, "MASPluginUser", "loginWithUsernameAndPassword", [username, password]);
+};
+
+/**
+ Authenticate a user via asynchronous request with id_token
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} idToken The id_token for the user.
+ *  @param {string} tokenType Token type of id_token.
+ */
+ MASPluginUser.loginWithIdTokenAndTokenType = function(successHandler, errorHandler, idToken, tokenType) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
 };
 
 module.exports = MASPluginUser;

@@ -178,6 +178,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private void setConfigFileName(final JSONArray args, final CallbackContext callbackContext) {
         try {
             String filename = args.getString(0);
+			if (!filename.endsWith(".json")) {
+                filename = filename + ".json";
+            }
             AssetManager mg = mContext.getResources().getAssets();
             try {
                 mg.open(filename);
