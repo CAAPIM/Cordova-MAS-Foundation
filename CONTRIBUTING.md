@@ -1,8 +1,8 @@
-# Contribute to CA Mobile App Services SDK - Cordova
+# Contribute to the Cordova Mobile SDK
 Contributions are welcome and much appreciated. Just follow these easy steps to contribute.
 
 ## Our Development Process
-To continue improving the SDK, the MAS development team will work on the same GitHub repos as you. The `develop branch` is used for development, and the `master branch` is used only for stable releases.
+To continue improving the SDK, our development team will work on the same GitHub repos as you. The `develop branch` is used for development, and the `master branch` is used only for stable releases.
 **Note:** For production environments, please use releases only from the master branch.
 
 ### Pull Requests
@@ -11,7 +11,7 @@ We welcome and encourage pull requests. When we get a pull request, it is peer r
 Follow these steps for pull requests:
 
 1. Fork the repo and create your branch from `master`.
-4. For any new code, add unit tests.
+2. For any new code, add unit tests.
 3. If you've changed APIs, update code comments in MASPlugin js file.
 4. Verify that the test suite passes.
 5. If you haven't already, complete the [Contributor License Agreement ("CLA")][cla].
@@ -40,10 +40,10 @@ Before filing a new issue, check Known Issues to see if your problem already exi
 * Anything else that seems relevant. 
 
 ## License
-By contributing to CA Mobile App Services SDK, you agree that your contributions will be licensed under its [license][license-link].
+By contributing to the Cordova Mobile SDK, you agree that your contributions will be licensed under its [license][license-link].
 
 
- [community]: https://communities.ca.com/community/ca-api-management-community/content?filterID=contentstatus%5Bpublished%5D~category%5Bca-mobile-api-gateway%5D
- [license-link]: /LICENSE
- [cla]: https://www.clahub.com/agreements/CAAPIM/Cordova-MAS-Foundation
- [casupport]: https://support.ca.com/irj/portal/implsvcnewcase
+[community]: https://communities.ca.com/community/ca-api-management-community/content?filterID=contentstatus%5Bpublished%5D~category%5Bca-mobile-api-gateway%5D
+[license-link]: /LICENSE
+[cla]: https://www.clahub.com/agreements/CAAPIM/Cordova-MAS-Foundation
+[casupport]: https://support.ca.com/irj/portal/implsvcnewcase
