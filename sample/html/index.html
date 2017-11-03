@@ -626,6 +626,30 @@
                     });
             });
 
+            $("#listAttributes").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                MASPluginUser.currentUser(function(result) {
+                        result.listAttributes(function(result) {
+                                thisElement.removeClass("success").removeClass("failure").addClass("success");
+                                displayResult(thisElement, result);
+                            },
+                            function(error) {
+                                thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                                displayError(thisElement, error);
+                            });
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+            });
+
+
             $("#isDeviceRegistered").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
 
@@ -1147,6 +1171,7 @@
                     <li data-icon="false"><a href="#" id="removeSessionLock">MASUser removeSessionLock<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="isUserAuthenticated">MASUser isAuthenticated<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getAccessToken">MASUser Access Token<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="listAttributes">MASUser List All Attributes<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
