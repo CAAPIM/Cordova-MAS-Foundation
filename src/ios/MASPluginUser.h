@@ -47,7 +47,7 @@
 
 - (void)currentUser:(CDVInvokedUrlCommand*)command;
 
-
+- (void)listAttributes:(CDVInvokedUrlCommand*)command;
 
 ///--------------------------------------
 /// @name Current User - Lock/Unlock Session

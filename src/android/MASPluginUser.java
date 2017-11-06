@@ -73,6 +73,8 @@ public class MASPluginUser extends MASCordovaPlugin {
                 logoutUser(callbackContext);
             } else if (action.equalsIgnoreCase("requestUserInfo")) {
                 requestUserInfo(callbackContext);
+            } else if (action.equalsIgnoreCase("listAttributes")) {
+                listAttributes(callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -469,6 +471,24 @@ public class MASPluginUser extends MASCordovaPlugin {
                 callbackContext.error(getError(throwable));
             }
         });
+    }
+
+    /**
+     * Fetches all the attributes of a logged-in user in the form of a JSON
+     */
+    private void listAttributes(final CallbackContext callbackContext) {
+        MASUser masUser = MASUser.getCurrentUser();
+        if (masUser == null) {
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            callbackContext.error(getError(e));
+            return;
+        }
+        try {
+            success(callbackContext, masUser.getAsJSONObject(), false);
+        } catch (JSONException ex) {
+            Log.e(TAG, ex.getMessage(), ex);
+            callbackContext.error(getError(ex));
+        }
     }
 
     private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException {

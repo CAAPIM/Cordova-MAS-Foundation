@@ -100,6 +100,15 @@
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
      };
 
+	 /**
+     *  String Lists all the attributes of the Current logged in user.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.listAttributes = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "listAttributes", []);
+     };
+
     /**
      *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback
