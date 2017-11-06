@@ -167,6 +167,27 @@
 }
 
 
+- (void)listAttributes:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    if([MASUser currentUser])
+    {
+        
+        NSDictionary *attribute = [[MASUser currentUser] _attributes];
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:attribute];
+    }
+    else {
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user available"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+    }
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
 ///--------------------------------------
 /// @name Current User - Lock/Unlock Session
 ///--------------------------------------
