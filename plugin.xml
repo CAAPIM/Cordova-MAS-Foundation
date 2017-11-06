@@ -52,6 +52,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <js-module src="www/simple-popup.js" name="PopupUI">
         <clobbers target="PopupUI" />
     </js-module>
+    <!--<js-module src="tests/tests.js" name="tests">
+</js-module>-->
 
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
