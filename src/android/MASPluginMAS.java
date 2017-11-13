@@ -541,7 +541,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
             obj = (JSONObject) args.get(0);
             String host = obj.getString("host");
             if (host == null || host.isEmpty()) {
-                throw new MASCordovaException("Missing host");
+                throw new IllegalArgumentException("Missing host");
             }
             boolean isPublic = obj.optBoolean("isPublic", false);
             JSONArray certs = obj.optJSONArray("certificates");

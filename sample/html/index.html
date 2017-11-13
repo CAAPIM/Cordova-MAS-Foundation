@@ -939,25 +939,18 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //     $.mobile.showPageLoadingMsg();
-
                 MAS.getFromPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
-                        //       console.log(error);
+                        // console.log(JSON.stringify(error));
                         var returnedMsg = getErrorMessage(error);
                         if (returnedMsg != null && returnedMsg != undefined && returnedMsg != "") {
                             error.errorMessage = returnedMsg;
                         }
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //   $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -975,20 +968,13 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //   $.mobile.showPageLoadingMsg();
-
                 MAS.putToPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //    $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -1005,21 +991,13 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
-
-                //   $.mobile.showPageLoadingMsg();
-
                 MAS.postToPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //    $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //    $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -1037,20 +1015,13 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //    $.mobile.showPageLoadingMsg();
-
                 MAS.deleteFromPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //     $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -1240,7 +1211,7 @@
                 <ul data-role="listview" data-theme="b">
                     <li data-icon="false">
                         <a href="#" id="setSecurityConfiguration">MAS Set Security Configuration
-                            <input type="text" name="host" placeholder="hostname:port"/>
+                            <input type="text" name="host" placeholder="hostname with optional port"/>
                             <label for="isPublic">Is Public Server:</label>
                             <select id="isPublic" name="isPublic" >
                                 <option value="false">False</option>
