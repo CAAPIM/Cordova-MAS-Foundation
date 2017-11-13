@@ -540,6 +540,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             obj = (JSONObject) args.get(0);
             String host = obj.getString("host");
+            if (host == null || host.isEmpty()) {
+                throw new MASCordovaException("Missing host");
+            }
             boolean isPublic = obj.optBoolean("isPublic", false);
             JSONArray certs = obj.optJSONArray("certificates");
             JSONArray publicKeyHashes = obj.optJSONArray("publicKeyHashes");
@@ -570,8 +573,11 @@ public class MASPluginMAS extends MASCordovaPlugin {
             configuration = secBuilder.build();
             MASConfiguration.getCurrentConfiguration().addSecurityConfiguration(configuration);
             success(callbackContext, false);
+        } catch (IllegalArgumentException iex) {
+            callbackContext.error(getError(new MASCordovaException(iex.getMessage())));
+            return;
         } catch (Exception e) {
-            callbackContext.error(getError(new MASCordovaException("Invalid MASSecurityConfiguration provided")));
+            callbackContext.error(getError(new MASCordovaException("Invalid MAS SecurityConfiguration provided")));
             return;
         }
     }
