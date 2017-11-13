@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.ca.mas.foundation.MASAuthorizationResponse;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
 import com.ca.mas.foundation.MASGroup;
@@ -69,12 +70,18 @@ public class MASPluginUser extends MASCordovaPlugin {
                 loginWithUsernameAndPassword(args, callbackContext);
             } else if (action.equalsIgnoreCase("loginWithIdTokenAndTokenType")) {
                 loginWithIdTokenAndTokenType(args, callbackContext);
-            } else if (action.equalsIgnoreCase("logoutUser")) {
+            } else if (action.equalsIgnoreCase("loginWithAuthCode")) {
+                loginWithIdTokenAndTokenType(args, callbackContext);
+            }else if (action.equalsIgnoreCase("logoutUser")) {
                 logoutUser(callbackContext);
             } else if (action.equalsIgnoreCase("requestUserInfo")) {
                 requestUserInfo(callbackContext);
             } else if (action.equalsIgnoreCase("listAttributes")) {
                 listAttributes(callbackContext);
+            } /*else if (action.equalsIgnoreCase("implicitLogin")) {
+                implicitLogin(callbackContext);
+            }*/ else if (action.equalsIgnoreCase("getAuthCredentialsType")) {
+                getAuthCredentialsType(callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -84,6 +91,51 @@ public class MASPluginUser extends MASCordovaPlugin {
         }
         return true;
     }
+
+    /**
+     * Returns the last authenticated session's type of auth credentials used.
+     */
+    private void getAuthCredentialsType(CallbackContext callbackContext) {
+        MASUser masUser = MASUser.getCurrentUser();
+        if (masUser == null) {
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            callbackContext.error(getError(e));
+            return;
+        }
+        success(callbackContext, masUser.getAuthCredentialsType(), false);
+    }
+
+    /**
+     *  Authenticates a user with an authorization code.
+     */
+    private void loginWithAuthCode(final JSONArray args, final CallbackContext callbackContext) {
+        String authorizationCode;
+        String state;
+        try {
+            authorizationCode = args.getString(0);
+            state = args.getString(1);
+        } catch (JSONException e) {
+            callbackContext.error(getError(e));
+            return;
+        }
+        MASAuthorizationResponse masAuthorizationResponse = new MASAuthorizationResponse(authorizationCode, state);
+
+        MASUser.login(masAuthorizationResponse, new MASCallback<MASUser>() {
+            @Override
+            public void onSuccess(MASUser masUser) {
+                String result = "Login with authorization code complete";
+                success(callbackContext, result, false);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage(), throwable);
+                callbackContext.error(getError(throwable));
+            }
+        });
+    }
+
+
 
     /**
      * Checks the boolean status if the user is logged in or not
@@ -576,4 +628,28 @@ public class MASPluginUser extends MASCordovaPlugin {
         map.put(IdentityConsts.KEY_GROUPS, groupArray);
         return map;
     }
+
+    /*
+    private void implicitLogin(final CallbackContext callbackContext) {
+        MASUser masUser = MASUser.getCurrentUser();
+        if (masUser == null) {
+            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
+            callbackContext.error(getError(e));
+            return;
+        }
+        masUser.login(new MASCallback<MASUser>() {
+            @Override
+            public void onSuccess(MASUser masUser) {
+                String result = "Implicit Login Complete";
+                success(callbackContext, result, false);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage(), throwable);
+                callbackContext.error(getError(throwable));
+            }
+        });
+    }
+*/
 }

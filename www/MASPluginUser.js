@@ -1,3 +1,4 @@
+cordova.define("cordova-plugin-mas-core.MASPluginUser", function(require, exports, module) {
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -109,6 +110,14 @@
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "listAttributes", []);
      };
 
+     /**
+     *  Returns the last authenticated session's type of auth credentials used.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.getAuthCredentialsType = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAuthCredentialsType", []);
+     };
     /**
      *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback
@@ -233,4 +242,31 @@ MASPluginUser.sharedCurrUser;
     }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
 };
 
+/**
+ *  Authenticates a user with an authorization code.
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} authCode The Authorization Code for the user.
+ *  @param {string} state The state.
+ */
+ MASPluginUser.loginWithAuthCode = function(successHandler, errorHandler, authCode, state) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCode", [authCode, state]);
+};
+
+
+     /**
+     *  Performs an implicit login by calling an endpoint that requires authentication. .
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     /* this.implicitLogin = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "implicitLogin", []);
+     };*/
+
 module.exports = MASPluginUser;
+});
