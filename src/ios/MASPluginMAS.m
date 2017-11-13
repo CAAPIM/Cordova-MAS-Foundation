@@ -497,8 +497,50 @@
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }];
     }
+
+
+    ///--------------------------------------
+    /// @name Security Configuration
+    ///--------------------------------------
+
+- (void)setSecurityConfiguration:(CDVInvokedUrlCommand *)command
+{
+    CDVPluginResult *result;
     
+    NSDictionary *securityConfig = [command.arguments objectAtIndex:0];
+    NSURL *url = nil;
+    NSString *host = [securityConfig objectForKey:@"host"];
+    if(host != nil)
+    {
+        url = [NSURL URLWithString:host];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"Missing host"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
     
+    MASSecurityConfiguration *securityConfiguration = [[MASSecurityConfiguration alloc] initWithURL:url];
+    
+    if([[securityConfig objectForKey:@"isPublic"] isEqualToString:@"true"])
+        securityConfiguration.isPublic = YES;
+    if([[securityConfig objectForKey:@"trustPublicPKI"] isEqualToString:@"true"])
+        securityConfiguration.trustPublicPKI = YES;
+    if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
+        securityConfiguration.publicKeyHashes = [securityConfig objectForKey:@"publicKeyHashes"];
+    if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
+        securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
+    
+    [MASConfiguration setSecurityConfiguration:securityConfiguration];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Security configuration set"];
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
     ///--------------------------------------
     /// @name Gateway Monitoring
     ///--------------------------------------
