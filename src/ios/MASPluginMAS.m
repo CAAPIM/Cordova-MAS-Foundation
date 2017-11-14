@@ -510,7 +510,7 @@
     NSDictionary *securityConfig = [command.arguments objectAtIndex:0];
     NSURL *url = nil;
     NSString *host = [securityConfig objectForKey:@"host"];
-    if(host != nil)
+    if(![host isEqualToString:@""])
     {
         url = [NSURL URLWithString:host];
     }
