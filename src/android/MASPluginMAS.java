@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 startWithDefaultConfiguration(args, callbackContext);
             } else if (action.equalsIgnoreCase("startWithJSON")) {
                 startWithJSON(args, callbackContext);
-            } else if (action.equalsIgnoreCase("stop")) {
+            } else if (action.equalsIgnoreCase("startWithURL")) {
+                startWithURL(args, callbackContext);
+            }else if (action.equalsIgnoreCase("stop")) {
                 stop(args, callbackContext);
             } else if (action.equalsIgnoreCase("setConfigFileName")) {
                 setConfigFileName(args, callbackContext);
@@ -115,6 +118,12 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 putToPath(args, callbackContext);
             } else if (action.equalsIgnoreCase("doSocialLogin")) {
                 doSocialLogin(args, callbackContext);
+            } else if (action.equalsIgnoreCase("isPKCEEnabled")) {
+                isPKCEEnabled(args, callbackContext);
+            } else if (action.equalsIgnoreCase("enablePKCE")) {
+                enablePKCE(args, callbackContext);
+            } else if (action.equalsIgnoreCase("getMASState")) {
+                getMASState(args, callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -124,6 +133,78 @@ public class MASPluginMAS extends MASCordovaPlugin {
         }
         return true;
     }
+
+    private void startWithURL(JSONArray args, CallbackContext callbackContext) {
+        try {
+            String urlString = args.getString(0);
+            if (urlString == null) {
+                MASCordovaException e = new MASCordovaException("Invalid URL provided");
+                callbackContext.error(getError(e));
+                return;
+            }
+            URL url = new URL(urlString);
+            MAS.start(mContext, url);
+            success(callbackContext, true, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+    }
+
+    private void getMASState(JSONArray args, CallbackContext callbackContext){
+        try {
+            int state = MAS.getState(mContext);
+            String result = null;
+            switch (state){
+                case 0:
+                    result = "NOT CONFIGURED";
+                    break;
+                case 1:
+                    result = "NOT INITIALIZED";
+                    break;
+                case 2:
+                    result = "STOPPED";
+                    break;
+                case 3:
+                    result = "STARTED";
+                    break;
+
+            }
+            success(callbackContext, result, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+
+    }
+
+    private void enablePKCE(final JSONArray args, final CallbackContext callbackContext) {
+        try {
+            String enable = args.getString(0);
+            if(enable == null || enable.isEmpty()){
+                callbackContext.error("Enter True or False");
+                return;
+            }
+            boolean enablePkce = Boolean.valueOf(enable);
+            MAS.enablePKCE(enablePkce);
+            String result = "Enable PKCE Complete";
+            success(callbackContext, result, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+    }
+
+    private void isPKCEEnabled(final JSONArray args, final CallbackContext callbackContext) {
+        try {
+            Boolean result = MAS.isPKCEEnabled();
+            success(callbackContext, result, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+    }
+
 
     private void start(final JSONArray args, final CallbackContext callbackContext) {
         try {

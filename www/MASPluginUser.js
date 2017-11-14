@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-mas-core.MASPluginUser", function(require, exports, module) {
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -99,6 +98,15 @@ cordova.define("cordova-plugin-mas-core.MASPluginUser", function(require, export
      */
      this.getAccessToken = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
+     };
+
+   /**
+     Returns current {@link MASState} value.  The value can be used to determine which state SDK is currently at.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.getMASState = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getMASState", []);
      };
 
 	 /**
@@ -258,15 +266,4 @@ MASPluginUser.sharedCurrUser;
     }, errorHandler, "MASPluginUser", "loginWithAuthCode", [authCode, state]);
 };
 
-
-     /**
-     *  Performs an implicit login by calling an endpoint that requires authentication. .
-     *  @param {function} successHandler user defined success callback
-     *  @param {function} errorHandler user defined error callback
-     */
-     /* this.implicitLogin = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "implicitLogin", []);
-     };*/
-
 module.exports = MASPluginUser;
-});

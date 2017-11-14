@@ -298,6 +298,25 @@
                     }, jsonObject);
             });
 
+            $("#startWithURL").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var url = $("input[name='startWithURL']").val();
+                var MAS = new MASPlugin.MAS();
+
+                MAS.startWithJSON(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, url);
+            });
+
             $("#stop").bind("click", function(event, ui) {
 
                 $(this).find("textarea.error").hide();
@@ -314,6 +333,7 @@
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
+
 
             $("#initEnterpriseBrowser").bind("click", function(event, ui) {
 
@@ -340,6 +360,59 @@
                 var MAS = new MASPlugin.MAS();
 
                 MAS.gatewayIsReachable(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+            });
+
+            $("#enablePKCE").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var enable = $("input[name='enable']").val();
+                var MAS = new MASPlugin.MAS();
+                MAS.enablePKCE(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, enable);
+            });
+
+
+            $("#isPKCEEnabled").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                MAS.isPKCEEnabled(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+            });
+
+            $("#getMASState").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                MAS.getMASState(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -634,16 +707,12 @@
                     });
             });
 
-<!--
-            $("#implicitLogin").bind("click", function(event, ui) {
+            $("#getAuthCredentialsType").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
-
                 $(this).find("textarea.error").hide();
-
                 var thisElement = $(this);
-
-                MASPluginUser.currentUser(function(result) {
-                        result.implicitLogin(function(result) {
+                 MASPluginUser.currentUser(function(result) {
+                        result.getAuthCredentialsType(function(result) {
                                 thisElement.removeClass("success").removeClass("failure").addClass("success");
                                 displayResult(thisElement, result);
                             },
@@ -657,22 +726,7 @@
                         displayError(thisElement, error);
                     });
             });
--->
 
-           $("#getAuthCredentialsType").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-
-                MASPluginUser.currentUser(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result.formattedName);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
-            });
 
             $("#isDeviceRegistered").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
@@ -1170,6 +1224,7 @@
                     <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="startWithDefault">MAS start with new configuration discarding local storage<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="startWithJSON">MAS start with JSON <input type="text" name="jsonObject" placeholder="JSON object in text"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="startWithURL">MAS start with URL <input type="text" name="jsonObject" placeholder="URL in text"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="stop">MAS stop<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
@@ -1197,8 +1252,7 @@
                     <li data-icon="false"><a href="#" id="getAccessToken">MASUser Access Token<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="listAttributes">MASUser List All Attributes<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-                    <li data-icon="false"><a href="#" id="getAuthCredentialsType">MASUser getAuthCredentialsType<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-                    <!--<li data-icon="false"><a href="#" id="implicitLogin">MASUser login implicitly<textarea class='error' style="display:none;" readonly=""></textarea></a></li>-->
+                    <li data-icon="false"><a href="#" id="getAuthCredentialsType">MASUser getAuthCredentialsType <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1330,6 +1384,9 @@
                 <ul data-role="listview" data-theme="b">
                     <li data-icon="false"><a href="#" id="gatewayIsReachable">MAS gatewayIsReachable<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="scan">Scan QRCode<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="enablePKCE">MAS enable PKCE <input type="text" name="enable"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="isPKCEEnabled">MAS isPKCEEnabled <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="getMASState">MAS getMASState <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error' style="display:none;" readonly=""></textarea></a></li>

@@ -78,9 +78,7 @@ public class MASPluginUser extends MASCordovaPlugin {
                 requestUserInfo(callbackContext);
             } else if (action.equalsIgnoreCase("listAttributes")) {
                 listAttributes(callbackContext);
-            } /*else if (action.equalsIgnoreCase("implicitLogin")) {
-                implicitLogin(callbackContext);
-            }*/ else if (action.equalsIgnoreCase("getAuthCredentialsType")) {
+            } else if (action.equalsIgnoreCase("getAuthCredentialsType")) {
                 getAuthCredentialsType(callbackContext);
             } else {
                 callbackContext.error("Invalid action");
@@ -102,7 +100,7 @@ public class MASPluginUser extends MASCordovaPlugin {
             callbackContext.error(getError(e));
             return;
         }
-        success(callbackContext, masUser.getAuthCredentialsType(), false);
+        success(callbackContext, MASUser.getAuthCredentialsType().toString(), false);
     }
 
     /**

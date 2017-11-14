@@ -453,6 +453,35 @@ var MASPluginMAS = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithJSON", [jsonObject]);
     };
 
+    /**
+     Starts the lifecycle of the MAS processes with given JSON configuration file path. This method will (if it is different) overwrite the JSON configuration that was stored.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {String}   url URL of the JSON configuration file path
+     */
+    this.startWithURL = function(successHandler, errorHandler, url) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithURL", [url]);
+    };
+
+    /**
+     Enable PKCE extension to OAuth.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     *@param {boolean}   enable True to enable PKCE extension, False to disable PKCE Extension. Default to true.
+     */
+    this.enablePKCE = function(successHandler, errorHandler, enable) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enablePKCE", [enable]);
+    };
+
+    /**
+     Determines whether PKCE extension is enabled.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.isPKCEEnabled = function(successHandler, errorHandler, enable) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isPKCEEnabled", []);
+    };
+
 
     /**
      Stops the lifecycle of all MAS processes.
@@ -540,6 +569,16 @@ var MASPluginMAS = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
     };
 
+
+    /**
+     Returns current MASState value.  The value can be used to determine which state SDK is currently at.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     *
+     */
+    this.getMASState = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getMASState", []);
+    };
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Proximity Login
