@@ -859,12 +859,12 @@
                     });
             });
 
-            $("#getApplicationIdentifier").bind("click", function(event, ui) {
+            $("#getApplicationProperties").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
                 var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getIdentifier(function(result) {
+                MASApplication.getApplicationProperties(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -874,80 +874,6 @@
                     });
             });
 
-            $("#getApplicationName").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getName(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }, ApplicationIdentifiersList[2]);
-            });
-
-            $("#getApplicationIconUrl").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getIconUrl(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
-            });
-
-            $("#getApplicationAuthUrl").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getAuthUrl(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
-            });
-
-            $("#getApplicationNativeUri").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getNativeUri(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
-            });
-
-            $("#getApplicationCustom").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASApplication = new MASPlugin.MASApplication();
-                MASApplication.getCustom(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
-            });
             var ApplicationIdentifiersList = "";
             $("#retrieveEnterpriseApps").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
@@ -1261,6 +1187,7 @@
                     <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice getCurrentDevice<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="getApplicationProperties">MASApplication Properties<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1270,8 +1197,7 @@
                     <li data-icon="false"><a href="#" id="retrieveEnterpriseApps">MASApplication Retrieve Enterprise Apps<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
-            <!--
-        <li data-icon="false"><a href="#" id="getApplicationIdentifier">MASApplication Identifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+        <!--
         <li data-icon="false"><a href="#" id="getApplicationName">MASApplication Name<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
         <li data-icon="false"><a href="#" id="getApplicationIconUrl">MASApplication IconUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
         <li data-icon="false"><a href="#" id="getApplicationAuthUrl">MASApplication AuthUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>

@@ -34,7 +34,6 @@
 - (void)isApplicationAuthenticated:(CDVInvokedUrlCommand*)command;
 
 
-
 /**
  *  Enumeration value of authentication status.
  *
@@ -42,6 +41,13 @@
  */
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
+
+/**
+ *  Returns a list of application properties
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getApplicationProperties:(CDVInvokedUrlCommand*)command;
 
 
 ///--------------------------------------

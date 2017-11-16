@@ -97,20 +97,51 @@
 
 # pragma mark - Authentication
 
-
+/**getA
+ *  Login with username and password
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Login with an ID token and its token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithIdTokenAndTokenType:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCode:(CDVInvokedUrlCommand*)command;
 
-- (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command;
+/**
+ *  Login with an an auth credentials object
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentials:(CDVInvokedUrlCommand*)command;
 
 
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Logout the current user
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-- (void)logoutUser:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Returns the authorization credentials' type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getAuthCredentialsType:(CDVInvokedUrlCommand *)command;
 
 
 @end

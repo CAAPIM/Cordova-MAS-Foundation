@@ -83,6 +83,49 @@
 }
 
 
+- (void)getApplicationProperties:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    NSMutableDictionary *applicationProps = [NSMutableDictionary dictionary];
+    MASApplication *currentApplication = [MASApplication currentApplication];
+
+    [applicationProps setObject:(([currentApplication isRegistered]) ? @"true" : @"false") forKey:@"isRegistered"];
+    [applicationProps setObject:(([currentApplication isAuthenticated]) ? @"true" : @"false") forKey:@"isAuthenticated"];
+    
+    if([currentApplication organization] != nil)
+        [applicationProps setObject:[currentApplication organization] forKey:@"organization"];
+    if([currentApplication name] != nil)
+        [applicationProps setObject:[currentApplication name] forKey:@"name"];
+    if([currentApplication identifier] != nil)
+        [applicationProps setObject:[currentApplication identifier] forKey:@"identifier"];
+    if([currentApplication detailedDescription] != nil)
+        [applicationProps setObject:[currentApplication detailedDescription] forKey:@"detailedDescription"];
+    if([currentApplication iconUrl] != nil)
+        [applicationProps setObject:[currentApplication iconUrl] forKey:@"iconUrl"];
+    if([currentApplication authUrl] != nil)
+        [applicationProps setObject:[currentApplication authUrl] forKey:@"authUrl"];
+    if([currentApplication nativeUrl] != nil)
+        [applicationProps setObject:[currentApplication nativeUrl] forKey:@"nativeUrl"];
+    if([currentApplication customProperties] != nil)
+        [applicationProps setObject:[currentApplication customProperties] forKey:@"customProperties"];
+    if([currentApplication environment] != nil)
+        [applicationProps setObject:[currentApplication environment] forKey:@"environment"];
+    if([currentApplication redirectUri] != nil)
+        [applicationProps setObject:[[currentApplication redirectUri] absoluteString] forKey:@"redirectUri"];
+    if([currentApplication registeredBy] != nil)
+        [applicationProps setObject:[currentApplication registeredBy] forKey:@"registeredBy"];
+    if([currentApplication scopeAsString] != nil)
+        [applicationProps setObject:[currentApplication scopeAsString] forKey:@"scopeAsString"];
+    if([currentApplication status] != nil)
+        [applicationProps setObject:[currentApplication status] forKey:@"status"];
+
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:applicationProps];
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
 ///--------------------------------------
 /// @name Enterprise App
 ///--------------------------------------

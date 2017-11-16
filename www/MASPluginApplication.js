@@ -55,6 +55,16 @@ var MASPluginApplication = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "authenticationStatus", []);
     };
 
+    /**
+    *   Returns a list of application properties
+    *   @param {function} successHandler user defined success callback
+    *   @param {function} errorHandler user defined error callback
+    */
+    this.getApplicationProperties = function(successHandler, errorHandler) {
+
+        return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "getApplicationProperties", []);
+    }
+
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Enterprise App
@@ -108,3 +118,4 @@ var MASPluginApplication = function() {
 }
 
 module.exports = MASPluginApplication;
+

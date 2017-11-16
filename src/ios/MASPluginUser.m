@@ -491,7 +491,7 @@
 }
 
 
-- (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command
+- (void)loginWithAuthCode:(CDVInvokedUrlCommand*)command
 {
     __block CDVPluginResult *result;
     
@@ -535,6 +535,15 @@
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         
     }
+}
+
+- (void)loginWithAuthCredentials:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 
@@ -581,7 +590,7 @@
 }
 
 
-- (void)logoutUser:(CDVInvokedUrlCommand *)command
+- (void)logoutUser:(CDVInvokedUrlCommand*)command
 {
     __block CDVPluginResult *result;
     
@@ -612,6 +621,17 @@
         
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
+}
+
+
+- (void)getAuthCredentialsType:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    
+    NSString *authCredentialsType = [MASUser authCredentialsType];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:authCredentialsType];
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 

@@ -235,7 +235,7 @@ MASPluginUser.sharedCurrUser;
 };
 
 /**
- Authenticate a user via asynchronous request with id_token
+ Authenticates a user via asynchronous request with id_token
  *  @param {function} successHandler user defined success callback
  *  @param {function} errorHandler user defined error callback
  *  @param {string} idToken The id_token for the user.
@@ -248,6 +248,23 @@ MASPluginUser.sharedCurrUser;
          }
         successHandler(result);
     }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
+};
+
+
+/**
+ Authenticates the user using an auth credentials object
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentials = function(successHandler, errorHandler, authCredentials) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentials", [authCredentials]);
 };
 
 /**
