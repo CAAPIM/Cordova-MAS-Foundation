@@ -887,6 +887,44 @@
                     });
             });
 
+            $("#setSecurityConfiguration").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var MAS = new MASPlugin.MAS();
+                var config = new MASPlugin.MASSecurityConfiguration();
+
+                var host = thisElement.find("input[name='host']").val().trim();
+                var isPublic = thisElement.find("select[name='isPublic']").val();
+                var trustPublicPKI = thisElement.find("select[name='trustPublicPKI']").val();
+                var certificate = thisElement.find("input[name='certificate']").val().trim();
+                var publicKeyHash = thisElement.find("input[name='publicKeyHash']").val().trim();
+
+                config.setHost(host);
+                config.setPublic(isPublic);
+                config.setTrustPublicPKI(trustPublicPKI);
+                config.addCertificate(certificate);
+                config.addPublicKeyHash(publicKeyHash);
+                console.log(JSON.stringify(config.getSecurityConfiguration()));
+
+                MAS.setSecurityConfiguration(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        var returnedMsg = getErrorMessage(error);
+                        if (returnedMsg != null && returnedMsg != undefined && returnedMsg != "") {
+                            error.errorMessage = returnedMsg;
+                        }
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, config.getSecurityConfiguration());
+            });
+
+
             $("#getCRUD").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
 
@@ -901,25 +939,18 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //     $.mobile.showPageLoadingMsg();
-
                 MAS.getFromPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
-                        //       console.log(error);
+                        // console.log(JSON.stringify(error));
                         var returnedMsg = getErrorMessage(error);
                         if (returnedMsg != null && returnedMsg != undefined && returnedMsg != "") {
                             error.errorMessage = returnedMsg;
                         }
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //   $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -937,20 +968,13 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //   $.mobile.showPageLoadingMsg();
-
                 MAS.putToPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //    $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -967,21 +991,13 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
-
-                //   $.mobile.showPageLoadingMsg();
-
                 MAS.postToPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //    $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //    $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -999,20 +1015,13 @@
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
 
-                //    $.mobile.showPageLoadingMsg();
-
                 MAS.deleteFromPath(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
-
-                        //      $.mobile.hidePageLoadingMsg();
                     },
                     function(error) {
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-
-                        //     $.mobile.hidePageLoadingMsg();
-
                     }, requestPath, requestParam, requestHeader, requestType, responseType);
             });
 
@@ -1200,6 +1209,24 @@
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>MAS CRUD Operations</h2>
                 <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="setSecurityConfiguration">MAS Set Security Configuration
+                            <input type="text" name="host" placeholder="hostname with optional port"/>
+                            <label for="isPublic">Is Public Server:</label>
+                            <select id="isPublic" name="isPublic" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
+                            <label for="trustPublicPKI">Trust Public PKI:</label>
+                            <select id="trustPublicPKI" name="trustPublicPKI" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
+                            <input type="text" name="certificate" placeholder="Certificates as PEM Strings"/>
+                            <input type="text" name="publicKeyHash" placeholder="Public Key Hashes as strings"/>
+                            <textarea class='error' style="display:none;" readonly=""></textarea>
+                        </a>
+                    </li>
                     <li data-icon="false">
                         <a href="#" id="getCRUD">MAS get
                             <input type="text" name="path" placeholder="API path"/>

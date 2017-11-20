@@ -19,15 +19,18 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
+import com.ca.mas.core.cert.CertUtils;
 import com.ca.mas.core.service.MssoIntents;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
+import com.ca.mas.foundation.MASConfiguration;
 import com.ca.mas.foundation.MASConstants;
 import com.ca.mas.foundation.MASOtpAuthenticationHandler;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
+import com.ca.mas.foundation.MASSecurityConfiguration;
 import com.ca.mas.foundation.MASUser;
 import com.ca.mas.foundation.auth.MASAuthenticationProvider;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
@@ -44,6 +47,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +119,8 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 putToPath(args, callbackContext);
             } else if (action.equalsIgnoreCase("doSocialLogin")) {
                 doSocialLogin(args, callbackContext);
+            } else if (action.equalsIgnoreCase("setSecurityConfiguration")) {
+                setSecurityConfiguration(args, callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -178,7 +184,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private void setConfigFileName(final JSONArray args, final CallbackContext callbackContext) {
         try {
             String filename = args.getString(0);
-			if (!filename.endsWith(".json")) {
+            if (!filename.endsWith(".json")) {
                 filename = filename + ".json";
             }
             AssetManager mg = mContext.getResources().getAssets();
@@ -527,6 +533,55 @@ public class MASPluginMAS extends MASCordovaPlugin {
         });
     }
 
+    private void setSecurityConfiguration(final JSONArray args, final CallbackContext callbackContext) {
+        JSONObject obj = null;
+        MASSecurityConfiguration.Builder secBuilder = new MASSecurityConfiguration.Builder();
+        MASSecurityConfiguration configuration = null;
+        try {
+            obj = (JSONObject) args.get(0);
+            String host = obj.getString("host");
+            if (host == null || host.isEmpty()) {
+                throw new IllegalArgumentException("Missing host");
+            }
+            boolean isPublic = obj.optBoolean("isPublic", false);
+            JSONArray certs = obj.optJSONArray("certificates");
+            JSONArray publicKeyHashes = obj.optJSONArray("publicKeyHashes");
+            boolean trustPublicPKI = obj.optBoolean("trustPublicPKI", false);
+
+            secBuilder.host(new Uri.Builder().encodedAuthority(host).build());
+            secBuilder.isPublic(isPublic);
+            if (certs != null && certs.length() > 0) {
+                for (byte b = 0; b < certs.length(); b++) {
+                    String certString = certs.optString(b);
+                    if (certString == null || certString.isEmpty()) {
+                        continue;
+                    }
+                    Certificate certificate = CertUtils.decodeCertFromPem(certString);
+                    secBuilder.add(certificate);
+                }
+            }
+            if (publicKeyHashes != null && publicKeyHashes.length() > 0) {
+                for (byte b = 0; b < publicKeyHashes.length(); b++) {
+                    String hash = publicKeyHashes.optString(b);
+                    if (hash == null || hash.isEmpty()) {
+                        continue;
+                    }
+                    secBuilder.add(hash);
+                }
+            }
+            secBuilder.trustPublicPKI(trustPublicPKI);
+            configuration = secBuilder.build();
+            MASConfiguration.getCurrentConfiguration().addSecurityConfiguration(configuration);
+            success(callbackContext, false);
+        } catch (IllegalArgumentException iex) {
+            callbackContext.error(getError(new MASCordovaException(iex.getMessage())));
+            return;
+        } catch (Exception e) {
+            callbackContext.error(getError(new MASCordovaException("Invalid MAS SecurityConfiguration provided")));
+            return;
+        }
+    }
+
     private void cancelAuthentication(final JSONArray args, final CallbackContext callbackContext) {
         try {
             int requestId = args.getInt(0);
@@ -631,7 +686,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
             }
         }
 
-        protected Uri getUri(String path, JSONObject parameters) throws JSONException {
+        protected Uri getUri(String path, JSONObject parameters) throws Exception {
             Uri.Builder uriBuilder = new Uri.Builder();
             uriBuilder.encodedPath(path);
             if (parameters != null && parameters.names() != null) {

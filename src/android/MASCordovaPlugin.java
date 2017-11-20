@@ -2,7 +2,6 @@
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
- *
  */
 package com.ca.mas.cordova.core;
 
@@ -47,6 +46,7 @@ public class MASCordovaPlugin extends CordovaPlugin {
         }
         return getError(error, rootCauseErrorMessage);
     }
+
     protected JSONObject getError(Throwable throwable, String rootCauseErrorMessage) {
         int errorCode = MAGErrorCode.UNKNOWN;
         String errorMessage = throwable.getMessage();
@@ -78,14 +78,14 @@ public class MASCordovaPlugin extends CordovaPlugin {
                 errorCode = ServerClient.findErrorCode(e.getResponse());
             } catch (Exception ignore) {
             }
-            errorMessage = e.getMessage();
+            errorMessage = e.getResponse() != null ? e.getResponse().getResponseMessage() : e.getMessage();
         } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
             errorCode = MAGErrorCode.UNKNOWN;
         } else if (throwable != null && throwable instanceof MASCordovaException) {
             errorMessage = throwable.getMessage();
         } else if ((throwable instanceof NullPointerException || throwable instanceof IllegalStateException) && (MAS.getContext() == null || MAS.getState(this.cordova.getActivity().getApplicationContext()) != MASConstants.MAS_STATE_STARTED)) {
             errorMessageDetail = "Mobile SSO has not been initialized.";
-        }else {
+        } else {
             errorMessageDetail = throwable.getMessage();
         }
 
@@ -102,7 +102,7 @@ public class MASCordovaPlugin extends CordovaPlugin {
             }
 
             //If root cause message is available then set that as the error message 
-            if (rootCauseErrorMessage != null ) {
+            if (rootCauseErrorMessage != null) {
                 error.put("errorMessage", rootCauseErrorMessage);
             }
         } catch (JSONException ignore) {
