@@ -478,7 +478,7 @@ var MASPluginMAS = function() {
      * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
      */
-    this.isPKCEEnabled = function(successHandler, errorHandler, enable) {
+    this.isPKCEEnabled = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isPKCEEnabled", []);
     };
 
@@ -591,6 +591,29 @@ var MASPluginMAS = function() {
      */
     this.authorize = function(successHandler, errorHandler, code) {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
+    };
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name JWT Signing
+    ///------------------------------------------------------------------------------------------------------------------
+    /**
+     *   Returns a MASClaims object that can be used to obtain a JWT token
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} code code extracted by the QR code scanner
+     */
+    this.initClaims = function(successHandler, errorHandler) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "initClaims", []);
+    };
+
+    /**
+     *   Signs MASClaims object with default private key from device registration against primary gateway.
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} code code extracted by the QR code scanner
+     */
+    this.signWithClaims = function(successHandler, errorHandler, claims) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims]);
     };
 
 

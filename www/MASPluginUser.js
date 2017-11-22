@@ -250,21 +250,52 @@ MASPluginUser.sharedCurrUser;
     }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
 };
 
-
 /**
- Authenticates the user using an auth credentials object
+ Authenticates the user using authCredentials with username and password
  *  @param {function} successHandler user defined success callback
  *  @param {function} errorHandler user defined error callback
  *  @param {string} userName username of the user
  *  @param {string} password password of the user
  */
- MASPluginUser.loginWithAuthCredentials = function(successHandler, errorHandler, authCredentials) {
+ MASPluginUser.loginWithAuthCredentialsAuthCode = function(successHandler, errorHandler, authorizationCode) {
     return Cordova.exec(function(result) {
         if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
             MASPluginUser.currentUser(function(){}, function(){});
          }
         successHandler(result);
-    }, errorHandler, "MASPluginUser", "loginWithAuthCredentials", [authCredentials]);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsAuthCode", [authorizationCode]);
+};
+
+/**
+ Authenticates the user using authCredentials with username and password
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentialsUsernamePassword = function(successHandler, errorHandler, username, password) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsUsernamePassword", [usernmae, password]);
+};
+
+/**
+ Authenticates the user using a JWT token and token type
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentialsJWT = function(successHandler, errorHandler, jwt, tokenType) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsJWT", [jwt, tokenType]);
 };
 
 /**

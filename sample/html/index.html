@@ -304,10 +304,10 @@
                 $(this).find("textarea.error").hide();
 
                 var thisElement = $(this);
-                var url = $("input[name='startWithURL']").val();
+                var url = $("input[name='configUrl']").val();
                 var MAS = new MASPlugin.MAS();
 
-                MAS.startWithJSON(function(result) {
+                MAS.startWithURL(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -375,7 +375,7 @@
                 $(this).find("textarea.error").hide();
 
                 var thisElement = $(this);
-                var enable = $("input[name='enable']").val();
+                var enable = thisElement.find("select[name='enablePKCEBoolValue']").val();
                 var MAS = new MASPlugin.MAS();
                 MAS.enablePKCE(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
@@ -1150,7 +1150,7 @@
                     <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="startWithDefault">MAS start with new configuration discarding local storage<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="startWithJSON">MAS start with JSON <input type="text" name="jsonObject" placeholder="JSON object in text"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-                    <li data-icon="false"><a href="#" id="startWithURL">MAS start with URL <input type="text" name="jsonObject" placeholder="URL in text"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="startWithURL">MAS start with URL <input type="text" name="configUrl" placeholder="URL in text"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="stop">MAS stop<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
@@ -1316,7 +1316,11 @@
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>PKCE Settings</h2>
                 <ul data-role="listview" data-theme="b">
-                    <li data-icon="false"><a href="#" id="enablePKCE">MAS enable PKCE <input type="text" name="enable" placeholder="Enter True or False"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="enablePKCE">MAS enable PKCE
+                        <select id="enablePKCEBool" name="enablePKCEBoolValue" >
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="isPKCEEnabled">MAS isPKCEEnabled <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
