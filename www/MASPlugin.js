@@ -13,6 +13,7 @@ var MASPluginMAS = require("./MASPluginMAS"),
     MASPluginAuthProviders = require("./MASPluginAuthProviders");
 
 var MASPluginConstants = require("./MASPluginConstants");
+var MASPluginSecurityConfiguration = require("./MASPluginSecurityConfiguration");
 
 var MASPlugin = {
 
@@ -51,7 +52,9 @@ var MASPlugin = {
      *
      * MASAuthenticationProviders represents all available providers
      */
-    MASAuthenticationProviders: MASPluginAuthProviders
+    MASAuthenticationProviders: MASPluginAuthProviders,
+
+    MASSecurityConfiguration: MASPluginSecurityConfiguration
 };
     
 module.exports = MASPlugin;

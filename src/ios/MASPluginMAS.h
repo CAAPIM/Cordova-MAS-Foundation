@@ -209,6 +209,19 @@
 
 
 
+///------------------------------------------------------------------------------------------------------------------
+/// @name Security Configuration
+///------------------------------------------------------------------------------------------------------------------
+
+/**
+ *  Sets the security configuration
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)setSecurityConfiguration:(CDVInvokedUrlCommand*)command;
+
+
+
 ///--------------------------------------
 /// @name Gateway Monitoring
 ///--------------------------------------

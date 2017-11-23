@@ -505,6 +505,16 @@ var MASPluginMAS = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "gatewayIsReachable", []);
     };
 
+	/**
+     Sets the Security Configurations for External Servers. This API should be invoked before making calls to External Server
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {jsonObject} jsonObject as a representation of MASSecurityConfiguration
+     */
+	this.setSecurityConfiguration = function(successHandler,errorHandler,masSecurityConfiguration){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "setSecurityConfiguration", [masSecurityConfiguration]);
+    }
+
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name HTTP Requests
