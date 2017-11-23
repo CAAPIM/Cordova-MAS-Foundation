@@ -442,6 +442,84 @@
                     }, username, password);
             });
 
+            $("#userLoginAuthCode").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var authCode = $("input[name='authCode']").val();
+
+                MASPluginUser.loginWithAuthCode(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, authCode);
+            });
+
+            $("#userLoginAuthCred").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var username = $("input[name='userLoginUsernameAuthCred']").val();
+                var password = $("input[name='userLoginPasswordAuthCred']").val();
+
+                MASPluginUser.loginWithAuthCredentialsUsernamePassword(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, username, password);
+            });
+
+            $("#userLoginAuthCredJWT").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var jwt = $("input[name='jwt']").val();
+                var tokenType = $("input[name='tokenType']").val();
+
+                MASPluginUser.loginWithAuthCredentialsJWT(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, jwt, tokenType);
+            });
+
+            $("#userLoginAuthCredAuthCode").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var authCode = $("input[name='authCodeAuthCred']").val();
+
+                MASPluginUser.loginWithAuthCredentialsAuthCode(function(result) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function(error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, authCode);
+            });
+
             $("#getUsername").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -859,6 +937,64 @@
                     });
             });
 
+            var claims;
+            $("#initClaims").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+
+                MAS.initClaims(function(result) {
+                    claims = result;
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                    console.log(claims);
+                },
+                function(error) {
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+               });
+            });
+
+            $("#signWithClaims").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+
+                MAS.signWithClaims(function(result) {
+                    thisElement.removeClass("success").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error) {
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, claims);
+            });
+
+            $("#signWithClaimsPrivateKey").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+                var MAS = new MASPlugin.MAS();
+                var privateKey = $("input[name='claimsPrivateKey']").val();
+
+                MAS.signWithClaims(function(result) {
+                 thisElement.removeClass("success").removeClass("failure").addClass("success");
+                 displayResult(thisElement, result);
+                },
+                function(error) {
+                    thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, claims, privateKey);
+            });
+
             $("#getApplicationProperties").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -904,6 +1040,7 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
+                var isPublic = thisElement.find("select[name='isPublic']").val();
 
                 //     $.mobile.showPageLoadingMsg();
 
@@ -924,7 +1061,7 @@
 
                         //   $.mobile.hidePageLoadingMsg();
 
-                    }, requestPath, requestParam, requestHeader, requestType, responseType);
+                    }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic);
             });
 
             $("#putCRUD").bind("click", function(event, ui) {
@@ -940,6 +1077,7 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
+                var isPublic = thisElement.find("select[name='isPublic']").val();
 
                 //   $.mobile.showPageLoadingMsg();
 
@@ -955,7 +1093,7 @@
 
                         //    $.mobile.hidePageLoadingMsg();
 
-                    }, requestPath, requestParam, requestHeader, requestType, responseType);
+                    }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic);
             });
 
             $("#postCRUD").bind("click", function(event, ui) {
@@ -971,6 +1109,7 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
+                var isPublic = thisElement.find("select[name='isPublic']").val();
 
                 //   $.mobile.showPageLoadingMsg();
 
@@ -986,7 +1125,7 @@
 
                         //    $.mobile.hidePageLoadingMsg();
 
-                    }, requestPath, requestParam, requestHeader, requestType, responseType);
+                    }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic);
             });
 
             $("#deleteCRUD").bind("click", function(event, ui) {
@@ -1002,6 +1141,7 @@
                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
                 var requestPath = thisElement.find("input[name='path']").val().trim();
+                var isPublic = thisElement.find("select[name='isPublic']").val();
 
                 //    $.mobile.showPageLoadingMsg();
 
@@ -1017,7 +1157,7 @@
 
                         //     $.mobile.hidePageLoadingMsg();
 
-                    }, requestPath, requestParam, requestHeader, requestType, responseType);
+                    }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic);
             });
 
             function parseRequestResponseType(type) {
@@ -1178,6 +1318,10 @@
                     <li data-icon="false"><a href="#" id="getAccessToken">MASUser Access Token<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="listAttributes">MASUser List All Attributes<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and password <input type="text" name="userLoginUsername" placeholder="username"/><input type="text" name="userLoginPassword" placeholder="password"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="userLoginAuthCode">MASUser login with AuthCode <input type="text" name="authCode" placeholder="auth code"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="userLoginAuthCred">MASUserAuthCredentials login with username and password <input type="text" name="userLoginUsernameAuthCred" placeholder="username"/><input type="text" name="userLoginPasswordAuthCred" placeholder="password"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="userLoginAuthCredJWT">MASUserAuthCredentials login with JWT <input type="text" name="jwt" placeholder="JWT"/><input type="text" name="tokenType" placeholder="Token Type"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="userLoginAuthCredAuthCode">MASUserAuthCredentials login with AuthCode <input type="text" name="authCodeAuthCred" placeholder="auth Code"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getAuthCredentialsType">MASUser getAuthCredentialsType <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
@@ -1187,7 +1331,6 @@
                     <li data-icon="false"><a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getDeviceIdentifier">MASDevice getDeviceIdentifier<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice getCurrentDevice<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-                    <li data-icon="false"><a href="#" id="getApplicationProperties">MASApplication Properties<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1227,6 +1370,11 @@
                             </select>
                             <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                             <input type="text" name="header" placeholder="Header in JSON format"/>
+                            <label for="isPublicGet">is Public:</label>
+                            <select id="isPublicGet" name="isPublic" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
                             <textarea class='error' style="display:none;" readonly=""></textarea>
                         </a>
                     </li>
@@ -1251,6 +1399,11 @@
                             </select>
                             <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                             <input type="text" name="header" placeholder="Header in JSON format"/>
+                            <label for="isPublicPut">is Public:</label>
+                            <select id="isPublicPut" name="isPublic" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
                             <textarea class='error' style="display:none;" readonly=""></textarea>
                         </a>
                     </li>
@@ -1275,6 +1428,11 @@
                             </select>
                             <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                             <input type="text" name="header" placeholder="Header in JSON format"/>
+                            <label for="isPublicPost">is Public:</label>
+                            <select id="isPublicPost" name="isPublic" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
                             <textarea class='error' style="display:none;" readonly=""></textarea>
                         </a>
                     </li>
@@ -1300,6 +1458,11 @@
                             </select>
                             <input type="text" name="parameter" placeholder="Parameter in JSON format"/>
                             <input type="text" name="header" placeholder="Header in JSON format"/>
+                            <label for="isPublicDelete">is Public:</label>
+                            <select id="isPublicDelete" name="isPublic" >
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
                             <textarea class='error' style="display:none;" readonly=""></textarea>
                         </a>
                     </li>
@@ -1311,6 +1474,7 @@
                     <li data-icon="false"><a href="#" id="gatewayIsReachable">MAS gatewayIsReachable<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="scan">Scan QRCode<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="getMASState">MAS getMASState <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="getApplicationProperties">MASApplication Properties<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1322,6 +1486,14 @@
                             <option value="false">False</option>
                         </select><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="isPKCEEnabled">MAS isPKCEEnabled <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                </ul>
+            </li>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>JWT Signing</h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false"><a href="#" id="initClaims">MAS initClaims <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="signWithClaims">MAS SignWithClaims <textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="signWithClaimsPrivateKey">MAS SignWithClaimsPrivateKey <input type="text" name="claimsPrivateKey" placeholder="Private Key as base64 string"/><textarea class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error' style="display:none;" readonly=""></textarea></a></li>

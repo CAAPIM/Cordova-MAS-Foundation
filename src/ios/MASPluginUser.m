@@ -537,13 +537,124 @@
     }
 }
 
-- (void)loginWithAuthCredentials:(CDVInvokedUrlCommand*)command
+- (void)loginWithAuthCredentialsUsernamePassword:(CDVInvokedUrlCommand *)command
 {
-    CDVPluginResult *result;
+    __block CDVPluginResult *result;
+    
+    NSString *username = [command.arguments objectAtIndex:0];
+    NSString *password = [command.arguments objectAtIndex:1];
+    
+    if(username!=NULL && password!=NULL) {
+        MASAuthCredentialsPassword *authCredentials = [MASAuthCredentialsPassword initWithUsername:username password:password];
+        
+        [MASUser loginWithAuthCredentials:authCredentials completion:^(BOOL completed, NSError * _Nullable error) {
+            if(completed && !error) {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                           messageAsString:@"Login with authorization credentials complete"];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            else {
+                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[NSDictionary dictionary]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        }];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:1000],
+                                    @"errorMessage":@"Invalid parameters. Please provide the valid inputs.",
+                                    @"errorInfo":[NSDictionary dictionary]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
 
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+- (void)loginWithAuthCredentialsAuthCode:(CDVInvokedUrlCommand *)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *authorizationCode = [command.arguments objectAtIndex:0];
+    
+    if(authorizationCode!=NULL) {
+        MASAuthCredentialsAuthorizationCode *authCredentials = [MASAuthCredentialsAuthorizationCode initWithAuthorizationCode:authorizationCode];
+        [MASUser loginWithAuthCredentials:authCredentials completion:^(BOOL completed, NSError * _Nullable error) {
+            if(completed && !error) {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                           messageAsString:@"Login with authorization credentials complete"];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            else {
+                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[NSDictionary dictionary]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        }];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:1000],
+                                    @"errorMessage":@"Invalid parameters. Please provide the valid inputs.",
+                                    @"errorInfo":[NSDictionary dictionary]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
 
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+- (void)loginWithAuthCredentialsJWT:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    NSString *jwt = [command.arguments objectAtIndex:0];
+    NSString *tokenType = [command.arguments objectAtIndex:1];
+    
+    if(jwt!=NULL && tokenType!=NULL) {
+        MASAuthCredentialsJWT *authCredentials = [MASAuthCredentialsJWT initWithJWT:jwt tokenType:tokenType];
+        [MASUser loginWithAuthCredentials:authCredentials completion:^(BOOL completed, NSError * _Nullable error) {
+            if(completed && !error) {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                           messageAsString:@"Login with authorization credentials complete"];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            else {
+                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[NSDictionary dictionary]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        }];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:1000],
+                                    @"errorMessage":@"Invalid parameters. Please provide the valid inputs.",
+                                    @"errorInfo":[NSDictionary dictionary]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 

@@ -279,7 +279,7 @@ MASPluginUser.sharedCurrUser;
             MASPluginUser.currentUser(function(){}, function(){});
          }
         successHandler(result);
-    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsUsernamePassword", [usernmae, password]);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsUsernamePassword", [username, password]);
 };
 
 /**

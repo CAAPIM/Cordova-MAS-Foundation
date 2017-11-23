@@ -520,8 +520,8 @@ var MASPluginMAS = function() {
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
-    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -535,8 +535,8 @@ var MASPluginMAS = function() {
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
-    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -550,8 +550,8 @@ var MASPluginMAS = function() {
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
-    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -565,8 +565,8 @@ var MASPluginMAS = function() {
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
      */
-    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -607,7 +607,7 @@ var MASPluginMAS = function() {
     };
 
     /**
-     *   Signs MASClaims object with default private key from device registration against primary gateway.
+     *   Signs MASClaims object with default private key.
      *   @param {function} successHandler user defined success callback
      *   @param {function} errorHandler user defined error callback
      *   @param {string} code code extracted by the QR code scanner
@@ -616,6 +616,15 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims]);
     };
 
+    /**
+     *   Signs MASClaims object with custom private key.
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} code code extracted by the QR code scanner
+     */
+    this.signWithClaimsPrivateKey = function(successHandler, errorHandler, claims) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims, privateKey]);
+    };
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility

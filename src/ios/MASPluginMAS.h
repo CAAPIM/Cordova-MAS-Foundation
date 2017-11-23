@@ -49,6 +49,14 @@
 - (void)useNativeMASUI:(CDVInvokedUrlCommand*)command;
 
 
+/**
+ *  Returns the current MASState
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getMASState:(CDVInvokedUrlCommand*)command;
+
+
 
 ///--------------------------------------
 /// @name Authentication Listeners
@@ -289,6 +297,52 @@
     
 - (void)doSocialLogin:(CDVInvokedUrlCommand *)command;
     
+///--------------------------------------
+/// @name Proof Key for Code Exchange (PKCE)
+///--------------------------------------
+
+# pragma mark - Proof Key for Code Exchange
+
+/**
+ *  Checks if PKCE is enabled
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isPKCEEnabled:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Enables PKCE
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enablePKCE:(CDVInvokedUrlCommand *)command;
+
+///--------------------------------------
+/// @name JWT Signing
+///--------------------------------------
+
+# pragma mark - JWT Signing
+
+/**
+ *  Returns a MASClaims object
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)initClaims:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Signs MASClaims with a default private key
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)signWithClaims:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Signs MASClaims with a custom private key
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)signWithClaimsPrivateKey:(CDVInvokedUrlCommand *)command;
 
 
 @end

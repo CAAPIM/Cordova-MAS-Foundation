@@ -119,12 +119,25 @@
 - (void)loginWithAuthCode:(CDVInvokedUrlCommand*)command;
 
 /**
- *  Login with an an auth credentials object
+ *  Login with an authorization code using MASAuthCredentials
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)loginWithAuthCredentials:(CDVInvokedUrlCommand*)command;
+- (void)loginWithAuthCredentialsAuthCode:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code using MASAuthCredentials
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsUsernamePassword:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Login with a JSON web token and a token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsJWT:(CDVInvokedUrlCommand*)command;
 
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command;
 
