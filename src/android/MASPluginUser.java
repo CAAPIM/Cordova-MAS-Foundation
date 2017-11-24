@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.ca.mas.foundation.MASAuthCredentialsPassword;
 import com.ca.mas.foundation.MASAuthorizationResponse;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASFoundationStrings;
@@ -72,7 +73,11 @@ public class MASPluginUser extends MASCordovaPlugin {
                 loginWithIdTokenAndTokenType(args, callbackContext);
             } else if (action.equalsIgnoreCase("loginWithAuthCode")) {
                 loginWithIdTokenAndTokenType(args, callbackContext);
-            }else if (action.equalsIgnoreCase("logoutUser")) {
+            }else if (action.equalsIgnoreCase("loginWithAuthCredentialsUsernamePassword")) {
+                loginWithAuthCredentialsUsernamePassword(args, callbackContext);
+            }else if (action.equalsIgnoreCase("loginWithAuthCredentialsAuthCode")) {
+                loginWithAuthCredentialsAuthCode(args, callbackContext);
+            } else if (action.equalsIgnoreCase("logoutUser")) {
                 logoutUser(callbackContext);
             } else if (action.equalsIgnoreCase("requestUserInfo")) {
                 requestUserInfo(callbackContext);
@@ -90,7 +95,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         return true;
     }
 
-    /**
+     /**
      * Returns the last authenticated session's type of auth credentials used.
      */
     private void getAuthCredentialsType(CallbackContext callbackContext) {
@@ -434,6 +439,40 @@ public class MASPluginUser extends MASCordovaPlugin {
             @Override
             public void onSuccess(MASUser masUser) {
                 String result = "Login with username and password complete";
+                success(callbackContext, result, false);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage(), throwable);
+                callbackContext.error(getError(throwable));
+            }
+        });
+    }
+
+
+
+    private void loginWithAuthCredentialsAuthCode(final JSONArray args, final CallbackContext callbackContext) {
+    }
+    /**
+     * is used to login with provided username and password.
+     */
+    private void loginWithAuthCredentialsUsernamePassword(final JSONArray args, final CallbackContext callbackContext) {
+        String username;
+        String password;
+        try {
+            username = args.getString(0);
+            password = args.getString(1);
+        } catch (JSONException e) {
+            callbackContext.error(getError(e));
+            return;
+        }
+
+        MASAuthCredentialsPassword masAuthCredentialsPassword = new MASAuthCredentialsPassword(username, password.toCharArray());
+        MASUser.login(username, password.toCharArray(), new MASCallback<MASUser>() {
+            @Override
+            public void onSuccess(MASUser masUser) {
+                String result = "Login with authcredentials username and password complete";
                 success(callbackContext, result, false);
             }
 
