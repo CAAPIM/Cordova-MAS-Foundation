@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -98,15 +99,6 @@
      */
      this.getAccessToken = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
-     };
-
-   /**
-     Returns current {@link MASState} value.  The value can be used to determine which state SDK is currently at.
-     *  @param {function} successHandler user defined success callback
-     *  @param {function} errorHandler user defined error callback
-     */
-     this.getMASState = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getMASState", []);
      };
 
 	 /**
@@ -257,13 +249,13 @@ MASPluginUser.sharedCurrUser;
  *  @param {string} userName username of the user
  *  @param {string} password password of the user
  */
- MASPluginUser.loginWithAuthCredentialsAuthCode = function(successHandler, errorHandler, authorizationCode) {
+ MASPluginUser.loginWithAuthCredentialsAuthCode = function(successHandler, errorHandler, authorizationCode,state) {
     return Cordova.exec(function(result) {
         if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
             MASPluginUser.currentUser(function(){}, function(){});
          }
         successHandler(result);
-    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsAuthCode", [authorizationCode]);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsAuthCode", [authorizationCode,state]);
 };
 
 /**

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -632,7 +633,7 @@ var MASPluginMAS = function() {
      *   @param {function} errorHandler user defined error callback
      *   @param {string} code code extracted by the QR code scanner
      */
-    this.signWithClaimsPrivateKey = function(successHandler, errorHandler, claims) {
+    this.signWithClaimsPrivateKey = function(successHandler, errorHandler, claims,privateKey) {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims, privateKey]);
     };
 
