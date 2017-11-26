@@ -1415,45 +1415,6 @@
 # pragma mark - JWT Signing
 
 /**
- *  Returns a MASClaims object
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)initClaims:(CDVInvokedUrlCommand *)command {
-    
-    CDVPluginResult *result;
-    
-    MASClaims *claims = [MASClaims claims];
-    
-    NSMutableDictionary *claimsDictionary = [[NSMutableDictionary alloc] init];
-
-    if(claims.iss)
-        [claimsDictionary setValue:claims.iss forKey:@"iss"];
-    if(claims.aud)
-        [claimsDictionary setValue:claims.aud forKey:@"aud"];
-    if(claims.sub)
-        [claimsDictionary setValue:claims.sub forKey:@"sub"];
-    if(claims.jti)
-        [claimsDictionary setValue:claims.jti forKey:@"jti"];
-    if(claims.iat)
-        [claimsDictionary setValue:claims.iat forKey:@"iat"];
-    if(claims.exp)
-        [claimsDictionary setValue:claims.exp forKey:@"exp"];
-    if(claims.nbf)
-        [claimsDictionary setValue:claims.nbf forKey:@"nbf"];
-    if(claims.content)
-        [claimsDictionary setValue:claims.content forKey:@"content"];
-    if(claims.contentType)
-        [claimsDictionary setValue:claims.contentType forKey:@"contentType"];
-    if(claims.customClaims)
-        [claimsDictionary setValue:claims.customClaims forKey:@"customClaims"];
-    
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:claimsDictionary];
-    
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-/**
  *  Signs MASClaims with a default private key
  *
  *  @param command CDInvokedUrlCommand object

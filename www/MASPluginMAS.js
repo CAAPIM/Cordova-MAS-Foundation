@@ -604,19 +604,6 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
     };
 
-    ///------------------------------------------------------------------------------------------------------------------
-    /// @name JWT Signing
-    ///------------------------------------------------------------------------------------------------------------------
-    /**
-     *   Returns a MASClaims object that can be used to obtain a JWT token
-     *   @param {function} successHandler user defined success callback
-     *   @param {function} errorHandler user defined error callback
-     *   @param {string} code code extracted by the QR code scanner
-     */
-    this.initClaims = function(successHandler, errorHandler) {
-        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "initClaims", []);
-    };
-
     /**
      *   Signs MASClaims object with default private key.
      *   @param {function} successHandler user defined success callback

@@ -444,26 +444,6 @@
                      }, username, password);
              });
 
-             $("#userLoginAuthCode").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-
-                 $(this).find("textarea.error").hide();
-
-                 var thisElement = $(this);
-
-                 var authCode = $("input[name='authCode']").val();
-                 var authCodeState = $("input[name='authCodeState']").val();
-
-                 MASPluginUser.loginWithAuthCode(function(result) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("success");
-                         displayResult(thisElement, result);
-                     },
-                     function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
-                     }, authCode,authCodeState);
-             });
-
              $("#userLoginAuthCred").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -482,46 +462,6 @@
                          thisElement.removeClass("success").removeClass("failure").addClass("failure");
                          displayError(thisElement, error);
                      }, username, password);
-             });
-
-             $("#userLoginAuthCredJWT").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-
-                 $(this).find("textarea.error").hide();
-
-                 var thisElement = $(this);
-
-                 var jwt = $("input[name='jwt']").val();
-                 var tokenType = $("input[name='tokenType']").val();
-
-                 MASPluginUser.loginWithAuthCredentialsJWT(function(result) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("success");
-                         displayResult(thisElement, result);
-                     },
-                     function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
-                     }, jwt, tokenType);
-             });
-
-             $("#userLoginAuthCredAuthCode").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-
-                 $(this).find("textarea.error").hide();
-
-                 var thisElement = $(this);
-
-                 var authCode = $("input[name='authCodeAuthCred']").val();
-                 var authCredState = $("input[name='authCredState']").val();
-
-                 MASPluginUser.loginWithAuthCredentialsAuthCode(function(result) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("success");
-                         displayResult(thisElement, result);
-                     },
-                     function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
-                     }, authCode,authCredState);
              });
 
              $("#getUsername").bind("click", function(event, ui) {
@@ -941,27 +881,6 @@
                      });
              });
 
-             var claims;
-             $("#initClaims").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-
-                 $(this).find("textarea.error").hide();
-
-                 var thisElement = $(this);
-                 var MAS = new MASPlugin.MAS();
-
-                 MAS.initClaims(function(result) {
-                     claims = result;
-                     thisElement.removeClass("success").removeClass("failure").addClass("success");
-                     displayResult(thisElement, result);
-                     console.log(claims);
-                 },
-                 function(error) {
-                     thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                     displayError(thisElement, error);
-                });
-             });
-
              $("#signWithClaims").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -1000,21 +919,6 @@
                      thisElement.removeClass("success").removeClass("failure").addClass("failure");
                      displayError(thisElement, error);
                  }, claims, privateKey);
-             });
-
-             $("#getApplicationProperties").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-                 $(this).find("textarea.error").hide();
-                 var thisElement = $(this);
-                 var MASApplication = new MASPlugin.MASApplication();
-                 MASApplication.getApplicationProperties(function(result) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("success");
-                         displayResult(thisElement, result);
-                     },
-                     function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
-                     });
              });
 
              var ApplicationIdentifiersList = "";
@@ -1420,14 +1324,6 @@
                                                                        placeholder="password"/><textarea
                                 class='error' style="display:none;" readonly=""></textarea></a>
                     </li>
-                    <li data-icon="false"><a href="#" id="userLoginAuthCode">MASUser login with
-                        AuthCode <input type="text" name="authCode"
-                                        placeholder="auth code"/>
-                        <input type="text" name="authCodeState"
-                               placeholder="State variable for PKCE"/><textarea class='error'
-                                                                           style="display:none;"
-                                                                           readonly=""></textarea></a>
-                    </li>
                     <li data-icon="false"><a href="#" id="userLoginAuthCred">MASUserAuthCredentials
                         login with username and password <input type="text"
                                                                 name="userLoginUsernameAuthCred"
@@ -1436,19 +1332,6 @@
                                 placeholder="password"/><textarea class='error'
                                                                   style="display:none;"
                                                                   readonly=""></textarea></a>
-                    </li>
-                    <li data-icon="false"><a href="#" id="userLoginAuthCredJWT">MASUserAuthCredentials
-                        login with JWT <input type="text" name="jwt" placeholder="JWT"/><input
-                                type="text" name="tokenType" placeholder="Token Type"/><textarea
-                                class='error' style="display:none;" readonly=""></textarea></a>
-                    </li>
-                    <li data-icon="false"><a href="#" id="userLoginAuthCredAuthCode">MASUserAuthCredentials
-                        login with AuthCode <input type="text" name="authCodeAuthCred"
-                                                   placeholder="auth Code"/>
-                        <input type="text" name="authCredState"
-                               placeholder="State variable for PKCE"/><textarea class='error'
-                                                                                      style="display:none;"
-                                                                                      readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="getAuthCredentialsType">MASUser
                         getAuthCredentialsType <textarea class='error' style="display:none;"
@@ -1654,10 +1537,6 @@
                     </li>
                     <li data-icon="false"><a href="#" id="getMASState">MAS getMASState <textarea
                             class='error' style="display:none;" readonly=""></textarea></a></li>
-                    <li data-icon="false"><a href="#" id="getApplicationProperties">MASApplication
-                        Properties<textarea class='error' style="display:none;"
-                                            readonly=""></textarea></a>
-                    </li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1681,8 +1560,6 @@
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>JWT Signing</h2>
                 <ul data-role="listview" data-theme="b">
-                    <li data-icon="false"><a href="#" id="initClaims">MAS initClaims <textarea
-                            class='error' style="display:none;" readonly=""></textarea></a></li>
                     <li data-icon="false"><a href="#" id="signWithClaims">MAS SignWithClaims<input
                             type="text" name="claimsJSON"
                             placeholder="Claim JSON"/>

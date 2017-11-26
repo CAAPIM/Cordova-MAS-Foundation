@@ -42,14 +42,6 @@
 - (void)authenticationStatus:(CDVInvokedUrlCommand*)command;
 
 
-/**
- *  Returns a list of application properties
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)getApplicationProperties:(CDVInvokedUrlCommand*)command;
-
-
 ///--------------------------------------
 /// @name Enterprise App
 ///--------------------------------------

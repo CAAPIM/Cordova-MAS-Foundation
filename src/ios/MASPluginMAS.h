@@ -337,13 +337,6 @@
 # pragma mark - JWT Signing
 
 /**
- *  Returns a MASClaims object
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)initClaims:(CDVInvokedUrlCommand *)command;
-
-/**
  *  Signs MASClaims with a default private key
  *
  *  @param command CDInvokedUrlCommand object
