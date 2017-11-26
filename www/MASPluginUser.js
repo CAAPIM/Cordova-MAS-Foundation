@@ -243,7 +243,7 @@ MASPluginUser.sharedCurrUser;
 };
 
 /**
- Authenticates the user using authCredentials with username and password
+ Authenticates the user using authCredentials with an authorization code
  *  @param {function} successHandler user defined success callback
  *  @param {function} errorHandler user defined error callback
  *  @param {string} userName username of the user
@@ -275,7 +275,7 @@ MASPluginUser.sharedCurrUser;
 };
 
 /**
- Authenticates the user using a JWT token and token type
+ Authenticates the user using authCredentials with a JWT token and token type
  *  @param {function} successHandler user defined success callback
  *  @param {function} errorHandler user defined error callback
  *  @param {string} userName username of the user
