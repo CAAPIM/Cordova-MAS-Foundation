@@ -343,12 +343,5 @@
  */
 - (void)signWithClaims:(CDVInvokedUrlCommand *)command;
 
-/**
- *  Signs MASClaims with a custom private key
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)signWithClaimsPrivateKey:(CDVInvokedUrlCommand *)command;
-
 
 @end
