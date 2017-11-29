@@ -1,3 +1,21 @@
+# Version 1.6
+
+## Bug fixes
+
+- None
+
+### New features
+
+- Set security configuration to access public server APIs.
+- Start SDK with msso_config.json from a URL.
+- Sign claims with keys to generate JWT token.
+- Login with authorization credentials with username/password, JWT token and auth code.
+
+### Deprecated classes
+
+- None.
+
+
 # Version 1.5
 
 ### Bug fixes
@@ -31,10 +49,6 @@
 - MASUser APIs made instance specific. This would now require an instance of MASUser to be created to access its state variable.[US298706]
 - Change in Javascript files and index to call different native Cordova Plugins as per the flow.[US298706]
 - Added Reference Documentation for Cordova APIs [US304202]
-- Set security configuration to access public server APIs.
-- Start SDK with msso_config.json from a URL.
-- Sign claims with keys to generate JWT token.
-- Login with authorization credentials with username/password, JWT token and auth code.
 
 ### Deprecated classes
 

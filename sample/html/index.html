@@ -959,7 +959,6 @@
                  config.setTrustPublicPKI(trustPublicPKI);
                  config.addCertificate(certificate);
                  config.addPublicKeyHash(publicKeyHash);
-                 console.log(JSON.stringify(config.getSecurityConfiguration()));
 
                  MAS.setSecurityConfiguration(function(result) {
                          thisElement.removeClass("success").removeClass("failure").addClass("success");
