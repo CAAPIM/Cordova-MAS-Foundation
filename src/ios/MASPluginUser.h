@@ -107,6 +107,9 @@
 - (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command;
 
 
+- (void)initializeBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command;
+
+
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command;
 
 

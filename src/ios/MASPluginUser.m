@@ -538,6 +538,31 @@
 }
 
 
+- (void)initializeBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command
+{
+    __block CDVPluginResult *result;
+    
+    [MASUser initializeBrowserBasedAuthenticationWithCompletion:^(BOOL completed, NSError* error){
+        if(error)
+        {
+            NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                        @"errorMessage":[error localizedDescription],
+                                        @"errorInfo":[error userInfo]};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                   messageAsDictionary:errorInfo];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"Browser based authentication is Successful"];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command
 {
     __block CDVPluginResult *result;
