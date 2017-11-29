@@ -142,6 +142,17 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "useNativeMASUI", []);
     };
 
+    
+    /**
+     * Enable Browser based authentication.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {bool} enable Whether to enable or disable. The default value is enable.
+     */
+    this.enableBrowserBasedAuthentication = function(successHandler, errorHandler, enable) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableBrowserBasedAuthentication", [enable]);
+    };
+
 
     /**
      Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.

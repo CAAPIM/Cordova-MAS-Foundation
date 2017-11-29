@@ -233,4 +233,18 @@ MASPluginUser.sharedCurrUser;
     }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
 };
 
+/**
+ Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
+ *  @param {function} successHandler user defined success callback which gets called after successful login
+ *  @param {function} errorHandler user defined error callback 
+ */
+MASPluginUser.initializeBrowserBasedAuthentication = function(successHandler, errorHandler) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "initializeBrowserBasedAuthentication", []);
+}
+
 module.exports = MASPluginUser;

@@ -50,6 +50,14 @@
 
 
 
+/**
+ * Enable browser based Authentication.
+ *
+ * @param command @param command CDInvokedUrlCommand object
+ */
+- (void)enableBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command;
+
+
 ///--------------------------------------
 /// @name Authentication Listeners
 ///--------------------------------------
