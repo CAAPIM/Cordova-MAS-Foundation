@@ -6,6 +6,7 @@
 
 package com.ca.mas.cordova.core;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.ca.mas.foundation.auth.MASApplication;
@@ -17,10 +18,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateCrtKeySpec;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import sun.security.util.DerInputStream;
+import sun.security.util.DerValue;
 
 /**
  * Utilities class
@@ -30,6 +40,13 @@ public class MASUtil {
     private static MASProximityLogin qrCode;
     private static Map<String, MASAuthenticationProvider> _providerMap = new HashMap<String, MASAuthenticationProvider>();
     private static final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock();
+    // PKCS#8 format
+    private static final String PEM_PRIVATE_START = "-----BEGIN PRIVATE KEY-----";
+    private static final String PEM_PRIVATE_END = "-----END PRIVATE KEY-----";
+
+    // PKCS#1 format
+    private static final String PEM_RSA_PRIVATE_START = "-----BEGIN RSA PRIVATE KEY-----";
+    private static final String PEM_RSA_PRIVATE_END = "-----END RSA PRIVATE KEY-----";
 
     /**
      * @return the already set MASProximityLoginQRCode qrCode
@@ -114,5 +131,47 @@ public class MASUtil {
         } finally {
             _lock.readLock().unlock();
         }
+    }
+
+    /**
+     * Generates a java.security.PrivateKey out of PEM String provided
+     *
+     * @param privateKeyPem PEM formatted private Key
+     * @return PrivateKey
+     */
+    public static PrivateKey generatePrivateKeyFromPEM(String privateKeyPem) throws Exception {
+        if (privateKeyPem.indexOf(PEM_PRIVATE_START) != -1) { // PKCS#8 format
+            privateKeyPem = privateKeyPem.replace(PEM_PRIVATE_START, "").replace(PEM_PRIVATE_END, "");
+            privateKeyPem = privateKeyPem.replaceAll("\\s", "");
+
+            byte[] pkcs8EncodedKey = Base64.decode(privateKeyPem, Base64.DEFAULT);
+
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            return factory.generatePrivate(new PKCS8EncodedKeySpec(pkcs8EncodedKey));
+        } else if (privateKeyPem.indexOf(PEM_RSA_PRIVATE_START) != -1) {  // PKCS#1 format
+            privateKeyPem = privateKeyPem.replace(PEM_RSA_PRIVATE_START, "").replace(PEM_RSA_PRIVATE_END, "");
+            privateKeyPem = privateKeyPem.replaceAll("\\s", "");
+            DerInputStream derReader = new DerInputStream(Base64.decode(privateKeyPem, Base64.DEFAULT));
+            DerValue[] seq = derReader.getSequence(0);
+
+            if (seq.length < 9) {
+                throw new GeneralSecurityException("Could not parse a PKCS1 private key.");
+            }
+
+            // skip version seq[0];
+            BigInteger modulus = seq[1].getBigInteger();
+            BigInteger publicExp = seq[2].getBigInteger();
+            BigInteger privateExp = seq[3].getBigInteger();
+            BigInteger prime1 = seq[4].getBigInteger();
+            BigInteger prime2 = seq[5].getBigInteger();
+            BigInteger exp1 = seq[6].getBigInteger();
+            BigInteger exp2 = seq[7].getBigInteger();
+            BigInteger crtCoef = seq[8].getBigInteger();
+
+            RSAPrivateCrtKeySpec keySpec = new RSAPrivateCrtKeySpec(modulus, publicExp, privateExp, prime1, prime2, exp1, exp2, crtCoef);
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            return factory.generatePrivate(keySpec);
+        }
+        throw new GeneralSecurityException("Could not parse the private key.");
     }
 }

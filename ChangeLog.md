@@ -1,3 +1,21 @@
+# Version 1.6
+
+## Bug fixes
+
+- None
+
+### New features
+
+- Set security configuration to access public server APIs.
+- Start SDK with msso_config.json from a URL.
+- Sign claims with keys to generate JWT token.
+- Login with authorization credentials with username/password, JWT token and auth code.
+
+### Deprecated classes
+
+- None.
+
+
 # Version 1.5
 
 ### Bug fixes

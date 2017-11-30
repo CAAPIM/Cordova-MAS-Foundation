@@ -108,3 +108,4 @@ var MASPluginApplication = function() {
 }
 
 module.exports = MASPluginApplication;
+

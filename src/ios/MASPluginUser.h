@@ -97,20 +97,64 @@
 
 # pragma mark - Authentication
 
-
+/**getA
+ *  Login with username and password
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Login with an ID token and its token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithIdTokenAndTokenType:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCode:(CDVInvokedUrlCommand*)command;
 
-- (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command;
+/**
+ *  Login with an authorization code using MASAuthCredentials
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsAuthCode:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code using MASAuthCredentials
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsUsernamePassword:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Login with a JSON web token and a token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsJWT:(CDVInvokedUrlCommand*)command;
 
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Logout the current user
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-- (void)logoutUser:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Returns the authorization credentials' type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getAuthCredentialsType:(CDVInvokedUrlCommand *)command;
 
 
 @end

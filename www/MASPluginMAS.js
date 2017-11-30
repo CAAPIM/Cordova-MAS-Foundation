@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -273,6 +274,13 @@ var MASPluginMAS = function() {
             "MASPluginMAS", "completeAuthentication", [username, password]);
     };
 
+    /**
+     * Perform social login
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param args social login provider
+     */
+
     this.doSocialLogin = function(successHandler, errorHandler, provider) {
         return Cordova.exec(function() {
             if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
@@ -453,6 +461,35 @@ var MASPluginMAS = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithJSON", [jsonObject]);
     };
 
+    /**
+     Starts the lifecycle of the MAS processes with given JSON configuration file path or URL. This method will (if it is different) overwrite the JSON configuration that was stored.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {String}   url URL of the JSON configuration file path
+     */
+    this.startWithURL = function(successHandler, errorHandler, url) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "startWithURL", [url]);
+    };
+
+    /**
+     Enable PKCE extension to OAuth.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     *@param {boolean}   enable True to enable PKCE extension, False to disable PKCE Extension. Default to true.
+     */
+    this.enablePKCE = function(successHandler, errorHandler, enable) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enablePKCE", [enable]);
+    };
+
+    /**
+     Determines whether PKCE extension is enabled.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.isPKCEEnabled = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isPKCEEnabled", []);
+    };
+
 
     /**
      Stops the lifecycle of all MAS processes.
@@ -500,9 +537,10 @@ var MASPluginMAS = function() {
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
+     * @param {string} isPublic specifies if the API being called is public or not
      */
-    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.getFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getFromPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -515,9 +553,10 @@ var MASPluginMAS = function() {
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
+     * @param {string} isPublic specifies if the API being called is public or not
      */
-    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.deleteFromPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "deleteFromPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -530,9 +569,10 @@ var MASPluginMAS = function() {
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
+     * @param {string} isPublic specifies if the API being called is public or not
      */
-    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.putToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "putToPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
 
@@ -545,11 +585,21 @@ var MASPluginMAS = function() {
      * @param {string} headersInfo headers of the request
      * @param {string} requestType specifies the request type of the request
      * @param {string} responseType specifies the response type of the request
+     * @param {string} isPublic specifies if the API being called is public or not
      */
-    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType]);
+    this.postToPath = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
+
+    /**
+     Returns current MASState value.  The value can be used to determine which state SDK is currently at.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.getMASState = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getMASState", []);
+    };
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Proximity Login
@@ -564,6 +614,26 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "authorizeQRCode", [code]);
     };
 
+    /**
+     *   Signs MASClaims object with default private key.
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} claims claims JSON object
+     */
+    this.signWithClaims = function(successHandler, errorHandler, claims) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims]);
+    };
+
+    /**
+     *   Signs MASClaims object with custom private key.
+     *   @param {function} successHandler user defined success callback
+     *   @param {function} errorHandler user defined error callback
+     *   @param {string} claims claims JSON object
+     *   @param {string} privateKey private key as a base64 encoded string
+     */
+    this.signWithClaimsPrivateKey = function(successHandler, errorHandler, claims, privateKey) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims, privateKey]);
+    };
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility
