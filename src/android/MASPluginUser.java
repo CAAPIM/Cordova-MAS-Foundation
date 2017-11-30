@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthCredentialsAuthorizationCode;
 import com.ca.mas.foundation.MASAuthCredentialsJWT;
 import com.ca.mas.foundation.MASAuthCredentialsPassword;
@@ -49,6 +50,8 @@ public class MASPluginUser extends MASCordovaPlugin {
         try {
             if (action.equalsIgnoreCase("isAuthenticated")) {
                 isAuthenticated(callbackContext);
+            } else if (action.equalsIgnoreCase("initializeBrowserBasedAuthentication")) {
+                initializeBrowserBasedAuthentication( callbackContext);
             } else if (action.equalsIgnoreCase("isCurrentUser")) {
                 isCurrentUser(callbackContext);
             } else if (action.equalsIgnoreCase("getAccessToken")) {
@@ -108,6 +111,31 @@ public class MASPluginUser extends MASCordovaPlugin {
         success(callbackContext, masUser.isAuthenticated(), false);
     }
 
+
+    /**
+     * Start Browser Based Authentication
+     */
+    private void initializeBrowserBasedAuthentication(final CallbackContext callbackContext) {
+        try {
+            MAS.enableBrowserBasedAuthentication();
+            MASUser.login(new MASCallback<MASUser>() {
+                @Override
+                public void onSuccess(MASUser masUser) {
+                    success(callbackContext, true, false);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    callbackContext.error(getError(e));
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+
+    }
     /**
      * Checks the boolean status if the user is current user
      */

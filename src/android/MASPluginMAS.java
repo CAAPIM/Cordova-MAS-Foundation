@@ -78,7 +78,9 @@ public class MASPluginMAS extends MASCordovaPlugin {
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         try {
-            if (action.equalsIgnoreCase("useNativeMASUI")) {
+            if (action.equalsIgnoreCase("enableBrowserBasedAuthentication")) {
+                enableBrowserBasedAuthentication(callbackContext);
+            } else if (action.equalsIgnoreCase("useNativeMASUI")) {
                 useNativeMASUI(args, callbackContext);
             } else if (action.equalsIgnoreCase("setConfigFileName")) {
                 setConfigFileName(args, callbackContext);
@@ -149,6 +151,20 @@ public class MASPluginMAS extends MASCordovaPlugin {
         }
         return true;
     }
+
+
+    private void enableBrowserBasedAuthentication(  final CallbackContext callbackContext) {
+        try {
+            MAS.enableBrowserBasedAuthentication();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+            return;
+        }
+        success(callbackContext, true, false);
+    }
+
+
 
     private void useNativeMASUI(final JSONArray args, final CallbackContext callbackContext) {
         MAS.setAuthenticationListener(new MASAuthenticationListener() {
