@@ -42,9 +42,9 @@
 
          function onDeviceReady() {
              var MAS = new MASPlugin.MAS();
-             MAS.initialize(function(result) {}, function(error) {
-                 alert("Initialization failure");
-             });
+             //MAS.initialize(function(result) {}, function(error) {
+               //  alert("Initialization failure");
+             //});-->
          }
 
 
@@ -452,7 +452,7 @@
                 var thisElement = $(this);
 
                 var MAS = new MASPlugin.MAS();
-                MAS.enableBrowserBasedAuthentication(function(success){
+
                     MASPluginUser.initializeBrowserBasedAuthentication(function(result) {
                         thisElement.removeClass("success").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
@@ -461,9 +461,26 @@
                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     });
-                },function(error){thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);},true);
+
             });
+
+            $("#enableBrowserBasedAuthentication").bind("click", function(event, ui) {
+                if ($(event.target).context.tagName != 'A') return;
+
+                $(this).find("textarea.error").hide();
+
+                var thisElement = $(this);
+
+                var MAS = new MASPlugin.MAS();
+                MAS.enableBrowserBasedAuthentication(function(success){
+
+                        thisElement.removeClass("success").removeClass("failure").addClass("success");
+                        displayResult(thisElement, success);
+
+                },function(error){thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);});
+            });
+
 
 
              $("#userLoginAuthCred").bind("click", function(event, ui) {
@@ -1273,6 +1290,10 @@
                                                                                   style="display:none;"
                                                                                   readonly=""></textarea></a>
                     </li>
+                    <li data-icon="false"><a href="#" id="enableBrowserBasedAuthentication">MAS enableBrowserBasedAuthentication<textarea class='error'
+                                                                                    style="display:none;"
+                                                                                    readonly=""></textarea></a>
+                    </li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1358,7 +1379,11 @@
                         getAuthCredentialsType <textarea class='error' style="display:none;"
                                                          readonly=""></textarea></a>
                     </li>
-                    <li data-icon="false"><a href="#" id="browserBasedLogin">MASUser initializeWithBrowserBasedAuthentication<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
+                    <li data-icon="false"><a href="#" id="browserBasedLogin">MASUser initializeWithBrowserBasedAuthentication
+                        <textarea class='error' style="display:none;" readonly="">
+
+                        </textarea></a>
+                    </li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
