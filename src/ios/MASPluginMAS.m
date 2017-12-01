@@ -186,12 +186,7 @@
 - (void)enableBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult *result;
-    BOOL enable = NO;
-    
-    if(command.arguments.count > 0)
-    {
-        enable = [command.arguments objectAtIndex:0];
-    }
+    BOOL enable = YES;
     [MAS enableBrowserBasedAuthentication:enable];
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Browser Based Authentication is enabled"];
