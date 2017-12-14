@@ -135,7 +135,65 @@
         
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
+
+- (void)getMASState:(CDVInvokedUrlCommand *)command
+    {
+        CDVPluginResult *result;
+        MASState masState = [MAS MASState];
+        NSString *currentState;
+        switch (masState) {
+            case MASStateNotConfigured:
+                currentState = @"MASStateNotConfigured";
+                break;
+                
+            case MASStateNotInitialized:
+                currentState = @"MASStateNotInitialized";
+                break;
+                
+            case MASStateDidLoad:
+                currentState = @"MASStateDidLoad";
+                break;
+                
+            case MASStateWillStart:
+                currentState = @"MASStateWillStart";
+                break;
+                
+            case MASStateDidStart:
+                currentState = @"MASStateDidStart";
+                break;
+                
+            case MASStateWillStop:
+                currentState = @"MASStateWillStop";
+                break;
+                
+            case MASStateDidStop:
+                currentState = @"MASStateDidStop";
+                break;
+                
+            case MASStateIsBeingStopped:
+                currentState = @"MASStateIsBeingStopped";
+                break;
+                
+            default:
+                break;
+        }
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:currentState];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+
+
+- (void)enableBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result;
+    BOOL enable = YES;
+    [MAS enableBrowserBasedAuthentication:enable];
     
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Browser Based Authentication is enabled"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
     
     ///--------------------------------------
     /// @name Authentication Listeners
@@ -468,6 +526,38 @@
         //
         // TODO
         //
+        __block CDVPluginResult *result;
+        
+        if ([command.arguments count] > 0 && [command.arguments count] == 1)
+        {
+            NSString *urlString = [command.arguments objectAtIndex:0];
+            NSURL *url = [NSURL URLWithString:urlString];
+            if(url && url.scheme && url.host) {
+                [MAS startWithURL:url completion:^(BOOL completed, NSError * error) {
+                    if (error) {
+                        
+                        NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                    @"errorMessage":[error localizedDescription],
+                                                    @"errorInfo":[error userInfo]};
+                        
+                        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                        
+                        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                    }
+                    
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Start complete"];
+                    
+                    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                }];
+            }
+            else {
+                NSDictionary *errorInfo = @{@"errorMessage":@"Invalid URL"};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        }
     }
     
     
@@ -497,8 +587,50 @@
             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         }];
     }
+
+
+    ///--------------------------------------
+    /// @name Security Configuration
+    ///--------------------------------------
+
+- (void)setSecurityConfiguration:(CDVInvokedUrlCommand *)command
+{
+    CDVPluginResult *result;
     
+    NSDictionary *securityConfig = [command.arguments objectAtIndex:0];
+    NSURL *url = nil;
+    NSString *host = [securityConfig objectForKey:@"host"];
+    if(![host isEqualToString:@""])
+    {
+        url = [NSURL URLWithString:host];
+    }
+    else
+    {
+        NSDictionary *errorInfo = @{@"errorMessage":@"Missing host"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
     
+    MASSecurityConfiguration *securityConfiguration = [[MASSecurityConfiguration alloc] initWithURL:url];
+    
+    if([[securityConfig objectForKey:@"isPublic"] isEqualToString:@"true"])
+        securityConfiguration.isPublic = YES;
+    if([[securityConfig objectForKey:@"trustPublicPKI"] isEqualToString:@"true"])
+        securityConfiguration.trustPublicPKI = YES;
+    if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
+        securityConfiguration.publicKeyHashes = [securityConfig objectForKey:@"publicKeyHashes"];
+    if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
+        securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
+    
+    [MASConfiguration setSecurityConfiguration:securityConfiguration];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Security configuration set"];
+    
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
     ///--------------------------------------
     /// @name Gateway Monitoring
     ///--------------------------------------
@@ -548,8 +680,9 @@
         NSDictionary *headersInfo = nil;
         MASRequestResponseType requestType = MASRequestResponseTypeJson;
         MASRequestResponseType responseType = MASRequestResponseTypeJson;
+        BOOL isPublic = NO;
         
-        if (command.arguments.count>0 && command.arguments.count==5)
+        if (command.arguments.count>0 && command.arguments.count==6)
         {
             //
             // Path
@@ -586,11 +719,19 @@
                 responseType = [[command.arguments objectAtIndex:4] intValue];
             }
             
+            //
+            // is public server
+            //
+            if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+                isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+            }
+            
             [MAS getFrom:path
           withParameters:parametersInfo
               andHeaders:headersInfo
              requestType:requestType
             responseType:responseType
+                isPublic:isPublic
               completion:^(NSDictionary *responseInfo, NSError *error) {
                   
                   //
@@ -660,8 +801,9 @@
         NSDictionary *headersInfo = @{};
         MASRequestResponseType requestType = MASRequestResponseTypeJson;
         MASRequestResponseType responseType = MASRequestResponseTypeJson;
+        BOOL isPublic = NO;
         
-        if (command.arguments.count>0 && command.arguments.count==5)
+        if (command.arguments.count>0 && command.arguments.count==6)
         {
             //
             // Path
@@ -698,11 +840,19 @@
                 responseType = [[command.arguments objectAtIndex:4] intValue];
             }
             
+            //
+            // is public server
+            //
+            if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+                isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+            }
+            
             [MAS deleteFrom:path
              withParameters:parametersInfo
                  andHeaders:headersInfo
                 requestType:requestType
                responseType:responseType
+                   isPublic:isPublic
                  completion:^(NSDictionary *responseInfo, NSError *error) {
                      
                      //
@@ -772,8 +922,9 @@
         NSDictionary *headersInfo = @{};
         MASRequestResponseType requestType = MASRequestResponseTypeJson;
         MASRequestResponseType responseType = MASRequestResponseTypeJson;
+        BOOL isPublic = NO;
         
-        if (command.arguments.count>0 && command.arguments.count==5)
+        if (command.arguments.count>0 && command.arguments.count==6)
         {
             //
             // Path
@@ -810,11 +961,19 @@
                 responseType = [[command.arguments objectAtIndex:4] intValue];
             }
             
+            //
+            //
+            //
+            if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+                isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+            }
+            
             [MAS postTo:path
          withParameters:parametersInfo
              andHeaders:headersInfo
             requestType:requestType
            responseType:responseType
+               isPublic:isPublic
              completion:^(NSDictionary *responseInfo, NSError *error) {
                  
                  //
@@ -884,8 +1043,9 @@
         NSDictionary *headersInfo = @{};
         MASRequestResponseType requestType = MASRequestResponseTypeJson;
         MASRequestResponseType responseType = MASRequestResponseTypeJson;
+        BOOL isPublic = NO;
         
-        if (command.arguments.count>0 && command.arguments.count==5)
+        if (command.arguments.count>0 && command.arguments.count==6)
         {
             //
             // Path
@@ -922,11 +1082,19 @@
                 responseType = [[command.arguments objectAtIndex:4] intValue];
             }
             
+            //
+            // is public server
+            //
+            if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+                isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+            }
+            
             [MAS putTo:path
         withParameters:parametersInfo
             andHeaders:headersInfo
            requestType:requestType
           responseType:responseType
+              isPublic:isPublic
             completion:^(NSDictionary *responseInfo, NSError *error) {
                 
                 //
@@ -996,8 +1164,9 @@
         NSDictionary *headersInfo = @{};
         MASRequestResponseType requestType = MASRequestResponseTypeJson;
         MASRequestResponseType responseType = MASRequestResponseTypeJson;
+        BOOL isPublic = NO;
         
-        if (command.arguments.count>0 && command.arguments.count==5)
+        if (command.arguments.count>0 && command.arguments.count==6)
         {
             //
             // Path
@@ -1034,11 +1203,19 @@
                 responseType = [[command.arguments objectAtIndex:4] intValue];
             }
             
+            //
+            // is public server
+            //
+            if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+                isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+            }
+            
             [MAS patchTo:path
           withParameters:parametersInfo
               andHeaders:headersInfo
              requestType:requestType
             responseType:responseType
+                isPublic:isPublic
               completion:^(NSDictionary *responseInfo, NSError *error) {
                   
                   //
@@ -1199,6 +1376,125 @@
          [self.viewController dismissViewControllerAnimated:YES completion:nil];
      }];
 }
+
+    ///--------------------------------------
+    /// @name Proof Key for Code Exchange (PKCE)
+    ///--------------------------------------
+
+# pragma mark - Proof Key for Code Exchange
+
+/**
+ *  Checks if PKCE is enabled
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+
+- (void)isPKCEEnabled:(CDVInvokedUrlCommand *)command {
     
+    CDVPluginResult *result;
     
+    BOOL isPKCEEnabled = [MAS isPKCEEnabled];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isPKCEEnabled];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/**
+ *  Enables PKCE
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enablePKCE:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    if([[command.arguments objectAtIndex:0] isEqualToString:@"true"]) {
+        [MAS enablePKCE:YES];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"PKCE Enabled"];
+    }
+    else {
+        [MAS enablePKCE:NO];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"PKCE Disabled"];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+    ///--------------------------------------
+    /// @name JWT Signing
+    ///--------------------------------------
+
+# pragma mark - JWT Signing
+
+/**
+ *  Signs MASClaims with a default private key
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)signWithClaims:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    NSError *customClaimsError, *error;
+    NSMutableDictionary *claimsDictionary = [command.arguments objectAtIndex:0];
+    NSString *privateKeyString, *jwt;
+    NSData *privateKey;
+    MASClaims *claims = [MASClaims claims];
+    if(!([claimsDictionary isKindOfClass:[NSDictionary class]])) {
+        NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:-1],
+                                    @"errorMessage":@"Invalid claims provided",
+                                    @"errorInfo":[NSDictionary dictionary]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+    
+    if([claimsDictionary objectForKey:@"aud"])
+        claims.aud = [claimsDictionary objectForKey:@"aud"];
+    if([claimsDictionary objectForKey:@"jti"])
+        claims.jti = [claimsDictionary objectForKey:@"jti"];
+    if([claimsDictionary objectForKey:@"sub"])
+        claims.sub = [claimsDictionary objectForKey:@"sub"];
+    if([claimsDictionary objectForKey:@"iss"])
+        claims.iss = [claimsDictionary objectForKey:@"iss"];
+    if([claimsDictionary objectForKey:@"iat"])
+        claims.iat = [claimsDictionary objectForKey:@"iat"];
+    if([claimsDictionary objectForKey:@"exp"])
+        claims.exp = [claimsDictionary objectForKey:@"exp"];
+    if([claimsDictionary objectForKey:@"nbf"])
+        claims.nbf = [claimsDictionary objectForKey:@"nbf"];
+    if([claimsDictionary objectForKey:@"content"])
+        claims.content = [claims objectForKey:@"content"];
+    if([claimsDictionary objectForKey:@"contentType"])
+        claims.contentType = [claimsDictionary objectForKey:@"contentType"];
+    if([claimsDictionary objectForKey:@"customClaims"])
+        [claims setValue:[claimsDictionary objectForKey:@"customClaims"] forClaimKey:@"customClaims" error:&customClaimsError];
+    
+    if(command.arguments.count > 1) {
+        privateKeyString = [command.arguments objectAtIndex:1];
+        if(![privateKeyString isEqualToString:@""])
+            privateKey = [privateKeyString dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    if(!(privateKey))
+        jwt = [MAS signWithClaims:claims error:&error];
+    else
+        jwt = [MAS signWithClaims:claims privateKey:privateKey error:&error];
+    
+    if(!error) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jwt];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+    else {
+        NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                    @"errorMessage":[error localizedDescription],
+                                    @"errorInfo":[error userInfo]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
     @end

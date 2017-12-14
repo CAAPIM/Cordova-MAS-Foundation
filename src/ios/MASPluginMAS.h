@@ -49,6 +49,21 @@
 - (void)useNativeMASUI:(CDVInvokedUrlCommand*)command;
 
 
+/**
+ *  Returns the current MASState
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getMASState:(CDVInvokedUrlCommand*)command;
+
+
+/**
+ * Enable browser based Authentication.
+ *
+ * @param command @param command CDInvokedUrlCommand object
+ */
+- (void)enableBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command;
+
 
 ///--------------------------------------
 /// @name Authentication Listeners
@@ -201,6 +216,19 @@
 
 
 
+///------------------------------------------------------------------------------------------------------------------
+/// @name Security Configuration
+///------------------------------------------------------------------------------------------------------------------
+
+/**
+ *  Sets the security configuration
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)setSecurityConfiguration:(CDVInvokedUrlCommand*)command;
+
+
+
 ///--------------------------------------
 /// @name Gateway Monitoring
 ///--------------------------------------
@@ -289,6 +317,38 @@
     
 - (void)doSocialLogin:(CDVInvokedUrlCommand *)command;
     
+///--------------------------------------
+/// @name Proof Key for Code Exchange (PKCE)
+///--------------------------------------
+
+# pragma mark - Proof Key for Code Exchange
+
+/**
+ *  Checks if PKCE is enabled
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isPKCEEnabled:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Enables PKCE
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enablePKCE:(CDVInvokedUrlCommand *)command;
+
+///--------------------------------------
+/// @name JWT Signing
+///--------------------------------------
+
+# pragma mark - JWT Signing
+
+/**
+ *  Signs MASClaims with a default private key
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)signWithClaims:(CDVInvokedUrlCommand *)command;
 
 
 @end

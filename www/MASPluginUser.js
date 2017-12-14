@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -100,6 +101,23 @@
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
      };
 
+	 /**
+     *  String Lists all the attributes of the Current logged in user.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.listAttributes = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "listAttributes", []);
+     };
+
+     /**
+     *  Returns the last authenticated session's type of auth credentials used.
+     *  @param {function} successHandler user defined success callback
+     *  @param {function} errorHandler user defined error callback
+     */
+     this.getAuthCredentialsType = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAuthCredentialsType", []);
+     };
     /**
      *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback
@@ -209,7 +227,7 @@ MASPluginUser.sharedCurrUser;
 };
 
 /**
- Authenticate a user via asynchronous request with id_token
+ Authenticates a user via asynchronous request with id_token
  *  @param {function} successHandler user defined success callback
  *  @param {function} errorHandler user defined error callback
  *  @param {string} idToken The id_token for the user.
@@ -223,5 +241,84 @@ MASPluginUser.sharedCurrUser;
         successHandler(result);
     }, errorHandler, "MASPluginUser", "loginWithIdTokenAndTokenType", [idToken, tokenType]);
 };
+
+/**
+ Authenticates the user using authCredentials with an authorization code
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentialsAuthCode = function(successHandler, errorHandler, authorizationCode,state) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsAuthCode", [authorizationCode,state]);
+};
+
+/**
+ Authenticates the user using authCredentials with username and password
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentialsUsernamePassword = function(successHandler, errorHandler, username, password) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsUsernamePassword", [username, password]);
+};
+
+/**
+ Authenticates the user using authCredentials with a JWT token and token type
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} userName username of the user
+ *  @param {string} password password of the user
+ */
+ MASPluginUser.loginWithAuthCredentialsJWT = function(successHandler, errorHandler, jwt, tokenType) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCredentialsJWT", [jwt, tokenType]);
+};
+
+/**
+ *  Authenticates a user with an authorization code.
+ *  @param {function} successHandler user defined success callback
+ *  @param {function} errorHandler user defined error callback
+ *  @param {string} authCode The Authorization Code for the user.
+ *  @param {string} state The state.
+ */
+ MASPluginUser.loginWithAuthCode = function(successHandler, errorHandler, authCode, state) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "loginWithAuthCode", [authCode, state]);
+};
+
+
+/**
+ Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
+ *  @param {function} successHandler user defined success callback which gets called after successful login
+ *  @param {function} errorHandler user defined error callback 
+ */
+MASPluginUser.initializeBrowserBasedAuthentication = function(successHandler, errorHandler) {
+    return Cordova.exec(function(result) {
+        if (result && typeof(MASPluginUser.sharedCurrUser !== 'undefined')){
+            MASPluginUser.currentUser(function(){}, function(){});
+         }
+        successHandler(result);
+    }, errorHandler, "MASPluginUser", "initializeBrowserBasedAuthentication", []);
+}
 
 module.exports = MASPluginUser;

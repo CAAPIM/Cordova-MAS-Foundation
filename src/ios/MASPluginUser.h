@@ -47,7 +47,7 @@
 
 - (void)currentUser:(CDVInvokedUrlCommand*)command;
 
-
+- (void)listAttributes:(CDVInvokedUrlCommand*)command;
 
 ///--------------------------------------
 /// @name Current User - Lock/Unlock Session
@@ -97,20 +97,72 @@
 
 # pragma mark - Authentication
 
-
+/**getA
+ *  Login with username and password
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithUsernameAndPassword:(CDVInvokedUrlCommand*)command;
 
-
+/**
+ *  Login with an ID token and its token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
 - (void)loginWithIdTokenAndTokenType:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCode:(CDVInvokedUrlCommand*)command;
 
-- (void)loginWithAuthorizationCode:(CDVInvokedUrlCommand*)command;
+/**
+ *  Login with an authorization code using MASAuthCredentials
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsAuthCode:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Login with an authorization code using MASAuthCredentials
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsUsernamePassword:(CDVInvokedUrlCommand*)command;
+
+/**
+ *  Login with a JSON web token and a token type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)loginWithAuthCredentialsJWT:(CDVInvokedUrlCommand*)command;
+
+/**
+ Authenticate a user by launching a Browser which in turn loads a URL (templatized).
+ 
+ @param completion The MASCompletionErrorBlock block that receives the results.  On a successful completion, the user
+ available via [MASUser currentUser] has been updated with the new information.
+ */
+- (void)initializeBrowserBasedAuthentication:(CDVInvokedUrlCommand*)command;
 
 - (void)requestUserInfo:(CDVInvokedUrlCommand*)command;
 
+/**
+ *  Logout the current user
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-- (void)logoutUser:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Returns the authorization credentials' type
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)getAuthCredentialsType:(CDVInvokedUrlCommand *)command;
 
 
 @end
