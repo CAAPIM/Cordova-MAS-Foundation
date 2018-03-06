@@ -8,7 +8,6 @@ package com.ca.mas.cordova.core;
 
 import android.util.Log;
 
-import com.ca.mas.foundation.Device;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASDevice;
 
@@ -56,7 +55,7 @@ public class MASPluginDevice extends MASCordovaPlugin {
      * Deregisters a device from MAG server i.e. remove all registration info of this device on server
      */
     private void deregister(final JSONArray args, final CallbackContext callbackContext) {
-        Device masDevice = MASDevice.getCurrentDevice();
+        MASDevice masDevice = MASDevice.getCurrentDevice();
         masDevice.deregister(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -77,7 +76,7 @@ public class MASPluginDevice extends MASCordovaPlugin {
      */
     private void isDeviceRegistered(final JSONArray args, final CallbackContext callbackContext) {
         try {
-            Device masDevice = MASDevice.getCurrentDevice();
+            MASDevice masDevice = MASDevice.getCurrentDevice();
             success(callbackContext, masDevice.isRegistered(), false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -89,7 +88,7 @@ public class MASPluginDevice extends MASCordovaPlugin {
      * Resets all the local cache of the device for this app i.e. all  tokens, credentials, states are flushed.
      */
     private void resetLocally(final JSONArray args, final CallbackContext callbackContext) {
-        Device masDevice = MASDevice.getCurrentDevice();
+        MASDevice masDevice = MASDevice.getCurrentDevice();
         try {
             masDevice.resetLocally();
             success(callbackContext, true, false);
@@ -103,7 +102,7 @@ public class MASPluginDevice extends MASCordovaPlugin {
      *  Fetches the current devices's identifier which is registered in MAG server.
      */
     private void getDeviceIdentifier(final JSONArray args, final CallbackContext callbackContext) {
-        Device masDevice = MASDevice.getCurrentDevice();
+        MASDevice masDevice = MASDevice.getCurrentDevice();
         try {
             String deviceIdentifier = masDevice.getIdentifier();
             success(callbackContext, deviceIdentifier, false);
@@ -117,7 +116,7 @@ public class MASPluginDevice extends MASCordovaPlugin {
      * Fetches a device's registration state and identifier as JSON string.
      */
     private void getCurrentDevice(final JSONArray args, final CallbackContext callbackContext) {
-        Device masDevice = MASDevice.getCurrentDevice();
+        MASDevice masDevice = MASDevice.getCurrentDevice();
         try {
             JSONObject result = new JSONObject();
             result.put("isRegistered", masDevice.isRegistered());

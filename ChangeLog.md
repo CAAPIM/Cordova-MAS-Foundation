@@ -1,3 +1,18 @@
+# Version 1.6.10
+
+## Bug fixes
+
+- None
+
+### New features
+
+- None
+
+### Deprecated classes
+
+- None
+
+
 # Version 1.6
 
 ## Bug fixes
