@@ -10,10 +10,7 @@ var MASPluginConstants = require("./MASPluginConstants"),
 
 var MASPluginUtils = {
     isEmpty: function(val) {
-        if (typeof val !== 'undefined' && val) {
-            return false;
-        }
-        return true;
+        return (typeof val === 'undefined' || !val);
     },
 
     XHR: function(cfg){
