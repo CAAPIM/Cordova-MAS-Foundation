@@ -106,11 +106,9 @@ public class MASUtil {
                 if (identifier.equalsIgnoreCase("qrcode")) {
                     continue;
                 }
-                if ((idp.equalsIgnoreCase("all") || idp.equalsIgnoreCase(identifier)) && !p.isProximityLogin()) {
-                    array.put(identifier);
-                    _providerMap.put(identifier, p);
+                array.put(identifier);
+                _providerMap.put(identifier, p);
 
-                }
             }
         } finally {
             _lock.writeLock().unlock();

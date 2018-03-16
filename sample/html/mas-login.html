@@ -580,6 +580,30 @@
         }
 
     </style>
+    <script>
+        (function(){
+            var payload = window.localStorage.getItem("masCallbackResult");
+            var result = JSON.parse(payload);
+            document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result.qrCodeImageBase64;
+            const providers = result.providers;
+            const idp = result.idp;
+            if(!MASPluginUtils.isEmpty(providers) && providers.length > 0) {
+                for(let i=0; i < providers.length; i++) {
+                    let p = providers[i];
+                    if(idp !== 'all' && idp !== p){
+                        continue;
+                    }
+                    if(document.getElementById('i'+p)) {
+                        document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
+                        document.getElementById('l'+p).className = "enabled";
+                        if(p === 'salesforce'){
+                            document.getElementById('i'+p).style.backgroundColor = "#1798c1";
+                        }
+                    }
+                }
+            }
+        })();
+    </script>
 </head>
 
 <body>

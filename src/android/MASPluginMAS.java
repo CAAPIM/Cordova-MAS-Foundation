@@ -77,6 +77,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private static final String NODE_REQUEST_ID = "requestId";
     private static final String NODE_QRCODE_IMAGE = "qrCodeImageBase64";
     private static final String NODE_PROVIDERS = "providers";
+    private static final String NODE_IDP = "idp";
     private static final String NODE_INVALID_OTP = "isInvalidOtp";
     private static final String NODE_OTP_ERR = "errorMessage";
     private static final String NODE_OTP_CHANNELS = "channels";
@@ -877,6 +878,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                         result.put(NODE_REQUEST_ID, requestId);
                         result.put(NODE_QRCODE_IMAGE, encodedImage);
                         result.put(NODE_PROVIDERS, providerIds);
+                        result.put(NODE_IDP,masAuthenticationProviders.getIdp());
                         jsonObject.put(NODE_RESULT, result);
                         qrcode.start();
                         success(AUTH_LISTENER_CALLBACK, jsonObject, true);

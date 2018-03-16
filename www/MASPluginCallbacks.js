@@ -37,24 +37,10 @@ var MASPluginCallbacks = {
             };
 
             let onLoadFunc = function(){
-                document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result.qrCodeImageBase64;
-                const providers = result.providers;
-                if(!MASPluginUtils.isEmpty(providers) && providers.length > 0) {
-                    for(let i=0; i < providers.length; i++) {
-                        let p = providers[i];
-                        if(p !== 'qrcode') {
-                            if(document.getElementById('i'+p)) {
-                                document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
-                                document.getElementById('l'+p).className = "enabled";
-                                if(p === 'salesforce'){
-                                    document.getElementById('i'+p).style.backgroundColor = "#1798c1";
-                                }
-                            }
-                        }
-                    }
-                }
+                window.localStorage.removeItem("masCallbackResult")
             };
-            MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,oncloseFunc,onLoadFunc);
+            MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
+            MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,result,oncloseFunc,onLoadFunc);
         }else if(requestType == "removeQRCode"){
             document.getElementById('qr-code').style.display = 'none';
         }else if(requestType == "qrCodeAuthorizationComplete"){
@@ -74,22 +60,16 @@ var MASPluginCallbacks = {
             console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
             return;
         }
-        const otpChannels = callbackResp.result.channels;
-        // TODO: If channel list is empty, how to send response to calling API
+        const result = callbackResp.result;
         let oncloseFunc = function(){
             $('#popUp').remove();
         };
         let onLoadFunc = function() {
-            if (otpChannels.length > 1){
-                for (i = 0; i < otpChannels.length; i++){
-                    if (document.getElementById(otpChannels[i])){
-                        document.getElementById(otpChannels[i]).style.display = 'block';
-                    }
-                }
-            }
+            window.localStorage.removeItem("masCallbackResult")
         }
-        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPChannelsPage,oncloseFunc,onLoadFunc);
-    },	
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPChannelsPage,result,oncloseFunc,onLoadFunc);
+    },
 
 
     /**
@@ -104,20 +84,17 @@ var MASPluginCallbacks = {
             return;
         }
 
-        const isInvalidOtp = callbackResp.resp.isInvalidOtp;
-        const errorMessage = callbackResp.resp.errorMessage;
+        const result = callbackResp.result;
 
         let oncloseFunc = function(){
             $('#popUp').remove();
         };
 
         let onLoadFunc = function() {
-            if(errorMessage !== "Enter the OTP"){ // TODO: Handle all these cases where getElementById is called, code should be oblivious of Ids
-                document.getElementById("CA-Title").style.color = "red";
-                document.getElementById("CA-Title").innerHTML = errorMessage;
-            }
+            window.localStorage.removeItem("masCallbackResult")
         };
-        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage,oncloseFunc,onLoadFunc);
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage,result,oncloseFunc,onLoadFunc);
     }
 };
 module.exports = MASPluginCallbacks;

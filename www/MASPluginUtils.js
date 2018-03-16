@@ -9,6 +9,7 @@ var MASPluginConstants = require("./MASPluginConstants"),
     MASPopup = require("./PopupUI");
 
 var MASPluginUtils = {
+    popupStyle:MASPluginConstants.MASPopupStyle.MASPopupLoginStyle,
     isEmpty: function(val) {
         return (typeof val === 'undefined' || !val);
     },
@@ -48,11 +49,11 @@ var MASPluginUtils = {
     },
 
     setPopUpStyle: function(style) {
-        MASPluginConstants.MASPopupStyle = style;
+        this.popupStyle = style;
     },
 
     getPopUpStyle: function(){
-        return MASPluginConstants.MASPopupStyle;
+        return this.popupStyle;
     },
 
     createPopupDiv: function() {
@@ -95,7 +96,8 @@ var MASPluginUtils = {
         }   
     },
 
-    MASPopupUI: function(url, popupafterclose, onload) {
+    MASPopupUI: function(url, result, popupafterclose, onload) {
+        window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
         if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             var onLoadMakePopUpVisible = function() {
                 if(document.getElementById('popUp') !== null) {
@@ -106,14 +108,12 @@ var MASPluginUtils = {
         
             $('#popUp').remove();
 
-            var popupStyle = MASPluginConstants.MASPopupLoginStyle;
-             if(url === "masui/mas-otp.html" || url === "masui/mas-otpchannel.html")
-               popupStyle = MASPluginConstants.MASPopupOTPStyle;
+            const popupStyle = this.getPopUpStyle();
 
             var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ popupStyle+"'>" + "</div>";
             popupafterclose = popupafterclose ? popupafterclose : function() {};
             $.mobile.activePage.append(template).trigger("create");
-            $('#popUp').load(url, onLoadMakePopUpVisible);
+            $('#popUp').load(url,onLoadMakePopUpVisible);
             $.mobile.activePage.find(".closePopup").bind("tap", function() {
                 $.mobile.activePage.find(".messagePopup").popup("close");
             });           
