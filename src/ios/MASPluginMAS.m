@@ -227,38 +227,28 @@
             setWillHandleOTPAuthentication([MAS class], selector, NO);
         }
         
-        [MAS setUserLoginBlock:
-         ^(MASBasicCredentialsBlock basicBlock,
-           MASAuthorizationCodeCredentialsBlock authorizationCodeBlock) {
-             
-             MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
-             
-             //
-             // This is the block that gets called when a login call is made
-             //
-             
-             NSDictionary *resultDictionary =
-             [MPAuthCntrl setLoginBlocksWithAuthentiationProviders:[MASAuthenticationProviders currentProviders]
-                                           basicCredentialsBlock__:basicBlock
-                                          authorizationCodeBlock__:authorizationCodeBlock
-                                                 removeQRCodeBlock:^(BOOL completed, NSError *error){
-                                                     
-                                                     if (completed) {
-                                                         
-                                                         [self removeQRCode:command.callbackId];
-                                                     }
-                                                 }
-                                        completeAuthorizationBlock:^(BOOL completed, NSError *error){
-                                            
-                                            [self completeAuthorization:command.callbackId];
-                                        }];
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
-             
-             [result setKeepCallbackAsBool:YES];
-             
-             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-         }];
+        [MAS setUserAuthCredentials:^(MASAuthCredentialsBlock  _Nonnull authCredentialBlock) {
+            MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
+            NSDictionary *resultDictionary = [MPAuthCntrl setLoginBlocksWithAuthenticationProviders:[MASAuthenticationProviders currentProviders]
+                                                                               authCredentialsBlock:authCredentialBlock
+                                                                                  removeQRCodeBlock:^(BOOL completed, NSError *error){
+                                                                                    if (completed) {
+                                                                                        
+                                                                                        [self removeQRCode:command.callbackId];
+                                                                                    }
+                                                                                 }
+                                                                         completeAuthorizationBlock:^(BOOL completed, NSError *error){
+                                                                            
+                                                                            [self completeAuthorization:command.callbackId];
+                                                                        }];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
+            
+            [result setKeepCallbackAsBool:YES];
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            
+        }];
     }
     
     
@@ -268,14 +258,23 @@
         // Complete the authentication process with credentials
         //
         
-        CDVPluginResult *result;
+        __block CDVPluginResult *result;
         
         MASPluginAuthenticationController *MPAuthCntrl = [MASPluginAuthenticationController sharedAuthController];
-        [MPAuthCntrl completeAuthenticationWithUserName:command.arguments[0] andPassword:command.arguments[1]];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"BasicCredentialsBlock called"];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        [MPAuthCntrl completeAuthenticationWithUserName:command.arguments[0] andPassword:command.arguments[1] completion:^(BOOL completed, NSError * _Nullable error) {
+            if(error) {
+                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":[error userInfo]};
+
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+            }
+            else {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Login successful"];
+            }
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
     }
     
     
@@ -315,7 +314,7 @@
              
              self.otpGenerationBlock = otpGenerationBlock;
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:supportedOTPChannels];
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:supportedOTPChannels, @"channels", nil], @"result", nil]];
              
              [result setKeepCallbackAsBool:YES];
              
@@ -373,11 +372,17 @@
             
             self.otpBlock = otpBlock;
             
-            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[otpError code]],
-                                        @"errorMessage":[otpError localizedDescription],
-                                        @"errorInfo":[otpError userInfo]};
+            NSString *isInvalidOtp = nil;
+            if(otpError.code == 160104) {
+                isInvalidOtp = @"false";
+            }
+            else {
+                isInvalidOtp = @"true";
+            }
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:errorInfo];
+            NSDictionary *errorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:isInvalidOtp, @"isInvalidOtp", [otpError localizedDescription], @"errorMessage", nil];
+            NSDictionary *resultDictionary = [NSDictionary dictionaryWithObjectsAndKeys: errorDictionary, @"result", nil];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultDictionary];
             
             [result setKeepCallbackAsBool:YES];
             
@@ -624,7 +629,8 @@
     if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
         securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
     
-    [MASConfiguration setSecurityConfiguration:securityConfiguration];
+    NSError *error = nil;
+    [MASConfiguration setSecurityConfiguration:securityConfiguration error:&error];
     
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Security configuration set"];
     
@@ -1316,7 +1322,7 @@
     
     CDVPluginResult *result;
     
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"qrCodeAuthorizationComplete"];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:@"qrCodeAuthorizationComplete", @"requestType", nil], @"result", nil]];
     
     [result setKeepCallbackAsBool:YES];
     
@@ -1332,7 +1338,7 @@
     
     CDVPluginResult *result;
     
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeQRCode"];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:@"removeQRCode", @"requestType", nil], @"result", nil]];
     
     [result setKeepCallbackAsBool:YES];
     

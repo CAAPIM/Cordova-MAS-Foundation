@@ -28,8 +28,7 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
     
 # pragma mark - Properties
     
-    @property (nonatomic, copy) MASAuthorizationCodeCredentialsBlock authorizationCodeBlock;
-    @property (nonatomic, copy) MASBasicCredentialsBlock basicCredentialsBlock;
+    @property (nonatomic, copy) MASAuthCredentialsBlock authCredentialsBlock;
     @property (nonatomic, copy) MASCompletionErrorBlock removeQRCodeBlock;
     @property (nonatomic, copy) MASCompletionErrorBlock completeAuthorizationBlock;
     @property (nonatomic, copy) MASCompletionErrorBlock completeSocialLoginBlock;
@@ -65,11 +64,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
     }
     
     
-- (NSDictionary *)setLoginBlocksWithAuthentiationProviders:(MASAuthenticationProviders *)providers
-                                   basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
-                                  authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
-                                         removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
-                                completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization
+- (NSDictionary *)setLoginBlocksWithAuthenticationProviders:(MASAuthenticationProviders *)providers
+                                       authCredentialsBlock:(MASAuthCredentialsBlock)authCredentialsBlock
+                                          removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
+                                 completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization
     {
         //
         // Set the login block for basic credentials and authorization with the available providers
@@ -100,8 +98,7 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
         
         self.removeQRCodeBlock = removeQRCodeBlock;
         self.completeAuthorizationBlock = completeAuthorization;
-        self.basicCredentialsBlock = basicCredentialsBlock;
-        self.authorizationCodeBlock = authorizationCodeBlock;
+        self.authCredentialsBlock = authCredentialsBlock;
         
         self.authenticationProviders = mutableCopy;
         self.qrCodeProvider = qrCodeAuthenticationProvider;
@@ -121,21 +118,30 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
             }
         }
         
-        return [NSDictionary dictionaryWithObjectsAndKeys:idps, MASCurrentAuthProviderIdentifiers,
-                qrCodeImageBase64, MASQRCodeImageBase64String, nil];
+        NSDictionary *resultDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Login", @"requestType", @"2", @"requestId", self.availableProvider, @"idp", idps, MASCurrentAuthProviderIdentifiers, qrCodeImageBase64, MASQRCodeImageBase64String, nil];
+        
+        return [NSDictionary dictionaryWithObjectsAndKeys:resultDictionary, @"result", nil];
     }
     
-- (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password
+- (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password completion:(MASCompletionErrorBlock)completion
     {
         //
         // Complete the authentication with a username and password
         //
         
-        if (self.basicCredentialsBlock) {
+        if (self.authCredentialsBlock) {
+            MASAuthCredentialsPassword *authCredentials = [MASAuthCredentialsPassword initWithUsername:userName password:password];
             
-            self.basicCredentialsBlock(userName, password, NO, nil);
+            self.authCredentialsBlock(authCredentials, NO, ^(BOOL completed, NSError * _Nullable error) {
+                if(error) {
+                    completion(completed, error);
+                }
+                else {
+                    [self qrCodeCleanup];
+                    completion(completed, error);
+                }
+            });
             
-            [self qrCodeCleanup];
         }
     }
     
@@ -146,9 +152,9 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
         // Cancel the authentication
         //
         
-        if (self.basicCredentialsBlock) {
+        if (self.authCredentialsBlock) {
             
-            self.basicCredentialsBlock(nil, nil, YES, nil);
+            self.authCredentialsBlock(nil, YES, nil);
             
             [self qrCodeCleanup];
         }
@@ -167,7 +173,9 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
         
         self.completeAuthorizationBlock(YES, nil);
         
-        self.authorizationCodeBlock(authorizationCode, NO, ^(BOOL completed, NSError *error) {
+        MASAuthCredentialsAuthorizationCode *authCode = [MASAuthCredentialsAuthorizationCode initWithAuthorizationCode:authorizationCode];
+        
+        self.authCredentialsBlock(authCode, NO, ^(BOOL completed, NSError * _Nullable error) {
             
             //
             // Ensure this code runs in the main UI thread
@@ -333,9 +341,10 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
     
 - (void)didReceiveAuthorizationCode:(NSString *)code
 {
-    if (_authorizationCodeBlock)
+    if (_authCredentialsBlock)
     {
-        _authorizationCodeBlock(code, NO, ^(BOOL completed, NSError *error) {
+        MASAuthCredentialsAuthorizationCode * authCode = [MASAuthCredentialsAuthorizationCode initWithAuthorizationCode:code];
+        _authCredentialsBlock(authCode, NO, ^(BOOL completed, NSError *error) {
             
             if (self.completeSocialLoginBlock)
             {
