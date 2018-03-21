@@ -16,12 +16,6 @@ var MASPluginCallbacks = {
      */
     MASAuthenticationCallback: function(callbackResp) {
         const error = callbackResp.error;
-        // TODO : How to handle Error scenarios
-        if(!MASPluginUtils.isEmpty(error)){
-            console.log("Error in AuthCallback:"+JSON.stringify(error));
-            return;
-        }
-
         const result = callbackResp.result;
         const requestType = result.requestType;
 
@@ -33,7 +27,7 @@ var MASPluginCallbacks = {
                 MASPluginConstants.MASLoginAuthRequestId = result.requestId;
             }
             let oncloseFunc = function(){
-                $('#popUp').remove();
+                MASPluginUtils.closePopup();
             };
 
             let onLoadFunc = function(){
@@ -42,9 +36,15 @@ var MASPluginCallbacks = {
             MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
             MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,result,oncloseFunc,onLoadFunc);
         }else if(requestType == "removeQRCode"){
-            document.getElementById('qr-code').style.display = 'none';
+            document.body.dispatchEvent(new CustomEvent("removeQRCode"));
         }else if(requestType == "qrCodeAuthorizationComplete"){
-            $('#popUp').remove();
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                let errorEvent = new CustomEvent("errorEvent",{"detail":callbackJSON});
+                document.body.dispatchEvent(errorEvent);
+            }else{
+                MASPluginUtils.closePopup();
+            }
         }
     },
 
@@ -55,14 +55,14 @@ var MASPluginCallbacks = {
      */
     MASOTPChannelSelectCallback: function(callbackResp) {
         const error = callbackResp.error;
-        // TODO: How to propogate error to API
+        // TODO: How to handle error here, since the popup is still not open
         if(!MASPluginUtils.isEmpty(error)){
             console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
             return;
         }
         const result = callbackResp.result;
         let oncloseFunc = function(){
-            $('#popUp').remove();
+            MASPluginUtils.closePopup();
         };
         let onLoadFunc = function() {
             window.localStorage.removeItem("masCallbackResult")
@@ -78,7 +78,7 @@ var MASPluginCallbacks = {
      */
     MASOTPAuthenticationCallback: function(callbackResp){
         const error = callbackResp.error;
-        // TODO: How to propogate error to API
+        // TODO: How to handle error here, since the popup is still not open
         if(!MASPluginUtils.isEmpty(error)){
             console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
             return;
@@ -87,7 +87,7 @@ var MASPluginCallbacks = {
         const result = callbackResp.result;
 
         let oncloseFunc = function(){
-            $('#popUp').remove();
+            MASPluginUtils.closePopup();
         };
 
         let onLoadFunc = function() {

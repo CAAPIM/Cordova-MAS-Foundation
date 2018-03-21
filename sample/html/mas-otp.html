@@ -241,12 +241,14 @@
     </style>
     <script>
         (function(){
-            var payload = window.localStorage.getItem("masCallbackResult");
-            var result = JSON.parse(payload);
-            var errorMessage = result.errorMessage;
-            if(errorMessage !== "Enter the OTP"){
-                document.getElementById("CA-Title").style.color = "red";
-                document.getElementById("CA-Title").innerHTML = errorMessage;
+            const payload = window.localStorage.getItem("masCallbackResult");
+            if(!MASPluginUtils.isEmpty(payload)){
+                const result = JSON.parse(payload);
+                const errorMessage = result.errorMessage;
+                if(errorMessage !== "Enter the OTP"){
+                    document.getElementById("CA-Title").style.color = "red";
+                    document.getElementById("CA-Title").innerHTML = errorMessage;
+                }
             }
         })();
     </script>
@@ -284,17 +286,29 @@
         submit();
     });
 
-    document.getElementById("close").addEventListener("click", function(event) {
+    document.getElementById("close_button").addEventListener("click", function (event) {
         event.preventDefault();
         var MAS = new MASPlugin.MAS();
-        MAS.cancelOTPValidation(function() {}, function() {});
+        MAS.cancelOTPValidation(function() {}, function(error) {
+            let errorMsgToDisplay = "Internal Server Error.";
+            if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                errorMsgToDisplay = error.errorMessage;
+            }
+            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+        });
     });
 
     function submit() {
         var otp = document.getElementById("CA-OTP").value;
         if (!MASPluginUtils.isEmpty(otp.trim())) {
             var MAS = new MASPlugin.MAS();
-            MAS.validateOTP(function() {}, function() {}, otp);
+            MAS.validateOTP(function() {}, function(error) {
+                let errorMsgToDisplay = "Internal Server Error.";
+                if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                    errorMsgToDisplay = error.errorMessage;
+                }
+                document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+            }, otp);
         } else {
             alert("Please enter valid OTP");
         }

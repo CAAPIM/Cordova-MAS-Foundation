@@ -367,7 +367,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             String otp = args.getString(0);
             masOtpAuthenticationHandlerStatic.proceed(mContext, otp);
-            success(callbackContext, true, false);// TODO: Recheck
+            success(callbackContext, true, false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));

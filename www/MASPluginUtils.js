@@ -11,7 +11,7 @@ var MASPluginConstants = require("./MASPluginConstants"),
 var MASPluginUtils = {
     popupStyle:MASPluginConstants.MASPopupStyle.MASPopupLoginStyle,
     isEmpty: function(val) {
-        return (typeof val === 'undefined' || !val);
+        return (typeof val === 'undefined' || !val || val == null);
     },
 
     XHR: function(cfg){
@@ -97,7 +97,9 @@ var MASPluginUtils = {
     },
 
     MASPopupUI: function(url, result, popupafterclose, onload) {
-        window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
+        if(!this.isEmpty(result)){
+            window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
+        }
         if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             var onLoadMakePopUpVisible = function() {
                 if(document.getElementById('popUp') !== null) {
@@ -132,6 +134,8 @@ var MASPluginUtils = {
                 }
             });
         }else{
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
             this.createPopupDiv();
             var popupEl = document.getElementById('popup');
             var popupBody = document.getElementById('popup-bdy');
@@ -164,6 +168,17 @@ var MASPluginUtils = {
 
             xhr.open('GET', url, true);
             xhr.send();
+        }
+    },
+    /**
+    Closes an existing popup.
+    */
+    closePopup: function() {
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
         }
     }
 };

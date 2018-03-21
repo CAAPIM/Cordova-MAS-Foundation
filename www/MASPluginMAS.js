@@ -151,8 +151,8 @@ var MASPluginMAS = function() {
     this.enableBrowserBasedAuthentication = function(successHandler, errorHandler) {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableBrowserBasedAuthentication");
     };
-    
-    
+
+
 
     /**
      Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.
@@ -215,17 +215,10 @@ var MASPluginMAS = function() {
      * @param {string} password user defined password
     */
     this.completeAuthentication = function(successHandler, errorHandler, username, password) {
-        if (document.getElementById("errorMesg"))
-            document.getElementById("errorMesg").innerHTML = "";
-
         return Cordova.exec(
             function() {
                 successHandler(true);
-            },
-            function(error) {
-                errorHandler(error);
-            },
-            "MASPluginMAS", "completeAuthentication", [username, password]);
+            },errorHandler,"MASPluginMAS", "completeAuthentication", [username, password]);
     };
 
     /**
@@ -236,23 +229,10 @@ var MASPluginMAS = function() {
      */
 
     this.doSocialLogin = function(successHandler, errorHandler, provider) {
-        return Cordova.exec(function() {
-            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-                $.mobile.activePage.find(".messagePopup").popup("close");
-            } else {
-                window.MASPopupUI.close();
-                    document.getElementById('popup').remove();
-            }
-            successHandler(true);
-        }, function(errorInfo) {
-            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-                $.mobile.activePage.find(".messagePopup").popup("close");
-            } else {
-                window.MASPopupUI.close();
-                    document.getElementById('popup').remove();
-            }
-            errorHandler(errorInfo);
-        }, "MASPluginMAS", "doSocialLogin", [provider]);
+        return Cordova.exec(
+            function() {
+                successHandler(true);
+            },errorHandler, "MASPluginMAS", "doSocialLogin", [provider]);
     }
 
 
@@ -263,27 +243,14 @@ var MASPluginMAS = function() {
      * @param args user defined variable which is request ID in Android. It is not used in iOS
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-
 		return Cordova.exec(
-            function() {
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-                    $.mobile.activePage.find(".messagePopup").popup("close");
-                } else {
-                    window.MASPopupUI.close();
-                        document.getElementById('popup').remove();
-                }
-                successHandler(true);
-            },
-            errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
+            function(result) {
+                MASPluginUtils.closePopup();
+                successHandler(result);
+            },errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
     };
 
-    
+
     ///------------------------------------------------------------------------------------------------------------------
     /// @name One Time Password callbacks
     ///------------------------------------------------------------------------------------------------------------------
@@ -297,40 +264,17 @@ var MASPluginMAS = function() {
     this.generateAndSendOTP = function(successHandler, errorHandler, channels) {
         return Cordova.exec(
             function(shouldValidateOTP) {
-                if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-                    $('#popUp').remove();
-                } else {
-                    window.MASPopupUI.close();
-                        document.getElementById('popup').remove();
-                }
-
                 if ("true" == shouldValidateOTP) {
+                    MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
                     MASPluginUtils.MASPopupUI(
-                        MASPluginConstants.MASOTPPage,
+                        MASPluginConstants.MASOTPPage,null,
                         function() {
-                            if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-                                $('#popUp').remove();
-                            } else {
-                                window.MASPopupUI.close();
-                                    document.getElementById('popup').remove();
-                            }
+                            MASPluginUtils.closePopup();
                         },
                         function() {}
                     );
                 }
-            },
-            function(error) {
-                if (document.getElementById("errorMesg")) {
-                    var errorMsgToDisplay = "Internal Server Error.";
-                    if (typeof error !== 'undefined' && !MASPluginUtils.isEmpty(error) &&
-                       typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
-                       errorMsgToDisplay = error.errorMessage;
-                    }
-                    document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                } else {
-                    errorHandler(error);
-                }
-            }, "MASPluginMAS", "generateAndSendOTP", [channels]);
+            },errorHandler, "MASPluginMAS", "generateAndSendOTP", [channels]);
     };
 
 
@@ -340,13 +284,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
 
 
@@ -357,13 +299,11 @@ var MASPluginMAS = function() {
      * @param {string} otp user defined one-time password that is to be verified
      */
     this.validateOTP = function(successHandler, errorHandler, otp) {
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "validateOTP", [otp]);
     };
 
 
@@ -373,13 +313,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelOTPValidation = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
     };
 
     ///------------------------------------------------------------------------------------------------------------------
@@ -592,19 +530,6 @@ var MASPluginMAS = function() {
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility
     ///------------------------------------------------------------------------------------------------------------------
-
-    /**
-     Closes an existing popup.
-     */
-    this.closePopup = function() {
-        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return;
-    };
 };
 
 module.exports = MASPluginMAS;

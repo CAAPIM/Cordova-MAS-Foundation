@@ -274,13 +274,15 @@
     </style>
     <script>
         (function(){
-            var payload = window.localStorage.getItem("masCallbackResult");
-            var result = JSON.parse(payload);
-            var otpChannels = result.channels;
-            if (otpChannels.length > 1){
-                for (i = 0; i < otpChannels.length; i++){
-                    if (document.getElementById(otpChannels[i])){
-                        document.getElementById(otpChannels[i]).style.display = 'block';
+            const payload = window.localStorage.getItem("masCallbackResult");
+            if(!MASPluginUtils.isEmpty(payload)){
+                const result = JSON.parse(payload);
+                const otpChannels = result.channels;
+                if (otpChannels.length > 1){
+                    for (i = 0; i < otpChannels.length; i++){
+                        if (document.getElementById(otpChannels[i])){
+                            document.getElementById(otpChannels[i]).style.display = 'block';
+                        }
                     }
                 }
             }
@@ -345,10 +347,16 @@
         send();
     });
 
-    document.getElementById("close").addEventListener("click", function(event) {
+    document.getElementById("close_button").addEventListener("click", function (event) {
         event.preventDefault();
         var MAS = new MASPlugin.MAS();
-        MAS.cancelGenerateAndSendOTP();
+        MAS.cancelGenerateAndSendOTP(function(){},function(error){
+            let errorMsgToDisplay = "Internal Server Error.";
+            if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                errorMsgToDisplay = error.errorMessage;
+            }
+            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+        });
     });
 
     function send() {
@@ -361,7 +369,13 @@
 
         if (checkArray.length) {
             var MAS = new MASPlugin.MAS();
-            MAS.generateAndSendOTP(function() {}, function() {}, checkArray);
+            MAS.generateAndSendOTP(function() {}, function(error) {
+                let errorMsgToDisplay = "Internal Server Error.";
+                if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                    errorMsgToDisplay = error.errorMessage;
+                }
+                document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+            }, checkArray);
         } else{
             alert("You have to select atleast one OTP channel");
         }
