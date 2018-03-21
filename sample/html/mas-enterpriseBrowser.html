@@ -30,8 +30,15 @@
         .appListItem{display: inline-block; width: 150px; height: 150px; margin-left: 20px; }
         </style>
     <script>
+
         
-        var apps;
+        (function(){
+         let apps = JSON.parse(window.localStorage.getItem("masCallbackResult"));
+         alert(apps);
+         for(var key in apps){
+            document.getElementsByClassName("appList")[0].innerHTML += "<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>";
+         }
+         })();
         
         function closePopup() {
             
@@ -43,14 +50,6 @@
             
             var MASApplication = new MASPlugin.MASApplication();
             MASApplication.launchApp(function(){}, function(){}, appId);
-        }
-    
-        function displayApps(apps){
-            
-            for(var key in apps){
-
-                document.getElementsByClassName("appList")[0].innerHTML += "<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>";
-            }
         }
 	
     </script>

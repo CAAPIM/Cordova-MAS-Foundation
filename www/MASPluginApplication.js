@@ -97,9 +97,8 @@ var MASPluginApplication = function() {
     this.initEnterpriseBrowser = function(successHandler, errorHandler) {
             
             var result = Cordova.exec(function(result) {
-                MASPluginUtils.MASPopupUI(MASPluginConstants.MASEnterpriseBrowserPage, function() {}, function() {
-                    displayApps(result);
-                    successHandler(true);
+                MASPluginUtils.MASPopupUI(MASPluginConstants.MASEnterpriseBrowserPage, result, function() {}, function() {
+                    window.localStorage.removeItem("masCallbackResult");
                 });
             }, errorHandler, "MASPluginApplication", "retrieveEnterpriseApps", []);
             
