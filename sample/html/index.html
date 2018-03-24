@@ -41,10 +41,7 @@
          }
 
          function onDeviceReady() {
-             var MAS = new MASPlugin.MAS();
-             //MAS.initialize(function(result) {}, function(error) {
-               //  alert("Initialization failure");
-             //});-->
+
          }
 
 
@@ -879,8 +876,14 @@
                              });
                      },
                      function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
+                         if(error !== 'undefined' && error.errorMessage !== 'undefined' && error.errorMessage === 'No currently authenticated user.'){
+                            error.errorMessage = "Logoff user complete";
+                            thisElement.removeClass("success").removeClass("failure").addClass("success");
+                            displayError(thisElement, error);
+                         }else{
+                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                            displayError(thisElement, error);
+                         }
                      });
              });
 

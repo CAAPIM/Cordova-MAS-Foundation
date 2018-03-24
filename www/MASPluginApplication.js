@@ -68,6 +68,7 @@ var MASPluginApplication = function() {
                 MASPluginUtils.MASPopupUI(MASPluginConstants.MASEnterpriseBrowserPage, result, function() {}, function() {
                     window.localStorage.removeItem("masCallbackResult");
                 });
+                successHandler(true);
             }, errorHandler, "MASPluginApplication", "retrieveEnterpriseApps", []);
     };
 }

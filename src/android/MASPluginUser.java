@@ -168,19 +168,6 @@ public class MASPluginUser extends MASCordovaPlugin {
     private void getCurrentUser(CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
-            for (int i = 0; i < 60; i++) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                masUser = MASUser.getCurrentUser();
-                if (masUser != null) {
-                    break;
-                }
-            }
-        }
-        if (masUser == null) {
             MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
             callbackContext.error(getError(e));
             return;
