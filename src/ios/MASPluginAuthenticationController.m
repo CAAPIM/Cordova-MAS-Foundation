@@ -372,15 +372,15 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
 
     
-    // NSMutableDictionary *errorInfo = [NSMutableDictionary new];
-    // errorInfo[NSLocalizedDescriptionKey] =
-    //     NSLocalizedString(@"UserPressedDone", @"UserPressedDone");
+     NSMutableDictionary *errorInfo = [NSMutableDictionary new];
+     errorInfo[NSLocalizedDescriptionKey] =
+         NSLocalizedString(@"User cancelled social login", @"User cancelled social login");
     
-    // NSError *error =
-    // [NSError errorWithDomain:MASFoundationErrorDomain
-    //                     code:MASFoundationErrorCodeUnknown userInfo:errorInfo];
+     NSError *error =
+     [NSError errorWithDomain:MASFoundationErrorDomain
+                         code:MASFoundationErrorCodeUnknown userInfo:errorInfo];
     
-    self.completeSocialLoginBlock(YES, nil);
+    self.completeSocialLoginBlock(no, error);
 }
     
     
