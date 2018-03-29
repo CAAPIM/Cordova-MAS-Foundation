@@ -380,7 +380,7 @@ static MASPluginAuthenticationController *_sharedAuthController = nil;
      [NSError errorWithDomain:MASFoundationErrorDomain
                          code:MASFoundationErrorCodeUnknown userInfo:errorInfo];
     
-    self.completeSocialLoginBlock(no, error);
+    self.completeSocialLoginBlock(NO, error);
 }
     
     
