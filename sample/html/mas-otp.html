@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login Page</title>
+    <title>OTP</title>
     <!--            <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet'>-->
     <!--                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel='stylesheet'>-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,12 +53,12 @@
         }
 
         .form-header li {
-            display:inline-block; 
-            line-height:40px; 
-            width:255px; 
-            margin:0 2px; 
-            text-align:center; 
-            background:#e8e8e8
+            display: inline-block;
+            line-height: 40px;
+            width: 255px;
+            margin: 0 2px;
+            text-align: center;
+            background: #e8e8e8
         }
 
         .form-header li:nth-child(odd) {
@@ -66,7 +66,8 @@
         }
 
         .form-header li:nth-child(even) {
-            width:50px; margin:0 0;
+            width: 50px;
+            margin: 0 0;
         }
 
         .user-image {
@@ -238,72 +239,88 @@
             color: #666
         }
     </style>
+    <script>
+        (function(){
+            const payload = window.localStorage.getItem("masCallbackResult");
+            if(!MASPluginUtils.isEmpty(payload)){
+                const result = JSON.parse(payload);
+                const errorMessage = result.errorMessage;
+                if(errorMessage !== "Enter the OTP"){
+                    document.getElementById("CA-Title").style.color = "red";
+                    document.getElementById("CA-Title").innerHTML = errorMessage;
+                }
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <div id="errorMesg" style="color:red"> </div>
-    <br>
-    <div id="login-form">
-        <div>
-            <ul id="" class="form-header">
-                <li>One Time Password</li>
-                <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
-                </li>
-            </ul>
-        </div>
-        <div class="user-image"><img src="masui/img/ca-logo.png"></img>
-        </div>
-        <h1 id="CA-Title"><strong>Enter OTP</strong></h1>
-        <form class="form">
-            <ul class="login">
-                <li>
-                    <input id="CA-OTP" type="text" class="input" required placeholder="One Time Password">
-                </li>
-                <li>
-                    <input id="submit_otp" class="btn" type="submit" value="SUBMIT">
-                </li>
-            </ul>
-        </form>
+<div id="errorMesg" style="color:red"> </div>
+<br>
+<div id="login-form">
+    <div>
+        <ul id="" class="form-header">
+            <li>One Time Password</li>
+            <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
+            </li>
+        </ul>
     </div>
+    <div class="user-image"><img src="masui/img/ca-logo.png"></img>
+    </div>
+    <h1 id="CA-Title"><strong>Enter OTP</strong></h1>
+    <form class="form">
+        <ul class="login">
+            <li>
+                <input id="CA-OTP" type="text" class="input" required placeholder="One Time Password">
+            </li>
+            <li>
+                <input id="submit_otp" class="btn" type="submit" value="SUBMIT">
+            </li>
+        </ul>
+    </form>
+</div>
 </body>
 <script>
-    
-    document.getElementById("submit_otp").addEventListener("click", function(event){
+    document.getElementById("submit_otp").addEventListener("click", function(event) {
         event.preventDefault();
-
         submit();
     });
 
-    document.getElementById("close").addEventListener("click", function(event){
+    document.getElementById("close_button").addEventListener("click", function (event) {
         event.preventDefault();
-
         var MAS = new MASPlugin.MAS();
-        MAS.cancelOTPValidation(function(){}, function(){});
+        MAS.cancelOTPValidation(function() {}, function(error) {
+            let errorMsgToDisplay = "Internal Server Error.";
+            if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                errorMsgToDisplay = error.errorMessage;
+            }
+            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+        });
     });
 
     function submit() {
-
         var otp = document.getElementById("CA-OTP").value;
-        if (otp.trim()) {
-
+        if (!MASPluginUtils.isEmpty(otp.trim())) {
             var MAS = new MASPlugin.MAS();
-            MAS.validateOTP(function(){}, function(){}, otp);
-        }
-        else
+            MAS.validateOTP(function() {}, function(error) {
+                let errorMsgToDisplay = "Internal Server Error.";
+                if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                    errorMsgToDisplay = error.errorMessage;
+                }
+                document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+            }, otp);
+        } else {
             alert("Please enter valid OTP");
+        }
     }
 
-    function doOnOrientationChange()
-    {
-        if(document.getElementById("CA-OTP") === document.activeElement) {
-            
+    function doOnOrientationChange() {
+        if (document.getElementById("CA-OTP") === document.activeElement) {
             document.getElementById("CA-OTP").blur();
             document.getElementById("CA-OTP").focus();
         }
     }
-
     window.addEventListener('orientationchange', doOnOrientationChange);
-
 </script>
 
 </html>

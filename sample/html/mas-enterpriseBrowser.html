@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
     <meta charset="utf-8">
     <title>Enterprise Browser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/> -->
-    <!-- <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    <script type="text/javascript" charset="utf-8" src="plugins/com.ca.apim/www/MASPlugin.js"></script> -->
     <meta charset="utf-8">
     <style type="text/css">  
         body{font-family: 'Ropa Sans', sans-serif; color:#666}
@@ -30,42 +25,37 @@
         .appListItem{display: inline-block; width: 150px; height: 150px; margin-left: 20px; }
         </style>
     <script>
-        
-        var apps;
-        
+        (function(){
+            const payload = window.localStorage.getItem("masCallbackResult");
+            if(!MASPluginUtils.isEmpty(payload)){
+                const apps = JSON.parse(payload);
+                if(MASPluginUtils.isEmpty(apps) || apps.length < 1){
+                    document.getElementsByClassName("appList")[0].style.color = "red";
+                    document.getElementsByClassName("appList")[0].innerHTML = "No Enterprise Apps found";
+                    return;
+                }
+                for(let key in apps){
+                    document.getElementsByClassName("appList")[0].innerHTML += "<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>";
+                }
+             }
+         })();
+
         function closePopup() {
-            
-            var MAS = new MASPlugin.MAS();
-            MAS.closePopup();
+            MASPluginUtils.closePopup();
 	    }
-    
+
         function launchApp(appId) {
-            
             var MASApplication = new MASPlugin.MASApplication();
             MASApplication.launchApp(function(){}, function(){}, appId);
         }
-    
-        function displayApps(apps){
-            
-            for(var key in apps){
-
-                document.getElementsByClassName("appList")[0].innerHTML += "<div class=\"appListItem\" onclick=\"launchApp('" + apps[key].identifier + "');\"><img src=\"" + apps[key].iconUrl + "\"></div>";
-            }
-        }
-	
     </script>
-
-    </head>
+</head>
 <body>
-
-
-    <div style="margin-top:20px">
-        <div id="login-form">
-            <div><ul id="" class="form-header"><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
-        </div>
-        <div class="appList"></div>
-        
+<div style="margin-top:20px">
+    <div id="login-form">
+        <div><ul id="" class="form-header"><li>Enterprise Browser</li><li id="close"><img src="masui/img/close.png" class="close_button" id="close_button" onclick="closePopup();"></img></li></ul></div>
     </div>
-
+    <div class="appList"></div>
+</div>
 </body>
 </html>

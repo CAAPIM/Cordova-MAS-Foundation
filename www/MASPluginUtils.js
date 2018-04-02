@@ -9,11 +9,9 @@ var MASPluginConstants = require("./MASPluginConstants"),
     MASPopup = require("./PopupUI");
 
 var MASPluginUtils = {
+    popupStyle:MASPluginConstants.MASPopupStyle.MASPopupLoginStyle,
     isEmpty: function(val) {
-        if (typeof val !== 'undefined' && val) {
-            return false;
-        }
-        return true;
+        return (typeof val === 'undefined' || !val || val == null);
     },
 
     XHR: function(cfg){
@@ -51,11 +49,11 @@ var MASPluginUtils = {
     },
 
     setPopUpStyle: function(style) {
-        MASPluginConstants.MASPopupStyle = style;
+        this.popupStyle = style;
     },
 
     getPopUpStyle: function(){
-        return MASPluginConstants.MASPopupStyle;
+        return this.popupStyle;
     },
 
     createPopupDiv: function() {
@@ -98,7 +96,10 @@ var MASPluginUtils = {
         }   
     },
 
-    MASPopupUI: function(url, popupafterclose, onload) {
+    MASPopupUI: function(url, result, popupafterclose, onload) {
+        if(!this.isEmpty(result)){
+            window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
+        }
         if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
             var onLoadMakePopUpVisible = function() {
                 if(document.getElementById('popUp') !== null) {
@@ -109,14 +110,12 @@ var MASPluginUtils = {
         
             $('#popUp').remove();
 
-            var popupStyle = MASPluginConstants.MASPopupLoginStyle;
-             if(url === "masui/mas-otp.html" || url === "masui/mas-otpchannel.html")
-               popupStyle = MASPluginConstants.MASPopupOTPStyle;
+            const popupStyle = this.getPopUpStyle();
 
             var template = "<div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ popupStyle+"'>" + "</div>";
             popupafterclose = popupafterclose ? popupafterclose : function() {};
             $.mobile.activePage.append(template).trigger("create");
-            $('#popUp').load(url, onLoadMakePopUpVisible);
+            $('#popUp').load(url,onLoadMakePopUpVisible);
             $.mobile.activePage.find(".closePopup").bind("tap", function() {
                 $.mobile.activePage.find(".messagePopup").popup("close");
             });           
@@ -135,6 +134,8 @@ var MASPluginUtils = {
                 }
             });
         }else{
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
             this.createPopupDiv();
             var popupEl = document.getElementById('popup');
             var popupBody = document.getElementById('popup-bdy');
@@ -167,6 +168,17 @@ var MASPluginUtils = {
 
             xhr.open('GET', url, true);
             xhr.send();
+        }
+    },
+    /**
+    Closes an existing popup.
+    */
+    closePopup: function() {
+        if (typeof jQuery !== 'undefined' && typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
         }
     }
 };
