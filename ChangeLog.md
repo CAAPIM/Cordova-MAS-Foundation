@@ -1,3 +1,17 @@
+# Version 1.7
+
+## Bug fixes
+
+- None
+
+### New features
+
+- Business logic for login moved over to the developers. [US469657]
+
+### Deprecated classes
+
+- None
+
 # Version 1.6.10
 
 ## Bug fixes
