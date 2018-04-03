@@ -630,7 +630,6 @@
 </head>
 
 <body>
-
 <br>
 <div id="login-form">
     <div>
@@ -642,7 +641,7 @@
     </div>
     <div class="user-image"><img src="masui/img/ca-logo.png"/></div>
     <div id="errorMesg" style="color:red" align="center"></div>
-    <br>
+
     <form class="form">
         <ul class="login">
             <li class="inline"><input id="CA-Username" type="text" class="input" required
@@ -708,7 +707,7 @@
 
                         try {
                             if (typeof error.errorMessage !== 'undefined' && !MASPluginUtils.isEmpty(error.errorMessage)) {
-                                returnedError = JSON.parse(error.errorMessage);
+                                returnedError = JSON.stringify(error.errorMessage);
                             }
                         } catch (e) {
 
@@ -749,7 +748,7 @@
 
                     try {
                         if (!MASPluginUtils.isEmpty(error.errorMessage)) {
-                                returnedError = JSON.parse(error.errorMessage);
+                                returnedError = JSON.stringify(error.errorMessage);
                         }
                     } catch (e) {
 
@@ -769,7 +768,7 @@
 
                     try {
                         if (!MASPluginUtils.isEmpty(error.errorMessage)) {
-                                returnedError = JSON.parse(error.errorMessage);
+                                returnedError = JSON.stringify(error.errorMessage);
                         }
                     } catch (e) {
 
