@@ -847,11 +847,24 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             @Override
                             public void close() {
                                 super.close();
+                                sendRemoveQRCodeCallback(null);
+                            }
+
+                            @Override
+                            public void onError(int errorCode, final String m, Exception e) {
+                                sendRemoveQRCodeCallback(e);
+
+                            }
+
+                            void sendRemoveQRCodeCallback(Throwable th){
                                 JSONObject jsonObject = new JSONObject();
                                 JSONObject result = new JSONObject();
                                 try {
                                     jsonObject.put(NODE_RESULT, result);
                                     result.put(NODE_REQUEST_TYPE, ACTION_QRCODE_EXPIRED);
+                                    if(th!=null){
+                                        jsonObject.put(NODE_ERROR,getError(th));
+                                    }
                                 } catch (Exception ex) {
                                     try {
                                         jsonObject.put(NODE_ERROR, getError(ex));

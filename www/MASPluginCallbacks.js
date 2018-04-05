@@ -36,7 +36,14 @@ var MASPluginCallbacks = {
             MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
             MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,result,oncloseFunc,onLoadFunc);
         }else if(requestType == "removeQRCode"){
-            document.body.dispatchEvent(new CustomEvent("removeQRCode"));
+            let event = null;
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                event = new CustomEvent("errorEvent",{"detail":callbackJSON});
+            }else{
+                event = new CustomEvent(requestType);
+            }
+            document.body.dispatchEvent(event);
         }else if(requestType == "qrCodeAuthorizationComplete"){
             if(!MASPluginUtils.isEmpty(error)){
                 const callbackJSON = {"requestType":requestType,"error":error};

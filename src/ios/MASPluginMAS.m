@@ -1337,8 +1337,14 @@
     //
     
     CDVPluginResult *result;
-    
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:@"removeQRCode", @"requestType", nil], @"result", nil]];
+    NSLog(@"%@", [MAS gatewayMonitoringStatusAsString]);
+    if ([MAS gatewayIsReachable]) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:@"removeQRCode", @"requestType", nil], @"result", nil]];
+    }
+    else {
+        NSDictionary *errorInfo = @{@"errorMessage": [NSString stringWithFormat:@"Unable to resolve host \"%@\": No address associated with hostname", [[MASConfiguration currentConfiguration] gatewayHostName]]};
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:@"qrCodeAuthorizationComplete", @"requestType", nil], @"result", errorInfo, @"error", nil]];
+    }
     
     [result setKeepCallbackAsBool:YES];
     

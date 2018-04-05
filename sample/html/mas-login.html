@@ -588,10 +588,10 @@
                 const error = callback.error;
                 const requestType = callback.requestType;
                 const errorMessage = (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage))?error.errorMessage:"Internal Server Error";
-                if(requestType === 'qrCodeAuthorizationComplete'){
+                if(requestType === 'qrCodeAuthorizationComplete' || requestType === 'removeQRCode'){
                     document.getElementById('qr-code').style.display = 'none';
                 }
-                document.getElementById("errorMesg").innerHTML = errorMessage;
+                document.getElementById("errorMesg").innerHTML = "QR Code disabled: Reason -- "+errorMessage;
                 document.body.removeEventListener("errorEvent",errorFn);
             };
             document.body.addEventListener("errorEvent",errorFn);
