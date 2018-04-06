@@ -9,6 +9,7 @@ import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.ca.mas.foundation.MAS;
@@ -196,6 +197,7 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * locks the current User's session
      */
+    @TargetApi(Build.VERSION_CODES.M)
     private void lockSession(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
@@ -221,7 +223,7 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * unlocks the current User's session
      */
-    @TargetApi(23)
+    @TargetApi(Build.VERSION_CODES.M)
     private void unlockSession(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
@@ -290,7 +292,7 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * unlocks the current User's session with a promt message provided by user
      */
-    @TargetApi(23)
+    @TargetApi(Build.VERSION_CODES.M)
     private void unlockSessionWithMessage(final CallbackContext callbackContext, JSONArray args) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
@@ -363,6 +365,7 @@ public class MASPluginUser extends MASCordovaPlugin {
     /**
      * removes any existing session lock for the logged in current user
      */
+    @TargetApi(Build.VERSION_CODES.M)
     private void removeSessionLock(final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
