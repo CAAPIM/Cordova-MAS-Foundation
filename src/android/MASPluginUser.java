@@ -87,8 +87,6 @@ public class MASPluginUser extends MASCordovaPlugin {
                 requestUserInfo(callbackContext);
             } else if (action.equalsIgnoreCase("listAttributes")) {
                 listAttributes(callbackContext);
-            } else if (action.equalsIgnoreCase("getAuthCredentialsType")) {
-                getAuthCredentialsType(callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -629,19 +627,6 @@ public class MASPluginUser extends MASCordovaPlugin {
             Log.e(TAG, ex.getMessage(), ex);
             callbackContext.error(getError(ex));
         }
-    }
-
-    /**
-     * Returns the last authenticated session's type of auth credentials used.
-     */
-    private void getAuthCredentialsType(CallbackContext callbackContext) {
-        MASUser masUser = MASUser.getCurrentUser();
-        if (masUser == null) {
-            MASCordovaException e = new MASCordovaException(MASFoundationStrings.USER_NOT_CURRENTLY_AUTHENTICATED);
-            callbackContext.error(getError(e));
-            return;
-        }
-        success(callbackContext, MASUser.getAuthCredentialsType().toString(), false);
     }
 
     private JSONObject convertUserToJSModel(MASUser masUser) throws JSONException {

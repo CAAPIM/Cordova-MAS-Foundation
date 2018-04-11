@@ -760,16 +760,6 @@
 }
 
 
-- (void)getAuthCredentialsType:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult *result;
-    
-    NSString *authCredentialsType = [MASUser authCredentialsType];
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:authCredentialsType];
-    
-    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
 
 ///--------------------------------------
 /// @name Utility

@@ -156,13 +156,4 @@
  */
 - (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
-
-/**
- *  Returns the authorization credentials' type
- *
- *  @param command CDInvokedUrlCommand object
- */
-- (void)getAuthCredentialsType:(CDVInvokedUrlCommand *)command;
-
-
 @end
