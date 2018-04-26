@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MASPluginUtils.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MASPluginUtils.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
+var MASPluginConstants = require("./MASPluginConstants"),
+    MASPopup = require("./PopupUI");
+
+var MASPluginUtils = {
+    popupStyle:MASPluginConstants.MASPopupStyle.MASPopupLoginStyle,
+    isEmpty: function(val) {
+        return (typeof val === 'undefined' || !val || val == null);
+    },
+
+    XHR: function(cfg){
+    	var xhr,
+        url = cfg.url,
+        method = cfg.method || 'GET',
+        success = cfg.success || function () {},
+        failure = cfg.failure || function () {};
+		
+        try {
+            xhr = new XMLHttpRequest();
+        }catch (e){
+            xhr = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+	
+        xhr.onreadystatechange = function (){
+            if (xhr.readyState == 4){
+                if (xhr.status == 200) {
+                    success.call(null, xhr);
+                }else{
+                    failure.call(null, xhr);
+                }
+            }
+        }
+
+        xhr.open(method, url); 
+        xhr.send(null);
+    },
+
+    onBackKeyPressEvent: function() {
+        successHandler = function() {
+            document.removeEventListener("backbutton", MASPluginUtils.onBackKeyPressEvent, false);
+        };
+        return Cordova.exec(successHandler, function() {}, "MASPluginApplication", "enterpriseBrowserWebAppBackButtonHandler", []);
+    },
+
+    setPopUpStyle: function(style) {
+        this.popupStyle = style;
+    },
+
+    getPopUpStyle: function(){
+        return this.popupStyle;
+    },
+
+    createPopupDiv: function() {
+        if (typeof document.getElementById('popup') !== 'undefined') {
+            var iDiv = document.createElement('div');
+            iDiv.id = 'popup';
+            iDiv.className = 'popup-wrapper hide';
+        
+            // Create the inner div before appending to the body
+            var innerDiv1 = document.createElement('div');
+            innerDiv1.className = 'popup-content';
+        
+            // The variable iDiv is still good... Just append to it.
+            iDiv.appendChild(innerDiv1);
+        
+            // Create the inner div before appending to the body
+            var innerDiv2 = document.createElement('div');
+            innerDiv2.className = 'popup-title';
+        
+            // The variable iDiv is still good... Just append to it.
+            innerDiv1.appendChild(innerDiv2);
+        
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'popup-close';
+            button.hidden = true;
+        
+            innerDiv2.appendChild(button);
+        
+            // Create the inner div before appending to the body
+            var innerDiv3 = document.createElement('div');
+            innerDiv3.id = 'popup-bdy';
+            innerDiv3.className = 'popup-body';
+        
+            // The variable iDiv is still good... Just append to it.
+            innerDiv1.appendChild(innerDiv3);
+        
+            // Then append the whole thing onto the body
+            document.getElementsByTagName('body')[0].appendChild(iDiv);
+        }   
+    },
+
+    MASPopupUI: function(url, result, popupafterclose, onload) {
+        if(!this.isEmpty(result)){
+            window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
+        }
+        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
+            var onLoadMakePopUpVisible = function() {
+                if(document.getElementById('popUp') !== null) {
+                    document.getElementById('popUp').hidden=false;
+                }
+                onload();
+            };
+        
+            $('#popUp').remove();
+
+            const popupStyle = this.getPopUpStyle();
+
+            var template = "&lt;div id='popUp' hidden data-role='popup' class='ui-content messagePopup' style='"+ popupStyle+"'>" + "&lt;/div>";
+            popupafterclose = popupafterclose ? popupafterclose : function() {};
+            $.mobile.activePage.append(template).trigger("create");
+            $('#popUp').load(url,onLoadMakePopUpVisible);
+            $.mobile.activePage.find(".closePopup").bind("tap", function() {
+                $.mobile.activePage.find(".messagePopup").popup("close");
+            });           
+
+            $.mobile.activePage.find(".messagePopup").popup().popup("open").bind({
+                popupafterclose: function() {
+                    $('body').off('touchmove');
+                    $(this).unbind("popupafterclose").remove();                    
+                    popupafterclose();
+                }
+            });
+            
+            $(".messagePopup").on({
+                popupbeforeposition: function() {
+                    $('.ui-popup-screen').off();
+                }
+            });
+        }else{
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
+            this.createPopupDiv();
+            var popupEl = document.getElementById('popup');
+            var popupBody = document.getElementById('popup-bdy');
+                popupEl.style.backgroundColor = "white";
+                popupBody.style.backgroundColor = "white";
+
+            window.MASPopupUI = new Popup(popupEl, {
+                 width: window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,
+                 height: window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                popupBody.innerHTML = this.response;
+                var s = popupBody.getElementsByTagName('script');
+                for (var i = 0; i &lt; s.length ; i++) {
+                    var node=s[i], parent=node.parentElement, d = document.createElement('script');
+                    d.async=node.async;
+                    d.type = node.type;
+                    if(typeof node.src !== 'undefined' &amp;&amp; node.src !== ""){
+                        d.src=node.src;
+                    }
+                    d.text = node.text;
+                    parent.insertBefore(d,node);
+                    parent.removeChild(node);
+                }
+                window.MASPopupUI.open();
+                onload();
+            };
+
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
+    },
+    /**
+    Closes an existing popup.
+    */
+    closePopup: function() {
+        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
+            $.mobile.activePage.find(".messagePopup").popup("close");
+        } else {
+            window.MASPopupUI.close();
+            document.getElementById('popup').remove();
+        }
+    }
+};
+
+module.exports = MASPluginUtils;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 25 2018 22:40:18 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
