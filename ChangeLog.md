@@ -12,6 +12,10 @@
 
 - None
 
+### Removed classes
+
+- getAuthCredentialsType has been removed.
+
 # Version 1.6.10
 
 ## Bug fixes
