@@ -354,7 +354,7 @@
         self.otpGenerationBlock(nil, YES, nil);
     }
     
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"OTP Channels Cancelled"];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OTP Channels Cancelled"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -421,7 +421,7 @@
         self.otpBlock(nil, YES, nil);
     }
     
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"OTP Cancelled"];
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OTP Cancelled"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
