@@ -8,9 +8,18 @@
 
 - Business logic for login moved over to the developers. [US469657]
 
+- Config file preference to specify the iOS deployment target.
+
+- CocoaPods integration with framework podspec for iOS 'MASFoundation' framework.
+
+
 ### Deprecated classes
 
 - None
+
+### Removed classes
+
+- getAuthCredentialsType has been removed.
 
 # Version 1.6.10
 
