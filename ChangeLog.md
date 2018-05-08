@@ -10,7 +10,7 @@
 
 - Config file preference to specify the iOS deployment target.
 
-- CocoaPods integration with framework podspec for 'MASFoundation'.
+- CocoaPods integration with framework podspec for iOS 'MASFoundation' framework.
 
 
 ### Deprecated classes
