@@ -8,6 +8,11 @@
 
 - Business logic for login moved over to the developers. [US469657]
 
+- Config file preference to specify the iOS deployment target.
+
+- CocoaPods integration with framework podspec for 'MASFoundation'.
+
+
 ### Deprecated classes
 
 - None

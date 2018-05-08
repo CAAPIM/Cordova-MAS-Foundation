@@ -64,6 +64,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
+
+            <preference name="deployment-target" value="9.0"/>
+
             <feature name="MASPluginMAS" >
                 <param name="ios-package" value="MASPluginMAS"/>
             </feature>
@@ -101,6 +104,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <header-file src="src/ios/WebViewController.h" />
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
+
+        <!-- Uncomment the belo code - Important before release. -->
+        <!-- <framework src="MASFoundation" type="podspec" spec="~> 1.7.00" /> -->
         
     </platform>
 
