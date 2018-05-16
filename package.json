@@ -26,5 +26,10 @@
   "bugs": {
     "url": "https://github.com/CAAPIM/MAS-Foundation-Cordova/issues"
   },
-  "homepage": "https://github.com/CAAPIM/MAS-Foundation-Cordova#readme"
+  "homepage": "https://github.com/CAAPIM/MAS-Foundation-Cordova#readme",
+  "dependencies": {
+    "filehound": "^1.16.2",
+    "plist": "^3.0.1",
+    "xcode": "^1.0.0"
+  }
 }

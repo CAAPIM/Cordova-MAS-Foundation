@@ -56,6 +56,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginSecurityConfiguration" />
     </js-module>
 
+    <hook type="after_prepare" src="scripts/MASAfterPrepare.js" />
+
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>
