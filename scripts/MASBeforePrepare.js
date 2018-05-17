@@ -13,9 +13,7 @@ module.exports = function(context) {
 		// Abort if the msso config path doesn't exist...
 		if (!fs.existsSync(path)) {
 
-		    console.log('\n' + 'Config file does not exist @ path : ' + path + '\n');
-
-		    return;
+            throw '\n' + 'Config file does not exist @ path : ' + path + '\n';
 		}
 
 		//
