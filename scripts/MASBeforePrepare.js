@@ -6,15 +6,17 @@ xcode       = require('xcode');
 
 module.exports = function(context) {
 
+    var path = require('os').homedir() + '/MAS_Config/msso_config.json';
+
+    // Abort if the msso config path doesn't exist...
+    if (!fs.existsSync(path)) {
+
+        throw '\n' + 'Config file does not exist @ path : ' + path + '\n';
+    }
+
 	if (fs.existsSync('platforms/ios/ios.json')) {
 	    
-	    var path = require('os').homedir() + '/MAS_Config/msso_config.json';
-
-		// Abort if the msso config path doesn't exist...
-		if (!fs.existsSync(path)) {
-
-            throw '\n' + 'Config file does not exist @ path : ' + path + '\n';
-		}
+	
 
 		//
         //  Configure authorization for location services. 
@@ -77,8 +79,7 @@ module.exports = function(context) {
 		    });
 	}
 
-    if (fs.existsSync('platforms/ios/android.json')) {
-
-        // Android Hooks go here.
+    if (fs.existsSync('platforms/android/android.json')) {
+        fs.createReadStream(path).pipe(fs.createWriteStream('./platforms/android/app/src/main/assets/msso_config.json'));  
     }
 };
