@@ -80,7 +80,7 @@ module.exports = function(context) {
 	}
 
     if (fs.existsSync('platforms/android/android.json')) {
-      if (fs.existsSync('platforms/android/app/src/main/assets/'){
+      if (fs.existsSync('platforms/android/app/src/main/assets/')){
           fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/app/src/main/assets/msso_config.json'));  
       } else {
           fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/assets/msso_config.json'));
