@@ -8,7 +8,7 @@ module.exports = function(context) {
 
 	if (fs.existsSync('platforms/ios/ios.json')) {
 	    
-	    var path = require('os').homedir() + '/MAS_Config/msso_config.json';
+	    var path = require('os').homedir() + '/masconfig/msso_config.json';
 
 		// Abort if the msso config path doesn't exist...
 		if (!fs.existsSync(path)) {
@@ -77,8 +77,11 @@ module.exports = function(context) {
 		    });
 	}
 
-    if (fs.existsSync('platforms/ios/android.json')) {
-
-        // Android Hooks go here.
-    }
+    if (fs.existsSync('platforms/android/android.json')) {
+      if (fs.existsSync('platforms/android/app/src/main/assets/'){
+          fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/app/src/main/assets/msso_config.json'));  
+      } else {
+          fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/assets/msso_config.json'));
+      }
+  }
 };
