@@ -10,12 +10,14 @@ module.exports = function(context) {
 	    
 	    var path = require('os').homedir() + '/masconfig/msso_config.json';
 
-		// Abort if the msso config path doesn't exist...
-		if (!fs.existsSync(path)) {
+    // Abort if the msso config path doesn't exist...
+    if (!fs.existsSync(path)) {
 
-            throw '\n' + 'Config file does not exist @ path : ' + path + '\n';
-		}
+        throw '\n' + 'Config file does not exist @ path : ' + path + '\n';
+    }
 
+	if (fs.existsSync('platforms/ios/ios.json')) {
+	    
 		//
         //  Configure authorization for location services. 
         //
