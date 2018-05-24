@@ -107,10 +107,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
-        <!-- Uncomment the belo code - Important before release. -->
-        <!-- <framework src="MASFoundation" type="podspec" spec="~> 1.7.00" /> -->
-        <!-- <framework src="MASUI" type="podspec" spec="~> 1.7.00" /> -->
+        <framework src="MASFoundation" type="podspec" spec="~> 1.7.00" />
+        <framework src="MASUI" type="podspec" spec="~> 1.7.00" />
         
+
     </platform>
 
     <!-- Android -->
