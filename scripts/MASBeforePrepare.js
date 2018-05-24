@@ -85,5 +85,6 @@ module.exports = function(context) {
       } else {
           fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/assets/msso_config.json'));
       }
+    }
   }
 };
