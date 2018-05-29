@@ -1,7 +1,3 @@
- PDF To Markdown Converter
-Debug View
-Result View
-
 This product includes _cordova-node-xcode_ content, which is distributed in accordance with the following license agreement(s):
 
 Copyright 2017 Apache Software Foundation
