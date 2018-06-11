@@ -7,6 +7,7 @@ var fs = require('fs'),
 module.exports = function (context) {
 
     var path = require('os').homedir() + '/masconfig/msso_config.json';
+    var iOSConfigPath = process.cwd() + '/platforms/ios/msso_config.json';
 
     // Abort if the msso config path doesn't exist...
     if (!fs.existsSync(path)) {
@@ -16,30 +17,7 @@ module.exports = function (context) {
 
     if (fs.existsSync('platforms/ios/ios.json')) {
 
-        //
-        //  Configure authorization for location services. 
-        //
-        fileHound.create()
-            .paths('./platforms/ios/')
-            .depth(0)
-            .ext('plist')
-            .match('*Info*')
-            .find()
-            .then(files => {
-                files.forEach(file => {
-                    var infoPlist = plist.parse(fs.readFileSync(file, 'utf8'));
-
-                    infoPlist.NSLocationWhenInUseUsageDescription =
-                        infoPlist.NSLocationAlwaysUsageDescription =
-                        infoPlist.NSLocationAlwaysAndWhenInUseUsageDescription =
-                        'The application requires location services to connect to MAS backend services.';
-
-                    fs.writeFileSync(file, plist.build(infoPlist));
-
-                    console.log('\n' + 'Successfully configured authorization for iOS location services.' + '\n');
-                });
-            });
-
+        fs.writeFileSync(iOSConfigPath, fs.readFileSync(path));
 
         //
         //  Configure MAS iOS project with msso_config.json.
@@ -52,6 +30,33 @@ module.exports = function (context) {
             .find()
             .then(files => {
                 files.forEach(file => {
+
+                    var ProjectDir = (file.split("/").slice(-2)[0]).split(".")[0];
+
+                    //
+                    //  Configure authorization for location services. 
+                    //
+                    fileHound.create()
+                        .paths('./platforms/ios/' + ProjectDir + '/')
+                        .depth(0)
+                        .ext('plist')
+                        .match('*' + ProjectDir + '-Info*')
+                        .find()
+                        .then(files => {
+                            files.forEach(file => {
+                                var infoPlist = plist.parse(fs.readFileSync(file, 'utf8'));
+
+                                infoPlist.NSLocationWhenInUseUsageDescription =
+                                    infoPlist.NSLocationAlwaysUsageDescription =
+                                    infoPlist.NSLocationAlwaysAndWhenInUseUsageDescription =
+                                    'The application requires location services to connect to MAS backend services.';
+
+                                fs.writeFileSync(file, plist.build(infoPlist));
+
+                                console.log('\n' + 'Successfully configured authorization for iOS location services.' + '\n');
+                            });
+                        });
+
                     var appProj = xcode.project(file);
 
                     appProj.parse(function (err) {
@@ -59,7 +64,7 @@ module.exports = function (context) {
                         //
                         //  Add the msso_config.json to resources directory of the XCode project.
                         //
-                        appProj.addResourceFile(path);
+                        appProj.addResourceFile(iOSConfigPath);
 
                         //
                         //  Add the XCode proejct buildPhase 'Run Script' Shell script.
@@ -71,7 +76,7 @@ module.exports = function (context) {
 
                         fs.writeFileSync(file, appProj.writeSync());
 
-                        console.log('\n' + 'Successfully configured ' + ' cordova project with : ' + path + '\n');
+                        console.log('\n' + 'Successfully configured ' + ' cordova project with : ' + iOSConfigPath + '\n');
                     });
                 });
             });
