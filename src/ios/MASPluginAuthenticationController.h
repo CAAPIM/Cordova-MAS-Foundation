@@ -30,16 +30,15 @@
 /**
  *  Set the login block with the available authentication providers
  */
-- (NSDictionary *)setLoginBlocksWithAuthentiationProviders:(MASAuthenticationProviders *)providers
-                                   basicCredentialsBlock__:(MASBasicCredentialsBlock)basicCredentialsBlock
-                                  authorizationCodeBlock__:(MASAuthorizationCodeCredentialsBlock)authorizationCodeBlock
+- (NSDictionary *)setLoginBlocksWithAuthenticationProviders:(MASAuthenticationProviders *)providers
+                                      authCredentialsBlock:(MASAuthCredentialsBlock)authCredentialsBlock
                                          removeQRCodeBlock:(MASCompletionErrorBlock)removeQRCodeBlock
                                 completeAuthorizationBlock:(MASCompletionErrorBlock)completeAuthorization;
 
 /**
  *  Complete Authentication with username and password
  */
-- (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password;
+- (void)completeAuthenticationWithUserName:(NSString *)userName andPassword:(NSString *)password completion:(MASCompletionErrorBlock)completion;
 
 /**
  *  Cancel the authentication request

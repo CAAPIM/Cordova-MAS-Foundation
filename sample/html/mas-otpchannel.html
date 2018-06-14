@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login Page</title>
+    <title>OTP Channel Selection</title>
     <!--            <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet'>-->
     <!--                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel='stylesheet'>-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,12 +39,12 @@
         }
 
         .form-header li {
-            display:inline-block; 
-            line-height:40px; 
-            width:255px; 
-            margin:0 2px; 
-            text-align:center; 
-            background:#e8e8e8
+            display: inline-block;
+            line-height: 40px;
+            width: 255px;
+            margin: 0 2px;
+            text-align: center;
+            background: #e8e8e8
         }
 
         .form-header li:nth-child(odd) {
@@ -52,7 +52,8 @@
         }
 
         .form-header li:nth-child(even) {
-            width:50px; margin:0 0;
+            width: 50px;
+            margin: 0 0;
         }
 
         .user-image {
@@ -271,56 +272,65 @@
             background-color: #9999ff;
         }
     </style>
+    <script>
+        (function(){
+            const payload = window.localStorage.getItem("masCallbackResult");
+            if(!MASPluginUtils.isEmpty(payload)){
+                const result = JSON.parse(payload);
+                const otpChannels = result.channels;
+                if (otpChannels.length > 1){
+                    for (i = 0; i < otpChannels.length; i++){
+                        if (document.getElementById(otpChannels[i])){
+                            document.getElementById(otpChannels[i]).style.display = 'block';
+                        }
+                    }
+                }
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <div id="errorMesg" style="color:red"> </div>
-    <br>
-    <div id="login-form">
-        <div>
-            <ul id="" class="form-header">
-                <li>OTP Channels</li>
-                <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
-                </li>
-            </ul>
-        </div>
-        <div class="user-image"><img src="masui/img/ca-logo.png"></img>
-        </div>
-
-        <form class="form">
-            <ul class="login">
-                <div class="multiselect">
-                    <div class="selectBox" onclick="showCheckboxes()">
-                        <select disabled>
-                            <option style="text-align:center">Select an OTP channel</option>
-                        </select>
-                        <div class="overSelect"></div>
-                    </div>
-                    <div id="checkboxes">
-                        <label id="EMAIL" style="display:none">
-                            <input class="otp" type="checkbox" value="EMAIL" />EMAIL</label>
-                        <label id="SMS" style="display:none">
-                            <input class="otp" type="checkbox" value="SMS" />SMS</label>
-                        <label id="PUSH" style="display:none">
-                            <input class="otp" type="checkbox" value="PUSH" />PUSH</label>
-                    </div>
-                </div>
-                <li>
-                    <input id="send_button" class="btn" type="submit" value="SEND">
-                </li>
-            </ul>
-        </form>
-        <!--            <div class="social-login">-->
-        <!--                <a href="" class="fb"><img class="slicon" src="img/facebook.png"></img></a>-->
-        <!--                <a href="" class="tw"><img class="slicon" src="img/twitter.png"></img></a>-->
-        <!--                <a href="" class="gp"><img class="slicon" src="img/gplus.png"></img></a>-->
-        <!--                <a href="" class="in"><img class="slicon" src="img/linkedin.png"></img></a>-->
-        <!--            </div>-->
+<div id="errorMesg" style="color:red"> </div>
+<br>
+<div id="login-form">
+    <div>
+        <ul id="" class="form-header">
+            <li>OTP Channels</li>
+            <li id="close"><img src="masui/img/close.png" class="close_button" id="close_button"></img>
+            </li>
+        </ul>
     </div>
+    <div class="user-image"><img src="masui/img/ca-logo.png"></img>
+    </div>
+
+    <form class="form">
+        <ul class="login">
+            <div class="multiselect">
+                <div class="selectBox" onclick="showCheckboxes()">
+                    <select disabled>
+                        <option style="text-align:center">Select an OTP channel</option>
+                    </select>
+                    <div class="overSelect"></div>
+                </div>
+                <div id="checkboxes">
+                    <label id="EMAIL" style="display:none">
+                        <input class="otp" type="checkbox" value="EMAIL" />EMAIL</label>
+                    <label id="SMS" style="display:none">
+                        <input class="otp" type="checkbox" value="SMS" />SMS</label>
+                    <label id="PUSH" style="display:none">
+                        <input class="otp" type="checkbox" value="PUSH" />PUSH</label>
+                </div>
+            </div>
+            <li>
+                <input id="send_button" class="btn" type="submit" value="SEND">
+            </li>
+        </ul>
+    </form>
+</div>
 </body>
 <script>
     var expanded = false;
-
     function showCheckboxes() {
         var checkboxes = document.getElementById("checkboxes");
         if (!expanded) {
@@ -332,21 +342,24 @@
         }
     }
 
-    document.getElementById("send_button").addEventListener("click", function(event){
+    document.getElementById("send_button").addEventListener("click", function(event) {
         event.preventDefault();
-
         send();
     });
 
-    document.getElementById("close").addEventListener("click", function(event){
+    document.getElementById("close_button").addEventListener("click", function (event) {
         event.preventDefault();
-
         var MAS = new MASPlugin.MAS();
-        MAS.cancelGenerateAndSendOTP();
+        MAS.cancelGenerateAndSendOTP(function(){},function(error){
+            let errorMsgToDisplay = "Internal Server Error.";
+            if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                errorMsgToDisplay = error.errorMessage;
+            }
+            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+        });
     });
 
     function send() {
-
         var checkArray = [];
         $('input.otp').each(function() {
             if ($(this).is(':checked')) {
@@ -355,12 +368,17 @@
         });
 
         if (checkArray.length) {
-
             var MAS = new MASPlugin.MAS();
-            MAS.generateAndSendOTP(function() {}, function() {}, checkArray);        
-        }
-        else
+            MAS.generateAndSendOTP(function() {}, function(error) {
+                let errorMsgToDisplay = "Internal Server Error.";
+                if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+                    errorMsgToDisplay = error.errorMessage;
+                }
+                document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
+            }, checkArray);
+        } else{
             alert("You have to select atleast one OTP channel");
+        }
     }
 </script>
 

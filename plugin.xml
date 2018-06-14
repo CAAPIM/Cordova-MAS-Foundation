@@ -56,6 +56,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginSecurityConfiguration" />
     </js-module>
 
+    <hook type="before_prepare" src="scripts/MASBeforePrepare.js" />
+
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>
@@ -64,6 +66,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
+
+            <preference name="deployment-target" value="9.0"/>
+
             <feature name="MASPluginMAS" >
                 <param name="ios-package" value="MASPluginMAS"/>
             </feature>
@@ -101,7 +106,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <header-file src="src/ios/WebViewController.h" />
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
+
+        <framework src="MASFoundation" type="podspec" spec="~> 1.7.00" />
+        <framework src="MASUI" type="podspec" spec="~> 1.7.00" />
         
+
     </platform>
 
     <!-- Android -->
@@ -123,8 +132,18 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.BLUETOOTH" />
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+            <uses-permission android:name="android.permission.NFC" />
+           <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+            <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
+        <framework src="com.ca:mas:1.6.10" />
+        <framework src="com.ca:masui:1.6.10" />
+        
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASPluginDevice.java" target-dir="src/com/ca/mas/cordova/core" />

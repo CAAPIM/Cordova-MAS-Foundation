@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-mas-core",
-  "version": "1.6.10",
-  "description": "Cordova MAS Plugin",
+  "version": "1.7.00",
+  "description": "Cordova MAS Foundation Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-core",
     "platforms": [
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CAAPIM/MAS-Foundation-Cordova.git"
+    "url": "git+https://github.com/CAAPIM/Cordova-MAS-Foundation.git"
   },
   "keywords": [
     "cordova",
@@ -24,7 +24,12 @@
   "author": "CA Technologies Ltd.",
   "license": "CA Technologies Ltd.",
   "bugs": {
-    "url": "https://github.com/CAAPIM/MAS-Foundation-Cordova/issues"
+    "url": "https://github.com/CAAPIM/Cordova-MAS-Foundation/issues"
   },
-  "homepage": "https://github.com/CAAPIM/MAS-Foundation-Cordova#readme"
+  "homepage": "https://github.com/CAAPIM/Cordova-MAS-Foundation#readme",
+  "dependencies": {
+    "filehound": "^1.16.2",
+    "plist": "^3.0.1",
+    "xcode": "^1.0.0"
+  }
 }

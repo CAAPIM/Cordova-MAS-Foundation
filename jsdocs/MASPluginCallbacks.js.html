@@ -39,79 +39,46 @@ var MASPluginConstants = require("./MASPluginConstants"),
 var MASPluginCallbacks = {
 
 
-	/** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
-     * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
+	/** Callback where it will prompt for login Credentials.
+     * @param callbackResp user defined callback object containing the relevant details of callback.
      */
-    MASAuthenticationCallback: function(result) {
-        
-        var pageToLoad = MASPluginConstants.MASLoginPage;
+    MASAuthenticationCallback: function(callbackResp) {
+        const error = callbackResp.error;
+        const result = callbackResp.result;
+        const requestType = result.requestType;
 
-        if (typeof result !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(result) &amp;&amp;
-            typeof result.requestId !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(result.requestId) &amp;&amp;
-            result.requestType === "Login") 
-        {
-            MASPluginConstants.MASLoginAuthRequestId = result.requestId;
-        }
-
-        /*if (typeof result !== 'undefined' &amp;&amp; !isEmpty(result) &amp;&amp;
-            typeof result.requestType !== 'undefined' &amp;&amp; !isEmpty(result.requestType) &amp;&amp;
-            result.requestType === "OTP") {
-            if (typeof result.isInvalidOtp !== 'undefined' &amp;&amp; !isEmpty(result.isInvalidOtp) &amp;&amp; result.isInvalidOtp == "true") {
-                MASPlugin.MASConfig.MASOTPAuthenticationCallback(result);
-            } else {
-                if (result.channels == null) {
-                    console.log("Channel list is empty");
-                    return;
-                }
-                var channelsCSV = result.channels;
-                var channels = channelsCSV.split(',');
-                MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
+        if(requestType === 'Login'){
+            if(document.getElementById('popUp') !== null || document.getElementById('popup') !== null){
+                return;
             }
-        } else */
+            if(result.requestId !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(result.requestId)){
+                MASPluginConstants.MASLoginAuthRequestId = result.requestId;
+            }
+            let oncloseFunc = function(){
+                MASPluginUtils.closePopup();
+            };
 
-        if (result === "removeQRCode") 
-        {
-            document.getElementById('qr-code').style.display = 'none';
-        } 
-        else if (result === "qrCodeAuthorizationComplete") 
-        {
-            $('#popUp').remove();
-        } 
-        else
-        {
-            if(pageToLoad === MASPluginConstants.MASLoginPage &amp;&amp; 
-            	document.getElementById('popUp') === null &amp;&amp; document.getElementById('popup') === null)
-            {
-                MASPluginUtils.MASPopupUI(
-                	pageToLoad, 
-                	function() { 
-
-                		$('#popUp').remove(); 
-                	}, 
-                	function() {
-                		document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
-
-                		var providers = result["providers"];
-                		if(typeof providers !== 'undefined' &amp; !MASPluginUtils.isEmpty(providers)) {
-                            
-                            for(var i=0; i &lt; providers.length; i++) {
-                                
-                                var p = providers[i];
-                                if(p !== 'qrcode') {
-                                    
-                                    if(document.getElementById('i'+p)) {
-                                        
-                                        document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
-                                        document.getElementById('l'+p).className = "enabled";
-                                          
-                                        if(p === 'salesforce')
-                                          document.getElementById('i'+p).style.backgroundColor = "#1798c1";
-                                    }
-                                }
-                            }
-                	    }
-                	}
-                );
+            let onLoadFunc = function(){
+                window.localStorage.removeItem("masCallbackResult")
+            };
+            MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
+            MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,result,oncloseFunc,onLoadFunc);
+        }else if(requestType == "removeQRCode"){
+            let event = null;
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                event = new CustomEvent("errorEvent",{"detail":callbackJSON});
+            }else{
+                event = new CustomEvent(requestType);
+            }
+            document.body.dispatchEvent(event);
+        }else if(requestType == "qrCodeAuthorizationComplete"){
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                let errorEvent = new CustomEvent("errorEvent",{"detail":callbackJSON});
+                document.body.dispatchEvent(errorEvent);
+            }else{
+                MASPluginUtils.closePopup();
             }
         }
     },
@@ -119,52 +86,52 @@ var MASPluginCallbacks = {
 
     /**
      * Callback which is used to prompt for the OTP provided channels
-     * @param otpChannels available channels array that will be recieved from server
-     * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
+     * @param callbackResp user defined callback object containing the OTP Channels as defined by MAG Server.
      */
-    MASOTPChannelSelectCallback: function(otpChannels) 
-    {
-        MASPluginUtils.MASPopupUI(
-        	MASPluginConstants.MASOTPChannelsPage, 
-        	function() { $('#popUp').remove(); }, 
-        	function() {
-            
-            	if (otpChannels.length > 1) 
-            	{              
-                	for (i = 0; i &lt; otpChannels.length; i++) 
-                	{                 
-                    	if (document.getElementById(otpChannels[i])) 
-                    	{
-                        	document.getElementById(otpChannels[i]).style.display = 'block';
-                    	}
-                	}
-            	}
-        	}
-        );
-    },	
+    MASOTPChannelSelectCallback: function(callbackResp) {
+        const error = callbackResp.error;
+        // TODO: How to handle error here, since the popup is still not open
+        if(!MASPluginUtils.isEmpty(error)){
+            console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
+            return;
+        }
+        const result = callbackResp.result;
+        let oncloseFunc = function(){
+            MASPluginUtils.closePopup();
+        };
+        let onLoadFunc = function() {
+            window.localStorage.removeItem("masCallbackResult")
+        }
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPChannelsPage,result,oncloseFunc,onLoadFunc);
+    },
 
 
     /**
      * Callback for the OTP Listener
-     * @param error message that is recieved from server for invalid attempt
-     * Note: This has to be called from android if otp is invalid.
+     * @param callbackResp user defined callback object containing the OTP failure error message. Called in case of invalid/expired OTP.
      */
-    MASOTPAuthenticationCallback: function(error) 
-    {
-        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage, 
-       	function() {
+    MASOTPAuthenticationCallback: function(callbackResp){
+        const error = callbackResp.error;
+        // TODO: How to handle error here, since the popup is still not open
+        if(!MASPluginUtils.isEmpty(error)){
+            console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
+            return;
+        }
 
-            $('#popUp').remove();
-        }, 
-        function() {
+        const result = callbackResp.result;
 
-            if(error.errorMessage !== "Enter the OTP")
-                document.getElementById("CA-Title").style.color = "red";
-            document.getElementById("CA-Title").innerHTML = error.errorMessage;			
-        });
+        let oncloseFunc = function(){
+            MASPluginUtils.closePopup();
+        };
+
+        let onLoadFunc = function() {
+            window.localStorage.removeItem("masCallbackResult")
+        };
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage,result,oncloseFunc,onLoadFunc);
     }
 };
-
 module.exports = MASPluginCallbacks;</code></pre>
         </article>
     </section>
@@ -175,13 +142,13 @@ module.exports = MASPluginCallbacks;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAuthCredentialsType">getAuthCredentialsType</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Nov 27 2017 03:56:23 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 29 2018 12:10:18 GMT+0530 (IST)
 </footer>
 
 <script> prettyPrint(); </script>

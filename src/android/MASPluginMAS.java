@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.ca.mas.core.cert.CertUtils;
 import com.ca.mas.core.service.MssoIntents;
 import com.ca.mas.foundation.MAS;
+import com.ca.mas.foundation.MASAuthCredentialsAuthorizationCode;
 import com.ca.mas.foundation.MASAuthenticationListener;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASClaims;
@@ -42,7 +43,6 @@ import com.ca.mas.foundation.auth.MASProximityLoginQRCode;
 import com.ca.mas.ui.MASCustomTabs;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +53,6 @@ import java.net.URI;
 import java.net.URL;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -68,6 +67,20 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private CallbackContext AUTH_LISTENER_CALLBACK;
     private CallbackContext OTP_AUTH_LISTENER_CALLBACK;
     private CallbackContext OTP_CHANNEL_SELECT_LISTENER_CALLBACK;
+    private static final String ACTION_LOGIN = "Login";
+    private static final String ACTION_QRCODE_COMPLETE = "qrCodeAuthorizationComplete";
+    private static final String ACTION_QRCODE_EXPIRED = "removeQRCode";
+    private static final String MSG_OTP_INVALID = "Otp is invalid";
+    private static final String NODE_RESULT = "result";
+    private static final String NODE_REQUEST_TYPE = "requestType";
+    private static final String NODE_ERROR = "error";
+    private static final String NODE_REQUEST_ID = "requestId";
+    private static final String NODE_QRCODE_IMAGE = "qrCodeImageBase64";
+    private static final String NODE_PROVIDERS = "providers";
+    private static final String NODE_IDP = "idp";
+    private static final String NODE_INVALID_OTP = "isInvalidOtp";
+    private static final String NODE_OTP_ERR = "errorMessage";
+    private static final String NODE_OTP_CHANNELS = "channels";
 
     @Override
     protected void pluginInitialize() {
@@ -153,7 +166,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
     }
 
 
-    private void enableBrowserBasedAuthentication(  final CallbackContext callbackContext) {
+    private void enableBrowserBasedAuthentication(final CallbackContext callbackContext) {
         try {
             MAS.enableBrowserBasedAuthentication();
         } catch (Exception e) {
@@ -163,7 +176,6 @@ public class MASPluginMAS extends MASCordovaPlugin {
         }
         success(callbackContext, true, false);
     }
-
 
 
     private void useNativeMASUI(final JSONArray args, final CallbackContext callbackContext) {
@@ -355,7 +367,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         try {
             String otp = args.getString(0);
             masOtpAuthenticationHandlerStatic.proceed(mContext, otp);
-            success(callbackContext, true, false);// TODO: Recheck
+            success(callbackContext, true, false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             callbackContext.error(getError(e));
@@ -796,21 +808,71 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 @Override
                 public void onAuthenticateRequest(Context context, long requestId, MASAuthenticationProviders masAuthenticationProviders) {
                     JSONObject jsonObject = new JSONObject();
+                    JSONObject result = new JSONObject();
                     try {
                         MASProximityLogin qrcode = new MASProximityLoginQRCode() {
                             @Override
-                            protected void onAuthCodeReceived(String code) {
-                                super.onAuthCodeReceived(code);
-                                MASUser.login(null);
-                                String data = "qrCodeAuthorizationComplete";
-                                success(AUTH_LISTENER_CALLBACK, data, true);
+                            protected void onAuthCodeReceived(String code, String state) {
+                                super.onAuthCodeReceived(code, state);
+                                MASUser.login(new MASAuthCredentialsAuthorizationCode(code, state), new MASCallback<MASUser>() {
+                                    @Override
+                                    public void onSuccess(MASUser result) {
+                                        JSONObject jsonObject = new JSONObject();
+                                        JSONObject subMap = new JSONObject();
+                                        try {
+                                            subMap.put(NODE_REQUEST_TYPE, ACTION_QRCODE_COMPLETE);
+                                            jsonObject.put(NODE_RESULT, subMap);
+                                        } catch (JSONException jce) {
+                                            Log.e(TAG, jce.getMessage());
+                                        }
+                                        success(AUTH_LISTENER_CALLBACK, jsonObject, true);
+                                    }
+
+                                    @Override
+                                    public void onError(final Throwable e) {
+                                        JSONObject jsonObject = new JSONObject();
+                                        JSONObject subMap = new JSONObject();
+                                        try {
+                                            subMap.put(NODE_REQUEST_TYPE, ACTION_QRCODE_COMPLETE);
+                                            jsonObject.put(NODE_RESULT, subMap);
+                                            jsonObject.put(NODE_ERROR, getError(e));
+                                        } catch (JSONException jce) {
+                                            Log.e(TAG, jce.getMessage());
+                                        }
+                                        success(AUTH_LISTENER_CALLBACK, jsonObject, true);
+                                    }
+                                });
                             }
 
                             @Override
                             public void close() {
                                 super.close();
-                                String data = "removeQRCode";
-                                success(AUTH_LISTENER_CALLBACK, data, true);
+                                sendRemoveQRCodeCallback(null);
+                            }
+
+                            @Override
+                            public void onError(int errorCode, final String m, Exception e) {
+                                sendRemoveQRCodeCallback(e);
+
+                            }
+
+                            void sendRemoveQRCodeCallback(Throwable th){
+                                JSONObject jsonObject = new JSONObject();
+                                JSONObject result = new JSONObject();
+                                try {
+                                    jsonObject.put(NODE_RESULT, result);
+                                    result.put(NODE_REQUEST_TYPE, ACTION_QRCODE_EXPIRED);
+                                    if(th!=null){
+                                        jsonObject.put(NODE_ERROR,getError(th));
+                                    }
+                                } catch (Exception ex) {
+                                    try {
+                                        jsonObject.put(NODE_ERROR, getError(ex));
+                                    } catch (JSONException e) {
+
+                                    }
+                                }
+                                success(AUTH_LISTENER_CALLBACK, jsonObject, true);
                             }
                         };
                         MASUtil.setQrCode(qrcode);
@@ -825,56 +887,66 @@ public class MASPluginMAS extends MASCordovaPlugin {
                             byte byteImgArr[] = byteArrOutStream.toByteArray();
                             encodedImage = Base64.encodeToString(byteImgArr, Base64.DEFAULT);
                         }
-                        jsonObject.put("requestType", "Login");
-                        jsonObject.put("requestId", requestId);
-                        jsonObject.put("qrCodeImageBase64", encodedImage);
-                        jsonObject.put("providers", providerIds);
+                        result.put(NODE_REQUEST_TYPE, ACTION_LOGIN);
+                        result.put(NODE_REQUEST_ID, requestId);
+                        result.put(NODE_QRCODE_IMAGE, encodedImage);
+                        result.put(NODE_PROVIDERS, providerIds);
+                        result.put(NODE_IDP,masAuthenticationProviders.getIdp());
+                        jsonObject.put(NODE_RESULT, result);
                         qrcode.start();
+                        success(AUTH_LISTENER_CALLBACK, jsonObject, true);
                     } catch (Exception e) {
+                        try {
+                            jsonObject.put(NODE_ERROR, getError(e));
+                            AUTH_LISTENER_CALLBACK.error(jsonObject);
+                        } catch (JSONException jce) {
+
+                        }
                         Log.e(TAG, e.getMessage(), e);
                     }
-                    success(AUTH_LISTENER_CALLBACK, jsonObject, true);
                 }
 
                 @Override
                 public void onOtpAuthenticateRequest(Context context, MASOtpAuthenticationHandler masOtpAuthenticationHandler) {
                     masOtpAuthenticationHandlerStatic = masOtpAuthenticationHandler;
+                    JSONObject jsonObject = new JSONObject();
+                    JSONObject result = new JSONObject();
                     try {
-                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put(NODE_RESULT, result);
                         if (masOtpAuthenticationHandler.isInvalidOtp()) {
-                            jsonObject.put("isInvalidOtp", "true");
-                            jsonObject.put("errorMessage", "Otp is invalid");
+                            result.put(NODE_INVALID_OTP, Boolean.TRUE);
+                            result.put(NODE_OTP_ERR, MSG_OTP_INVALID);
                             success(OTP_AUTH_LISTENER_CALLBACK, jsonObject, true);
                         } else {
                             JSONArray jsonArray = new JSONArray();
                             List<String> channels = masOtpAuthenticationHandler.getChannels();
-                            if (channels != null) {
-                                StringBuffer channelResult = new StringBuffer();
-                                for (int i = 0; i < channels.size(); i++) {
-                                    channelResult.append(channels.get(i));
-                                    jsonArray.put(channels.get(i));
-                                    if (i != channels.size() - 1) {
-                                        channelResult.append(",");
+                            if (channels != null && !channels.isEmpty()) {
+                                for (String channel : channels) {
+                                    if (channel != null && !channel.isEmpty()) {
+                                        jsonArray.put(channel);
                                     }
                                 }
                             }
-                            success(OTP_CHANNEL_SELECT_LISTENER_CALLBACK, jsonArray, true);
+                            result.put(NODE_OTP_CHANNELS, jsonArray);
+                            success(OTP_CHANNEL_SELECT_LISTENER_CALLBACK, jsonObject, true);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage(), e);
+                        try {
+                            jsonObject.put(NODE_ERROR, getError(e));
+                        } catch (JSONException e1) {
+                        }
                         if (masOtpAuthenticationHandler.isInvalidOtp()) {
-                            OTP_AUTH_LISTENER_CALLBACK.error(getError(e));
+                            OTP_AUTH_LISTENER_CALLBACK.error(jsonObject);
                         } else {
-                            OTP_CHANNEL_SELECT_LISTENER_CALLBACK.error(getError(e));
+                            OTP_CHANNEL_SELECT_LISTENER_CALLBACK.error(jsonObject);
                         }
                     }
                 }
             });
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-            PluginResult pluginResult = new PluginResult(PluginResult.Status.ERROR, getError(e));
-            pluginResult.setKeepCallback(true);
-            AUTH_LISTENER_CALLBACK.sendPluginResult(pluginResult);
+        } catch (Throwable th) {
+            Log.e(TAG, th.getMessage(), th);
+            callbackContext.error(getError(th));
         }
     }
 

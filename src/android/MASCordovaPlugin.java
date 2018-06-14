@@ -22,9 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 /**
  * Created by trima09 on 27/01/2017.
  */
@@ -50,7 +47,7 @@ public class MASCordovaPlugin extends CordovaPlugin {
     protected JSONObject getError(Throwable throwable, String rootCauseErrorMessage) {
         int errorCode = MAGErrorCode.UNKNOWN;
         String errorMessage = throwable.getMessage();
-        String errorMessageDetail = "";
+
         //Try to capture the root cause of the error
         if (throwable instanceof MAGException) {
             MAGException ex = (MAGException) throwable;
@@ -71,7 +68,13 @@ public class MASCordovaPlugin extends CordovaPlugin {
         } else if (throwable.getCause() != null && throwable.getCause() instanceof MAGServerException) {
             MAGServerException serverException = ((MAGServerException) throwable.getCause());
             errorCode = serverException.getErrorCode();
-            errorMessage = serverException.getMessage();
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject(serverException.getMessage());
+                errorMessage = jsonObj.get("error_description").toString();
+            } catch (JSONException e) {
+                errorMessage = "Unknown Error";
+            }
         } else if (throwable.getCause() != null && throwable.getCause() instanceof TargetApiException) {
             TargetApiException e = ((TargetApiException) throwable.getCause());
             try {
@@ -79,32 +82,21 @@ public class MASCordovaPlugin extends CordovaPlugin {
             } catch (Exception ignore) {
             }
             errorMessage = e.getResponse() != null ? e.getResponse().getResponseMessage() : e.getMessage();
-        } else if (errorMessage != null && errorMessage.equalsIgnoreCase("The session is currently locked.")) {
-            errorCode = MAGErrorCode.UNKNOWN;
-        } else if (throwable != null && throwable instanceof MASCordovaException) {
+        }else if (throwable != null && throwable instanceof MASCordovaException) {
             errorMessage = throwable.getMessage();
-        } else if ((throwable instanceof NullPointerException || throwable instanceof IllegalStateException) && (MAS.getContext() == null || MAS.getState(this.cordova.getActivity().getApplicationContext()) != MASConstants.MAS_STATE_STARTED)) {
-            errorMessageDetail = "Mobile SSO has not been initialized.";
-        } else {
-            errorMessageDetail = throwable.getMessage();
+            if (throwable.getCause() != null) {
+                rootCauseErrorMessage = throwable.getCause().getMessage();
+            }
+        } else if ((throwable instanceof NullPointerException || throwable instanceof IllegalStateException) &&
+                (MAS.getContext() == null || MAS.getState(this.cordova.getActivity().getApplicationContext()) != MASConstants.MAS_STATE_STARTED)) {
+            errorMessage = "Mobile SDK has not been initialized.";
         }
 
         JSONObject error = new JSONObject();
         try {
             error.put("errorCode", errorCode);
             error.put("errorMessage", errorMessage);
-            StringWriter errors = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(errors));
-            error.put("errorInfo", errors.toString());
-            if (!"".equals(errorMessageDetail)) {
-                error.put("errorMessageDetail", errorMessageDetail);
-                error.put("errorMessage", "Internal Server Error");
-            }
-
-            //If root cause message is available then set that as the error message 
-            if (rootCauseErrorMessage != null) {
-                error.put("errorMessage", rootCauseErrorMessage);
-            }
+            error.put("errorMessageDetail", rootCauseErrorMessage != null ? rootCauseErrorMessage : errorMessage);
         } catch (JSONException ignore) {
         }
 

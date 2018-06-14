@@ -26,8 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
-/*
+            <pre class="prettyprint source linenums"><code>/*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -171,6 +170,17 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "useNativeMASUI", []);
     };
 
+    /**
+     * Enable Browser based authentication.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     *
+     */
+    this.enableBrowserBasedAuthentication = function(successHandler, errorHandler) {
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableBrowserBasedAuthentication");
+    };
+
+
 
     /**
      Sets the name of the configuration file.  This gives the ability to set the file's name to a custom value.
@@ -233,73 +243,10 @@ var MASPluginMAS = function() {
      * @param {string} password user defined password
     */
     this.completeAuthentication = function(successHandler, errorHandler, username, password) {
-        if (document.getElementById("errorMesg"))
-            document.getElementById("errorMesg").innerHTML = "";
-
         return Cordova.exec(
             function() {
-                if (document.getElementById("CA-Username") !== null) {
-                    if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                        $.mobile.activePage.find(".messagePopup").popup("close");
-                    } else {
-                        window.MASPopupUI.close();
-                            document.getElementById('popup').remove();
-                    }
-                }
                 successHandler(true);
-            },
-            function(error) {
-                if (typeof error !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(error)) {
-                    if (typeof error.errorCode !== 'undefined' &amp;&amp;
-                        !MASPluginUtils.isEmpty(error.errorCode) &amp;&amp;
-                        !isNaN(error.errorCode)) {
-
-                        var returnedError = "";
-                        var errorMsgToDisplay = "";
-                        var errorCodeLastDigits = error.errorCode % 1000;
-
-                        try {
-                            if (typeof error.errorMessage !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(error.errorMessage)) {
-                                returnedError = JSON.parse(error.errorMessage);
-                            }
-                        } catch (e) {
-
-                        }
-
-                        if (errorCodeLastDigits === 103) {
-                            errorMsgToDisplay = "invalid request: Missing or duplicate parameters";
-                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        } else if (errorCodeLastDigits === 202) {
-                            errorMsgToDisplay = "Username or Password invalid";
-                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        } else if (errorCodeLastDigits === 105) {
-                            errorMsgToDisplay = "Device registration error. The device has already been registered.";
-                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        } else if (errorCodeLastDigits === 107) {
-                            errorMsgToDisplay = "The given mag-identifier is either invalid or points to an unknown device.";
-                            document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                        } else {
-                            if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                                $.mobile.activePage.find(".messagePopup").popup("close");
-                            } else {
-                                window.MASPopupUI.close();
-                                    document.getElementById('popup').remove();
-                            }
-                        }
-                    }
-                } else {
-
-                    if (typeof jQuery !== 'undefined' &amp;&amp;
-                        typeof $.mobile !== 'undefined') {
-                        $.mobile.activePage.find(".messagePopup").popup("close");
-                    } else {
-                        window.MASPopupUI.close();
-                            document.getElementById('popup').remove();
-                    }
-                }
-                errorHandler(error);
-            },
-            "MASPluginMAS", "completeAuthentication", [username, password]);
+            },errorHandler,"MASPluginMAS", "completeAuthentication", [username, password]);
     };
 
     /**
@@ -310,23 +257,10 @@ var MASPluginMAS = function() {
      */
 
     this.doSocialLogin = function(successHandler, errorHandler, provider) {
-        return Cordova.exec(function() {
-            if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                $.mobile.activePage.find(".messagePopup").popup("close");
-            } else {
-                window.MASPopupUI.close();
-                    document.getElementById('popup').remove();
-            }
-            successHandler(true);
-        }, function(errorInfo) {
-            if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                $.mobile.activePage.find(".messagePopup").popup("close");
-            } else {
-                window.MASPopupUI.close();
-                    document.getElementById('popup').remove();
-            }
-            errorHandler(errorInfo);
-        }, "MASPluginMAS", "doSocialLogin", [provider]);
+        return Cordova.exec(
+            function() {
+                successHandler(true);
+            },errorHandler, "MASPluginMAS", "doSocialLogin", [provider]);
     }
 
 
@@ -337,24 +271,11 @@ var MASPluginMAS = function() {
      * @param args user defined variable which is request ID in Android. It is not used in iOS
      */
     this.cancelAuthentication = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-
 		return Cordova.exec(
-            function() {
-                if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                    $.mobile.activePage.find(".messagePopup").popup("close");
-                } else {
-                    window.MASPopupUI.close();
-                        document.getElementById('popup').remove();
-                }
-                successHandler(true);
-            },
-            errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
+            function(result) {
+                MASPluginUtils.closePopup();
+                successHandler(result);
+            },errorHandler, "MASPluginMAS", "cancelAuthentication", [MASPluginConstants.MASLoginAuthRequestId]);
     };
 
 
@@ -371,40 +292,17 @@ var MASPluginMAS = function() {
     this.generateAndSendOTP = function(successHandler, errorHandler, channels) {
         return Cordova.exec(
             function(shouldValidateOTP) {
-                if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                    $('#popUp').remove();
-                } else {
-                    window.MASPopupUI.close();
-                        document.getElementById('popup').remove();
-                }
-
                 if ("true" == shouldValidateOTP) {
+                    MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
                     MASPluginUtils.MASPopupUI(
-                        MASPluginConstants.MASOTPPage,
+                        MASPluginConstants.MASOTPPage,null,
                         function() {
-                            if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-                                $('#popUp').remove();
-                            } else {
-                                window.MASPopupUI.close();
-                                    document.getElementById('popup').remove();
-                            }
+                            MASPluginUtils.closePopup();
                         },
                         function() {}
                     );
                 }
-            },
-            function(error) {
-                if (document.getElementById("errorMesg")) {
-                    var errorMsgToDisplay = "Internal Server Error.";
-                    if (typeof error !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(error) &amp;&amp;
-                       typeof error.errorMessage !== 'undefined' &amp;&amp; !MASPluginUtils.isEmpty(error.errorMessage)) {
-                       errorMsgToDisplay = error.errorMessage;
-                    }
-                    document.getElementById("errorMesg").innerHTML = errorMsgToDisplay;
-                } else {
-                    errorHandler(error);
-                }
-            }, "MASPluginMAS", "generateAndSendOTP", [channels]);
+            },errorHandler, "MASPluginMAS", "generateAndSendOTP", [channels]);
     };
 
 
@@ -414,13 +312,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelGenerateAndSendOTP = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "cancelGenerateAndSendOTP", []);
     };
 
 
@@ -431,13 +327,11 @@ var MASPluginMAS = function() {
      * @param {string} otp user defined one-time password that is to be verified
      */
     this.validateOTP = function(successHandler, errorHandler, otp) {
-        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "validateOTP", [otp]);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "validateOTP", [otp]);
     };
 
 
@@ -447,13 +341,11 @@ var MASPluginMAS = function() {
      * @param {function} errorHandler user defined error callback
      */
     this.cancelOTPValidation = function(successHandler, errorHandler) {
-        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
+        return Cordova.exec(
+            function(result){
+                MASPluginUtils.closePopup();
+                successHandler(result)
+            },errorHandler, "MASPluginMAS", "cancelOTPValidation", []);
     };
 
     ///------------------------------------------------------------------------------------------------------------------
@@ -666,19 +558,6 @@ var MASPluginMAS = function() {
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility
     ///------------------------------------------------------------------------------------------------------------------
-
-    /**
-     Closes an existing popup.
-     */
-    this.closePopup = function() {
-        if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
-            $.mobile.activePage.find(".messagePopup").popup("close");
-        } else {
-            window.MASPopupUI.close();
-                document.getElementById('popup').remove();
-        }
-        return;
-    };
 };
 
 module.exports = MASPluginMAS;</code></pre>
@@ -691,13 +570,13 @@ module.exports = MASPluginMAS;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAuthCredentialsType">getAuthCredentialsType</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Nov 27 2017 03:56:23 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 29 2018 12:10:18 GMT+0530 (IST)
 </footer>
 
 <script> prettyPrint(); </script>

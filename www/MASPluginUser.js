@@ -110,14 +110,6 @@
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "listAttributes", []);
      };
 
-     /**
-     *  Returns the last authenticated session's type of auth credentials used.
-     *  @param {function} successHandler user defined success callback
-     *  @param {function} errorHandler user defined error callback
-     */
-     this.getAuthCredentialsType = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAuthCredentialsType", []);
-     };
     /**
      *  Boolean indicator that specifies whether the currently authenticated MASPluginUser object is locked
      *  @param {function} successHandler user defined success callback

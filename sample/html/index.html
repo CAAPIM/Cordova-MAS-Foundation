@@ -41,10 +41,7 @@
          }
 
          function onDeviceReady() {
-             var MAS = new MASPlugin.MAS();
-             //MAS.initialize(function(result) {}, function(error) {
-               //  alert("Initialization failure");
-             //});-->
+
          }
 
 
@@ -768,27 +765,6 @@
                      });
              });
 
-             $("#getAuthCredentialsType").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-                 $(this).find("textarea.error").hide();
-                 var thisElement = $(this);
-                  MASPluginUser.currentUser(function(result) {
-                         result.getAuthCredentialsType(function(result) {
-                                 thisElement.removeClass("success").removeClass("failure").addClass("success");
-                                 displayResult(thisElement, result);
-                             },
-                             function(error) {
-                                 thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                                 displayError(thisElement, error);
-                             });
-                     },
-                     function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
-                     });
-             });
-
-
              $("#isDeviceRegistered").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -879,8 +855,14 @@
                              });
                      },
                      function(error) {
-                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                         displayError(thisElement, error);
+                         if(error !== 'undefined' && error.errorMessage !== 'undefined' && error.errorMessage === 'No currently authenticated user.'){
+                            error.errorMessage = "Logoff user complete";
+                            thisElement.removeClass("success").removeClass("failure").addClass("success");
+                            displayError(thisElement, error);
+                         }else{
+                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                            displayError(thisElement, error);
+                         }
                      });
              });
 
@@ -1374,10 +1356,6 @@
                                 placeholder="password"/><textarea class='error'
                                                                   style="display:none;"
                                                                   readonly=""></textarea></a>
-                    </li>
-                    <li data-icon="false"><a href="#" id="getAuthCredentialsType">MASUser
-                        getAuthCredentialsType <textarea class='error' style="display:none;"
-                                                         readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="browserBasedLogin">MASUser initializeWithBrowserBasedAuthentication
                         <textarea class='error' style="display:none;" readonly="">

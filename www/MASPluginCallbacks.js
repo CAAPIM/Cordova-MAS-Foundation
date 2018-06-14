@@ -11,79 +11,46 @@ var MASPluginConstants = require("./MASPluginConstants"),
 var MASPluginCallbacks = {
 
 
-	/** Callback where it will prompt for login Credentials. It will also prompt for OTP channels in Android flow.
-     * @param result user defined variable which has requestId and channels for the OTP in android. It is not used in iOS.
+	/** Callback where it will prompt for login Credentials.
+     * @param callbackResp user defined callback object containing the relevant details of callback.
      */
-    MASAuthenticationCallback: function(result) {
-        
-        var pageToLoad = MASPluginConstants.MASLoginPage;
+    MASAuthenticationCallback: function(callbackResp) {
+        const error = callbackResp.error;
+        const result = callbackResp.result;
+        const requestType = result.requestType;
 
-        if (typeof result !== 'undefined' && !MASPluginUtils.isEmpty(result) &&
-            typeof result.requestId !== 'undefined' && !MASPluginUtils.isEmpty(result.requestId) &&
-            result.requestType === "Login") 
-        {
-            MASPluginConstants.MASLoginAuthRequestId = result.requestId;
-        }
-
-        /*if (typeof result !== 'undefined' && !isEmpty(result) &&
-            typeof result.requestType !== 'undefined' && !isEmpty(result.requestType) &&
-            result.requestType === "OTP") {
-            if (typeof result.isInvalidOtp !== 'undefined' && !isEmpty(result.isInvalidOtp) && result.isInvalidOtp == "true") {
-                MASPlugin.MASConfig.MASOTPAuthenticationCallback(result);
-            } else {
-                if (result.channels == null) {
-                    console.log("Channel list is empty");
-                    return;
-                }
-                var channelsCSV = result.channels;
-                var channels = channelsCSV.split(',');
-                MASPlugin.MASConfig.MASOTPChannelSelectCallback(channels);
+        if(requestType === 'Login'){
+            if(document.getElementById('popUp') !== null || document.getElementById('popup') !== null){
+                return;
             }
-        } else */
+            if(result.requestId !== 'undefined' && !MASPluginUtils.isEmpty(result.requestId)){
+                MASPluginConstants.MASLoginAuthRequestId = result.requestId;
+            }
+            let oncloseFunc = function(){
+                MASPluginUtils.closePopup();
+            };
 
-        if (result === "removeQRCode") 
-        {
-            document.getElementById('qr-code').style.display = 'none';
-        } 
-        else if (result === "qrCodeAuthorizationComplete") 
-        {
-            $('#popUp').remove();
-        } 
-        else
-        {
-            if(pageToLoad === MASPluginConstants.MASLoginPage && 
-            	document.getElementById('popUp') === null && document.getElementById('popup') === null)
-            {
-                MASPluginUtils.MASPopupUI(
-                	pageToLoad, 
-                	function() { 
-
-                		$('#popUp').remove(); 
-                	}, 
-                	function() {
-                		document.getElementById('qr-code').src = "data:image/jpeg;base64, " + result["qrCodeImageBase64"];
-
-                		var providers = result["providers"];
-                		if(typeof providers !== 'undefined' & !MASPluginUtils.isEmpty(providers)) {
-                            
-                            for(var i=0; i < providers.length; i++) {
-                                
-                                var p = providers[i];
-                                if(p !== 'qrcode') {
-                                    
-                                    if(document.getElementById('i'+p)) {
-                                        
-                                        document.getElementById('i'+p).src = "masui/img/"+p+"_enabled.png";
-                                        document.getElementById('l'+p).className = "enabled";
-                                          
-                                        if(p === 'salesforce')
-                                          document.getElementById('i'+p).style.backgroundColor = "#1798c1";
-                                    }
-                                }
-                            }
-                	    }
-                	}
-                );
+            let onLoadFunc = function(){
+                window.localStorage.removeItem("masCallbackResult")
+            };
+            MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
+            MASPluginUtils.MASPopupUI(MASPluginConstants.MASLoginPage,result,oncloseFunc,onLoadFunc);
+        }else if(requestType == "removeQRCode"){
+            let event = null;
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                event = new CustomEvent("errorEvent",{"detail":callbackJSON});
+            }else{
+                event = new CustomEvent(requestType);
+            }
+            document.body.dispatchEvent(event);
+        }else if(requestType == "qrCodeAuthorizationComplete"){
+            if(!MASPluginUtils.isEmpty(error)){
+                const callbackJSON = {"requestType":requestType,"error":error};
+                let errorEvent = new CustomEvent("errorEvent",{"detail":callbackJSON});
+                document.body.dispatchEvent(errorEvent);
+            }else{
+                MASPluginUtils.closePopup();
             }
         }
     },
@@ -91,50 +58,50 @@ var MASPluginCallbacks = {
 
     /**
      * Callback which is used to prompt for the OTP provided channels
-     * @param otpChannels available channels array that will be recieved from server
-     * Note: In case of android this function has to be called from Authentication Callback where OTP request with channels will come back.
+     * @param callbackResp user defined callback object containing the OTP Channels as defined by MAG Server.
      */
-    MASOTPChannelSelectCallback: function(otpChannels) 
-    {
-        MASPluginUtils.MASPopupUI(
-        	MASPluginConstants.MASOTPChannelsPage, 
-        	function() { $('#popUp').remove(); }, 
-        	function() {
-            
-            	if (otpChannels.length > 1) 
-            	{              
-                	for (i = 0; i < otpChannels.length; i++) 
-                	{                 
-                    	if (document.getElementById(otpChannels[i])) 
-                    	{
-                        	document.getElementById(otpChannels[i]).style.display = 'block';
-                    	}
-                	}
-            	}
-        	}
-        );
-    },	
+    MASOTPChannelSelectCallback: function(callbackResp) {
+        const error = callbackResp.error;
+        // TODO: How to handle error here, since the popup is still not open
+        if(!MASPluginUtils.isEmpty(error)){
+            console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
+            return;
+        }
+        const result = callbackResp.result;
+        let oncloseFunc = function(){
+            MASPluginUtils.closePopup();
+        };
+        let onLoadFunc = function() {
+            window.localStorage.removeItem("masCallbackResult")
+        }
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPChannelsPage,result,oncloseFunc,onLoadFunc);
+    },
 
 
     /**
      * Callback for the OTP Listener
-     * @param error message that is recieved from server for invalid attempt
-     * Note: This has to be called from android if otp is invalid.
+     * @param callbackResp user defined callback object containing the OTP failure error message. Called in case of invalid/expired OTP.
      */
-    MASOTPAuthenticationCallback: function(error) 
-    {
-        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage, 
-       	function() {
+    MASOTPAuthenticationCallback: function(callbackResp){
+        const error = callbackResp.error;
+        // TODO: How to handle error here, since the popup is still not open
+        if(!MASPluginUtils.isEmpty(error)){
+            console.log("Error in OTPChannelCallback:"+JSON.stringify(error));
+            return;
+        }
 
-            $('#popUp').remove();
-        }, 
-        function() {
+        const result = callbackResp.result;
 
-            if(error.errorMessage !== "Enter the OTP")
-                document.getElementById("CA-Title").style.color = "red";
-            document.getElementById("CA-Title").innerHTML = error.errorMessage;			
-        });
+        let oncloseFunc = function(){
+            MASPluginUtils.closePopup();
+        };
+
+        let onLoadFunc = function() {
+            window.localStorage.removeItem("masCallbackResult")
+        };
+        MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupOTPStyle);
+        MASPluginUtils.MASPopupUI(MASPluginConstants.MASOTPPage,result,oncloseFunc,onLoadFunc);
     }
 };
-
 module.exports = MASPluginCallbacks;
