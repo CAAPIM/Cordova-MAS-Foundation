@@ -11,6 +11,7 @@ The Cordova-MAS-Foundation framework has the following features:
 * One-Time Password (OTP)
 * Proximity Login (QR Code)
 * Social Login
+* SSL Pinning with certificate, public key, or public key hash
 
 *********************************************************
 
