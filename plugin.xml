@@ -141,8 +141,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
-        <framework src="com.ca:mas:1.6.10" />
-        <framework src="com.ca:masui:1.6.10" />
+        <framework src="com.ca:mas:1.7.00" />
+        <framework src="com.ca:masui:1.7.00" />
         
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
