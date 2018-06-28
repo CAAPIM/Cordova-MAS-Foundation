@@ -127,16 +127,18 @@
                         let requestType = result.requestType;
                         console.log(JSON.stringify(result));
                         if(requestType !== null && requestType === 'Login'){
-                            MAS.completeAuthentication(
-                                function () {
-                                    console.log("Login successful");
-                                }, function (error) {
-		                            let returnedError = "Internal Server Error";
-                                    if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
-			                            returnedError = JSON.stringify(error.errorMessage);
-                                    }
-		                            console.log("Error in Login::"+returnedError);
-                                }, "manu", "dost1234");
+                            $.mobile.changePage( "custom-login.html", { role: "dialog" } );
+
+                            // MAS.completeAuthentication(
+                            //     function () {
+                            //         console.log("Login successful");
+                            //     }, function (error) {
+		                    //         let returnedError = "Internal Server Error";
+                            //         if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+			                //             returnedError = JSON.stringify(error.errorMessage);
+                            //         }
+		                    //         console.log("Error in Login::"+returnedError);
+                            //     }, "manu", "dost1234");
                         // Or you can choose to cancel this request as below
                         // MAS.cancelAuthentication(function() {},function (){});
                         }

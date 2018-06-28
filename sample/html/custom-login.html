@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dialog demo</title>
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css">
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-core/www/MASPlugin.js"></script>
+    <script type="text/javascript">
+    
+    $("#login_click").bind("click", function(event, ui) {
+        var MAS = new MASPlugin.MAS();
+        MAS.completeAuthentication(
+                                function () {
+                                    console.log("Login successful");
+                                }, function (error) {
+		                            let returnedError = "Internal Server Error";
+                                    if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+			                            returnedError = JSON.stringify(error.errorMessage);
+                                    }
+		                            console.log("Error in Login::"+returnedError);
+                                }, "manu", "dost1234");
+                                
+                                $('#page1').dialog( "close" );
+    });
+
+    $("#cancel_click").bind("click", function(event, ui) {
+        
+        var MAS = new MASPlugin.MAS();
+        MAS.cancelAuthentication(function(){}, function(){});
+        $('#page1').dialog( "close" );
+    });
+
+    </script>
+</head>
+
+<body>
+    <div data-role="page" id="page1">
+        <div data-role="header">
+            <h1>Login</h1>
+        </div>
+        <div data-role="main" id="popupLogin" data-theme="a" class="ui-corner-all" data-dismissible="false" style="margin-top:10; margin-bottom:10;">
+            <form>
+                <div style="padding: 10px 20px;">
+                    <label for="un" class="ui-hidden-accessible">Username:</label>
+                    <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+                    <label for="pw" class="ui-hidden-accessible">Password:</label>
+                    <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+                    <button type="submit" id="login_click" data-theme="b">Login
+                    </button>
+                    <button type="submit" id="cancel_click" data-theme="e">Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div data-role="footer">
+            <h2></h2>
+        </div>
+    </div>
+
+</body>
+
+</html>
