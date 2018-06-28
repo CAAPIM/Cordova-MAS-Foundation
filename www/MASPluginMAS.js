@@ -32,6 +32,25 @@ var MASPluginMAS = function() {
         return successHandler("Initialization success !!");
     };
 
+    /**
+     * Enables the developer to set it's own Authentication Listener or callback handling
+     * mechanism, which overrides the one set by CA Mobile SDK. The developer needs to have
+     * the business login inside the authHandler function.
+     * @param {function} authHandler user defined authentication callback handling function
+     */
+    this.setAuthCallbackHandler = function(authHandler){
+        this.initialize(function(){},function(){});
+        MASPluginCallbacks.setCustomAuthHandler(authHandler);
+    };
+
+    /**
+     * Removes the authentication listener set by developer. This would fallback to
+     * default mechanism of Authentication callback handling by CA Mobile SDK.
+     */
+    this.removeAuthCallbackHandler = function(){
+        MASPluginCallbacks.removeCustomAuthHandler();
+    };
+
 
     /**
      * Sets the authentication UI handling page
