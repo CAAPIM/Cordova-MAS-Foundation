@@ -28,3 +28,4 @@ DerivedData
 # Android
 /.idea
 *.iml
+node_modules
