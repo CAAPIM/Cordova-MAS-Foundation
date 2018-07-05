@@ -141,7 +141,8 @@
 			                            returnedError = JSON.stringify(error.errorMessage);
                                     }
 		                            console.log("Error in Login::"+returnedError);
-                                }, "manu", "dost1234");
+									alert("LOGIN-ERROR:"+returnedError);
+                                }, "username", "password"); // Replace the username/password here with actual credentials
                         // Or you can choose to cancel this request as below
                         // MAS.cancelAuthentication(function() {},function (){});
                         }
