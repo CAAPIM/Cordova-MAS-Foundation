@@ -114,6 +114,55 @@
                  });
              });
 
+             $("#setAuthCallbackHandler").bind("click", function(event, ui) {
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MAS = new MASPlugin.MAS();
+
+
+                 MAS.setAuthCallbackHandler(
+                    function(result){
+                        let requestType = result.requestType;
+                        console.log(JSON.stringify(result));
+                        if(requestType !== null && requestType === 'Login'){
+
+                            // Uncomment this code for using custom-login.html
+                            // MASPluginUtils.setPopUpStyle(MASPluginConstants.MASPopupStyle.MASPopupLoginStyle);
+                            // MASPluginUtils.MASPopupUI("custom-login.html",null,function(){},function(){});
+
+                            MAS.completeAuthentication(
+                                function () {
+                                    console.log("Login successful");
+                                }, function (error) {
+		                            let returnedError = "Internal Server Error";
+                                    if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
+			                            returnedError = JSON.stringify(error.errorMessage);
+                                    }
+		                            console.log("Error in Login::"+returnedError);
+									alert("LOGIN-ERROR:"+returnedError);
+                                }, "username", "password"); // Replace the username/password here with actual credentials
+                        // Or you can choose to cancel this request as below
+                        // MAS.cancelAuthentication(function() {},function (){});
+                        }
+                    });
+                 thisElement.removeClass("success").removeClass("failure").addClass("success");
+                 displayResult(thisElement, "Custom Authentication Handler Registered");
+             });
+
+             $("#removeAuthCallbackHandler").bind("click", function(event, ui) {
+                 $(this).find("textarea.error").hide();
+                 var thisElement = $(this);
+                 var MAS = new MASPlugin.MAS();
+
+                 MAS.removeAuthCallbackHandler();
+
+                 thisElement.removeClass("success").removeClass("failure").addClass("success");
+                 displayResult(thisElement, "Custom Authentication Handler Removed");
+             });
+
+
              $("#useNativeMASUI").bind("click", function(event, ui) {
 
                  $(this).find("textarea.error").hide();
@@ -1235,6 +1284,12 @@
                     <li data-icon="false"><a href="#" id="init">MAS Init<textarea class='error'
                                                                                   style="display:none;"
                                                                                   readonly=""></textarea></a>
+                    </li>
+                    <li data-icon="false"><a href="#" id="setAuthCallbackHandler">MAS Set Custom AuthCallbackHandler
+                        <textarea class='error' style="display:none;" readonly=""></textarea></a>
+                    </li>
+                    <li data-icon="false"><a href="#" id="removeAuthCallbackHandler">MAS Remove Custom AuthCallbackHandler
+                        <textarea class='error' style="display:none;" readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="setGrantFlowPassword">MAS GrantFlow:
                         password<textarea class='error' style="display:none;"
