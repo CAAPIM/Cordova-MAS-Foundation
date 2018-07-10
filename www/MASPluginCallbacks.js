@@ -9,6 +9,14 @@ var MASPluginConstants = require("./MASPluginConstants"),
     MASPluginUtils = require("./MASPluginUtils");
 	
 var MASPluginCallbacks = {
+    customAuthHandler:null,
+
+    setCustomAuthHandler: function(authHandler){
+        this.customAuthHandler = authHandler;
+    },
+    removeCustomAuthHandler: function(){
+        this.customAuthHandler = null;
+    },
 
 
 	/** Callback where it will prompt for login Credentials.
@@ -26,6 +34,10 @@ var MASPluginCallbacks = {
             if(result.requestId !== 'undefined' && !MASPluginUtils.isEmpty(result.requestId)){
                 MASPluginConstants.MASLoginAuthRequestId = result.requestId;
             }
+            if(!MASPluginUtils.isEmpty(MASPluginCallbacks.customAuthHandler)){
+                MASPluginCallbacks.customAuthHandler(result);
+                return;
+            }
             let oncloseFunc = function(){
                 MASPluginUtils.closePopup();
             };
@@ -39,17 +51,33 @@ var MASPluginCallbacks = {
             let event = null;
             if(!MASPluginUtils.isEmpty(error)){
                 const callbackJSON = {"requestType":requestType,"error":error};
+                if(!MASPluginUtils.isEmpty(MASPluginCallbacks.customAuthHandler)){
+                    MASPluginCallbacks.customAuthHandler(callbackJSON);
+                    return;
+                }
                 event = new CustomEvent("errorEvent",{"detail":callbackJSON});
             }else{
+                if(!MASPluginUtils.isEmpty(MASPluginCallbacks.customAuthHandler)){
+                    MASPluginCallbacks.customAuthHandler(result);
+                    return;
+                }
                 event = new CustomEvent(requestType);
             }
             document.body.dispatchEvent(event);
         }else if(requestType == "qrCodeAuthorizationComplete"){
             if(!MASPluginUtils.isEmpty(error)){
                 const callbackJSON = {"requestType":requestType,"error":error};
+                if(!MASPluginUtils.isEmpty(MASPluginCallbacks.customAuthHandler)){
+                    MASPluginCallbacks.customAuthHandler(callbackJSON);
+                    return;
+                }
                 let errorEvent = new CustomEvent("errorEvent",{"detail":callbackJSON});
                 document.body.dispatchEvent(errorEvent);
             }else{
+                if(!MASPluginUtils.isEmpty(MASPluginCallbacks.customAuthHandler)){
+                    MASPluginCallbacks.customAuthHandler(result);
+                    return;
+                }
                 MASPluginUtils.closePopup();
             }
         }

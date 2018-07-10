@@ -62,6 +62,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>
     <asset src="sample/html/mas-enterpriseBrowser.html" target="masui/mas-enterpriseBrowser.html" />
+    <asset src="sample/html/custom-login.html" target="custom-login.html" />
     <asset src="sample/img" target="masui/img"/>
     <!-- iOS -->
     <platform name="ios" >
@@ -107,8 +108,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
-        <framework src="MASFoundation" type="podspec" spec="~> 1.7.00" />
-        <framework src="MASUI" type="podspec" spec="~> 1.7.00" />
+        <framework src="MASFoundation" type="podspec" spec="~> 1.7.10" />
+        <framework src="MASUI" type="podspec" spec="~> 1.7.10" />
         
 
     </platform>
@@ -141,8 +142,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
-        <framework src="com.ca:mas:1.7.00" />
-        <framework src="com.ca:masui:1.7.00" />
+        <framework src="com.ca:mas:1.7.10" />
+        <framework src="com.ca:masui:1.7.10" />
         
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />

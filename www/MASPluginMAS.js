@@ -32,6 +32,27 @@ var MASPluginMAS = function() {
         return successHandler("Initialization success !!");
     };
 
+    /**
+     * Enables the developer to set its own Authentication Listener or callback handling
+     * mechanism, which overrides the one set by CA Mobile Cordova Plugin. The developer needs to have
+     * the business logic such as auditing etc. inside the authHandler function. The developer must call
+     * MAS.completeAuthentication or MAS.cancelAuthentication API from inside this function in order to
+     * unblock the original API call.
+     * @param {function} authHandler user defined authentication callback handling function
+     */
+    this.setAuthCallbackHandler = function(authHandler){
+        this.initialize(function(){},function(){});
+        MASPluginCallbacks.setCustomAuthHandler(authHandler);
+    };
+
+    /**
+     * Removes the authentication listener set by developer. This would fallback to the
+     * default mechanism of Authentication being handled by CA Mobile Cordova Plugin.
+     */
+    this.removeAuthCallbackHandler = function(){
+        MASPluginCallbacks.removeCustomAuthHandler();
+    };
+
 
     /**
      * Sets the authentication UI handling page
