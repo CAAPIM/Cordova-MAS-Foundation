@@ -329,16 +329,26 @@
     // Generate the OTP
     //
     
-    CDVPluginResult *result;
+    __block CDVPluginResult *result;
     
     if (self.otpGenerationBlock) {
         
-        self.otpGenerationBlock(command.arguments[0], NO, nil);
+        self.otpGenerationBlock(command.arguments[0], NO, ^(BOOL completed, NSError * _Nullable error) {
+            if(error) {
+                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription]};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            else {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+                
+                [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        });
     }
-    
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
-    
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
     
     
