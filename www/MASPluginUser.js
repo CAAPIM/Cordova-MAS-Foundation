@@ -6,6 +6,8 @@
  *
  */
 
+import deprecated from 'deprecated-decorator';
+
  var MASPluginUser = function(masPluginUser) {
 
     ///------------------------------------------------------------------------------------------------------------------
@@ -161,7 +163,7 @@
     }
 
     /**
-     Logs off the user with force.
+     * Logs off the user with force.
      */
     this.logout = function(successHandler, errorHandler, force) {
         return Cordova.exec(function(result) {
@@ -171,14 +173,19 @@
     };
 
     /**
-     @deprecated from 1.8.00.
+     * Logs off the user.
+     * @deprecated [#1] Since version 1.8.00 [#2].
+     * [#3] In case you need a similar behaviour, use MASPluginUser.logout(succesHandler, errorHandler, false).
      */
-     this.logout = function(successHandler, errorHandler) {
+     this.logout = deprecated({
+        alternative: 'logout',
+        version: '1.8.0'
+    }, function(successHandler, errorHandler) {
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
             successHandler(result);            
         }, errorHandler, "MASPluginUser", "logoutUser", []);
-    };
+    });
 }
 
 ///------------------------------------------------------------------------------------------------------------------

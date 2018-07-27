@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/CAAPIM/Cordova-MAS-Foundation#readme",
   "dependencies": {
+    "deprecated-decorator": "^0.1.6",
     "filehound": "^1.16.2",
     "plist": "^3.0.1",
     "xcode": "^1.0.0"
