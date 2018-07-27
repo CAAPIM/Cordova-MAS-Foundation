@@ -167,7 +167,7 @@
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
             successHandler(result);            
-        }, errorHandler, "MASPluginUser", "logoutUser", [force]);
+        }, errorHandler, "MASPluginUser", "logoutUserForce", [force]);
     };
 
     /**
