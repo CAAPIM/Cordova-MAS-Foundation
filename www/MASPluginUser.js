@@ -6,8 +6,6 @@
  *
  */
 
-import deprecated from 'deprecated-decorator';
-
  var MASPluginUser = function(masPluginUser) {
 
     ///------------------------------------------------------------------------------------------------------------------
@@ -177,15 +175,15 @@ import deprecated from 'deprecated-decorator';
      * @deprecated [#1] Since version 1.8.00 [#2].
      * [#3] In case you need a similar behaviour, use MASPluginUser.logout(succesHandler, errorHandler, false).
      */
-     this.logout = deprecated({
-        alternative: 'logout',
-        version: '1.8.0'
-    }, function(successHandler, errorHandler) {
+     this.logout = function(successHandler, errorHandler) {
+        
+        console.warn('MASPluginUser.currentUser.logout(successHandler, errorHandler) is deprecated since version \'1.8.00\'.\n Use MASPluginUser.currentUser.logout(successHandler, errorHandler, force) instead.')
+        
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
             successHandler(result);            
         }, errorHandler, "MASPluginUser", "logoutUser", []);
-    });
+    };
 }
 
 ///------------------------------------------------------------------------------------------------------------------
