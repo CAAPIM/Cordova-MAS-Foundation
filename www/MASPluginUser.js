@@ -161,7 +161,17 @@
     }
 
     /**
-     Logs off the user.
+     Logs off the user with force.
+     */
+    this.logout = function(successHandler, errorHandler, force) {
+        return Cordova.exec(function(result) {
+            delete MASPluginUser.sharedCurrUser;
+            successHandler(result);            
+        }, errorHandler, "MASPluginUser", "logoutUser", [force]);
+    };
+
+    /**
+     @deprecated from 1.8.00.
      */
      this.logout = function(successHandler, errorHandler) {
         return Cordova.exec(function(result) {
