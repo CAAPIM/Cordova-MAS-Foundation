@@ -165,12 +165,9 @@
      * The behavior for different values of force would be<br>
      *  `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.<br>
      *  `false`: the SDK clears local tokens only if the logout call to the server is successful.<br>
-     *   If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.
+     *   If nothing passed then the default value used is `false` for iOS and `true` for Android. This is for backward compatibility with old logout signature.
      */
     this.logout = function(successHandler, errorHandler, force) {
-        if(force === 'undefined'){
-            force = false;
-        }
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
             successHandler(result);
