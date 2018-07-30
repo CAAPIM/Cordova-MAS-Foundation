@@ -1234,10 +1234,10 @@
                  var errorMessage = "";
                  if (typeof error === 'undefined' || typeof error.errorMessage === 'undefined') {
                      errorMessage = "Unknown error";
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail === 'undefined') {
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo === 'undefined') {
                      errorMessage = error.errorMessage;
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail !== 'undefined') {
-                     errorMessage = error.errorMessageDetail;
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo !== 'undefined') {
+                     errorMessage = error.errorInfo;
                  } else {
                      errorMessage = error.errorMessage;
                  }
@@ -1692,7 +1692,7 @@
                     <li data-icon="false">
                         <a href="#" id="userLogoutForce">
                             MASUser Logout With Force
-                            <select id="enableForceBool" name="enableForceBoolValue">
+                            <select id="enableForceBool" name="enableForceBool">
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
@@ -1700,10 +1700,10 @@
                                       readonly=""></textarea>
                         </a>
                     </li>
-                    <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error'
+                    <li data-icon="false"><a href="#" id="userLogout">MASUser logout[Deprecated]<textarea class='error'
                         style="display:none;"
                         readonly=""></textarea></a>
-</li>
+                    </li>
                 </ul>
             </li>
             
