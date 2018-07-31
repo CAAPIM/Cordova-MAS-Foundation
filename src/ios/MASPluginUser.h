@@ -154,13 +154,6 @@
  *
  *  @param command CDInvokedUrlCommand object
  */
-- (void)logoutUserForce:(CDVInvokedUrlCommand*)command;
-
-/**
- *  Logout the current user
- *
- *  @param command CDInvokedUrlCommand object
- */
 - (void)logoutUser:(CDVInvokedUrlCommand*)command;
 
 @end

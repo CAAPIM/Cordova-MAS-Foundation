@@ -725,46 +725,15 @@
     }
 }
 
-- (void)logoutUserForce:(CDVInvokedUrlCommand*)command
-{
-    __block CDVPluginResult *result;
-    
-    if ([MASUser currentUser])
-    {
-        [[MASUser currentUser] logout:[command.arguments objectAtIndex:0] completion:^(BOOL completed, NSError *error) {
-            if (error) {
-                
-                NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
-                                            @"errorMessage":[error localizedDescription],
-                                            @"errorInfo":[error userInfo]};
-                
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-                
-                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-            }
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Logoff user complete"];
-            
-            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = @{@"errorMessage":@"User has not been authenticated."};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
 - (void)logoutUser:(CDVInvokedUrlCommand*)command
 {
     __block CDVPluginResult *result;
+    BOOL force = ( [[command.arguments objectAtIndex:0] isKindOfClass:[NSNull class]] ||
+                   [[command.arguments objectAtIndex:0] isEqualToString:@"false"] ) ? NO : YES;
     
     if ([MASUser currentUser])
     {
-        [[MASUser currentUser] logoutWithCompletion:^(BOOL completed, NSError *error) {
+        [[MASUser currentUser] logout:force completion:^(BOOL completed, NSError *error) {
             if (error) {
                 
                 NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
