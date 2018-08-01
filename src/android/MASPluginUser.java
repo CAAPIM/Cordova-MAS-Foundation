@@ -575,7 +575,7 @@ public class MASPluginUser extends MASCordovaPlugin {
             callbackContext.success("User Already Logged off");
             return;
         }
-        boolean force = args.optBoolean(0, true);
+        boolean force = args.optBoolean(0, false);
 
         masUser.logout(force, new MASCallback<Void>() {
             @Override
