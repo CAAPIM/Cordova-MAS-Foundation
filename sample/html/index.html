@@ -886,6 +886,36 @@
                      });
              });
 
+             $("#userLogoutForce").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var force = thisElement.find("select[name='enableForceBool']").val();
+
+                 MASPluginUser.currentUser(function(currentUser) {
+                         currentUser.logout(function(result) {
+                                 thisElement.removeClass("success").removeClass("failure").addClass("success");
+                                 displayResult(thisElement, result);
+                             },
+                             function(error) {
+                                 thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                                 displayError(thisElement, error);
+                             }, force);
+                     },
+                     function(error) {
+                         if(error !== 'undefined' && error.errorMessage !== 'undefined' && error.errorMessage === 'No currently authenticated user.'){
+                            error.errorMessage = "Logoff user complete";
+                            thisElement.removeClass("success").removeClass("failure").addClass("success");
+                            displayError(thisElement, error);
+                         }else{
+                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                            displayError(thisElement, error);
+                         }
+                     });
+             });
+
              $("#userLogout").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -1204,10 +1234,10 @@
                  var errorMessage = "";
                  if (typeof error === 'undefined' || typeof error.errorMessage === 'undefined') {
                      errorMessage = "Unknown error";
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail === 'undefined') {
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo === 'undefined') {
                      errorMessage = error.errorMessage;
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail !== 'undefined') {
-                     errorMessage = error.errorMessageDetail;
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo !== 'undefined') {
+                     errorMessage = error.errorInfo;
                  } else {
                      errorMessage = error.errorMessage;
                  }
@@ -1656,10 +1686,27 @@
                     </li>
                 </ul>
             </li>
-            <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error'
-                                                                                      style="display:none;"
-                                                                                      readonly=""></textarea></a>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>MASUser logout</h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="userLogoutForce">
+                            MASUser Logout With Force
+                            <select id="enableForceBool" name="enableForceBool">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                            <textarea class='error' style="display:none;"
+                                      readonly=""></textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false"><a href="#" id="userLogout">MASUser logout[Deprecated]<textarea class='error'
+                        style="display:none;"
+                        readonly=""></textarea></a>
+                    </li>
+                </ul>
             </li>
+            
             <li data-icon="false"><a href="#" id="deregisterDevice">MASDevice deregister<textarea
                     class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="resetLocally">MASDevice resetLocally<textarea

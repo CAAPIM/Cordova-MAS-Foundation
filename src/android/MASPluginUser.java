@@ -52,7 +52,7 @@ public class MASPluginUser extends MASCordovaPlugin {
             if (action.equalsIgnoreCase("isAuthenticated")) {
                 isAuthenticated(callbackContext);
             } else if (action.equalsIgnoreCase("initializeBrowserBasedAuthentication")) {
-                initializeBrowserBasedAuthentication( callbackContext);
+                initializeBrowserBasedAuthentication(callbackContext);
             } else if (action.equalsIgnoreCase("isCurrentUser")) {
                 isCurrentUser(callbackContext);
             } else if (action.equalsIgnoreCase("getAccessToken")) {
@@ -82,8 +82,8 @@ public class MASPluginUser extends MASCordovaPlugin {
             } else if (action.equalsIgnoreCase("loginWithAuthCredentialsAuthCode")) {
                 loginWithAuthCredentialsAuthCode(args, callbackContext);
             } else if (action.equalsIgnoreCase("logoutUser")) {
-                logoutUser(callbackContext);
-            } else if (action.equalsIgnoreCase("requestUserInfo")) {
+                logoutUser(args,callbackContext);
+            }else if (action.equalsIgnoreCase("requestUserInfo")) {
                 requestUserInfo(callbackContext);
             } else if (action.equalsIgnoreCase("listAttributes")) {
                 listAttributes(callbackContext);
@@ -135,6 +135,7 @@ public class MASPluginUser extends MASCordovaPlugin {
         }
 
     }
+
     /**
      * Checks the boolean status if the user is current user
      */
@@ -564,15 +565,19 @@ public class MASPluginUser extends MASCordovaPlugin {
     }
 
     /**
-     * logs out the current logged in user
+     * logs out the current logged in user with provision to delete or retain local tokens
+     * If you specify the `true` value for `force`, the  SDK clears local tokens regardless if the logout call to the server is successful or not.
+     * If you specify the `false` value for `force`, the SDK clears local tokens only if the logout call to the server is successful.
      */
-    private void logoutUser(final CallbackContext callbackContext) {
+    private void logoutUser(final JSONArray args, final CallbackContext callbackContext) {
         MASUser masUser = MASUser.getCurrentUser();
         if (masUser == null) {
             callbackContext.success("User Already Logged off");
             return;
         }
-        masUser.logout(new MASCallback<Void>() {
+        boolean force = args.optBoolean(0, false);
+
+        masUser.logout(force, new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 String result = "Logoff user complete";
