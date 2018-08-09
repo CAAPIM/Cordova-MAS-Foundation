@@ -98,9 +98,9 @@ public class MASCordovaPlugin extends CordovaPlugin {
         JSONObject error = new JSONObject();
         try {
             error.put("errorCode", errorCode);
-            error.put("errorMessage", errorMessage);
+            error.put("errorMessage", errorMessage != null ? errorMessage : (throwable.getCause() != null ? throwable.getCause().getClass().getName() : null));
             StringWriter errors = new StringWriter();
-            if(throwable!=null) {
+            if (throwable != null) {
                 throwable.printStackTrace(new PrintWriter(errors));
             }
             error.put("errorInfo", rootCauseErrorMessage != null ? rootCauseErrorMessage : errors.toString());

@@ -155,6 +155,10 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 success(callbackContext, false);
             } else if (action.equalsIgnoreCase("signWithClaims")) {
                 signWithClaims(args, callbackContext);
+            } else if (action.equalsIgnoreCase("enableIdTokenValidation")) {
+                enableIdTokenValidation(args, callbackContext);
+            } else if (action.equalsIgnoreCase("isIdTokenValidationEnabled")) {
+                isIdTokenValidationEnabled(args, callbackContext);
             } else {
                 callbackContext.error("Invalid action");
                 return false;
@@ -856,14 +860,14 @@ public class MASPluginMAS extends MASCordovaPlugin {
 
                             }
 
-                            void sendRemoveQRCodeCallback(Throwable th){
+                            void sendRemoveQRCodeCallback(Throwable th) {
                                 JSONObject jsonObject = new JSONObject();
                                 JSONObject result = new JSONObject();
                                 try {
                                     jsonObject.put(NODE_RESULT, result);
                                     result.put(NODE_REQUEST_TYPE, ACTION_QRCODE_EXPIRED);
-                                    if(th!=null){
-                                        jsonObject.put(NODE_ERROR,getError(th));
+                                    if (th != null) {
+                                        jsonObject.put(NODE_ERROR, getError(th));
                                     }
                                 } catch (Exception ex) {
                                     try {
@@ -891,7 +895,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                         result.put(NODE_REQUEST_ID, requestId);
                         result.put(NODE_QRCODE_IMAGE, encodedImage);
                         result.put(NODE_PROVIDERS, providerIds);
-                        result.put(NODE_IDP,masAuthenticationProviders.getIdp());
+                        result.put(NODE_IDP, masAuthenticationProviders.getIdp());
                         jsonObject.put(NODE_RESULT, result);
                         qrcode.start();
                         success(AUTH_LISTENER_CALLBACK, jsonObject, true);
@@ -991,6 +995,36 @@ public class MASPluginMAS extends MASCordovaPlugin {
             }
             String signedJWT = privateKey != null ? MAS.sign(claims, privateKey) : MAS.sign(claims);
             success(callbackContext, signedJWT, false);
+        } catch (Throwable e) {
+            callbackContext.error(getError(e));
+            return;
+        }
+    }
+
+    /**
+     * Sets boolean indicator of enforcing id_token validation upon device registration/user authentication. id_token is being validated as part of authentication/registration process against known signing algorithm.
+     * Mobile SDK currently supports following algorithm(s):HS256
+     * Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.
+     * If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.
+     * By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.
+     */
+    private void enableIdTokenValidation(final JSONArray args, final CallbackContext callbackContext) {
+        boolean enableValidation = args.optBoolean(0, true);
+        try {
+            MAS.enableIdTokenValidation(enableValidation);
+            success(callbackContext, true, false);
+        } catch (Throwable e) {
+            callbackContext.error(getError(e));
+            return;
+        }
+    }
+
+    /**
+     * Value of the boolean indicator which indicate if the id_token validation is active or not.
+     */
+    private void isIdTokenValidationEnabled(final JSONArray args, final CallbackContext callbackContext) {
+        try {
+            success(callbackContext, MAS.isIdTokenValidationEnabled(), false);
         } catch (Throwable e) {
             callbackContext.error(getError(e));
             return;
