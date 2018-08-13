@@ -51,6 +51,8 @@ module.exports = function (context) {
                                     infoPlist.NSLocationAlwaysAndWhenInUseUsageDescription =
                                     'The application requires location services to connect to MAS backend services.';
 
+                                infoPlist.NSFaceIDUsageDescription = 'The application requires FaceId authentication.';
+
                                 fs.writeFileSync(file, plist.build(infoPlist));
 
                                 console.log('\n' + 'Successfully configured authorization for iOS location services.' + '\n');
