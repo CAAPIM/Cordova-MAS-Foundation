@@ -10,14 +10,13 @@
 ### Deprecated classes
 ```
 MASPlugin.MASUser.currentUser(function(currentUser) {
-	*currentUser.logout(successHandler, errorHandler);*
+    currentUser.logout(successHandler, errorHandler);
 },function(error) {});
 ```
-is now deprecated to support new feature. Please use
-```
+is now deprecated to support new feature. Please use -- 
 ```
 MASPlugin.MASUser.currentUser(function(currentUser) {
-	*currentUser.logout(successHandler, errorHandler,force);*
+	currentUser.logout(successHandler, errorHandler,force);
 },function(error) {});
 ```
 
