@@ -8,16 +8,18 @@
 - The Mobile SDK now supports offline logout. Use the new logout call to delete or keep credentials upon error. [US520142]
 
 ### Deprecated classes
-The old logout API which took zero arguments
 ```
 MASPlugin.MASUser.currentUser(function(currentUser) {
-	currentUser.logout(successHandler, errorHandler);
-},
-function(error) {
-	// No authenticated user present
-	// Handler error
-});
-```  
+	*currentUser.logout(successHandler, errorHandler);*
+},function(error) {});
+```
+is now deprecated to support new feature. Please use
+```
+```
+MASPlugin.MASUser.currentUser(function(currentUser) {
+	*currentUser.logout(successHandler, errorHandler,force);*
+},function(error) {});
+```
 
 ### Removed classes
 - None
