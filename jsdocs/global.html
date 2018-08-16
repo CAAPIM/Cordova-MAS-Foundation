@@ -3056,7 +3056,14 @@
 
 
 <div class="description">
-    Sets boolean indicator of enforcing id_token validation upon device registration/user authentication.id_token is being validated as part of authentication/registration process against known signing algorithm.<br>Mobile SDK currently supports following algorithm(s): - HS256<br>Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
+    Sets boolean indicator of enforcing id_token validation upon device registration/user authentication.
+id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
+Mobile SDK currently supports following algorithm(s): - HS256<br>
+
+Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
+If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
+
+By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
 </div>
 
 
@@ -5182,7 +5189,9 @@
 
 
 <div class="description">
-    Initializes the MAS plugin. This includes setting of the various listeners requiredfor authenticating the user while registration of the application with the Gatewayand accessing various protected API. Any further initialization related setting will go here
+    Initializes the MAS plugin. This includes setting of the various listeners required
+for authenticating the user while registration of the application with the Gateway
+and accessing various protected API. Any further initialization related setting will go here
 </div>
 
 
@@ -6153,7 +6162,13 @@
 
 
 <div class="description">
-    Gets boolean indicator of enforcing id_token validation upon device registration/user authentication.id_token is being validated as part of authentication/registration process against known signing algorithm.<br>Mobile SDK currently supports following algorithm(s): - HS256<br>Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
+    Gets boolean indicator of enforcing id_token validation upon device registration/user authentication.
+id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
+Mobile SDK currently supports following algorithm(s): - HS256<br>
+
+Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
+If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
+By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
 </div>
 
 
@@ -7186,7 +7201,10 @@
 
             
 
-            <td class="description last">The behavior for different values of force would be<br> `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.<br> `false`: the SDK clears local tokens only if the logout call to the server is successful.<br>  If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.</td>
+            <td class="description last">The behavior for different values of force would be<br>
+ `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.<br>
+ `false`: the SDK clears local tokens only if the logout call to the server is successful.<br>
+  If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.</td>
         </tr>
 
     
@@ -8019,7 +8037,8 @@
 
 
 <div class="description">
-    Removes the authentication listener set by developer. This would fallback to thedefault mechanism of Authentication being handled by CA Mobile Cordova Plugin.
+    Removes the authentication listener set by developer. This would fallback to the
+default mechanism of Authentication being handled by CA Mobile Cordova Plugin.
 </div>
 
 
@@ -8737,7 +8756,11 @@
 
 
 <div class="description">
-    Enables the developer to set its own Authentication Listener or callback handlingmechanism, which overrides the one set by CA Mobile Cordova Plugin. The developer needs to havethe business logic such as auditing etc. inside the authHandler function. The developer must callMAS.completeAuthentication or MAS.cancelAuthentication API from inside this function in order tounblock the original API call.
+    Enables the developer to set its own Authentication Listener or callback handling
+mechanism, which overrides the one set by CA Mobile Cordova Plugin. The developer needs to have
+the business logic such as auditing etc. inside the authHandler function. The developer must call
+MAS.completeAuthentication or MAS.cancelAuthentication API from inside this function in order to
+unblock the original API call.
 </div>
 
 
@@ -8970,7 +8993,8 @@
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.    "mas-login.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.
+    "mas-login.html" is the default page.</td>
         </tr>
 
     
@@ -9151,7 +9175,8 @@
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.    "mas-otpchannel.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.
+    "mas-otpchannel.html" is the default page.</td>
         </tr>
 
     
@@ -9332,7 +9357,8 @@
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.    "mas-otp.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.
+    "mas-otp.html" is the default page.</td>
         </tr>
 
     
@@ -11526,7 +11552,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Aug 09 2018 11:51:54 GMT+0530 (India Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Aug 16 2018 15:31:07 GMT+0530 (IST)
 </footer>
 
 <script> prettyPrint(); </script>
