@@ -1,3 +1,28 @@
+# Version 1.8.00
+
+### Bug fixes
+- The Response JSON in Cordova-Android fixed to return errorInfo node instead of errorMessageDetails.
+
+### New features
+- In previous releases, the Mobile SDK always enforced id_token validation during device registration and user authentication. This caused a "JWT invalid" failure if the id_token signing algorithm was not supported by the Mobile SDK. The Mobile SDK now provides the option to enable or disable id_token validation to handle unsupported id_token signing algorithms. [US532284]
+- The Mobile SDK now supports offline logout. Use the new logout call to delete or keep credentials upon error. [US520142]
+
+### Deprecated classes
+```
+MASPlugin.MASUser.currentUser(function(currentUser) {
+    currentUser.logout(successHandler, errorHandler);
+},function(error) {});
+```
+is now deprecated to support new feature. Please use -- 
+```
+MASPlugin.MASUser.currentUser(function(currentUser) {
+	currentUser.logout(successHandler, errorHandler,force);
+},function(error) {});
+```
+
+### Removed classes
+- None
+
 # Version 1.7.10
 
 ### Bug fixes

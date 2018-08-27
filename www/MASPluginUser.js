@@ -161,6 +161,8 @@
 
     /**
      * Logs off the user.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
      * @param {Boolean} force
      * The behavior for different values of force would be<br>
      *  `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.<br>

@@ -108,8 +108,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
-        <framework src="MASFoundation" type="podspec" spec="~> 1.7.10" />
-        <framework src="MASUI" type="podspec" spec="~> 1.7.10" />
+        <framework src="MASFoundation" type="podspec" spec="~> 1.8.00" />
+        <framework src="MASUI" type="podspec" spec="~> 1.8.00" />
         
 
     </platform>
@@ -142,8 +142,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
-        <framework src="com.ca:mas:1.7.10" />
-        <framework src="com.ca:masui:1.7.10" />
+        <framework src="com.ca:mas:1.8.00" />
+        <framework src="com.ca:masui:1.8.00" />
         
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
