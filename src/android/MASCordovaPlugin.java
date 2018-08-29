@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Created by trima09 on 27/01/2017.
  */
@@ -82,7 +85,7 @@ public class MASCordovaPlugin extends CordovaPlugin {
             } catch (Exception ignore) {
             }
             errorMessage = e.getResponse() != null ? e.getResponse().getResponseMessage() : e.getMessage();
-        }else if (throwable != null && throwable instanceof MASCordovaException) {
+        } else if (throwable != null && throwable instanceof MASCordovaException) {
             errorMessage = throwable.getMessage();
             if (throwable.getCause() != null) {
                 rootCauseErrorMessage = throwable.getCause().getMessage();
@@ -95,11 +98,14 @@ public class MASCordovaPlugin extends CordovaPlugin {
         JSONObject error = new JSONObject();
         try {
             error.put("errorCode", errorCode);
-            error.put("errorMessage", errorMessage);
-            error.put("errorMessageDetail", rootCauseErrorMessage != null ? rootCauseErrorMessage : errorMessage);
-        } catch (JSONException ignore) {
+            error.put("errorMessage", errorMessage != null ? errorMessage : (throwable.getCause() != null ? throwable.getCause().getClass().getName() : null));
+            StringWriter errors = new StringWriter();
+            if (throwable != null) {
+                throwable.printStackTrace(new PrintWriter(errors));
+            }
+            error.put("errorInfo", rootCauseErrorMessage != null ? rootCauseErrorMessage : errors.toString());
+        } catch (Throwable ignore) {
         }
-
         return error;
     }
 

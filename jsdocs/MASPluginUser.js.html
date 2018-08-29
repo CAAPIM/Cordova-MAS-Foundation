@@ -26,8 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
-/*
+            <pre class="prettyprint source linenums"><code>/*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -62,43 +61,43 @@
     /**
      *  The formatted name of the user
      *  @member {string}
-     */   
+     */
      this.formattedName = masPluginUser.formattedName;
 
     /**
      *  Lists of the email addresses of the user
      *  @member {array}
-     */  
+     */
      this.emailAddresses = masPluginUser.emailAddresses;
 
     /**
      *  Lists of the phone numbers of the user
      *  @member {array}
-     */    
+     */
      this.phoneNumbers = masPluginUser.phoneNumbers;
 
     /**
      *  Lists of the addresses of the user
      *  @member {array}
-     */ 
+     */
      this.addresses = masPluginUser.addresses;
 
      /**
      *  Returns the base64 string of the user's photo
      *  @member {string}
-     */ 
+     */
      this.photos = masPluginUser.photos;
 
      /**
      *  List of the groups the user is a part of
      *  @member {array}
-     */ 
+     */
      this.groups = masPluginUser.groups;
 
      /**
      *  Checks if the user is active
      *  @member {bool}
-     */ 
+     */
      this.active = masPluginUser.active;
 
      /**
@@ -150,54 +149,61 @@
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Current User - Lock/Unlock Session
     ///------------------------------------------------------------------------------------------------------------------
-    
+
     /**
-     *  Locks the current session 
+     *  Locks the current session
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.lockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "lockSession", []);
-    }
+    };
 
     /**
-     *  Unlocks the current session 
+     *  Unlocks the current session
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.unlockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSession", []);
-    }
+    };
 
     /**
-     *  Unlocks the current session with a message to the user 
+     *  Unlocks the current session with a message to the user
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      *  @param {string} message message to the user
      */
     this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSessionWithMessage", [message]);
-    }
+    };
 
     /**
-     *  Removes the session lock 
+     *  Removes the session lock
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.removeSessionLock = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "removeSessionLock", []);
-    }
+    };
 
     /**
-     Logs off the user.
+     * Logs off the user.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {Boolean} force
+     * The behavior for different values of force would be&lt;br>
+     *  `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.&lt;br>
+     *  `false`: the SDK clears local tokens only if the logout call to the server is successful.&lt;br>
+     *   If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.
      */
-     this.logout = function(successHandler, errorHandler) {
+    this.logout = function(successHandler, errorHandler, force) {
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
-            successHandler(result);            
-        }, errorHandler, "MASPluginUser", "logoutUser", []);
+            successHandler(result);
+        }, errorHandler, "MASPluginUser", "logoutUser", [force]);
     };
-}
+ }
 
 ///------------------------------------------------------------------------------------------------------------------
 /// @name Current User
@@ -214,7 +220,7 @@ MASPluginUser.sharedCurrUser;
  */
 
  MASPluginUser.currentUser = function(successHandler, errorHandler) {
- 
+
     Cordova.exec(function(masPluginUser) {
         if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
@@ -330,7 +336,7 @@ MASPluginUser.sharedCurrUser;
 /**
  Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
  *  @param {function} successHandler user defined success callback which gets called after successful login
- *  @param {function} errorHandler user defined error callback 
+ *  @param {function} errorHandler user defined error callback
  */
 MASPluginUser.initializeBrowserBasedAuthentication = function(successHandler, errorHandler) {
     return Cordova.exec(function(result) {
@@ -351,13 +357,13 @@ module.exports = MASPluginUser;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeAuthCallbackHandler">removeAuthCallbackHandler</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setAuthCallbackHandler">setAuthCallbackHandler</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enableIdTokenValidation">enableIdTokenValidation</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isIdTokenValidationEnabled">isIdTokenValidationEnabled</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeAuthCallbackHandler">removeAuthCallbackHandler</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setAuthCallbackHandler">setAuthCallbackHandler</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jul 06 2018 11:25:38 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Aug 27 2018 11:16:53 GMT+0530 (IST)
 </footer>
 
 <script> prettyPrint(); </script>

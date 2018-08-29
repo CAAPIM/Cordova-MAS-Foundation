@@ -1,3 +1,28 @@
+# Version 1.8.00
+
+### Bug fixes
+- The Response JSON in Cordova-Android fixed to return errorInfo node instead of errorMessageDetails.
+
+### New features
+- In previous releases, the Mobile SDK always enforced id_token validation during device registration and user authentication. This caused a "JWT invalid" failure if the id_token signing algorithm was not supported by the Mobile SDK. The Mobile SDK now provides the option to enable or disable id_token validation to handle unsupported id_token signing algorithms. [US532284]
+- The Mobile SDK now supports offline logout. Use the new logout call to delete or keep credentials upon error. [US520142]
+
+### Deprecated methods
+```
+MASPlugin.MASUser.currentUser(function(currentUser) {
+    currentUser.logout(successHandler, errorHandler);
+},function(error) {});
+```
+is now deprecated to support new feature. Please use -- 
+```
+MASPlugin.MASUser.currentUser(function(currentUser) {
+	currentUser.logout(successHandler, errorHandler,force);
+},function(error) {});
+```
+
+### Removed methods
+- None
+
 # Version 1.7.10
 
 ### Bug fixes
@@ -8,10 +33,10 @@
   - MAS.setAuthCallbackHandler(authHandler)
   - MAS.removeAuthCallbackHandler()
 
-### Deprecated classes
+### Deprecated methods
 - None
 
-### Removed classes
+### Removed methods
 - None
 
 # Version 1.7
@@ -24,10 +49,10 @@
 - Config file preference to specify the iOS deployment target.
 - CocoaPods integration with framework podspec for iOS 'MASFoundation' framework.
 
-### Deprecated classes
+### Deprecated methods
 - None
 
-### Removed classes
+### Removed methods
 - getAuthCredentialsType has been removed.
 
 # Version 1.6.10
@@ -38,7 +63,7 @@
 ### New features
 - None
 
-### Deprecated classes
+### Deprecated methods
 - None
 
 # Version 1.6
@@ -52,7 +77,7 @@
 - Sign claims with keys to generate JWT token.
 - Login with authorization credentials with username/password, JWT token and auth code.
 
-### Deprecated classes
+### Deprecated methods
 - None.
 
 # Version 1.5
@@ -65,7 +90,7 @@
 - Exposed API for loginWithIdToken in MASPluginUser.
 - Now available as npm package "cordova-plugin-mas-core".
 
-### Deprecated classes
+### Deprecated methods
 - None.
 
 # Version 1.4
@@ -83,7 +108,7 @@
 - Change in Javascript files and index to call different native Cordova Plugins as per the flow.[US298706]
 - Added Reference Documentation for Cordova APIs [US304202]
 
-### Deprecated classes
+### Deprecated methods
 - None.
 
 # Version 1.3.00

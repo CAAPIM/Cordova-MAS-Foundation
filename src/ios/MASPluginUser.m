@@ -725,14 +725,15 @@
     }
 }
 
-
 - (void)logoutUser:(CDVInvokedUrlCommand*)command
 {
     __block CDVPluginResult *result;
+    BOOL force = ( [[command.arguments objectAtIndex:0] isKindOfClass:[NSNull class]] ||
+                   [[command.arguments objectAtIndex:0] isEqualToString:@"false"] ) ? NO : YES;
     
     if ([MASUser currentUser])
     {
-        [[MASUser currentUser] logoutWithCompletion:^(BOOL completed, NSError *error) {
+        [[MASUser currentUser] logout:force completion:^(BOOL completed, NSError *error) {
             if (error) {
                 
                 NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],

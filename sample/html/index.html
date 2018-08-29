@@ -470,6 +470,41 @@
                      });
              });
 
+             $("#enableIdTokenValidation").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var enableValidation = thisElement.find("select[name='enableValidation']").val();
+                 var MAS = new MASPlugin.MAS();
+                 MAS.enableIdTokenValidation(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, enableValidation==='true' ? "ID_Token Validation Enabled" : "ID_Token Validation Disabled");
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },enableValidation);
+             });
+
+             $("#isIdTokenValidationEnabled").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MAS = new MASPlugin.MAS();
+                 MAS.isIdTokenValidationEnabled(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
              $("#userLogin").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -886,12 +921,13 @@
                      });
              });
 
-             $("#userLogout").bind("click", function(event, ui) {
+             $("#userLogoutForce").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
                  $(this).find("textarea.error").hide();
 
                  var thisElement = $(this);
+                 var force = thisElement.find("select[name='enableForceBool']").val();
 
                  MASPluginUser.currentUser(function(currentUser) {
                          currentUser.logout(function(result) {
@@ -901,7 +937,7 @@
                              function(error) {
                                  thisElement.removeClass("success").removeClass("failure").addClass("failure");
                                  displayError(thisElement, error);
-                             });
+                             }, force);
                      },
                      function(error) {
                          if(error !== 'undefined' && error.errorMessage !== 'undefined' && error.errorMessage === 'No currently authenticated user.'){
@@ -1204,10 +1240,10 @@
                  var errorMessage = "";
                  if (typeof error === 'undefined' || typeof error.errorMessage === 'undefined') {
                      errorMessage = "Unknown error";
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail === 'undefined') {
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo === 'undefined') {
                      errorMessage = error.errorMessage;
-                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail !== 'undefined') {
-                     errorMessage = error.errorMessageDetail;
+                 } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorInfo !== 'undefined') {
+                     errorMessage = error.errorInfo;
                  } else {
                      errorMessage = error.errorMessage;
                  }
@@ -1394,6 +1430,18 @@
                     </li>
                     <li data-icon="false"><a href="#" id="listAttributes">MASUser List All
                         Attributes<textarea class='error' style="display:none;"
+                                            readonly=""></textarea></a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="enableIdTokenValidation">Enable ID Token Validation
+                            <select id="enableValidation" name="enableValidation">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                            <textarea class='error' style="display:none;" readonly=""></textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false"><a href="#" id="isIdTokenValidationEnabled">Is ID Token Validation Enabled<textarea class='error' style="display:none;"
                                             readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and
@@ -1656,10 +1704,23 @@
                     </li>
                 </ul>
             </li>
-            <li data-icon="false"><a href="#" id="userLogout">MASUser logout<textarea class='error'
-                                                                                      style="display:none;"
-                                                                                      readonly=""></textarea></a>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>MASUser logout</h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="userLogoutForce">
+                            MASUser Logout With Force
+                            <select id="enableForceBool" name="enableForceBool">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                            <textarea class='error' style="display:none;"
+                                      readonly=""></textarea>
+                        </a>
+                    </li>
+                </ul>
             </li>
+            
             <li data-icon="false"><a href="#" id="deregisterDevice">MASDevice deregister<textarea
                     class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="resetLocally">MASDevice resetLocally<textarea

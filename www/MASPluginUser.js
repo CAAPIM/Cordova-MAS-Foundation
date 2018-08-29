@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -34,43 +33,43 @@
     /**
      *  The formatted name of the user
      *  @member {string}
-     */   
+     */
      this.formattedName = masPluginUser.formattedName;
 
     /**
      *  Lists of the email addresses of the user
      *  @member {array}
-     */  
+     */
      this.emailAddresses = masPluginUser.emailAddresses;
 
     /**
      *  Lists of the phone numbers of the user
      *  @member {array}
-     */    
+     */
      this.phoneNumbers = masPluginUser.phoneNumbers;
 
     /**
      *  Lists of the addresses of the user
      *  @member {array}
-     */ 
+     */
      this.addresses = masPluginUser.addresses;
 
      /**
      *  Returns the base64 string of the user's photo
      *  @member {string}
-     */ 
+     */
      this.photos = masPluginUser.photos;
 
      /**
      *  List of the groups the user is a part of
      *  @member {array}
-     */ 
+     */
      this.groups = masPluginUser.groups;
 
      /**
      *  Checks if the user is active
      *  @member {bool}
-     */ 
+     */
      this.active = masPluginUser.active;
 
      /**
@@ -122,54 +121,61 @@
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Current User - Lock/Unlock Session
     ///------------------------------------------------------------------------------------------------------------------
-    
+
     /**
-     *  Locks the current session 
+     *  Locks the current session
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.lockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "lockSession", []);
-    }
+    };
 
     /**
-     *  Unlocks the current session 
+     *  Unlocks the current session
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.unlockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSession", []);
-    }
+    };
 
     /**
-     *  Unlocks the current session with a message to the user 
+     *  Unlocks the current session with a message to the user
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      *  @param {string} message message to the user
      */
     this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSessionWithMessage", [message]);
-    }
+    };
 
     /**
-     *  Removes the session lock 
+     *  Removes the session lock
      *  @param {function} successHandler user defined success callback
      *  @param {function} errorHandler user defined error callback
      */
     this.removeSessionLock = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "removeSessionLock", []);
-    }
+    };
 
     /**
-     Logs off the user.
+     * Logs off the user.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {Boolean} force
+     * The behavior for different values of force would be<br>
+     *  `true`: the  SDK clears local tokens regardless if the logout call to the server is successful or not.<br>
+     *  `false`: the SDK clears local tokens only if the logout call to the server is successful.<br>
+     *   If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.
      */
-     this.logout = function(successHandler, errorHandler) {
+    this.logout = function(successHandler, errorHandler, force) {
         return Cordova.exec(function(result) {
             delete MASPluginUser.sharedCurrUser;
-            successHandler(result);            
-        }, errorHandler, "MASPluginUser", "logoutUser", []);
+            successHandler(result);
+        }, errorHandler, "MASPluginUser", "logoutUser", [force]);
     };
-}
+ }
 
 ///------------------------------------------------------------------------------------------------------------------
 /// @name Current User
@@ -186,7 +192,7 @@ MASPluginUser.sharedCurrUser;
  */
 
  MASPluginUser.currentUser = function(successHandler, errorHandler) {
- 
+
     Cordova.exec(function(masPluginUser) {
         if (typeof(MASPluginUser.sharedCurrUser === 'undefined')){
             MASPluginUser.sharedCurrUser = new MASPluginUser(masPluginUser);
@@ -302,7 +308,7 @@ MASPluginUser.sharedCurrUser;
 /**
  Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
  *  @param {function} successHandler user defined success callback which gets called after successful login
- *  @param {function} errorHandler user defined error callback 
+ *  @param {function} errorHandler user defined error callback
  */
 MASPluginUser.initializeBrowserBasedAuthentication = function(successHandler, errorHandler) {
     return Cordova.exec(function(result) {

@@ -194,6 +194,43 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+
+///--------------------------------------
+/// @name IdToken Validation
+///--------------------------------------
+
+# pragma mark - IdToken Validation
+
+- (void)enableIdTokenValidation:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    BOOL enableValidation = false;
+    if (command.arguments.count>0) {
+        
+        enableValidation = [[command.arguments objectAtIndex:0] isEqualToString:@"true"] ? YES : NO;
+    }
+
+    [MAS enableIdTokenValidation:enableValidation];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"IdToken Validation is set"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+- (void)isIdTokenValidationEnabled:(CDVInvokedUrlCommand*)command {
+    
+    CDVPluginResult *result;
+    
+    BOOL isIdTokenValidationEnabled = [MAS isIdTokenValidationEnabled];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isIdTokenValidationEnabled];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
     
     ///--------------------------------------
     /// @name Authentication Listeners

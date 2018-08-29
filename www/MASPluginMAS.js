@@ -548,6 +548,39 @@ var MASPluginMAS = function() {
         Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "signWithClaims", [claims, privateKey]);
     };
 
+    /**
+     * Sets boolean indicator of enforcing id_token validation upon device registration/user authentication.
+     * id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
+     * Mobile SDK currently supports following algorithm(s): - HS256<br>
+     *
+     * Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
+     * If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
+     *
+     * By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @param {Boolean} enableValidation BOOL value indicating whether id_token validation is enabled or not.
+     */
+    this.enableIdTokenValidation = function(successHandler,errorHandler,enableValidation){
+        Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableIdTokenValidation", [enableValidation]);
+    };
+
+    /**
+     * Gets boolean indicator of enforcing id_token validation upon device registration/user authentication.
+     * id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
+     * Mobile SDK currently supports following algorithm(s): - HS256<br>
+	 * 
+     * Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
+     * If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
+     * By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.<br>
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     * @return BOOL value of indicating whether id_token validation is enabled or not.
+     */
+    this.isIdTokenValidationEnabled = function(successHandler,errorHandler){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isIdTokenValidationEnabled",[]);
+    };
+
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility
     ///------------------------------------------------------------------------------------------------------------------
