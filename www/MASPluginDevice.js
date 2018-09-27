@@ -65,7 +65,32 @@ var MASPluginDevice = function() {
     this.resetLocally = function(successHandler, errorHandler) {
         
         return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "resetLocally", []);
-    };    
+    };
+
+	//TODO: JSDocs to be added
+    this.addAttribute = function(successHandler,errorHandler,attributeName,attributeValue){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "addAttribute", [attributeName,attributeValue]);
+    };
+
+    //TODO: JSDocs to be added
+    this.removeAttribute = function(successHandler,errorHandler,attributeName){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "removeAttribute", [attributeName]);
+    };
+
+    //TODO: JSDocs to be added
+    this.removeAllAttributes = function(successHandler,errorHandler){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "removeAllAttributes", []);
+    };
+
+    //TODO: JSDocs to be added
+    this.getAttribute = function(successHandler,errorHandler,attributeName){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getAttribute", [attributeName]);
+    };
+
+    //TODO: JSDocs to be added
+    this.getAttributes = function(successHandler,errorHandler){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getAttributes", []);
+    };
 }
 
 module.exports = MASPluginDevice;

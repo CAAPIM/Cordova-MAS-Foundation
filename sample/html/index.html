@@ -885,6 +885,104 @@
                      });
              });
 
+             // Add Attribute
+             $("#addAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='addAttrAttributeName']").val();
+                 var attrValue = $("input[name='addAttrAttributeValue']").val();
+
+                 MASDevice.addAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName,attrValue);
+             });
+
+             //Remove Attribute
+             $("#removeAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='removeAttrAttributeName']").val();
+
+                 MASDevice.removeAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName);
+             });
+
+             //Remove All Attributes
+             $("#removeAllAttributes").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+
+                 MASDevice.removeAllAttributes(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
+             //Get Attribute
+             $("#getAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='getAttrAttributeName']").val();
+                 MASDevice.getAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName);
+             });
+
+             //Get All Attributes
+             $("#getAttributes").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+
+                 MASDevice.getAttributes(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
              $("#isActive").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -1481,6 +1579,45 @@
                     <li data-icon="false"><a href="#" id="getCurrentDevice">MASDevice
                         getCurrentDevice<textarea class='error' style="display:none;"
                                                   readonly=""></textarea></a>
+                    </li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>MASDevice Metadata Management</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li data-icon="false">
+                                <a href="#" id="addAttribute">
+                                    Add Attribute
+                                    <input type="text" name="addAttrAttributeName" placeholder="Attribute Name"/>
+                                    <input type="text" name="addAttrAttributeValue" placeholder="Attribute Value"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="removeAttribute">
+                                    Remove an Attribute
+                                    <input type="text" name="removeAttrAttributeName" placeholder="Attribute Name"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="removeAllAttributes">
+                                    Remove all Attributes
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="getAttribute">
+                                    Get Attribute
+                                    <input type="text" name="getAttrAttributeName" placeholder="Attribute Name"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="getAttributes">
+                                    Get all Attributes
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
