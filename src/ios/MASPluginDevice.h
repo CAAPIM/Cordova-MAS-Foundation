@@ -67,6 +67,7 @@
 - (void)deregister:(CDVInvokedUrlCommand*)command;
 
 
+
 /**
  *  Reset local keychain storage
  *
@@ -74,6 +75,31 @@
  */
 - (void)resetLocally:(CDVInvokedUrlCommand*)command;
 
+
+
+///--------------------------------------
+/// @name Device Meta Data
+///--------------------------------------
+
+# pragma mark - Device Meta Data
+
+- (void)addAttribute:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)removeAttribute:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)removeAllAttributes:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)getAttribute:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)getAttributes:(CDVInvokedUrlCommand*)command;
 
 
 @end
