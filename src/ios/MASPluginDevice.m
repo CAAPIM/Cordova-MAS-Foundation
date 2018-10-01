@@ -182,24 +182,11 @@
     __block CDVPluginResult *result;
     
     NSString *attributeName = [command.arguments objectAtIndex:0];
-    if (!attributeName || [attributeName isEqualToString:@""]) {
-        
-        errorInfo = @{@"errorMessage":@"Invalid arguments - Please provide a valid attribute name."};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    attributeName = !attributeName ? @"" : attributeName;
     
     NSString *attributeValue = [command.arguments objectAtIndex:1];
-    if (!attributeValue || [attributeValue isEqualToString:@""]) {
-        
-        errorInfo = @{@"errorMessage":@"Invalid arguments - Please provide a valid attribute value."};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+    attributeValue = !attributeValue ? (NSString *)[NSNull null] : attributeValue;
     
     if ([MASDevice currentDevice]) {
         
@@ -242,14 +229,7 @@
     __block CDVPluginResult *result;
     
     NSString *attributeName = [command.arguments objectAtIndex:0];
-    if (!attributeName || [attributeName isEqualToString:@""]) {
-        
-        errorInfo = @{@"errorMessage":@"Invalid arguments - Please provide a valid attribute name."};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([MASDevice currentDevice]) {
         
@@ -328,14 +308,7 @@
     __block CDVPluginResult *result;
     
     NSString *attributeName = [command.arguments objectAtIndex:0];
-    if (!attributeName || [attributeName isEqualToString:@""]) {
-        
-        errorInfo = @{@"errorMessage":@"Invalid arguments - Please provide a valid attribute name."};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([MASDevice currentDevice]) {
         
