@@ -40,7 +40,7 @@
     }
     else {
         
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -63,7 +63,7 @@
     }
     else {
         
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -96,7 +96,7 @@
     }
     else {
         
-        NSDictionary *errorInfo = @{@"errorMessage":@"No device found"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
@@ -136,7 +136,7 @@
     }
     else {
         
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
         
@@ -160,12 +160,223 @@
     }
     else {
         
-        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not properly initialized"};
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
         
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
     }
     
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
+
+///--------------------------------------
+/// @name Device Meta Data
+///--------------------------------------
+
+# pragma mark - Device Meta Data
+
+- (void)addAttribute:(CDVInvokedUrlCommand*)command {
+ 
+    __block NSDictionary *errorInfo;
+    __block CDVPluginResult *result;
+    
+    NSString *attributeName = [command.arguments objectAtIndex:0];
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    attributeName = !attributeName ? @"" : attributeName;
+    
+    NSString *attributeValue = [command.arguments objectAtIndex:1];
+    attributeValue = !attributeValue ? (NSString *)[NSNull null] : attributeValue;
+    
+    if ([MASDevice currentDevice]) {
+        
+        [[MASDevice currentDevice] addAttribute:attributeName
+                                        value:attributeValue
+                                     completion:
+         ^(id  _Nullable object, NSError * _Nullable error) {
+            
+             if (error) {
+                 
+                 errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:(NSDictionary *)object];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
+
+
+- (void)removeAttribute:(CDVInvokedUrlCommand*)command {
+    
+    __block NSDictionary *errorInfo;
+    __block CDVPluginResult *result;
+    
+    NSString *attributeName = [command.arguments objectAtIndex:0];
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([MASDevice currentDevice]) {
+        
+        [[MASDevice currentDevice] removeAttribute:attributeName
+                                        completion:
+         ^(BOOL completed, NSError * _Nullable error) {
+            
+             if (error) {
+                 
+                 errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:completed];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else {
+        
+        errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
+
+
+- (void)removeAllAttributes:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    if ([MASDevice currentDevice]) {
+        
+        [[MASDevice currentDevice] removeAllAttributes:
+         ^(BOOL completed, NSError * _Nullable error) {
+            
+             if (error) {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:completed];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else {
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
+
+
+- (void)getAttribute:(CDVInvokedUrlCommand*)command {
+ 
+    __block NSDictionary *errorInfo;
+    __block CDVPluginResult *result;
+    
+    NSString *attributeName = [command.arguments objectAtIndex:0];
+    attributeName = [attributeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([MASDevice currentDevice]) {
+        
+        [[MASDevice currentDevice] getAttribute:attributeName
+                                     completion:
+         ^(id  _Nullable object, NSError * _Nullable error) {
+            
+             if (error) {
+                 
+                 errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:(NSDictionary *)object];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else {
+    
+        errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
+    
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
+
+
+- (void)getAttributes:(CDVInvokedUrlCommand*)command {
+    
+    __block CDVPluginResult *result;
+    
+    if ([MASDevice currentDevice]) {
+        
+        [[MASDevice currentDevice] getAttributes:
+         ^(id  _Nullable object, NSError * _Nullable error) {
+            
+             if (error) {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode": [NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                 
+                 return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:(NSDictionary *)object];
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else {
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"SDK has not been properly initialized"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 

@@ -65,7 +65,56 @@ var MASPluginDevice = function() {
     this.resetLocally = function(successHandler, errorHandler) {
         
         return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "resetLocally", []);
-    };    
+    };
+
+	/**
+    * Create or update a new attribute for the current device. The response is SUCCESS if attribute added successfully, else an error specifying the reason.
+    * @param {function} successHandler user defined success callback
+    * @param {function} errorHandler user defined error callback
+    * @param {string} attributeName Key of the attribute to be associated with the device. Key should not be null or empty.
+    * @param {string} attributeValue Value of the attribute to be associated with the device.
+    */
+    this.addAttribute = function(successHandler,errorHandler,attributeName,attributeValue){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "addAttribute", [attributeName,attributeValue]);
+    };
+
+	/**
+    * Remove attribute by name, succeed even if device attribute does not exists. The response is SUCCESS if attribute removed successfully, else an error specifying the reason.
+    * @param {function} successHandler user defined success callback
+    * @param {function} errorHandler user defined error callback
+    * @param {string} attributeName Key of the attribute to be associated with the device. Key should not be null or empty.
+    */
+    this.removeAttribute = function(successHandler,errorHandler,attributeName){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "removeAttribute", [attributeName]);
+    };
+
+	/**
+    * Remove all attributes for the current device. The response is SUCCESS if all attributes removed successfully, else an error specifying the reason.
+    * @param {function} successHandler user defined success callback
+    * @param {function} errorHandler user defined error callback
+    */
+    this.removeAllAttributes = function(successHandler,errorHandler){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "removeAllAttributes", []);
+    };
+
+	/**
+    * Get attribute by name, return empty JSONObject if no attribute is found.<br> Sample: For a key=k1, if exists the response will be <br> {"k1":"v1"}
+    * @param {function} successHandler user defined success callback
+    * @param {function} errorHandler user defined error callback
+    * @param {string} attributeName Key of the attribute to be associated with the device. Key should not be null or empty.
+    */
+    this.getAttribute = function(successHandler,errorHandler,attributeName){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getAttribute", [attributeName]);
+    };
+
+	/**
+    * Get all attributes for the device, return empty JSONArray if no attributes found.<br> Sample: if multiple attribute pair exists then the response will be <br> [{"k1":"v1"},{"k2":"v2"}]
+    * @param {function} successHandler user defined success callback
+    * @param {function} errorHandler user defined error callback
+    */
+    this.getAttributes = function(successHandler,errorHandler){
+        return Cordova.exec(successHandler, errorHandler, "MASPluginDevice", "getAttributes", []);
+    };
 }
 
 module.exports = MASPluginDevice;
