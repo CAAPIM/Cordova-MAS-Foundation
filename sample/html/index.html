@@ -1494,6 +1494,24 @@
                                                                         style="display:none;"
                                                                         readonly=""></textarea></a>
                     </li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>JWKS Settings</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li data-icon="false">
+                                <a href="#" id="enableJwksPreload">
+                                    MAS enable JWKS
+                                    <select id="enableJwksPreloadBool" name="enableJwksPreloadBoolValue">
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <textarea class='error' style="display:none;"
+                                              readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false"><a href="#" id="isJwksPreloadEnabled">MAS isJwksPreloadEnabled <textarea
+                                    class='error' style="display:none;" readonly=""></textarea></a></li>
+                        </ul>
+                    </li>
                     <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error'
                                                                                     style="display:none;"
                                                                                     readonly=""></textarea></a>
@@ -1876,24 +1894,6 @@
                         </a>
                     </li>
                     <li data-icon="false"><a href="#" id="isPKCEEnabled">MAS isPKCEEnabled <textarea
-                            class='error' style="display:none;" readonly=""></textarea></a></li>
-                </ul>
-            </li>
-            <li data-role="collapsible" data-iconpos="right" data-inset="false">
-                <h2>JWKS Settings</h2>
-                <ul data-role="listview" data-theme="b">
-                    <li data-icon="false">
-                        <a href="#" id="enableJwksPreload">
-                            MAS enable JWKS enableJwksPreload
-                            <select id="enableJwksPreloadBool" name="enableJwksPreloadBoolValue">
-                                <option value="true">True</option>
-                                <option value="false">False</option>
-                            </select>
-                            <textarea class='error' style="display:none;"
-                                      readonly=""></textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false"><a href="#" id="isJwksPreloadEnabled">MAS isJwksPreloadEnabled <textarea
                             class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
