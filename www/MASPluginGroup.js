@@ -6,53 +6,15 @@
  */
 
 var MASPluginGroup = function() {
-
-
-	///------------------------------------------------------------------------------------------------------------------
-	/// @name Properties
-	///------------------------------------------------------------------------------------------------------------------
-
-	/**
-	*	The name of the group
-	*	@member {string}
-	*/
 	this.groupName;
-
-	/**
-	*	The owner of the group
-	*	@member {string}
-	*/
 	this.owner;
-
-	/**
-	*	Lists the members of the group
-	*	@member {array}
-	*/
 	this.members;
 
-
-	///------------------------------------------------------------------------------------------------------------------
-	/// @name Lifecycle
-	///------------------------------------------------------------------------------------------------------------------
-
-	/**
-	*	Creates a new group with the specified information
-	* 	@param {function} successHandler user defined success callback
-	* 	@param {function} errorHandler user defined error callback
-	* 	@param {dictionary} info
-	*/
 	this.initWithInfo = function(successHandler, errorHandler, info) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginGroup", "initWithInfo", [info]);
 	};
 
-	/**
-	*	Creates a new group
-	* 	@param {function} successHandler user defined success callback
-	* 	@param {function} errorHandler user defined error callback
-	*/
 	this.newGroup = function(successHandler, errorHandler) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginGroup", "newGroup", []);
 	};
 }

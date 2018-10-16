@@ -885,6 +885,104 @@
                      });
              });
 
+             // Add Attribute
+             $("#addAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='addAttrAttributeName']").val();
+                 var attrValue = $("input[name='addAttrAttributeValue']").val();
+
+                 MASDevice.addAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName,attrValue);
+             });
+
+             //Remove Attribute
+             $("#removeAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='removeAttrAttributeName']").val();
+
+                 MASDevice.removeAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName);
+             });
+
+             //Remove All Attributes
+             $("#removeAllAttributes").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+
+                 MASDevice.removeAllAttributes(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
+             //Get Attribute
+             $("#getAttribute").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+                 var attrName = $("input[name='getAttrAttributeName']").val();
+                 MASDevice.getAttribute(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     },attrName);
+             });
+
+             //Get All Attributes
+             $("#getAttributes").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MASDevice = new MASPlugin.MASDevice();
+
+                 MASDevice.getAttributes(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
              $("#isActive").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -1446,17 +1544,17 @@
                     </li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and
                         password <input type="text" name="userLoginUsername"
-                                        placeholder="username"/><input type="text"
+                                        placeholder="userLoginUsername:username"/><input type="text"
                                                                        name="userLoginPassword"
-                                                                       placeholder="password"/><textarea
+                                                                       placeholder="userLoginUsername:password"/><textarea
                                 class='error' style="display:none;" readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="userLoginAuthCred">MASUserAuthCredentials
                         login with username and password <input type="text"
                                                                 name="userLoginUsernameAuthCred"
-                                                                placeholder="username"/><input
+                                                                placeholder="userLoginUsernameAuthCred:username"/><input
                                 type="text" name="userLoginPasswordAuthCred"
-                                placeholder="password"/><textarea class='error'
+                                placeholder="userLoginUsernameAuthCred:password"/><textarea class='error'
                                                                   style="display:none;"
                                                                   readonly=""></textarea></a>
                     </li>
@@ -1482,6 +1580,45 @@
                         getCurrentDevice<textarea class='error' style="display:none;"
                                                   readonly=""></textarea></a>
                     </li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>MASDevice Metadata Management</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li data-icon="false">
+                                <a href="#" id="addAttribute">
+                                    Add Attribute
+                                    <input type="text" name="addAttrAttributeName" placeholder="addAttribute:Attribute Name"/>
+                                    <input type="text" name="addAttrAttributeValue" placeholder="addAttribute:Attribute Value"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="removeAttribute">
+                                    Remove an Attribute
+                                    <input type="text" name="removeAttrAttributeName" placeholder="removeAttribute:Attribute Name"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="removeAllAttributes">
+                                    Remove all Attributes
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="getAttribute">
+                                    Get Attribute
+                                    <input type="text" name="getAttrAttributeName" placeholder="getAttribute:Attribute Name"/>
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false">
+                                <a href="#" id="getAttributes">
+                                    Get all Attributes
+                                    <textarea class='error' style="display:none;"  readonly=""></textarea>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1497,12 +1634,6 @@
                     </li>
                 </ul>
             </li>
-            <!--
-               <li data-icon="false"><a href="#" id="getApplicationName">MASApplication Name<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-               <li data-icon="false"><a href="#" id="getApplicationIconUrl">MASApplication IconUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-               <li data-icon="false"><a href="#" id="getApplicationAuthUrl">MASApplication AuthUrl<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-               <li data-icon="false"><a href="#" id="getApplicationNativeUri">MASApplication NativeUri<textarea class='error' style="display:none;" readonly=""></textarea></a></li>
-               <li data-icon="false"><a href="#" id="getApplicationCustom">MASApplication Custom<textarea class='error' style="display:none;" readonly=""></textarea></a></li> -->
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>MAS CRUD Operations</h2>
                 <ul data-role="listview" data-theme="b">
@@ -1531,7 +1662,7 @@
                     <li data-icon="false">
                         <a href="#" id="getCRUD">
                             MAS get
-                            <input type="text" name="path" placeholder="API path"/>
+                            <input type="text" name="path" placeholder="MASGet:API path"/>
                             <label for="requestTypeGet">Request Type:</label>
                             <select id="requestTypeGet" name="requestType">
                                 <option value="json">JSON</option>
@@ -1549,8 +1680,8 @@
                                 <option value="xml">XML</option>
                             </select>
                             <input type="text" name="parameter"
-                                   placeholder="Parameter in JSON format"/>
-                            <input type="text" name="header" placeholder="Header in JSON format"/>
+                                   placeholder="MASGet:Parameter in JSON format"/>
+                            <input type="text" name="header" placeholder="MASGet:Header in JSON format"/>
                             <label for="isPublicGet">is Public:</label>
                             <select id="isPublicGet" name="isPublic">
                                 <option value="false">False</option>
@@ -1562,7 +1693,7 @@
                     <li data-icon="false">
                         <a href="#" id="putCRUD">
                             MAS put
-                            <input type="text" name="path" placeholder="API path"/>
+                            <input type="text" name="path" placeholder="MASPut:API path"/>
                             <label for="requestTypePut">Request Type:</label>
                             <select id="requestTypePut" name="requestType">
                                 <option value="json">JSON</option>
@@ -1580,8 +1711,8 @@
                                 <option value="xml">XML</option>
                             </select>
                             <input type="text" name="parameter"
-                                   placeholder="Parameter in JSON format"/>
-                            <input type="text" name="header" placeholder="Header in JSON format"/>
+                                   placeholder="MASPut:Parameter in JSON format"/>
+                            <input type="text" name="header" placeholder="MASPut:Header in JSON format"/>
                             <label for="isPublicPut">is Public:</label>
                             <select id="isPublicPut" name="isPublic">
                                 <option value="false">False</option>
@@ -1593,7 +1724,7 @@
                     <li data-icon="false">
                         <a href="#" id="postCRUD">
                             MAS post
-                            <input type="text" name="path" placeholder="API path"/>
+                            <input type="text" name="path" placeholder="MASPost:API path"/>
                             <label for="requestTypePost">Request Type:</label>
                             <select id="requestTypePost" name="requestType">
                                 <option value="json">JSON</option>
@@ -1611,8 +1742,8 @@
                                 <option value="xml">XML</option>
                             </select>
                             <input type="text" name="parameter"
-                                   placeholder="Parameter in JSON format"/>
-                            <input type="text" name="header" placeholder="Header in JSON format"/>
+                                   placeholder="MASPost:Parameter in JSON format"/>
+                            <input type="text" name="header" placeholder="MASPost:Header in JSON format"/>
                             <label for="isPublicPost">is Public:</label>
                             <select id="isPublicPost" name="isPublic">
                                 <option value="false">False</option>
@@ -1624,7 +1755,7 @@
                     <li data-icon="false">
                         <a href="#" id="deleteCRUD">
                             MAS delete
-                            <input type="text" name="path" placeholder="API path"/>
+                            <input type="text" name="path" placeholder="MASDelete:API path"/>
                             <label for="requestTypeD">Request Type:</label>
                             <select id="requestTypeD" name="requestType">
                                 <option value="json">JSON</option>
@@ -1642,8 +1773,8 @@
                                 <option value="xml">XML</option>
                             </select>
                             <input type="text" name="parameter"
-                                   placeholder="Parameter in JSON format"/>
-                            <input type="text" name="header" placeholder="Header in JSON format"/>
+                                   placeholder="MASDelete:Parameter in JSON format"/>
+                            <input type="text" name="header" placeholder="MASDelete:Header in JSON format"/>
                             <label for="isPublicDelete">is Public:</label>
                             <select id="isPublicDelete" name="isPublic">
                                 <option value="false">False</option>
