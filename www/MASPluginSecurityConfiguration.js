@@ -8,7 +8,7 @@
 /**
 * @class MASPluginSecurityConfiguration
 * @hideconstructor
-* @classdesc A class which can be used to set MAS Security Configuration for a server based on the trust settings.
+* @classdesc A class to set MAS Security Configuration for a server based on the trust settings.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>MASPluginSecurityConfiguration Constructor</th></tr>
 *	<tr><td><i>var MASSecurityConfiguration = new MASPlugin.MASSecurityConfiguration();</td></tr>
@@ -23,7 +23,7 @@ var MASPluginSecurityConfiguration = function(){
 	    trustPublicPKI : false
 	},
 	/**
-	* Setter for host of the server you need to connect
+	* Set the host of the server that you want to connect
 	* @memberOf MASPluginSecurityConfiguration
 	* @function setHost
 	* @instance
@@ -33,7 +33,7 @@ var MASPluginSecurityConfiguration = function(){
 		this.json.host = pHost;
 	},
 	/**
-	* Setter for public/private scope of the server
+	* Sets the public/private scope of the server.
 	* @memberOf MASPluginSecurityConfiguration
 	* @function setPublic
 	* @instance
@@ -43,7 +43,7 @@ var MASPluginSecurityConfiguration = function(){
 		this.json.isPublic = pPublic;
 	},
 	/**
-	* Setter for adding certificate of the host server
+	* Set the certificate of the host server
 	* @memberOf MASPluginSecurityConfiguration
 	* @function addCertificate
 	* @instance
@@ -53,7 +53,7 @@ var MASPluginSecurityConfiguration = function(){
 		this.json.certificates.push(certificate);
 	},
 	/**
-	* Setter for adding public keys of the host server
+	* Set the public keys of the host server
 	* @function addPublicKeyHash
 	* @instance
 	* @memberOf MASPluginSecurityConfiguration
@@ -63,7 +63,7 @@ var MASPluginSecurityConfiguration = function(){
     		this.json.publicKeyHashes.push(publicKeyHash);
     },
 	/**
-	* Setter for determining whether to trust Public PKI for the host server.
+	* Determines whether to trust Public PKI for the host server.
 	* @memberOf MASPluginSecurityConfiguration
 	* @function setTrustPublicPKI
 	* @instance
@@ -73,7 +73,7 @@ var MASPluginSecurityConfiguration = function(){
         this.json.trustPublicPKI = pTrustPublicPKI;
     },
 	/**
-	* Getter for fetching the final MASSecurityConfiguration as a JSON object
+	* Gets the final MASSecurityConfiguration as a JSON object
 	* @function getSecurityConfiguration
 	* @instance
 	* @memberOf MASPluginSecurityConfiguration

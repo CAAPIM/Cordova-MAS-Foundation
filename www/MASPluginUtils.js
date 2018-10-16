@@ -10,7 +10,7 @@ var MASPluginConstants = require("./MASPluginConstants"),
 /**
 * @class MASPluginUtils
 * @hideconstructor
-* @classdesc A static utility class which enables the developers (and internal plugin classes) to validate object sanctity, allows for setting popup styles, launch a HTML page and close it.
+* @classdesc A static utility class that enables the developers (and internal plugin classes) to validate object sanctity, allows setting of popup styles, launch a HTML page and close it.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>Sample API usage</th></tr>
 *	<tr><td><i>var isObjectAlive = MASPluginUtils.isEmpty(obj);</i></td></tr>
@@ -63,7 +63,7 @@ var MASPluginUtils = {
     },
 
 	/**
-	* Utility Method to set the popup style of the UI which will be loaded by the MAS Plugin in case of Authentication/OTP-Channel Selection/OTP verification etc.
+	* Utility method to set the popup style of the UI that the MAS PLugin loads in case of Authentication/OTP-Channel Selection/OTP verification etc.
 	* @memberOf MASPluginUtils
 	* @param {string} style The style string. See {@link MASPopupStyle}
 	*/
@@ -72,7 +72,7 @@ var MASPluginUtils = {
     },
 
 	/**
-	* Utility Method to get the popup style for a UI.
+	* Utility method to get the popup style for a UI.
 	* @memberOf MASPluginUtils
 	* @returns {string} The popup style. See {@link MASPopupStyle}
 	*/
@@ -125,8 +125,8 @@ var MASPluginUtils = {
 	* @memberOf MASPluginUtils
 	* @param {string} url path/name to the local HTML page
 	* @param {object} result An object which the native Mobile SDK returns, loaded with data related to Authentication or OTP details.
-	* @param {function} popupafterclose The user defined function to be called after the popup closes.Any cleaning to be done post closure.
-	* @param {function} onload The user defined function which would be called when the popup UI loads. Any initialization can be done here.
+	* @param {function} popupafterclose A user defined function that would be called after the popup closes.Any cleaning to be done post closure.
+	* @param {function} onload A user defined function that would be called when the popup UI loads. Any initialization can be done here.
 	*/
     MASPopupUI: function(url, result, popupafterclose, onload) {
         if(!this.isEmpty(result)){
@@ -204,7 +204,7 @@ var MASPluginUtils = {
     },
 
     /**
-	* Utility Method to close the popup UI element. Can be called by developer for closing the UI which is on top of the stack.
+	* Utility method to close the popup UI element. Developer can use this method to close the UI which is on top of the stack.
 	* @memberOf MASPluginUtils
 	*/
     closePopup: function() {

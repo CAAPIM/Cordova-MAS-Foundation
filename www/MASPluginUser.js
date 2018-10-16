@@ -7,7 +7,7 @@
 /**
 * @class MASPluginUser
 * @hideconstructor
-* @classdesc The main class representing the User lifecycle management like login,logout etc.
+* @classdesc The main class representing the User Lifecycle Management like login,logout etc.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>MASUser Singleton instance</th></tr>
 *	<tr><td><i> MASPlugin.MASUser.currentUser(successHandler(theUser),errorHandler(error));</i>//theUser is the singleton here</td></tr>
@@ -47,7 +47,7 @@
      this.formattedName = masPluginUser.formattedName;
 
     /**
-     * Lists of the email addresses of the user
+     * List of the email addresses of the user
 	 * @memberOf MASPluginUser
      * @member {array} emailAddresses
 	 * @instance
@@ -55,7 +55,7 @@
      this.emailAddresses = masPluginUser.emailAddresses;
 
     /**
-     * Lists of the phone numbers of the user
+     * List of the phone numbers of the user
 	 * @memberOf MASPluginUser
      * @member {array} phoneNumbers
 	 * @instance
@@ -63,7 +63,7 @@
      this.phoneNumbers = masPluginUser.phoneNumbers;
 
     /**
-     * Lists of the addresses of the user
+     * List of the addresses of the user
 	 * @memberOf MASPluginUser
      * @member {array} addresses
 	 * @instance
@@ -99,8 +99,8 @@
 	 * @memberOf MASPluginUser
 	 * @function isCurrentUser
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
      this.isCurrentUser = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isCurrentUser", []);
@@ -111,20 +111,20 @@
 	 * @memberOf MASPluginUser
 	 * @function isAuthenticated
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
      this.isAuthenticated = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isAuthenticated", []);
      };
 
     /**
-     * String accessToken value of the Current logged in user.
+     * String accessToken value of the current logged in user.
 	 * @memberOf MASPluginUser
 	 * @function getAccessToken
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
      this.getAccessToken = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "getAccessToken", []);
@@ -135,8 +135,8 @@
 	 * @memberOf MASPluginUser
 	 * @function listAttributes
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
      this.listAttributes = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "listAttributes", []);
@@ -147,69 +147,69 @@
 	 * @memberOf MASPluginUser
 	 * @function isSessionLocked
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
      this.isSessionLocked = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "isSessionLocked", []);
      };
 
 	/**
-     * Locks the current session of the user. The user needs to be logged in to be able to use this API.
+     * Locks the current session of the user. The user must log in to use this API.
 	 * @memberOf MASPluginUser
 	 * @function lockSession
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
     this.lockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "lockSession", []);
     };
 
     /**
-     * Unlocks the current session of the user. The user needs to be logged in to be able to use this API.
+     * Unlocks the current session of the user. The user must log in to use this API.
 	 * @memberOf MASPluginUser
 	 * @function unlockSession
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
     this.unlockSession = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSession", []);
     };
 
     /**
-     * Unlocks the current session of the user with a customizable message while unlocking. The user needs to be logged in to be able to use this API.
+     * Unlocks the current session of the user with a customizable message while unlocking. The user must log in to use this API.
 	 * @memberOf MASPluginUser
 	 * @function unlockSessionWithMessage
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
-     * @param {string} message A user defined message which will be displyed on the lock screen before asking for PIN/Fingerprint.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+     * @param {string} message A user defined message that is displyed on the lock screen before asking for PIN/Fingerprint.
      */
     this.unlockSessionWithMessage = function(successHandler, errorHandler, message) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "unlockSessionWithMessage", [message]);
     };
 
     /**
-     * Removes the session lock for the user. Remove session causes all the stored tokens in the device to be wiped-out.The user needs to be logged in to be able to use this API.
+     * Removes the session lock for the user. Remove session causes all the stored tokens in the device to be wiped-out. The user must log in to use this API.
 	 * @memberOf MASPluginUser
 	 * @function removeSessionLock
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
     this.removeSessionLock = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginUser", "removeSessionLock", []);
     };
 
     /**
-     * Logs off the user from this app (In case of SSO the user will be logged off from other apps too).
+     * Logs off the user from this app (In case of SSO the user is logged off from other apps too).
 	 * @memberOf MASPluginUser
 	 * @function logout
 	 * @instance
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      * @param {boolean} force
      * The behavior for different values of force would be<br>
 	 * <table>
@@ -217,7 +217,7 @@
 	 * <tr><td>true</td><td>The  SDK clears local tokens regardless if the logout call to the server is successful or not.</td>
 	 * <tr><td>false</td><td>The SDK clears local tokens only if the logout call to the server is successful.</td></tr>
 	 * </table>
-     *   If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.
+     *   If no value is provided, then the default value `false` is used. This is for backward compatibility with old logout signature.
      */
     this.logout = function(successHandler, errorHandler, force) {
         return Cordova.exec(function(result) {
@@ -234,13 +234,13 @@
 MASPluginUser.sharedCurrUser;
 
  /**
- * The authenticated user for the application, if any. nil returned if none. This is a singleton object. <b>Developers should call this API first in order to use the instance attributes or functions
+ * The authenticated user for the application, if any. Returns null if no authenticated user found.. This is a singleton object. <b>Developers should call this API first in order to use the instance attributes or functions
  * of the MASUser object.</b>
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @example
-	<caption>For instance to access the username field of the logged in user (and to see if the session is locked) you must call this API as mentioned below</caption>
+	<caption>For instance, to access the username field of the logged in user (and to see if the session is locked) you must call this API as follows</caption>
 
 MASPluginUser.currentUser(
 	function(result) {
@@ -271,8 +271,8 @@ MASPluginUser.currentUser(
  /**
  * Authenticates the user asynchronously using the username and password.
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @param {string} userName username of the user
  * @param {string} password password of the user
  */
@@ -288,9 +288,9 @@ MASPluginUser.currentUser(
  /**
  * Authenticates a user asynchronously using and id_token
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
- * @param {string} idToken The id_token for the user. the id_token should be a valid JWT.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ * @param {string} idToken The id_token for the user. Ensure that the id_token is a valid JWT
  * @param {string} tokenType Token type of id_token. <table><tr bgcolor="#D3D3D3"><th>Example</th></tr><tr><td>{`urn:ietf:params:oauth:grant-type:jwt-bearer`}</td></tr></table>
  */
  MASPluginUser.loginWithIdTokenAndTokenType = function(successHandler, errorHandler, idToken, tokenType) {
@@ -305,8 +305,8 @@ MASPluginUser.currentUser(
  /**
  * Authenticates a user asynchronously using an authorization code and a state(optional) variable
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @param {string} authCode The Authorization code as received from an OAuth server.
  * @param {string} state A state variable for supporting the PKCE validation.
  */
@@ -320,10 +320,10 @@ MASPluginUser.currentUser(
  };
 
  /**
- * Authenticates the user asynchronously using the MAS native AuthCredential construct containing username and password.
+ * Authenticates the user asynchronously using the MAS native AuthCredential construct that contains username and password.
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @param {string} userName username of the user
  * @param {string} password password of the user
  */
@@ -339,9 +339,9 @@ MASPluginUser.currentUser(
  /**
  * Authenticates a user asynchronously using the MAS native AuthCredential construct containing a JWT(id_token) and a token type 
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
- * @param {string} jwt The id_token for the user. the id_token should be a valid JWT.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ * @param {string} jwt The id_token for the user. Ensure that the id_token is a valid JWT
  * @param {string} tokenType Token type of id_token. <table><tr bgcolor="#D3D3D3"><th>Example</th></tr><tr><td>{`urn:ietf:params:oauth:grant-type:jwt-bearer`}</td></tr></table>
  */
  MASPluginUser.loginWithAuthCredentialsJWT = function(successHandler, errorHandler, jwt, tokenType) {
@@ -356,8 +356,8 @@ MASPluginUser.currentUser(
  /**
  * Authenticates a user asynchronously using the MAS native AuthCredential construct containing an authorization code and a state(optional) variable
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @param {string} authorizationCode The Authorization code as received from an OAuth server.
  * @param {string} state A state variable for supporting the PKCE validation.
  */
@@ -371,10 +371,10 @@ MASPluginUser.currentUser(
  };
 
  /**
- * Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
+ * Authenticates a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
  * @memberOf MASPluginUser
- * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
- * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+ * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+ * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  * @static
  */
  MASPluginUser.initializeBrowserBasedAuthentication = function(successHandler, errorHandler) {
