@@ -19,23 +19,23 @@ var MASPluginSecurityConfiguration = require("./MASPluginSecurityConfiguration")
 * @hideconstructor
 * @classdesc The parent MASFoundation factory class to get objects of MAS Core classes.
 * @example
-* <caption>To get instance of {@link MASPluginMAS} : An interfaces which is mapped to MAS Model of Native and controls MAS Process Lifecycle</caption>
+* <caption>To get instance of {@link MASPluginMAS} : An interface that is mapped to MAS Model of Native and controls MAS Process Lifecycle</caption>
 var MAS = new MASPlugin.MAS();
 * @example
-* <caption>To get instance of {@link MASPluginUser} : An interfaces which is mapped to MASUser Model of Native and controls MASUser Lifecycle</caption>
+* <caption>To get instance of {@link MASPluginUser} : An interface that is mapped to MASUser Model of Native and controls MASUser Lifecycle</caption>
 MASPlugin.MASUser.currentUser(successHandler(theUser),errorHandler(error));
 //The theUser provided in the successHandler is the final populated user received after login.
 * @example
-* <caption>To get instance of {@link MASPluginDevice} : An interfaces which is mapped to MASDevice Model of Native and controls MASDevice Lifecycle</caption>
+* <caption>To get instance of {@link MASPluginDevice} : An interface that is mapped to MASDevice Model of Native and controls MASDevice Lifecycle</caption>
 var MASDevice = new MASPlugin.MASDevice();
 * @example
-* <caption>To get instance of {@link MASPluginApplication} : An interfaces which is mapped to MASApplication Model of Native and controls MASApplication Lifecycle</caption>
+* <caption>To get instance of {@link MASPluginApplication} : An interface that is mapped to MASApplication Model of Native and controls MASApplication Lifecycle</caption>
 var MASApplication = new MASPlugin.MASApplication();
 * @example
-* <caption>To get instance of {@link MASPluginAuthProviders} : An interfaces which is mapped to MASAuthenticationProviders Model of Native</caption>
+* <caption>To get instance of {@link MASPluginAuthProviders} : An interface that is mapped to MASAuthenticationProviders Model of Native</caption>
 var MASAuthenticationProviders = new MASPlugin.MASAuthenticationProviders();
 * @example
-* <caption>To get instance of {@link MASPluginSecurityConfiguration} : An interfaces which is mapped to MASSecurityConfiguration Model of Native</caption>
+* <caption>To get instance of {@link MASPluginSecurityConfiguration} : An interface that is mapped to MASSecurityConfiguration Model of Native</caption>
 var MASSecurityConfiguration = new MASPlugin.MASSecurityConfiguration();
 */
 var MASPlugin = {

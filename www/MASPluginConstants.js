@@ -7,7 +7,7 @@
 /**
 * @class MASPluginConstants
 * @hideconstructor
-* @classdesc The class containing various MAS constants.
+* @classdesc This class contains various MAS constants.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>Sample constant access</th></tr>
 *	<tr><td><i>var grantFlow = MASPluginConstants.MASGrantFlow.MASGrantFlowClientCredentials;</i></td></tr>
@@ -72,13 +72,13 @@ var MASPluginConstants = {
     },
 	
 	 /**
- 	 * The constant which indicates the state in which the MAS process lifecyle is
+ 	 * The constant which indicates the state in which the MAS process lifecycle is
 	 * @memberOf MASPluginConstants
 	 * @typedef {Object} MASState 
-	 * @property {number} MASStateNotConfigured State that SDK has not been initialized and does not have configuration file either in local file system based on the default configuration file name, nor in the keychain storage.
-	 * @property {number} MASStateNotInitialized State that SDK has the active configuration either in the local file system, but has not been initialized yet.
-	 * @property {number} MASStateStarted State that SDK did start; at this state, SDK should be fully functional.
-	 * @property {number} MASStateStopped State that SDK did stop; at this state, SDK is properly stopped and should be able to re-start.
+	 * @property {number} MASStateNotConfigured States that SDK has not been initialized and does not have configuration file either in local file system based on the default configuration file name, nor in the keychain storage.
+	 * @property {number} MASStateNotInitialized States that SDK has the active configuration either in the local file system but has not been initialized yet.
+	 * @property {number} MASStateStarted States that SDK did start; at this state, SDK should be fully functional.
+	 * @property {number} MASStateStopped States that SDK did stop; at this state, SDK is properly stopped and should be able to re-start.
  	 */
 	MASState: {
 		MASStateNotConfigured:1,

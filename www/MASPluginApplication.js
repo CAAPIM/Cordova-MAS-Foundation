@@ -11,7 +11,7 @@ var MASPluginUtils = require("./MASPluginUtils"),
 /**
 * @class MASPluginApplication
 * @hideconstructor
-* @classdesc The main class responsible for MASApplication Object lifecycle Management.
+* @classdesc The main class responsible for MASApplication Object Lifecycle Management.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>MASApplication Construtor</th></tr>
 *	<tr><td><i>var MASApplication = new MASPlugin.MASApplication();</i></td></tr>
@@ -30,8 +30,8 @@ var MASPluginApplication = function() {
 	* @memberOf MASPluginApplication
 	* @function isApplicationAuthenticated
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     */
     this.isApplicationAuthenticated = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "isApplicationAuthenticated", []);
@@ -42,8 +42,8 @@ var MASPluginApplication = function() {
 	* @memberOf MASPluginApplication
 	* @function authenticationStatus
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     */
     this.authenticationStatus  = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "authenticationStatus", []);
@@ -54,8 +54,8 @@ var MASPluginApplication = function() {
 	* @memberOf MASPluginApplication
 	* @function launchApp
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     * @param {string} appId application ID of the app that needs to be launched.
     */
     this.launchApp = function(successHandler, errorHandler, appId) {
@@ -69,8 +69,8 @@ var MASPluginApplication = function() {
 	* @memberOf MASPluginApplication
 	* @function retrieveEnterpriseApps
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario and would contain the relevant apps.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     */
     this.retrieveEnterpriseApps = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginApplication", "retrieveEnterpriseApps", []);
@@ -81,8 +81,8 @@ var MASPluginApplication = function() {
 	* @memberOf MASPluginApplication
 	* @function initEnterpriseBrowser
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     */
     this.initEnterpriseBrowser = function(successHandler, errorHandler) {
             return Cordova.exec(function(result) {

@@ -7,7 +7,7 @@
 /**
 * @class MASPluginAuthProviders
 * @hideconstructor
-* @classdesc The class containing the functions for MAS Authentication Providers details. Only for Cordova-iOS platform.
+* @classdesc This class contains the functions for MAS Authentication Providers details. Only for Cordova-iOS platform.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>MASPluginAuthProviders Construtor</th></tr>
 *	<tr><td><i>var MASAuthenticationProviders = new MASPlugin.MASAuthenticationProviders();</i></td></tr>
@@ -20,8 +20,8 @@ var MASPluginAuthProviders = function() {
 	* @memberOf MASPluginAuthProviders
 	* @function getCurrentProviders
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario. The result object containing the provider list
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario. The result object containing the provider list
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	*/
     this.getCurrentProviders = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginAuthProviders", "getCurrentProviders", []);
@@ -32,8 +32,8 @@ var MASPluginAuthProviders = function() {
 	* @memberOf MASPluginAuthProviders
 	* @function retrieveAuthenticationProviderForProximityLogin
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
     */
     this.retrieveAuthenticationProviderForProximityLogin = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginAuthProviders", "retrieveAuthenticationProviderForProximityLogin", []);
