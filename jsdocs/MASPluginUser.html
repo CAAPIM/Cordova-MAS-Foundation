@@ -30,7 +30,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>MASPluginUser</h2>
         
-            <div class="class-description">The main class representing the User lifecycle management like login,logout etc.
+            <div class="class-description">The main class representing the User Lifecycle Management like login,logout etc.
 <table>
 	<tr bgcolor="#D3D3D3"><th>MASUser Singleton instance</th></tr>
 	<tr><td><i> MASPlugin.MASUser.currentUser(successHandler(theUser),errorHandler(error));</i>//theUser is the singleton here</td></tr>
@@ -213,7 +213,7 @@
 
 
 <div class="description">
-    Lists of the addresses of the user
+    List of the addresses of the user
 </div>
 
 
@@ -285,7 +285,7 @@
 
 
 <div class="description">
-    Lists of the email addresses of the user
+    List of the email addresses of the user
 </div>
 
 
@@ -645,7 +645,7 @@
 
 
 <div class="description">
-    Lists of the phone numbers of the user
+    List of the phone numbers of the user
 </div>
 
 
@@ -873,7 +873,7 @@
 
 
 <div class="description">
-    The authenticated user for the application, if any. nil returned if none. This is a singleton object. <b>Developers should call this API first in order to use the instance attributes or functions
+    The authenticated user for the application, if any. Returns null if no authenticated user found.. This is a singleton object. <b>Developers should call this API first in order to use the instance attributes or functions
 of the MASUser object.</b>
 </div>
 
@@ -926,7 +926,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -949,7 +949,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -1019,7 +1019,7 @@ of the MASUser object.</b>
 
     <h5>Example</h5>
     
-        <p class="code-caption">For instance to access the username field of the logged in user (and to see if the session is locked) you must call this API as mentioned below</p>
+        <p class="code-caption">For instance, to access the username field of the logged in user (and to see if the session is locked) you must call this API as follows</p>
     
     <pre class="prettyprint"><code>MASPluginUser.currentUser(
 	function(result) {
@@ -1050,7 +1050,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Authenticate a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
+    Authenticates a user by launching a Browser which in turn loads a URL (templatized). The URL needed is retrieved from the server endpoint mentioned in the configuration file.
 </div>
 
 
@@ -1102,7 +1102,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -1125,7 +1125,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -1260,7 +1260,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -1283,7 +1283,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -1464,7 +1464,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -1487,7 +1487,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -1668,7 +1668,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -1691,7 +1691,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -1714,7 +1714,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">The id_token for the user. the id_token should be a valid JWT.</td>
+            <td class="description last">The id_token for the user. Ensure that the id_token is a valid JWT</td>
         </tr>
 
     
@@ -1820,7 +1820,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Authenticates the user asynchronously using the MAS native AuthCredential construct containing username and password.
+    Authenticates the user asynchronously using the MAS native AuthCredential construct that contains username and password.
 </div>
 
 
@@ -1872,7 +1872,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -1895,7 +1895,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2076,7 +2076,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2099,7 +2099,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2122,7 +2122,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">The id_token for the user. the id_token should be a valid JWT.</td>
+            <td class="description last">The id_token for the user. Ensure that the id_token is a valid JWT</td>
         </tr>
 
     
@@ -2280,7 +2280,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2303,7 +2303,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2432,7 +2432,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    String accessToken value of the Current logged in user.
+    String accessToken value of the current logged in user.
 </div>
 
 
@@ -2484,7 +2484,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2507,7 +2507,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2642,7 +2642,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2665,7 +2665,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2800,7 +2800,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2823,7 +2823,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -2958,7 +2958,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -2981,7 +2981,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3116,7 +3116,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3139,7 +3139,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3222,7 +3222,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Locks the current session of the user. The user needs to be logged in to be able to use this API.
+    Locks the current session of the user. The user must log in to use this API.
 </div>
 
 
@@ -3274,7 +3274,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3297,7 +3297,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3380,7 +3380,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Logs off the user from this app (In case of SSO the user will be logged off from other apps too).
+    Logs off the user from this app (In case of SSO the user is logged off from other apps too).
 </div>
 
 
@@ -3432,7 +3432,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3455,7 +3455,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3484,7 +3484,7 @@ of the MASUser object.</b>
 <tr><td>true</td><td>The  SDK clears local tokens regardless if the logout call to the server is successful or not.</td>
 <tr><td>false</td><td>The SDK clears local tokens only if the logout call to the server is successful.</td></tr>
 </table>
-  If nothing passed then the default value used is `false`. This is for backward compatibility with old logout signature.</td>
+  If no value is provided, then the default value `false` is used. This is for backward compatibility with old logout signature.</td>
         </tr>
 
     
@@ -3567,7 +3567,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Removes the session lock for the user. Remove session causes all the stored tokens in the device to be wiped-out.The user needs to be logged in to be able to use this API.
+    Removes the session lock for the user. Remove session causes all the stored tokens in the device to be wiped-out. The user must log in to use this API.
 </div>
 
 
@@ -3619,7 +3619,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3642,7 +3642,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3725,7 +3725,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Unlocks the current session of the user. The user needs to be logged in to be able to use this API.
+    Unlocks the current session of the user. The user must log in to use this API.
 </div>
 
 
@@ -3777,7 +3777,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3800,7 +3800,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3883,7 +3883,7 @@ of the MASUser object.</b>
 
 
 <div class="description">
-    Unlocks the current session of the user with a customizable message while unlocking. The user needs to be logged in to be able to use this API.
+    Unlocks the current session of the user with a customizable message while unlocking. The user must log in to use this API.
 </div>
 
 
@@ -3935,7 +3935,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined success callback which will be invoked on success scenario.</td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
         </tr>
 
     
@@ -3958,7 +3958,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">user defined error callback which will be invoked on failure scenario.</td>
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -3981,7 +3981,7 @@ of the MASUser object.</b>
 
             
 
-            <td class="description last">A user defined message which will be displyed on the lock screen before asking for PIN/Fingerprint.</td>
+            <td class="description last">A user defined message that is displyed on the lock screen before asking for PIN/Fingerprint.</td>
         </tr>
 
     
@@ -4072,7 +4072,7 @@ of the MASUser object.</b>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Oct 10 2018 11:53:03 GMT+0530 (India Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 16 2018 14:42:35 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
