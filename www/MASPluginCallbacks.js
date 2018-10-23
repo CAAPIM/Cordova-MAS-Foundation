@@ -19,9 +19,10 @@ var MASPluginCallbacks = {
     },
 
 
-	/** Callback where it will prompt for login Credentials.
-     * @param callbackResp user defined callback object containing the relevant details of callback.
-     */
+	/** 
+	* Callback where it will prompt for login Credentials.
+    * @param {function} callbackResp user defined callback object containing the relevant details of callback.
+    */
     MASAuthenticationCallback: function(callbackResp) {
         const error = callbackResp.error;
         const result = callbackResp.result;
@@ -86,7 +87,7 @@ var MASPluginCallbacks = {
 
     /**
      * Callback which is used to prompt for the OTP provided channels
-     * @param callbackResp user defined callback object containing the OTP Channels as defined by MAG Server.
+     * @param {function} callbackResp user defined callback object containing the OTP Channels as defined by MAG Server.
      */
     MASOTPChannelSelectCallback: function(callbackResp) {
         const error = callbackResp.error;
@@ -109,7 +110,7 @@ var MASPluginCallbacks = {
 
     /**
      * Callback for the OTP Listener
-     * @param callbackResp user defined callback object containing the OTP failure error message. Called in case of invalid/expired OTP.
+     * @param {function} callbackResp user defined callback object containing the OTP failure error message. Called in case of invalid/expired OTP.
      */
     MASOTPAuthenticationCallback: function(callbackResp){
         const error = callbackResp.error;
