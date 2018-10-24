@@ -130,8 +130,6 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 isPKCEEnabled(args, callbackContext);
             } else if (action.equalsIgnoreCase("enableJwksPreload")) {
                 enableJwksPreload(args, callbackContext);
-           } else if (action.equalsIgnoreCase("getJwks")) {
-                getJwks(args, callbackContext);
             } else if (action.equalsIgnoreCase("isJwksPreloadEnabled")) {
                 isJwksPreloadEnabled(args, callbackContext);
             } else if (action.equalsIgnoreCase("stop")) {
@@ -488,19 +486,6 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private void isJwksPreloadEnabled(final JSONArray args, final CallbackContext callbackContext) {
         try {
             Boolean result = MAS.isPreloadJWKSEnabled();
-            success(callbackContext, result, false);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-            callbackContext.error(getError(e));
-        }
-    }
-
-
-    private void getJwks(JSONArray args, CallbackContext callbackContext) {
-        try {
-
-            JWTRS256Validator jwtrs256Validator = new JWTRS256Validator();
-           String result = jwtrs256Validator.getJwks();
             success(callbackContext, result, false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
