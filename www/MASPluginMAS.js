@@ -422,15 +422,6 @@ var MASPluginMAS = function() {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isJwksPreloadEnabled", []);
     };
 
-        /**
-     Returns the loaded JWT Key Set.
-     * @param {function} successHandler user defined success callback
-     * @param {function} errorHandler user defined error callback
-     */
-    this.getJwks = function(successHandler, errorHandler) {
-        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "getJwks", []);
-    };
-
     /**
      Stops the lifecycle of all MAS processes.
      * @param {function} successHandler user defined success callback
