@@ -1436,6 +1436,50 @@
      }];
 }
 
+///--------------------------------------
+/// @name JWKS Preloading.
+///--------------------------------------
+
+# pragma mark - JWKS Preloading
+
+/**
+ *  Determines whether preloading of JWKS is enabled.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isJwksPreloadEnabled:(CDVInvokedUrlCommand *)command {
+ 
+    CDVPluginResult *result;
+    
+    BOOL isJwksPreloadEnabled = [MAS isJWKSetLoadingEnabled];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isJwksPreloadEnabled];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/**
+ *  Enable JWKS preloading.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enableJwksPreload:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    if([[command.arguments objectAtIndex:0] isEqualToString:@"true"]) {
+        [MAS enableJWKSetLoading:YES];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"JWKS Preloading Enabled"];
+    }
+    else {
+        [MAS enableJWKSetLoading:NO];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"JWKS Preloading Disabled"];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+
     ///--------------------------------------
     /// @name Proof Key for Code Exchange (PKCE)
     ///--------------------------------------
