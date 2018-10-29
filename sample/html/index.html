@@ -470,6 +470,45 @@
                      });
              });
 
+             ////////////////////// JWKS Begin//////////////////////////////////////
+             $("#enableJwksPreload").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var enable = thisElement.find("select[name='enableJwksPreloadBoolValue']").val();
+                 var MAS = new MASPlugin.MAS();
+                 MAS.enableJwksPreload(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     }, enable);
+             });
+
+
+             $("#isJwksPreloadEnabled").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MAS = new MASPlugin.MAS();
+                 MAS.isJwksPreloadEnabled(function(result) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     });
+             });
+
+             ////////////////////////////JWKS End///////////////////////////////
+
              $("#enableIdTokenValidation").bind("click", function(event, ui) {
                  if ($(event.target).context.tagName != 'A') return;
 
@@ -1439,6 +1478,24 @@
                                                                         style="display:none;"
                                                                         readonly=""></textarea></a>
                     </li>
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>JWKS Settings</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li data-icon="false">
+                                <a href="#" id="enableJwksPreload">
+                                    MAS enable JWKS
+                                    <select id="enableJwksPreloadBool" name="enableJwksPreloadBoolValue">
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <textarea class='error' style="display:none;"
+                                              readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false"><a href="#" id="isJwksPreloadEnabled">MAS isJwksPreloadEnabled <textarea
+                                    class='error' style="display:none;" readonly=""></textarea></a></li>
+                        </ul>
+                    </li>
                     <li data-icon="false"><a href="#" id="start">MAS start<textarea class='error'
                                                                                     style="display:none;"
                                                                                     readonly=""></textarea></a>
@@ -1795,7 +1852,7 @@
                                                                                      readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="getMASState">MAS getMASState <textarea
-                            class='error' style="display:none;" readonly=""></textarea></a></li>
+                            class='error' style="display:none;" readonly=""></textarea></a></li>       
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1816,6 +1873,7 @@
                             class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
+
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>JWT Signing</h2>
                 <ul data-role="listview" data-theme="b">

@@ -496,6 +496,24 @@ function(result){
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isPKCEEnabled", []);
     };
 
+       /**
+     Enable JWKS preloading.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     *@param {boolean}   enable True to enable JWKS preloading, False no preloading of JWKS. Default to true.
+     */
+    this.enableJwksPreload = function(successHandler, errorHandler, enable) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableJwksPreload", [enable]);
+    };
+
+    /**
+     Determines whether preloading of JWKS is enabled.
+     * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+     */
+    this.isJwksPreloadEnabled = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isJwksPreloadEnabled", []);
+    };
 
     /**
      * Stops the lifecycle of all MAS processes.

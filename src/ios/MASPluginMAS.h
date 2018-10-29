@@ -352,6 +352,26 @@
 - (void)doSocialLogin:(CDVInvokedUrlCommand *)command;
     
 ///--------------------------------------
+/// @name JWKS Preloading.
+///--------------------------------------
+
+# pragma mark - JWKS Preloading
+
+/**
+ *  Determines whether preloading of JWKS is enabled.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isJwksPreloadEnabled:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Enable JWKS preloading.
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enableJwksPreload:(CDVInvokedUrlCommand *)command;
+
+///--------------------------------------
 /// @name Proof Key for Code Exchange (PKCE)
 ///--------------------------------------
 
