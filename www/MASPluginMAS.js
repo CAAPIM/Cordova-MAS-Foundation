@@ -501,9 +501,9 @@ function(result){
      * @memberOf MASPluginMAS
 	 * @function enableJwksPreload
 	 * @instance
-     * @param {function} successHandler user defined success callback that is invoked on success scenario.
-     * @param {function} errorHandler user defined error callback that is invoked on failure scenario.
-     * @param {boolean}   enable True to enable JWKS preloading. False to disable JWKS preloading. By default it is false.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+     * @param {boolean} enable True to enable JWKS preloading. False to disable JWKS preloading. Default value is 'false'
      */
     this.enableJwksPreload = function(successHandler, errorHandler, enable) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableJwksPreload", [enable]);
@@ -514,8 +514,8 @@ function(result){
      * @memberOf MASPluginMAS
 	 * @function isJwksPreloadEnabled
 	 * @instance
-     * @param {function} successHandler user defined success callback that is invoked on success scenario.
-     * @param {function} errorHandler user defined error callback that is invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
      */
     this.isJwksPreloadEnabled = function(successHandler, errorHandler) {
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isJwksPreloadEnabled", []);
