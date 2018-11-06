@@ -32,8 +32,8 @@ module.exports = function (context) {
 
                                 var infoPlist = plist.parse(fs.readFileSync(file, 'utf8'));
 
-                                if (infoPlist.NSLocationWhenInUseUsageDescriptio === 'The application requires location services to connect to MAS backend services.')
-                                    delete infoPlist.NSLocationWhenInUseUsageDescriptio;
+                                if (infoPlist.NSLocationWhenInUseUsageDescription === 'The application requires location services to connect to MAS backend services.')
+                                    delete infoPlist.NSLocationWhenInUseUsageDescription;
                                 if (infoPlist.NSLocationAlwaysUsageDescription === 'The application requires location services to connect to MAS backend services.')
                                     delete infoPlist.NSLocationAlwaysUsageDescription;
                                 if (infoPlist.NSLocationAlwaysAndWhenInUseUsageDescription === 'The application requires location services to connect to MAS backend services.')
