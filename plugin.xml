@@ -57,7 +57,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <hook type="before_prepare" src="scripts/MASBeforePrepare.js" />
-    <hook type="before_plugin_rm" src="scripts/MASBeforePluginRemove.js" />
+    
     
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
@@ -111,7 +111,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <framework src="MASFoundation" type="podspec" spec="~> 1.8.00" />
         <framework src="MASUI" type="podspec" spec="~> 1.8.00" />
-        
+        <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveIos.js" />
 
     </platform>
 
@@ -153,6 +153,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/android/MASCordovaPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />
+
+        <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveAndroid.js" />
     </platform>
 </plugin>
 
