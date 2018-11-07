@@ -57,7 +57,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <hook type="before_prepare" src="scripts/MASBeforePrepare.js" />
-
+    <hook type="before_plugin_rm" src="scripts/MASBeforePluginRemove.js" />
+    
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>

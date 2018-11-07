@@ -77,8 +77,6 @@ module.exports = function (context) {
                         var buildPhase = appProj.addBuildPhase([], 'PBXShellScriptBuildPhase', 'Run a script', appProj.getFirstTarget().uuid, options).buildPhase;
 
                         fs.writeFileSync(file, appProj.writeSync());
-
-                        console.log('\n' + 'Successfully configured ' + ' cordova project with : ' + iOSConfigPath + '\n');
                     });
                 });
             });
@@ -89,6 +87,8 @@ module.exports = function (context) {
             fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/app/src/main/assets/msso_config.json'));
         } else {
             fs.createReadStream(path).pipe(fs.createWriteStream('platforms/android/assets/msso_config.json'));
-        }
+        }     
     }
+    console.log('\n' + 'Successfully configured ' + ' cordova project with : ' + path + '\n');
+
 };
