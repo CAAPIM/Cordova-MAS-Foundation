@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mas-core",
-  "version": "1.8.00",
+  "version": "1.9.00",
   "description": "Cordova MAS Foundation Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-core",
