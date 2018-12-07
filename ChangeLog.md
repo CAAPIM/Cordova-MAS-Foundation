@@ -1,3 +1,21 @@
+# Version 1.9.00
+
+### Bug fixes
+- None
+
+### New features
+- The Mobile SDK now supports adding and viewing of Metadata for a registered Device [US528171]
+- The Mobile SDK now supports ID Token Validation for JWT signed with RS256 Algorithm [F74400]
+- Cordova API Reference Guide Enhanced to have more details [US547180]
+- Cordova plugin `remove` command now reverts the app to pre-add state [US552411]
+
+### Deprecated methods
+- None
+
+### Removed methods
+- None
+
+
 # Version 1.8.00
 
 ### Bug fixes

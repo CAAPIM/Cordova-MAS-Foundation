@@ -21,6 +21,7 @@ import android.widget.ImageView;
 
 import com.ca.mas.core.cert.CertUtils;
 import com.ca.mas.core.service.MssoIntents;
+import com.ca.mas.core.token.JWTRS256Validator;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthCredentialsAuthorizationCode;
 import com.ca.mas.foundation.MASAuthenticationListener;
@@ -127,6 +128,10 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 enablePKCE(args, callbackContext);
             } else if (action.equalsIgnoreCase("isPKCEEnabled")) {
                 isPKCEEnabled(args, callbackContext);
+            } else if (action.equalsIgnoreCase("enableJwksPreload")) {
+                enableJwksPreload(args, callbackContext);
+            } else if (action.equalsIgnoreCase("isJwksPreloadEnabled")) {
+                isJwksPreloadEnabled(args, callbackContext);
             } else if (action.equalsIgnoreCase("stop")) {
                 stop(args, callbackContext);
             } else if (action.equalsIgnoreCase("gatewayIsReachable")) {
@@ -459,6 +464,28 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private void isPKCEEnabled(final JSONArray args, final CallbackContext callbackContext) {
         try {
             Boolean result = MAS.isPKCEEnabled();
+            success(callbackContext, result, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+    }
+
+    private void enableJwksPreload(final JSONArray args, final CallbackContext callbackContext) {
+        try {
+            boolean enableJwksPreload = Boolean.valueOf(args.optString(0, "true"));
+            MAS.enableJwksPreload(enableJwksPreload);
+            String result = "Enable JWKS Preload Complete";
+            success(callbackContext, result, false);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            callbackContext.error(getError(e));
+        }
+    }
+
+    private void isJwksPreloadEnabled(final JSONArray args, final CallbackContext callbackContext) {
+        try {
+            Boolean result = MAS.isPreloadJWKSEnabled();
             success(callbackContext, result, false);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

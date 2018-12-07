@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-mas-core"
-      version="0.1.0">
+      version="1.9.00">
     <name>MAS</name>
     <description>Cordova MAS Plugin</description>
     <license>CA Technologies Ltd.</license>
@@ -57,7 +57,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <hook type="before_prepare" src="scripts/MASBeforePrepare.js" />
-
+    
+    
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>
@@ -108,9 +109,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
-        <framework src="MASFoundation" type="podspec" spec="~> 1.8.00" />
-        <framework src="MASUI" type="podspec" spec="~> 1.8.00" />
-        
+        <framework src="MASFoundation" type="podspec" spec="~> 1.9.00" />
+        <framework src="MASUI" type="podspec" spec="~> 1.9.00" />
+        <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveIos.js" />
 
     </platform>
 
@@ -142,8 +143,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
-        <framework src="com.ca:mas:1.8.00" />
-        <framework src="com.ca:masui:1.8.00" />
+        <framework src="com.ca:mas:1.9.00" />
+        <framework src="com.ca:masui:1.9.00" />
         
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />
@@ -152,6 +153,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/android/MASCordovaPlugin.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASUtil.java" target-dir="src/com/ca/mas/cordova/core" />
         <source-file src="src/android/MASCordovaException.java" target-dir="src/com/ca/mas/cordova/core" />
+
+        <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveAndroid.js" />
     </platform>
 </plugin>
 

@@ -35,9 +35,23 @@
 
 var MASPluginConstants = require("./MASPluginConstants"),
     MASPopup = require("./PopupUI");
-
+/**
+* @class MASPluginUtils
+* @hideconstructor
+* @classdesc A static utility class that enables the developers (and internal plugin classes) to validate object sanctity, allows setting of popup styles, launch a HTML page and close it.
+* &lt;table>
+*	&lt;tr bgcolor="#D3D3D3">&lt;th>Sample API usage&lt;/th>&lt;/tr>
+*	&lt;tr>&lt;td>&lt;i>var isObjectAlive = MASPluginUtils.isEmpty(obj);&lt;/i>&lt;/td>&lt;/tr>
+* &lt;/table>
+*/
 var MASPluginUtils = {
     popupStyle:MASPluginConstants.MASPopupStyle.MASPopupLoginStyle,
+
+	/**
+	* Utility Method to validates the passed-in object for null/empty or undefined state. The type of object can be anything i.e. object, string, null etc.
+	* @memberOf MASPluginUtils
+	* @param {*} val Object to be validated
+	*/
     isEmpty: function(val) {
         return (typeof val === 'undefined' || !val || val == null);
     },
@@ -76,10 +90,20 @@ var MASPluginUtils = {
         return Cordova.exec(successHandler, function() {}, "MASPluginApplication", "enterpriseBrowserWebAppBackButtonHandler", []);
     },
 
+	/**
+	* Utility method to set the popup style of the UI that the MAS PLugin loads in case of Authentication/OTP-Channel Selection/OTP verification etc.
+	* @memberOf MASPluginUtils
+	* @param {string} style The style string. See {@link MASPopupStyle}
+	*/
     setPopUpStyle: function(style) {
         this.popupStyle = style;
     },
 
+	/**
+	* Utility method to get the popup style for a UI.
+	* @memberOf MASPluginUtils
+	* @returns {string} The popup style. See {@link MASPopupStyle}
+	*/
     getPopUpStyle: function(){
         return this.popupStyle;
     },
@@ -124,6 +148,14 @@ var MASPluginUtils = {
         }   
     },
 
+	/**
+	* Utility Method to popup a UI from a local HTML resource
+	* @memberOf MASPluginUtils
+	* @param {string} url path/name to the local HTML page
+	* @param {object} result An object which the native Mobile SDK returns, loaded with data related to Authentication or OTP details.
+	* @param {function} popupafterclose A user defined function that would be called after the popup closes.Any cleaning to be done post closure.
+	* @param {function} onload A user defined function that would be called when the popup UI loads. Any initialization can be done here.
+	*/
     MASPopupUI: function(url, result, popupafterclose, onload) {
         if(!this.isEmpty(result)){
             window.localStorage.setItem("masCallbackResult",JSON.stringify(result));
@@ -198,9 +230,11 @@ var MASPluginUtils = {
             xhr.send();
         }
     },
+
     /**
-    Closes an existing popup.
-    */
+	* Utility method to close the popup UI element. Developer can use this method to close the UI which is on top of the stack.
+	* @memberOf MASPluginUtils
+	*/
     closePopup: function() {
         if (typeof jQuery !== 'undefined' &amp;&amp; typeof $.mobile !== 'undefined') {
             $.mobile.activePage.find(".messagePopup").popup("close");
@@ -221,13 +255,13 @@ module.exports = MASPluginUtils;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enableIdTokenValidation">enableIdTokenValidation</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isIdTokenValidationEnabled">isIdTokenValidationEnabled</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeAuthCallbackHandler">removeAuthCallbackHandler</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setAuthCallbackHandler">setAuthCallbackHandler</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASPlugin.html">MASPlugin</a></li><li><a href="MASPluginApplication.html">MASPluginApplication</a></li><li><a href="MASPluginAuthProviders.html">MASPluginAuthProviders</a></li><li><a href="MASPluginConstants.html">MASPluginConstants</a></li><li><a href="MASPluginDevice.html">MASPluginDevice</a></li><li><a href="MASPluginMAS.html">MASPluginMAS</a></li><li><a href="MASPluginSecurityConfiguration.html">MASPluginSecurityConfiguration</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li><li><a href="MASPluginUtils.html">MASPluginUtils</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Aug 27 2018 11:16:53 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 29 2018 19:12:28 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

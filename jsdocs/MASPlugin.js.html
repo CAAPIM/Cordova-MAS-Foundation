@@ -30,7 +30,6 @@
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
- *
  */
 
 var MASPluginMAS = require("./MASPluginMAS"),
@@ -43,48 +42,58 @@ var MASPluginMAS = require("./MASPluginMAS"),
 var MASPluginConstants = require("./MASPluginConstants");
 var MASPluginSecurityConfiguration = require("./MASPluginSecurityConfiguration");
 
+/**
+* @class MASPlugin
+* @hideconstructor
+* @classdesc The parent MASFoundation factory class to get objects of MAS Core classes.
+* @example
+* &lt;caption>To get instance of {@link MASPluginMAS} : An interface that is mapped to MAS Model of Native and controls MAS Process Lifecycle&lt;/caption>
+var MAS = new MASPlugin.MAS();
+* @example
+* &lt;caption>To get instance of {@link MASPluginUser} : An interface that is mapped to MASUser Model of Native and controls MASUser Lifecycle&lt;/caption>
+MASPlugin.MASUser.currentUser(successHandler(theUser),errorHandler(error));
+//The theUser provided in the successHandler is the final populated user received after login.
+* @example
+* &lt;caption>To get instance of {@link MASPluginDevice} : An interface that is mapped to MASDevice Model of Native and controls MASDevice Lifecycle&lt;/caption>
+var MASDevice = new MASPlugin.MASDevice();
+* @example
+* &lt;caption>To get instance of {@link MASPluginApplication} : An interface that is mapped to MASApplication Model of Native and controls MASApplication Lifecycle&lt;/caption>
+var MASApplication = new MASPlugin.MASApplication();
+* @example
+* &lt;caption>To get instance of {@link MASPluginAuthProviders} : An interface that is mapped to MASAuthenticationProviders Model of Native&lt;/caption>
+var MASAuthenticationProviders = new MASPlugin.MASAuthenticationProviders();
+* @example
+* &lt;caption>To get instance of {@link MASPluginSecurityConfiguration} : An interface that is mapped to MASSecurityConfiguration Model of Native&lt;/caption>
+var MASSecurityConfiguration = new MASPlugin.MASSecurityConfiguration();
+*/
 var MASPlugin = {
-
     MASGrantFlow: MASPluginConstants.MASGrantFlow,
-
     MASRequestResponseType: MASPluginConstants.MASRequestResponseType,
-
     MASAuthenticationStatus: MASPluginApplication.MASAuthenticationStatus,
-
-    /**
-     MAS which has the interfaces mapped to the native MAS class.
-     */
     MAS: MASPluginMAS,
-
-    /**
-     MASUser which has the interfaces mapped to the native MASUser class.
-     */
     MASUser: MASPluginUser,
-
-    /**
-     MASGroup which has the interfaces mapped to the native MASGroup class.
-     */
     MASGroup: MASPluginGroup,    
-
-    /**
-     MASDevice which has the interfaces mapped to the native MASDevice class.
-     */
     MASDevice: MASPluginDevice,
-    /**
-     *
-     * MASApplication has the interfaces mapped to the native MASApplication class.
-     */
     MASApplication: MASPluginApplication,
-
-    /**
-     *
-     * MASAuthenticationProviders represents all available providers
-     */
     MASAuthenticationProviders: MASPluginAuthProviders,
-
     MASSecurityConfiguration: MASPluginSecurityConfiguration
 };
     
+/**
+ * A user defined success callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a structure based on operation type.
+ * @callback successCallbackFunction
+ * @param {Object} result The result object can take any form. It can be an object, or a plain string, a boolean or a number based on the API.
+ * &lt;br>As an example for HTTP GET calls it will be :&lt;br>{&lt;br>&amp;nbsp;&amp;nbsp;"MASResponseInfoBodyInfoKey": "&amp;lt;The response content&amp;gt;",
+ * &lt;br>&amp;nbsp;&amp;nbsp;"MASResponseInfoHeaderInfoKey":{&lt;br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;"&amp;lt;header name&amp;gt;": "&amp;lt;Header value&amp;gt;"&lt;br>&amp;nbsp;&amp;nbsp;}&lt;br>}&lt;br>
+ * For other operations, it can be a string returning SUCCESS or TRUE or any other type&lt;br> Developer may check for existance of result object to define success in such case and must not rely on the exact response format.
+ * To know about specific result for each API see {@link http://mas.ca.com/docs/cordova/latest/guides}
+ */
+
+ /**
+ * A user defined error callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a strict structure.
+ * @callback errorCallbackFunction
+ * @param {Object} error A Json Object with below structure &lt;br>{&lt;br>&amp;nbsp;&amp;nbsp;"errorCode": &amp;lt;The error code. For ex. 3003123&amp;gt;,&lt;br>&amp;nbsp;&amp;nbsp;"errorMessage": "&amp;lt;The error message&amp;gt;"&lt;br>&amp;nbsp;&amp;nbsp;"errorInfo":"&amp;lt;The Error Info&amp;gt;"&lt;br>}&lt;br>
+ */
 module.exports = MASPlugin;</code></pre>
         </article>
     </section>
@@ -95,13 +104,13 @@ module.exports = MASPlugin;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#active">active</a></li><li><a href="global.html#addresses">addresses</a></li><li><a href="global.html#authenticationStatus">authenticationStatus</a></li><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#cancelAuthentication">cancelAuthentication</a></li><li><a href="global.html#cancelGenerateAndSendOTP">cancelGenerateAndSendOTP</a></li><li><a href="global.html#cancelOTPValidation">cancelOTPValidation</a></li><li><a href="global.html#completeAuthentication">completeAuthentication</a></li><li><a href="global.html#configFileName">configFileName</a></li><li><a href="global.html#deleteFromPath">deleteFromPath</a></li><li><a href="global.html#deregister">deregister</a></li><li><a href="global.html#doSocialLogin">doSocialLogin</a></li><li><a href="global.html#emailAddresses">emailAddresses</a></li><li><a href="global.html#enableBrowserBasedAuthentication">enableBrowserBasedAuthentication</a></li><li><a href="global.html#enableIdTokenValidation">enableIdTokenValidation</a></li><li><a href="global.html#enablePKCE">enablePKCE</a></li><li><a href="global.html#familyName">familyName</a></li><li><a href="global.html#formattedName">formattedName</a></li><li><a href="global.html#gatewayIsReachable">gatewayIsReachable</a></li><li><a href="global.html#generateAndSendOTP">generateAndSendOTP</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getCurrentDevice">getCurrentDevice</a></li><li><a href="global.html#getCurrentProviders">getCurrentProviders</a></li><li><a href="global.html#getDeviceIdentifier">getDeviceIdentifier</a></li><li><a href="global.html#getFromPath">getFromPath</a></li><li><a href="global.html#getMASState">getMASState</a></li><li><a href="global.html#givenName">givenName</a></li><li><a href="global.html#grantFlow">grantFlow</a></li><li><a href="global.html#groupName">groupName</a></li><li><a href="global.html#groups">groups</a></li><li><a href="global.html#initEnterpriseBrowser">initEnterpriseBrowser</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initWithInfo">initWithInfo</a></li><li><a href="global.html#isApplicationAuthenticated">isApplicationAuthenticated</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#isCurrentUser">isCurrentUser</a></li><li><a href="global.html#isDeviceRegistered">isDeviceRegistered</a></li><li><a href="global.html#isIdTokenValidationEnabled">isIdTokenValidationEnabled</a></li><li><a href="global.html#isPKCEEnabled">isPKCEEnabled</a></li><li><a href="global.html#isSessionLocked">isSessionLocked</a></li><li><a href="global.html#launchApp">launchApp</a></li><li><a href="global.html#listAttributes">listAttributes</a></li><li><a href="global.html#lockSession">lockSession</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#members">members</a></li><li><a href="global.html#newGroup">newGroup</a></li><li><a href="global.html#owner">owner</a></li><li><a href="global.html#phoneNumbers">phoneNumbers</a></li><li><a href="global.html#photos">photos</a></li><li><a href="global.html#postToPath">postToPath</a></li><li><a href="global.html#putToPath">putToPath</a></li><li><a href="global.html#removeAuthCallbackHandler">removeAuthCallbackHandler</a></li><li><a href="global.html#removeSessionLock">removeSessionLock</a></li><li><a href="global.html#resetLocally">resetLocally</a></li><li><a href="global.html#retrieveAuthenticationProviderForProximityLogin">retrieveAuthenticationProviderForProximityLogin</a></li><li><a href="global.html#retrieveEnterpriseApps">retrieveEnterpriseApps</a></li><li><a href="global.html#setAuthCallbackHandler">setAuthCallbackHandler</a></li><li><a href="global.html#setCustomLoginPage">setCustomLoginPage</a></li><li><a href="global.html#setCustomOTPChannelsPage">setCustomOTPChannelsPage</a></li><li><a href="global.html#setCustomOTPPage">setCustomOTPPage</a></li><li><a href="global.html#setSecurityConfiguration">setSecurityConfiguration</a></li><li><a href="global.html#signWithClaims">signWithClaims</a></li><li><a href="global.html#signWithClaimsPrivateKey">signWithClaimsPrivateKey</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startWithDefaultConfiguration">startWithDefaultConfiguration</a></li><li><a href="global.html#startWithJSON">startWithJSON</a></li><li><a href="global.html#startWithURL">startWithURL</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#unlockSession">unlockSession</a></li><li><a href="global.html#unlockSessionWithMessage">unlockSessionWithMessage</a></li><li><a href="global.html#useNativeMASUI">useNativeMASUI</a></li><li><a href="global.html#userName">userName</a></li><li><a href="global.html#validateOTP">validateOTP</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASPlugin.html">MASPlugin</a></li><li><a href="MASPluginApplication.html">MASPluginApplication</a></li><li><a href="MASPluginAuthProviders.html">MASPluginAuthProviders</a></li><li><a href="MASPluginConstants.html">MASPluginConstants</a></li><li><a href="MASPluginDevice.html">MASPluginDevice</a></li><li><a href="MASPluginMAS.html">MASPluginMAS</a></li><li><a href="MASPluginSecurityConfiguration.html">MASPluginSecurityConfiguration</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li><li><a href="MASPluginUtils.html">MASPluginUtils</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Aug 27 2018 11:16:53 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 29 2018 19:12:28 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

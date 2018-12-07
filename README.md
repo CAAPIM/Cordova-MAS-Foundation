@@ -25,7 +25,7 @@ The reference documents for the MAS modules are generated using the JSDoc markdo
 
 To install JSDoc, follow the instructions on [JSDoc](http://usejsdoc.org/) website.
 
-The Cordova reference documents are available at our [mas.ca.com]( http://mas.ca.com/docs/cordova/1.4.00/sdk/) site.
+The Cordova reference documents are available at our [mas.ca.com]( http://mas.ca.com/docs/cordova/latest/sdk/) site.
 
 Example:
 An annotated comment for validateOTP method is as follows:

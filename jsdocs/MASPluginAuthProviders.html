@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Global</title>
+    <title>JSDoc: Class: MASPluginAuthProviders</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">Class: MASPluginAuthProviders</h1>
 
     
 
@@ -28,7 +28,13 @@
 
 <header>
     
-        <h2></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>MASPluginAuthProviders</h2>
+        
+            <div class="class-description">This class contains the functions for MAS Authentication Providers details. Only for Cordova-iOS platform.
+<table>
+	<tr bgcolor="#D3D3D3"><th>MASPluginAuthProviders Construtor</th></tr>
+	<tr><td><i>var MASAuthenticationProviders = new MASPlugin.MASAuthenticationProviders();</i></td></tr>
+</table></div>
         
     
 </header>
@@ -38,7 +44,18 @@
     
         
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -68,6 +85,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginAuthProviders.js.html">MASPluginAuthProviders.js</a>, <a href="MASPluginAuthProviders.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
 
     
 
@@ -77,7 +99,22 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -96,17 +133,15 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
-                
+            
 
     
 
     
-    <h4 class="name" id="errorCallbackFunction"><span class="type-signature"></span>errorCallbackFunction<span class="signature">(error)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getCurrentProviders"><span class="type-signature"></span>getCurrentProviders<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
     
 
     
@@ -114,7 +149,7 @@
 
 
 <div class="description">
-    A user defined error callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a strict structure.
+    Returns a list of available authentication providers as enabled on the MAG server.
 </div>
 
 
@@ -150,13 +185,13 @@
 
         <tr>
             
-                <td class="name"><code>error</code></td>
+                <td class="name"><code>successHandler</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
 
 
             
@@ -166,7 +201,30 @@
 
             
 
-            <td class="description last">A Json Object with below structure <br>{<br>&nbsp;&nbsp;"errorCode": &lt;The error code. For ex. 3003123&gt;,<br>&nbsp;&nbsp;"errorMessage": "&lt;The error message&gt;"<br>&nbsp;&nbsp;"errorInfo":"&lt;The Error Info&gt;"<br>}<br></td>
+            <td class="description last">user defined success callback that is invoked on success scenario. The result object containing the provider list</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -207,7 +265,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPlugin.js.html">MASPlugin.js</a>, <a href="MASPlugin.js.html#line64">line 64</a>
+        <a href="MASPluginAuthProviders.js.html">MASPluginAuthProviders.js</a>, <a href="MASPluginAuthProviders.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -235,13 +293,13 @@
 
 
 
+        
             
-                
 
     
 
     
-    <h4 class="name" id="successCallbackFunction"><span class="type-signature"></span>successCallbackFunction<span class="signature">(result)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="retrieveAuthenticationProviderForProximityLogin"><span class="type-signature"></span>retrieveAuthenticationProviderForProximityLogin<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
     
 
     
@@ -249,7 +307,7 @@
 
 
 <div class="description">
-    A user defined success callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a structure based on operation type.
+    Returns all the proximity login providers
 </div>
 
 
@@ -285,13 +343,13 @@
 
         <tr>
             
-                <td class="name"><code>result</code></td>
+                <td class="name"><code>successHandler</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
 
 
             
@@ -301,11 +359,30 @@
 
             
 
-            <td class="description last">The result object can take any form. It can be an object, or a plain string, a boolean or a number based on the API.
-<br>As an example for HTTP GET calls it will be :<br>{<br>&nbsp;&nbsp;"MASResponseInfoBodyInfoKey": "&lt;The response content&gt;",
-<br>&nbsp;&nbsp;"MASResponseInfoHeaderInfoKey":{<br>&nbsp;&nbsp;&nbsp;&nbsp;"&lt;header name&gt;": "&lt;Header value&gt;"<br>&nbsp;&nbsp;}<br>}<br>
-For other operations, it can be a string returning SUCCESS or TRUE or any other type<br> Developer may check for existance of result object to define success in such case and must not rely on the exact response format.
-To know about specific result for each API see <a href="http://mas.ca.com/docs/cordova/latest/guides">http://mas.ca.com/docs/cordova/latest/guides</a></td>
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
         </tr>
 
     
@@ -346,7 +423,7 @@ To know about specific result for each API see <a href="http://mas.ca.com/docs/c
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPlugin.js.html">MASPlugin.js</a>, <a href="MASPlugin.js.html#line54">line 54</a>
+        <a href="MASPluginAuthProviders.js.html">MASPluginAuthProviders.js</a>, <a href="MASPluginAuthProviders.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -374,7 +451,9 @@ To know about specific result for each API see <a href="http://mas.ca.com/docs/c
 
 
 
-            
+        
+    
+
     
 
     
