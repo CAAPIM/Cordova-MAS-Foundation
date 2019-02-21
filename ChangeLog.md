@@ -1,3 +1,17 @@
+# Version 1.9.10
+
+### Bug fixes
+- None
+
+### New features
+- None
+
+### Deprecated methods
+- None
+
+### Removed methods
+- None
+
 # Version 1.9.00
 
 ### Bug fixes
