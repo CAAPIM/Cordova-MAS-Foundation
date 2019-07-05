@@ -136,12 +136,12 @@
                                 function () {
                                     console.log("Login successful");
                                 }, function (error) {
-		                            let returnedError = "Internal Server Error";
+                                    let returnedError = "Internal Server Error";
                                     if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
-			                            returnedError = JSON.stringify(error.errorMessage);
+                                        returnedError = JSON.stringify(error.errorMessage);
                                     }
-		                            console.log("Error in Login::"+returnedError);
-									alert("LOGIN-ERROR:"+returnedError);
+                                    console.log("Error in Login::"+returnedError);
+                                    alert("LOGIN-ERROR:"+returnedError);
                                 }, "username", "password"); // Replace the username/password here with actual credentials
                         // Or you can choose to cancel this request as below
                         // MAS.cancelAuthentication(function() {},function (){});
@@ -1194,12 +1194,14 @@
                  var host = thisElement.find("input[name='host']").val().trim();
                  var isPublic = thisElement.find("select[name='isPublic']").val();
                  var trustPublicPKI = thisElement.find("select[name='trustPublicPKI']").val();
+                 var pinningMode = parsePinningMode(thisElement.find("select[name='pinningMode']").val());
                  var certificate = thisElement.find("input[name='certificate']").val().trim();
                  var publicKeyHash = thisElement.find("input[name='publicKeyHash']").val().trim();
 
                  config.setHost(host);
                  config.setPublic(isPublic);
                  config.setTrustPublicPKI(trustPublicPKI);
+                 config.setPinningMode(pinningMode);
                  config.addCertificate(certificate);
                  config.addPublicKeyHash(publicKeyHash);
 
@@ -1348,6 +1350,18 @@
                      return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
                  }
              }
+                           
+               function parsePinningMode(pinningMode) {
+                   if(pinningMode == "PublicKeyHash") {
+                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModePublicKeyHash;
+                   }
+                   else if(pinningMode == "CertificateChain"){
+                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModeCertificate;
+                   }
+                   else if(pinningMode == "IntermediateCertificate"){
+                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModeIntermediateCertificate;
+                   }
+               }
 
              function resetAction(element) {
                  element.find("textarea.error").hide();
@@ -1709,6 +1723,14 @@
                                 <option value="false">False</option>
                                 <option value="true">True</option>
                             </select>
+                            
+                            <label for="pinningMode">Pinning Options:</label>
+                            <select id="pinningMode" name="pinningMode">
+                                <option value="PublicKeyHash">Public Key hash</option>
+                                <option value="CertificateChain">Certificate Chain</option>
+                                <option value="IntermediateCertificate">Intermediate Certificate</option>
+                            </select>
+                            
                             <input type="text" name="certificate"
                                    placeholder="Certificates as PEM Strings"/>
                             <input type="text" name="publicKeyHash"
