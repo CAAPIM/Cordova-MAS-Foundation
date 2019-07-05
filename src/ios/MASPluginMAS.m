@@ -675,6 +675,13 @@
         securityConfiguration.publicKeyHashes = [securityConfig objectForKey:@"publicKeyHashes"];
     if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
         securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
+    if([securityConfig objectForKey:@"pinningMode"])
+    {
+        int value = [[securityConfig objectForKey:@"pinningMode"] intValue];
+        [self setPinningModeForConfiguration:securityConfiguration withValue:value];
+        
+    }
+    
     
     NSError *error = nil;
     [MASConfiguration setSecurityConfiguration:securityConfiguration error:&error];
@@ -682,6 +689,20 @@
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Security configuration set"];
     
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+//method that maps the javascript constant to appropriate pinning mode value
+- (void)setPinningModeForConfiguration:(MASSecurityConfiguration *)securityConfiguration withValue:(int)value
+{
+    if(value == 0){
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModePublicKeyHash;
+    }
+    else if(value == 2){
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModeIntermediateCertifcate;
+    }
+    else{
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModeCertificate;
+    }
 }
 
     ///--------------------------------------
