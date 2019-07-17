@@ -1195,14 +1195,19 @@
                  var isPublic = thisElement.find("select[name='isPublic']").val();
                  var trustPublicPKI = thisElement.find("select[name='trustPublicPKI']").val();
                  var pinningMode = parsePinningMode(thisElement.find("select[name='pinningMode']").val());
-                 var certificate = thisElement.find("input[name='certificate']").val().trim();
+
+                 var certificateArray = splitCertificateString(thisElement.find("input[name='certificate']").val().trim());//thisElement.find("input[name='certificate']").val().trim();
                  var publicKeyHash = thisElement.find("input[name='publicKeyHash']").val().trim();
 
                  config.setHost(host);
                  config.setPublic(isPublic);
                  config.setTrustPublicPKI(trustPublicPKI);
                  config.setPinningMode(pinningMode);
-                 config.addCertificate(certificate);
+
+                 for(var i = 0; i < certificateArray.length;i++){
+                    config.addCertificate(certificateArray[i]);
+                 }
+                 
                  config.addPublicKeyHash(publicKeyHash);
 
                  MAS.setSecurityConfiguration(function(result) {
@@ -1361,6 +1366,10 @@
                    else if(pinningMode == "IntermediateCertificate"){
                         return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModeIntermediateCertificate;
                    }
+               }
+
+               function splitCertificateString(certificateString) {
+                    return certificateString.split(",");
                }
 
              function resetAction(element) {

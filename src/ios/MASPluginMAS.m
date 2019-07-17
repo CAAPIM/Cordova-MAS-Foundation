@@ -673,13 +673,16 @@
         securityConfiguration.trustPublicPKI = YES;
     if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
         securityConfiguration.publicKeyHashes = [securityConfig objectForKey:@"publicKeyHashes"];
-    if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
+    
+    if([[securityConfig objectForKey:@"certificates"] count])
+    {
         securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
+    }
+    
     if([securityConfig objectForKey:@"pinningMode"])
     {
         int value = [[securityConfig objectForKey:@"pinningMode"] intValue];
         [self setPinningModeForConfiguration:securityConfiguration withValue:value];
-        
     }
     
     
