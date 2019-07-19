@@ -48,7 +48,8 @@ var MASPlugin = {
     MASDevice: MASPluginDevice,
     MASApplication: MASPluginApplication,
     MASAuthenticationProviders: MASPluginAuthProviders,
-    MASSecurityConfiguration: MASPluginSecurityConfiguration
+    MASSecurityConfiguration: MASPluginSecurityConfiguration,
+    MASSecuritySSLPinningMode: MASPluginConstants.MASSecuritySSLPinningMode
 };
     
 /**

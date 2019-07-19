@@ -85,7 +85,21 @@ var MASPluginConstants = {
 		MASStateNotInitialized:2,
 		MASStateStarted:3,
 		MASStateStopped:4
-	}
+	},
+
+	/**
+    * The constant which specifies the SSL pinning mode that can be opted.
+    * @memberOf MASPluginSecurityConfiguration
+    * @typedef {Object} MASSecuritySSLPinningMode
+    * @property {number} MASSecuritySSLPinningModePublicKeyHash SSL Pinning based on Public Key Hash
+    * @property {number} MASSecuritySSLPinningModeCertificate SSL pinning based on Leaf Certificate
+    * @property {number} MASSecuritySSLPinningModeIntermediateCertificate SSL pinning based on Intermediate Certificate
+    */
+    MASSecuritySSLPinningMode: {
+       MASSecuritySSLPinningModePublicKeyHash: 0,
+       MASSecuritySSLPinningModeCertificate: 1 ,
+       MASSecuritySSLPinningModeIntermediateCertificate: 2
+   }
 };
 
 module.exports = MASPluginConstants;

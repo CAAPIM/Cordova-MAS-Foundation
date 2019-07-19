@@ -20,8 +20,11 @@ var MASPluginSecurityConfiguration = function(){
 	    isPublic : false,
 	    certificates : [],
 	    publicKeyHashes : [],
-	    trustPublicPKI : false
+	    trustPublicPKI : false,
+	    pinningMode : 1
 	},
+
+
 	/**
 	* Set the host of the server that you want to connect
 	* @memberOf MASPluginSecurityConfiguration
@@ -72,6 +75,19 @@ var MASPluginSecurityConfiguration = function(){
     this.setTrustPublicPKI = function(pTrustPublicPKI){
         this.json.trustPublicPKI = pTrustPublicPKI;
     },
+    /**
+    * Set the SSL Pinning mode needed.
+    * @memberOf MASPluginSecurityConfiguration
+    * @function setPinningMode
+    * @instance
+    * @param {MASSecuritySSLPinningMode} pinningMode enum value to specify the type of SSL pinning needed. 
+    * The Certifcates array needs to be set accordingly with the certificates that needs to be pinned. 
+    * If MASSecuritySSLPinningModeIntermediateCertifcate is chosen, then the certificates array should contain intermediate certificate.
+    */
+    this.setPinningMode = function(pinningMode){
+    	this.json.pinningMode = pinningMode;
+    },
+
 	/**
 	* Gets the final MASSecurityConfiguration as a JSON object
 	* @function getSecurityConfiguration
