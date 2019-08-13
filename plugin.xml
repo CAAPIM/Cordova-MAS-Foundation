@@ -109,6 +109,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
+        <podspec> 
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true" >
+                <pod name="MASFoundation" spec="~> 1.9.10" />
+                <pod name="MASUI" spec="~> 1.9.10" />
+            </pods>
+        </podspec>
     
         <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveIos.js" />
 
