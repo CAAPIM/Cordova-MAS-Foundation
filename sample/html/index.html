@@ -48,7 +48,6 @@
       </script>
     <script type="text/javascript">
          $(document).ready(function() {
-
              $("#scan").bind("click", function(event, ui) {
 
                  $(this).find("textarea.error").hide();
@@ -136,12 +135,12 @@
                                 function () {
                                     console.log("Login successful");
                                 }, function (error) {
-                                    let returnedError = "Internal Server Error";
+		                            let returnedError = "Internal Server Error";
                                     if (!MASPluginUtils.isEmpty(error) && !MASPluginUtils.isEmpty(error.errorMessage)) {
-                                        returnedError = JSON.stringify(error.errorMessage);
+			                            returnedError = JSON.stringify(error.errorMessage);
                                     }
-                                    console.log("Error in Login::"+returnedError);
-                                    alert("LOGIN-ERROR:"+returnedError);
+		                            console.log("Error in Login::"+returnedError);
+									alert("LOGIN-ERROR:"+returnedError);
                                 }, "username", "password"); // Replace the username/password here with actual credentials
                         // Or you can choose to cancel this request as below
                         // MAS.cancelAuthentication(function() {},function (){});
@@ -1194,20 +1193,13 @@
                  var host = thisElement.find("input[name='host']").val().trim();
                  var isPublic = thisElement.find("select[name='isPublic']").val();
                  var trustPublicPKI = thisElement.find("select[name='trustPublicPKI']").val();
-                 var pinningMode = parsePinningMode(thisElement.find("select[name='pinningMode']").val());
-
-                 var certificateArray = splitCertificateString(thisElement.find("input[name='certificate']").val().trim());//thisElement.find("input[name='certificate']").val().trim();
+                 var certificate = thisElement.find("input[name='certificate']").val().trim();
                  var publicKeyHash = thisElement.find("input[name='publicKeyHash']").val().trim();
 
                  config.setHost(host);
                  config.setPublic(isPublic);
                  config.setTrustPublicPKI(trustPublicPKI);
-                 config.setPinningMode(pinningMode);
-
-                 for(var i = 0; i < certificateArray.length;i++){
-                    config.addCertificate(certificateArray[i]);
-                 }
-                 
+                 config.addCertificate(certificate);
                  config.addPublicKeyHash(publicKeyHash);
 
                  MAS.setSecurityConfiguration(function(result) {
@@ -1339,6 +1331,70 @@
 
                      }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic);
              });
+             var fileDetails = {};
+             $("#chooseFiles").bind("click", function(event, ui) {
+                if(typeof chooser !== 'undefined'){
+                    (async () => {
+                        const file = await chooser.getFile();
+                        if(file){
+                            fileDetails.fileName = file.name;
+                            fileDetails.filePath = file.uri;
+                            fileDetails.fileMimeType = file.mediaType;
+                            fileDetails.data = btoa(file.data.reduce((data, byte) => data + String.fromCharCode(byte), ''));
+                        }
+                    })();
+                }
+             });
+
+             $("#postMultiPartForm").bind("click", function(event, ui) {
+                 if ($(event.target).context.tagName != 'A') return;
+                 $(this).find("textarea.error").hide();
+
+                 var thisElement = $(this);
+                 var MAS = new MASPlugin.MAS();
+                 var multipart = new MASPlugin.MASMultipartForm();
+
+                 var requestType = parseRequestResponseType(thisElement.find("select[name='requestType']").val());
+                 var responseType = parseRequestResponseType(thisElement.find("select[name='responseType']").val());
+                 var requestParam = thisElement.find("input[name='parameter']").val() ? JSON.parse(thisElement.find("input[name='parameter']").val()) : null;
+                 var requestHeader = thisElement.find("input[name='header']").val() ? JSON.parse(thisElement.find("input[name='header']").val()) : null;
+                 var requestPath = thisElement.find("input[name='path']").val().trim();
+                 var isPublic = thisElement.find("select[name='isPublic']").val();
+
+                 var firstName = document.querySelector('#firstName').value.trim();
+                 var lastName = document.querySelector('#lastName').value.trim();
+                 var age = document.querySelector('#age').value.trim();
+
+                 multipart.addFormData(firstName,firstName);
+                 multipart.addFormData(lastName,lastName);
+                 multipart.addFormData(age,age);
+
+                 if(fileDetails && fileDetails.length !== 0){
+                    multipart.addFiles(fileDetails.fileName,fileDetails.filePath,fileDetails.fileMimeType,fileDetails.fileName,fileDetails.data);
+                    fileDetails = {};
+                 }
+
+                 MAS.postMultiPartForm(function(result) {
+                        $("#progressPopup").popup("close");
+                         thisElement.removeClass("success").removeClass("failure").addClass("success");
+                         displayResult(thisElement, result);
+                     },
+                     function(error) {
+                         $("#progressPopup").popup("close");
+                         thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                         displayError(thisElement, error);
+                     }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic,multipart.getMultipartForm(),
+                     function(result){
+                        if(result == -1){
+                            $("#progressPopup").popup("close");
+                        }
+                        if(result > 0){
+                            document.getElementById("progress").value = result;
+                        }
+                     });
+                     $("#progressPopup").popup("open");
+                     document.getElementById("progress").hidden = false;
+             });
 
              function parseRequestResponseType(type) {
                  if (type == "json") {
@@ -1355,22 +1411,6 @@
                      return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
                  }
              }
-                           
-               function parsePinningMode(pinningMode) {
-                   if(pinningMode == "PublicKeyHash") {
-                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModePublicKeyHash;
-                   }
-                   else if(pinningMode == "CertificateChain"){
-                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModeCertificate;
-                   }
-                   else if(pinningMode == "IntermediateCertificate"){
-                        return MASPlugin.MASSecuritySSLPinningMode.MASSecuritySSLPinningModeIntermediateCertificate;
-                   }
-               }
-
-               function splitCertificateString(certificateString) {
-                    return certificateString.split(",");
-               }
 
              function resetAction(element) {
                  element.find("textarea.error").hide();
@@ -1461,6 +1501,16 @@
          .ui-loading .ui-loader-background {
          display: block;
          }
+         .ui-progressbar {
+            position: relative;
+          }
+         .progress-label {
+            position: absolute;
+            left: 50%;
+            top: 4px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff;
+         }
       </style>
 </head>
 <body onload="onBodyLoad();">
@@ -1542,8 +1592,8 @@
                                                                                   readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="enableBrowserBasedAuthentication">MAS enableBrowserBasedAuthentication<textarea class='error'
-                                                                                    style="display:none;"
-                                                                                    readonly=""></textarea></a>
+                                                                                                                                          style="display:none;"
+                                                                                                                                          readonly=""></textarea></a>
                     </li>
                 </ul>
             </li>
@@ -1620,13 +1670,13 @@
                         </a>
                     </li>
                     <li data-icon="false"><a href="#" id="isIdTokenValidationEnabled">Is ID Token Validation Enabled<textarea class='error' style="display:none;"
-                                            readonly=""></textarea></a>
+                                                                                                                              readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="userLogin">MASUser login with username and
                         password <input type="text" name="userLoginUsername"
                                         placeholder="userLoginUsername:username"/><input type="text"
-                                                                       name="userLoginPassword"
-                                                                       placeholder="userLoginUsername:password"/><textarea
+                                                                                         name="userLoginPassword"
+                                                                                         placeholder="userLoginUsername:password"/><textarea
                                 class='error' style="display:none;" readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="userLoginAuthCred">MASUserAuthCredentials
@@ -1635,8 +1685,8 @@
                                                                 placeholder="userLoginUsernameAuthCred:username"/><input
                                 type="text" name="userLoginPasswordAuthCred"
                                 placeholder="userLoginUsernameAuthCred:password"/><textarea class='error'
-                                                                  style="display:none;"
-                                                                  readonly=""></textarea></a>
+                                                                                            style="display:none;"
+                                                                                            readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="browserBasedLogin">MASUser initializeWithBrowserBasedAuthentication
                         <textarea class='error' style="display:none;" readonly="">
@@ -1732,14 +1782,6 @@
                                 <option value="false">False</option>
                                 <option value="true">True</option>
                             </select>
-                            
-                            <label for="pinningMode">Pinning Options:</label>
-                            <select id="pinningMode" name="pinningMode">
-                                <option value="PublicKeyHash">Public Key hash</option>
-                                <option value="CertificateChain">Certificate Chain</option>
-                                <option value="IntermediateCertificate">Intermediate Certificate</option>
-                            </select>
-                            
                             <input type="text" name="certificate"
                                    placeholder="Certificates as PEM Strings"/>
                             <input type="text" name="publicKeyHash"
@@ -1874,6 +1916,37 @@
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <div data-role="popup" id="progressPopup">
+                    <progress max="100" value="0" id="progress"></progress>
+                </div>
+                <h2>MAS Multipart File Upload and Download</h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="postMultiPartForm" data-rel="popup">
+                            MAS MultipartForm upload
+                            <input type="text" name="path" placeholder="MASUpload: Server API path" value="/test/multipart/"/>
+                            <input type="text" name="parameter"
+                                   placeholder="MASGet:Parameter in JSON format"/>
+                            <input type="text" name="header" placeholder="MASGet:Header in JSON format"/>
+                            <label for="isPublicUpload">is Public:</label>
+                            <select id="isPublicUpload" name="isPublic">
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
+                            <label for="formDataTable">Multipart Form Data</label></br>
+                            <table id="formDataTable" cellspacing="0">
+                                <tr><td>First Name</td><td><input id="firstName" type="text" name="firstName" placeholder="First Name"/></td></tr>
+                                <tr><td>Last Name</td><td><input id="lastName" type="text" name="lastName" placeholder="Last Name"/></td></tr>
+                                <tr><td>Age</td><td><input id="age" type="text" name="age" placeholder="Age"/></td></tr>
+                            </table>
+                            <label for="chooseFiles">Select Files to Upload</label></br>
+                            <input type="file" id="chooseFiles">
+                            <textarea class='error' style="display:none;" readonly=""></textarea>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
                 <h2>MAS Additionals</h2>
                 <ul data-role="listview" data-theme="b">
                     <li data-icon="false"><a href="#" id="gatewayIsReachable">MAS gatewayIsReachable<textarea
@@ -1883,7 +1956,7 @@
                                                                                      readonly=""></textarea></a>
                     </li>
                     <li data-icon="false"><a href="#" id="getMASState">MAS getMASState <textarea
-                            class='error' style="display:none;" readonly=""></textarea></a></li>       
+                            class='error' style="display:none;" readonly=""></textarea></a></li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -1940,7 +2013,7 @@
                     </li>
                 </ul>
             </li>
-            
+
             <li data-icon="false"><a href="#" id="deregisterDevice">MASDevice deregister<textarea
                     class='error' style="display:none;" readonly=""></textarea></a></li>
             <li data-icon="false"><a href="#" id="resetLocally">MASDevice resetLocally<textarea
