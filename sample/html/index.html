@@ -1365,9 +1365,9 @@
                  var lastName = document.querySelector('#lastName').value.trim();
                  var age = document.querySelector('#age').value.trim();
 
-                 multipart.addFormData(firstName,firstName);
-                 multipart.addFormData(lastName,lastName);
-                 multipart.addFormData(age,age);
+                 multipart.addFormData("firstName",firstName);
+                 multipart.addFormData("lastName",lastName);
+                 multipart.addFormData("age",age);
 
                  if(fileDetails && fileDetails.length !== 0){
                     multipart.addFiles(fileDetails.fileName,fileDetails.filePath,fileDetails.fileMimeType,fileDetails.fileName,fileDetails.data);
@@ -1385,6 +1385,8 @@
                          displayError(thisElement, error);
                      }, requestPath, requestParam, requestHeader, requestType, responseType, isPublic,multipart.getMultipartForm(),
                      function(result){
+                        $("#progressPopup").popup("open");
+                        document.getElementById("progress").hidden = false;
                         if(result == -1){
                             $("#progressPopup").popup("close");
                         }
@@ -1392,8 +1394,6 @@
                             document.getElementById("progress").value = result;
                         }
                      });
-                     $("#progressPopup").popup("open");
-                     document.getElementById("progress").hidden = false;
              });
 
              function parseRequestResponseType(type) {
