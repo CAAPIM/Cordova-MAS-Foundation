@@ -20,8 +20,8 @@ import android.util.Pair;
 import android.widget.ImageView;
 
 import com.ca.mas.core.cert.CertUtils;
+import com.ca.mas.core.error.MAGError;
 import com.ca.mas.core.service.MssoIntents;
-import com.ca.mas.core.token.JWTRS256Validator;
 import com.ca.mas.foundation.MAS;
 import com.ca.mas.foundation.MASAuthCredentialsAuthorizationCode;
 import com.ca.mas.foundation.MASAuthenticationListener;
@@ -30,13 +30,16 @@ import com.ca.mas.foundation.MASClaims;
 import com.ca.mas.foundation.MASClaimsBuilder;
 import com.ca.mas.foundation.MASConfiguration;
 import com.ca.mas.foundation.MASConstants;
+import com.ca.mas.foundation.MASFileObject;
 import com.ca.mas.foundation.MASOtpAuthenticationHandler;
+import com.ca.mas.foundation.MASProgressListener;
 import com.ca.mas.foundation.MASRequest;
 import com.ca.mas.foundation.MASRequestBody;
 import com.ca.mas.foundation.MASResponse;
 import com.ca.mas.foundation.MASResponseBody;
 import com.ca.mas.foundation.MASSecurityConfiguration;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.foundation.MultiPart;
 import com.ca.mas.foundation.auth.MASAuthenticationProvider;
 import com.ca.mas.foundation.auth.MASAuthenticationProviders;
 import com.ca.mas.foundation.auth.MASProximityLogin;
@@ -52,6 +55,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
@@ -82,6 +86,14 @@ public class MASPluginMAS extends MASCordovaPlugin {
     private static final String NODE_INVALID_OTP = "isInvalidOtp";
     private static final String NODE_OTP_ERR = "errorMessage";
     private static final String NODE_OTP_CHANNELS = "channels";
+    private static final String NODE_FORM_DATA = "formData";
+    private static final String NODE_FILES = "files";
+    private static final String NODE_FILE_NAME = "fileName";
+    private static final String NODE_FILE_PATH = "filePath";
+    private static final String NODE_FILE_MIME_TYPE = "fileMimeType";
+    private static final String NODE_FILE_FIELD_NAME = "fileFieldName";
+    private static final String NODE_FILE_DATA = "fileData";
+
 
     @Override
     protected void pluginInitialize() {
@@ -146,6 +158,8 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 putToPath(args, callbackContext);
             } else if (action.equalsIgnoreCase("postToPath")) {
                 postToPath(args, callbackContext);
+            } else if (action.equalsIgnoreCase("postMultiPartForm")) {
+                postMultiPartForm(args, callbackContext);
             } else if (action.equalsIgnoreCase("getMASState")) {
                 getMASState(args, callbackContext);
             } else if (action.equalsIgnoreCase("authorizeQRCode")) {
@@ -631,6 +645,25 @@ public class MASPluginMAS extends MASCordovaPlugin {
         command.execute(mContext, args, callbackContext);
     }
 
+    private void postMultiPartForm(final JSONArray args, final CallbackContext callbackContext) {
+        InvokeCommand command = new InvokeCommand() {
+            @Override
+            public MASRequest.MASRequestBuilder getRequestBuilder(String path, JSONObject parameters, int requestType, int responseType) throws Exception {
+                MASRequest.MASRequestBuilder builder = new MASRequest.MASRequestBuilder(new URI(path));
+                MASRequestBody requestBody = getRequestBody(requestType, parameters);
+                if (requestBody != null) {
+                    builder.post(requestBody);
+                }
+                MASResponseBody responseBody = getResponseBody(responseType);
+                if (responseBody != null) {
+                    builder.responseBody(responseBody);
+                }
+                return builder;
+            }
+        };
+        command.execute(mContext, args, callbackContext);
+    }
+
     private abstract class InvokeCommand {
         protected static final int MAS_REQUEST_RESPONSE_TYPE_JSON = 0;
         protected static final int MAS_REQUEST_RESPONSE_TYPE_SCIM_JSON = 1;
@@ -644,6 +677,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
         private static final int REQUEST_TYPE = 3;
         private static final int RESPONSE_TYPE = 4;
         private static final int IS_PUBLIC = 5;
+        private static final int MULTIPART_FORM = 6;
 
 
         protected void execute(Context context, JSONArray args, final CallbackContext callbackContext) {
@@ -654,6 +688,7 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 final int requestType = args.getInt(REQUEST_TYPE);
                 final int responseType = args.getInt(RESPONSE_TYPE);
                 boolean isPublic = Boolean.parseBoolean(args.optString(IS_PUBLIC, "false"));
+                JSONObject multipartForm = args.optJSONObject(MULTIPART_FORM);
                 MASRequest.MASRequestBuilder builder = getRequestBuilder(path, parameters, requestType, responseType);
                 if (headers != null && headers.names() != null) {
                     for (int i = 0; i < headers.names().length(); i++) {
@@ -665,6 +700,67 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 builder.notifyOnCancel();
                 if (isPublic) {
                     builder.setPublic();
+                }
+                if (multipartForm != null && multipartForm.length() > 0) {
+                    try {
+                        final MASProgressListener progressListener = getMASProgressListener(callbackContext);
+                        final MultiPart multiPart = createMASMultiPartFromJSON(multipartForm);
+                        MAS.postMultiPartForm(builder.build(), multiPart, progressListener, new MASCallback<MASResponse<Object>>() {
+                            @Override
+                            public void onSuccess(MASResponse masResponse) {
+                                JSONObject response = new JSONObject();
+                                Object content = masResponse.getBody().getContent();
+                                if (content != null) {
+                                    try {
+                                        response.put("MASResponseInfoBodyInfoKey", content);
+                                    } catch (JSONException ignore) {
+                                    }
+                                }
+                                Map<String, List<String>> responseHeaders = masResponse.getHeaders();
+                                if (responseHeaders != null) {
+                                    JSONObject headerJson = new JSONObject();
+                                    for (String h : responseHeaders.keySet()) {
+                                        List<String> hv = responseHeaders.get(h);
+                                        if (hv != null && !hv.isEmpty()) {
+                                            try {
+                                                headerJson.put(h, hv.get(0));
+                                            } catch (JSONException ignore) {
+                                            }
+                                        }
+                                    }
+                                    try {
+                                        response.put("MASResponseInfoHeaderInfoKey", headerJson);
+                                    } catch (JSONException ignore) {
+                                    }
+                                }
+                                success(callbackContext, response, false);
+                            }
+
+                            @Override
+                            public void onError(Throwable throwable) {
+                                if (throwable instanceof MAS.RequestCancelledException) {
+                                    JSONObject error = new JSONObject();
+                                    String errorMessage = "Request Cancelled";
+                                    try {
+                                        if ((((MAS.RequestCancelledException) throwable).getData() != null &&
+                                                ((MAS.RequestCancelledException) throwable).getData().get(REQUEST_CANCELLATION_MSG_KEY) != null)) {
+                                            errorMessage = (String) ((MAS.RequestCancelledException) throwable).getData().get(REQUEST_CANCELLATION_MSG_KEY);
+                                        }
+                                        error.put("errorMessage", errorMessage);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    callbackContext.error(error);
+                                } else
+                                    callbackContext.error(getError(throwable));
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage(), e);
+                        callbackContext.error(getError(e));
+                    } finally {
+                        return;
+                    }
                 }
                 MAS.invoke(builder.build(), new MASCallback<MASResponse<Object>>() {
 
@@ -1079,5 +1175,91 @@ public class MASPluginMAS extends MASCordovaPlugin {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private MASProgressListener getMASProgressListener(final CallbackContext callbackContext) {
+        MASProgressListener progressListener = new MASProgressListener() {
+            @Override
+            public void onProgress(String progressPercent) {
+                Log.d(TAG, progressPercent);
+                JSONObject progress = new JSONObject();
+                try {
+                    progress.put("iAmProgress", true);
+                    progress.put("state", 0);
+                    progress.put("progress", progressPercent);
+
+
+                } catch (JSONException jce) {
+                    callbackContext.error(getError(jce));
+                }
+                success(callbackContext, progress, true);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "Progress completed");
+                JSONObject progress = new JSONObject();
+                try {
+                    progress.put("iAmProgress", true);
+                    progress.put("state", 1);
+                } catch (JSONException jce) {
+                    callbackContext.error(getError(jce));
+                }
+                success(callbackContext, progress, true);
+            }
+
+            @Override
+            public void onError(MAGError error) {
+                Log.d(TAG, "Progress error");
+                JSONObject progress = new JSONObject();
+                try {
+                    progress.put("iAmProgress", true);
+                    progress.put("state", -1);
+                    progress.put("error", getError(error));
+                    callbackContext.error(progress);
+                } catch (JSONException jce) {
+                    callbackContext.error(getError(jce));
+                }
+            }
+        };
+        return progressListener;
+    }
+
+    private MultiPart createMASMultiPartFromJSON(final JSONObject multiPartJSON) {
+        final MultiPart multiPart = new MultiPart();
+        JSONObject formData = multiPartJSON.optJSONObject(NODE_FORM_DATA);
+        if (formData != null && formData.length() > 0) {
+            Iterator<String> itr = formData.keys();
+            while (itr.hasNext()) {
+                String key = itr.next();
+                multiPart.addFormField(key, formData.optString(key));
+            }
+        }
+
+        JSONArray fileList = multiPartJSON.optJSONArray(NODE_FILES);
+        if (fileList != null && fileList.length() > 0) {
+            for (int i = 0; i < fileList.length(); i++) {
+                JSONObject file = fileList.optJSONObject(i);
+                if (file != null && file.length() > 0) {
+                    try {
+                        MASFileObject obj;
+                        String filePath = URLDecoder.decode(file.getString(NODE_FILE_PATH), "UTF-8");
+                        String fileName = URLDecoder.decode(file.getString(NODE_FILE_NAME), "UTF-8");
+                        String fileMimeType = URLDecoder.decode(file.getString(NODE_FILE_MIME_TYPE), "UTF-8");
+                        String dataEncoded = file.optString(NODE_FILE_DATA);
+                        if (dataEncoded != null) {
+                            byte[] bytes = Base64.decode(dataEncoded, Base64.DEFAULT);
+                            obj = new MASFileObject(fileName, fileMimeType, fileName, bytes);
+                        }else{
+                            obj = new MASFileObject(fileName,filePath,fileMimeType,fileName);
+                        }
+                        multiPart.addFilePart(obj);
+                    } catch (Exception e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+                }
+            }
+        }
+        return multiPart;
     }
 }

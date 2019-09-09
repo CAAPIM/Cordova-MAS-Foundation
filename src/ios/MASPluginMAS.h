@@ -327,7 +327,13 @@
  */
 - (void)patchToPath:(CDVInvokedUrlCommand*)command;
 
+///--------------------------------------
+/// @name HTTP File Requests
+///--------------------------------------
 
+# pragma mark - HTTP File Requests
+
+- (void)postMultiPartForm: (CDVInvokedUrlCommand *)command;
 
 ///--------------------------------------
 /// @name Proximity Login

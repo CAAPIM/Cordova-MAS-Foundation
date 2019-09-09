@@ -49,6 +49,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginUtils" />
     </js-module>
 
+    <js-module src="www/MASPluginMultipartForm.js" name="MASPluginMultipartForm">
+        <clobbers target="MASPluginMultipartForm" />
+    </js-module>
+
     <js-module src="www/simple-popup.js" name="PopupUI">
         <clobbers target="PopupUI" />
     </js-module>
