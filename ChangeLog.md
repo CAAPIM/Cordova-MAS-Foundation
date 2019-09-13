@@ -1,3 +1,20 @@
+# Version 2.0.00
+
+### Bug fixes
+- None
+
+### New features
+- Decoupling the Proximity login feature in Cordova in accordance with Native iOS SDK [US587011]
+- Intermediate Certificate Pinning-Implementation Cordova-iOS [US600504]
+- iOS - Podspec entry instead of framework tag in plugin.xml [US604884]
+- Multipart Form data support (Usage: File Upload) [US605856]
+
+### Deprecated methods
+- None
+
+### Removed methods
+- None
+
 # Version 1.9.10
 
 ### Bug fixes

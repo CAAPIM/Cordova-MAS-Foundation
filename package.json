@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mas-core",
-  "version": "1.9.10",
+  "version": "2.0.0",
   "description": "Cordova MAS Foundation Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-core",
@@ -16,13 +16,14 @@
   "keywords": [
     "cordova",
     "MAS",
+    "Broadcom",
     "CA Technologies",
     "ecosystem:cordova",
     "cordova-ios",
     "cordova-android"
   ],
-  "author": "CA Technologies Ltd.",
-  "license": "CA Technologies Ltd.",
+  "author": "Broadcom",
+  "license": "Broadcom",
   "bugs": {
     "url": "https://github.com/CAAPIM/Cordova-MAS-Foundation/issues"
   },

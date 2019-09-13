@@ -6,12 +6,15 @@ The Cordova-MAS-Foundation framework has the following features:
 
 * User Authentication and Authorization
 * Customize Login Dialogs
+* Customized Login Mechanism Handling
 * Enterprise Browser
 * Fingerprint Sessions Lock
 * One-Time Password (OTP)
 * Proximity Login (QR Code)
 * Social Login
 * SSL Pinning with certificate, public key, or public key hash
+* Intermediate Certificate for enhanced security
+* Multipart Form Upload capability. Enables the SDK user to upload files.
 
 *********************************************************
 
@@ -65,6 +68,7 @@ Contributions are welcome and much appreciated. To learn more, see the [Contribu
 - *Request a feature or have an idea?*, open an issue.
 
 ## License
-Copyright (c) 2016 CA. All rights reserved.
+Copyright (c) 2019 Broadcom. All Rights Reserved.
+The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 This software may be modified and distributed under the terms of the MIT license. See the [LICENSE](https://github.com/CAAPIM/Cordova-MAS-Foundation/blob/develop/LICENSE) file for details.
