@@ -17,13 +17,13 @@ Follow these steps for pull requests:
 5. If you haven't already, complete the [Contributor License Agreement ("CLA")][cla].
 
 ### Contributor License Agreement ("CLA")
-To accept pull requests, submit a CLA. (Submitting a single CLA lets you work on any open source projects from CA, Inc.)
+To accept pull requests, submit a CLA. (Submitting a single CLA lets you work on any open source projects from CA, Inc., A Broadcom Company)
 
 Complete your CLA here: [Contributor License Agreement ("CLA")][cla]
 
 ## Bugs
-We work hard to avoid them, but they still happen. If you're a CA customer, open an issue in our [Support Page][casupport], otherwise use GitHub issues.
-To share ideas or ask product-related questions go to [CA Communities][community].
+We work hard to avoid them, but they still happen. If you're a Broadcom customer, open an issue in our [Support Page][support], otherwise use GitHub issues.
+To share ideas or ask product-related questions go to [Broadcom Communities][community]
 
 ### Known Issues
 We also use GitHub issues for updates to known issues, including alerts when fixes are in progress. 
@@ -43,7 +43,7 @@ Before filing a new issue, check Known Issues to see if your problem already exi
 By contributing to the Cordova Mobile SDK, you agree that your contributions will be licensed under its [license][license-link].
 
 
-[community]: https://communities.ca.com/community/ca-api-management-community/content?filterID=contentstatus%5Bpublished%5D~category%5Bca-mobile-api-gateway%5D
+[community]: https://community.broadcom.com/enterprisesoftware/communities/communityhomeblogs?CommunityKey=0f580f5f-30a4-41de-a75c-e5f433325a18
 [license-link]: /LICENSE
 [cla]: https://www.clahub.com/agreements/CAAPIM/Cordova-MAS-Foundation
-[casupport]: https://support.ca.com/irj/portal/implsvcnewcase
+[support]: https://casupport.broadcom.com

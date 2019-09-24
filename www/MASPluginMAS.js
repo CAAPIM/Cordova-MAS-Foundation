@@ -644,10 +644,12 @@ function(result){
     };
 
      /**
-     * postMultiPartForm adds the capability to upload multipart forms over HTTP(s) POST to the bacend services via Layer7 Gateway.
-     * This expects at least three mandatory parameters as shown in the below example. The requestType and responseType are the optional parameters. If the requestType and responseType is not present, then it is set to the Default Type to JSON.
+     * PostMultiPartForm adds the capability to upload multipart forms over HTTP(s) POST to the backend services via Layer7 Gateway.
+     * The requestType and responseType are the optional parameters. If the requestType and responseType is not present,
+	 * then it is set to the Default Type to requestType as "multipart/form-data" and responseType as JSON.<br>
+	 * `multipartForm` is the mandatory parameter along with `path`
 	 * @memberOf MASPluginMAS
-	 * @function postToPath
+	 * @function postMultiPartForm
 	 * @instance
      * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
      * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
@@ -661,14 +663,14 @@ function(result){
      * @param {function} progressListener A function to listen to form upload progress.
 	 * @example
 	 * <caption>The progressListener struct should have the below facade.</caption>
-					function(progress){// This function will be invoked with the progress percent of the data uploaded.
-                        if(progress == -1){
-                            // Close the progress bar
-                        }
-                        if(progress > 0){
-                            Update the HTML/jQuery progress bar with the progress percent
-                        }
-                     });
+	function(progress){// This function will be invoked with the progress percent of the data uploaded.
+       if(progress == -1){
+           // Close the progress bar
+       }
+       if(progress > 0){
+           Update the HTML/jQuery progress bar with the progress percent
+       }
+    });
      */
 
     this.postMultiPartForm = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic,multipartForm,progressListener) {
