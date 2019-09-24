@@ -22,7 +22,7 @@ To accept pull requests, submit a CLA. (Submitting a single CLA lets you work on
 Complete your CLA here: [Contributor License Agreement ("CLA")][cla]
 
 ## Bugs
-We work hard to avoid them, but they still happen. If you're a CA customer, open an issue in our [Support Page][support], otherwise use GitHub issues.
+We work hard to avoid them, but they still happen. If you're a Broadcom customer, open an issue in our [Support Page][support], otherwise use GitHub issues.
 To share ideas or ask product-related questions go to [Broadcom Communities][community]
 
 ### Known Issues
