@@ -19,7 +19,7 @@ The Cordova-MAS-Foundation framework has the following features:
 *********************************************************
 
 ## Get Started
-Follow our [documentation](http://mas.ca.com/docs/) to install Cordova and set up iOS and Android projects.
+Follow our [documentation](http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-0.html) to install Cordova and set up iOS and Android projects.
 *********************************************************
 
 ## Generate Reference documents
@@ -28,7 +28,7 @@ The reference documents for the MAS modules are generated using the JSDoc markdo
 
 To install JSDoc, follow the instructions on [JSDoc](http://usejsdoc.org/) website.
 
-The Cordova reference documents are available at our [mas.ca.com]( http://mas.ca.com/docs/cordova/latest/sdk/) site.
+The Cordova reference documents are available at our [techdocs.broadcom.com]( http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-0/Cordova.html) site.
 
 Example:
 An annotated comment for validateOTP method is as follows:
