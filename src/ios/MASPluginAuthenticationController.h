@@ -12,6 +12,12 @@
 #import <Cordova/CDV.h>
 #import <MASFoundation/MASFoundation.h>
 
+#if defined(__has_include)
+#if __has_include(<MASProximity/MASProximity.h>)
+#import <MASProximity/MASProximity.h>
+#endif
+#endif
+
 
 
 @interface MASPluginAuthenticationController : CDVPlugin

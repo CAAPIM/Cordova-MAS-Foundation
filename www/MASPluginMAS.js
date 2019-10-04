@@ -643,6 +643,60 @@ function(result){
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "postToPath", [path, parametersInfo, headersInfo, requestType, responseType, isPublic]);
     };
 
+     /**
+     * PostMultiPartForm adds the capability to upload multipart forms over HTTP(s) POST to the backend services via Layer7 Gateway.
+     * The requestType and responseType are the optional parameters. If the requestType and responseType is not present,
+	 * then it is set to the Default Type to requestType as "multipart/form-data" and responseType as JSON.<br>
+	 * `multipartForm` is the mandatory parameter along with `path`
+	 * @memberOf MASPluginMAS
+	 * @function postMultiPartForm
+	 * @instance
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+     * @param {string} path path to the url. For example, "/protected/resource/*"
+     * @param {Object} parametersInfo Query Parameters to be passed along with the request. <table><tr><th>Example</th></tr><tr><td>{<br>&nbsp;&nbsp;"x-otp":"2345",<br>&nbsp;&nbsp;"empName":"Jon"<br>}</td></tr></table>
+     * @param {Object} headersInfo The HTTP Headers to be passed along with the request.<table><tr><th>Example</th></tr><tr><td>{<br>&nbsp;&nbsp;"Content-Type":"application/xml",<br>&nbsp;&nbsp;"reload-cache":"true"<br>}</td></tr></table>
+     * @param {MASPluginConstants.MASRequestResponseType} requestType specifies the request type of the request.<br>
+     * @param {MASPluginConstants.MASRequestResponseType} responseType specifies the response type of the request
+     * @param {boolean} isPublic specifies if the API being called is public or not
+     * @param {MASPluginMultipartForm} multipartForm Representation of a multipart form. For usage see {MASPluginMultipartForm}
+     * @param {function} progressListener A function to listen to form upload progress.
+	 * @example
+	 * <caption>The progressListener struct should have the below facade.</caption>
+	function(progress){// This function will be invoked with the progress percent of the data uploaded.
+       if(progress == -1){
+           // Close the progress bar
+       }
+       if(progress > 0){
+           Update the HTML/jQuery progress bar with the progress percent
+       }
+    });
+     */
+
+    this.postMultiPartForm = function(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic,multipartForm,progressListener) {
+        let modifiedSuccessCallback = function(result){
+            if(typeof result.iAmProgress != 'undefined'){
+                if(result.state != 'undefined' && result.state == 0){
+                    progressListener(result.progress);
+                }else if(result.state != 'undefined' && result.state == 1){
+                    progressListener(-1);
+                }
+            }else{
+                successHandler(result);
+            }
+        };
+        let modifiedErrorCallback = function(error){
+            if(typeof error.iAmProgress !== 'undefined'){
+                progressListener(-1);
+            }else{
+                errorHandler(error);
+            }
+        };
+
+        return Cordova.exec(modifiedSuccessCallback, modifiedErrorCallback, "MASPluginMAS", "postMultiPartForm", [path, parametersInfo, headersInfo, requestType, responseType, isPublic,multipartForm]);
+    };
+
+
 
     /**
      * Returns current value of the {@link MASPluginConstants.MASState}.  The value can be used to determine the current state of the SDK.

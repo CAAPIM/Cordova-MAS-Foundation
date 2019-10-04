@@ -30,11 +30,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>MASPluginMAS</h2>
         
-            <div class="class-description">This main class contains the functions for MAS Lifecycle Management.
-<table>
-	<tr bgcolor="#D3D3D3"><th>MASPluginMAS Construtor</th></tr>
-	<tr><td><i>var MAS = new MASPlugin.MAS();</i></td></tr>
-</table></div>
+            <div class="class-description">This main class contains the functions for MAS Lifecycle Management.<table>	<tr bgcolor="#D3D3D3"><th>MASPluginMAS Construtor</th></tr>	<tr><td><i>var MAS = new MASPlugin.MAS();</i></td></tr></table></div>
         
     
 </header>
@@ -149,8 +145,7 @@
 
 
 <div class="description">
-    This method is used to authorize the application and user via QRCode session transfer. The user scans and fetches the auth_code from a QRCode
-on another device/application and uses this API to send the code to MAG server to authorize the session on another device.
+    This method is used to authorize the application and user via QRCode session transfer. The user scans and fetches the auth_code from a QRCodeon another device/application and uses this API to send the code to MAG server to authorize the session on another device.
 </div>
 
 
@@ -289,7 +284,7 @@ on another device/application and uses this API to send the code to MAG server t
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line659">line 659</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line713">line 713</a>
     </li></ul></dd>
     
 
@@ -1825,14 +1820,7 @@ on another device/application and uses this API to send the code to MAG server t
 
 
 <div class="description">
-    Sets boolean indicator of enforcing id_token validation upon device registration/user authentication.
-id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
-Mobile SDK currently supports following algorithm(s): - HS256<br>
-
-Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
-If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
-
-By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.
+    Sets boolean indicator of enforcing id_token validation upon device registration/user authentication.id_token is being validated as part of authentication/registration process against known signing algorithm.<br>Mobile SDK currently supports following algorithm(s): - HS256<br>Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.
 </div>
 
 
@@ -1971,7 +1959,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line700">line 700</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line754">line 754</a>
     </li></ul></dd>
     
 
@@ -2292,12 +2280,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
 
             
 
-            <td class="description last">The behaviour of this flag would be
-<table>
-<tr bgcolor="#D3D3D3"><th>Value</th><th>Description</th>
-<tr><td>true</td><td>Enable PKCE extension i.e. while authorizing enable PKCE based validation</td>
-<tr><td>false</td><td>Disable PKCE extension</td></tr>
-</table></td>
+            <td class="description last">The behaviour of this flag would be<table><tr bgcolor="#D3D3D3"><th>Value</th><th>Description</th><tr><td>true</td><td>Enable PKCE extension i.e. while authorizing enable PKCE based validation</td><tr><td>false</td><td>Disable PKCE extension</td></tr></table></td>
         </tr>
 
     
@@ -3131,7 +3114,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line647">line 647</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line701">line 701</a>
     </li></ul></dd>
     
 
@@ -3354,8 +3337,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
 
 
 <div class="description">
-    Initializes the MAS plugin. This includes setting of the various listeners that are required for authenticating the user while registration of the application with the Gateway
-and accessing various protected API. All other initialization related setting must be done in this method.
+    Initializes the MAS plugin. This includes setting of the various listeners that are required for authenticating the user while registration of the application with the Gatewayand accessing various protected API. All other initialization related setting must be done in this method.
 </div>
 
 
@@ -3513,13 +3495,7 @@ and accessing various protected API. All other initialization related setting mu
 
 
 <div class="description">
-    Gets boolean indicator of enforcing id_token validation upon device registration/user authentication.
-id_token is being validated as part of authentication/registration process against known signing algorithm.<br>
-Mobile SDK currently supports the <b>HS256</b> algorithm<br>
-
-Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>
-If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>
-By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.
+    Gets boolean indicator of enforcing id_token validation upon device registration/user authentication.id_token is being validated as part of authentication/registration process against known signing algorithm.<br>Mobile SDK currently supports the <b>HS256</b> algorithm<br>Any other signing algorithm will cause authentication/registration failure due to unknown signing algorithm.<br>If the server side is configured to return a different or custom algorithm, ensure to disable id_token validation to avoid any failure on Mobile SDK.<br>By default, id_token validation is enabled and enforced in authentication and/or registration process; it can be opted-out.
 </div>
 
 
@@ -3635,7 +3611,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line720">line 720</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line774">line 774</a>
     </li></ul></dd>
     
 
@@ -3976,6 +3952,362 @@ By default, id_token validation is enabled and enforced in authentication and/or
 
 
 
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="postMultiPartForm"><span class="type-signature"></span>postMultiPartForm<span class="signature">(successHandler, errorHandler, path, parametersInfo, headersInfo, requestType, responseType, isPublic, multipartForm, progressListener)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    PostMultiPartForm adds the capability to upload multipart forms over HTTP(s) POST to the backend services via Layer7 Gateway.The requestType and responseType are the optional parameters. If the requestType and responseType is not present,then it is set to the Default Type to requestType as "multipart/form-data" and responseType as JSON.<br>`multipartForm` is the mandatory parameter along with `path`
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">path to the url. For example, "/protected/resource/*"</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parametersInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Query Parameters to be passed along with the request. <table><tr><th>Example</th></tr><tr><td>{<br>&nbsp;&nbsp;"x-otp":"2345",<br>&nbsp;&nbsp;"empName":"Jon"<br>}</td></tr></table></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>headersInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The HTTP Headers to be passed along with the request.<table><tr><th>Example</th></tr><tr><td>{<br>&nbsp;&nbsp;"Content-Type":"application/xml",<br>&nbsp;&nbsp;"reload-cache":"true"<br>}</td></tr></table></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>requestType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MASPluginConstants.html#.MASRequestResponseType">MASPluginConstants.MASRequestResponseType</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">specifies the request type of the request.<br></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MASPluginConstants.html#.MASRequestResponseType">MASPluginConstants.MASRequestResponseType</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">specifies the response type of the request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isPublic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">specifies if the API being called is public or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>multipartForm</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MASPluginMultipartForm.html">MASPluginMultipartForm</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Representation of a multipart form. For usage see {MASPluginMultipartForm}</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>progressListener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A function to listen to form upload progress.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line646">line 646</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">The progressListener struct should have the below facade.</p>
+    
+    <pre class="prettyprint"><code>	function(progress){// This function will be invoked with the progress percent of the data uploaded.
+       if(progress == -1){
+           // Close the progress bar
+       }
+       if(progress > 0){
+           Update the HTML/jQuery progress bar with the progress percent
+       }
+    });</code></pre>
 
 
 
@@ -4585,8 +4917,7 @@ By default, id_token validation is enabled and enforced in authentication and/or
 
 
 <div class="description">
-    Removes the authentication listener set by developer. This would fallback to the
-default mechanism of Authentication that the CA Mobile Cordova Plugin handles.
+    Removes the authentication listener set by developer. This would fallback to thedefault mechanism of Authentication that the CA Mobile Cordova Plugin handles.
 </div>
 
 
@@ -4672,10 +5003,7 @@ default mechanism of Authentication that the CA Mobile Cordova Plugin handles.
 
 
 <div class="description">
-    Enables the developer to set its own Authentication Listener or callback handling
-mechanism, which overrides the one that the CA Mobile Cordova Plugin sets. The developer needs to set their
-business logic such as auditing etc. inside the authHandler function. The developer must call the 
-MAS.completeAuthentication or MAS.cancelAuthentication API from this function to unblock the original API call.
+    Enables the developer to set its own Authentication Listener or callback handlingmechanism, which overrides the one that the CA Mobile Cordova Plugin sets. The developer needs to set theirbusiness logic such as auditing etc. inside the authHandler function. The developer must call the MAS.completeAuthentication or MAS.cancelAuthentication API from this function to unblock the original API call.
 </div>
 
 
@@ -4933,8 +5261,7 @@ MAS.completeAuthentication or MAS.cancelAuthentication API from this function to
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.
-    "mas-login.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.    "mas-login.html" is the default page.</td>
         </tr>
 
     
@@ -5115,8 +5442,7 @@ MAS.completeAuthentication or MAS.cancelAuthentication API from this function to
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.
-    "mas-otpchannel.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.    "mas-otpchannel.html" is the default page.</td>
         </tr>
 
     
@@ -5297,8 +5623,7 @@ MAS.completeAuthentication or MAS.cancelAuthentication API from this function to
 
             
 
-            <td class="description last">user defined page if you want the plugin to use it.
-    "mas-otp.html" is the default page.</td>
+            <td class="description last">user defined page if you want the plugin to use it.    "mas-otp.html" is the default page.</td>
         </tr>
 
     
@@ -5551,13 +5876,7 @@ MAS.completeAuthentication or MAS.cancelAuthentication API from this function to
     
         <p class="code-caption">Populates and set the MASSecurityConfiguration object to the MAS Lifecycle</p>
     
-    <pre class="prettyprint"><code>var MAS = new MASPlugin.MAS();
-var config = new MASPlugin.MASSecurityConfiguration();
-var publicKeyHash = publicKeyHash; 
-config.setHost("mygw.ca.com");
-config.setPublic("true");
-config.addPublicKeyHash("jjHshjkslsk....sjsjjsjs");//server’s public key hash
-MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityConfiguration());</code></pre>
+    <pre class="prettyprint"><code>var MAS = new MASPlugin.MAS();var config = new MASPlugin.MASSecurityConfiguration();var publicKeyHash = publicKeyHash; config.setHost("mygw.ca.com");config.setPublic("true");config.addPublicKeyHash("jjHshjkslsk....sjsjjsjs");//server’s public key hashMAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityConfiguration());</code></pre>
 
 
 
@@ -5714,7 +6033,7 @@ MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityCon
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line673">line 673</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line727">line 727</a>
     </li></ul></dd>
     
 
@@ -5918,7 +6237,7 @@ MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityCon
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line686">line 686</a>
+        <a href="MASPluginMAS.js.html">MASPluginMAS.js</a>, <a href="MASPluginMAS.js.html#line740">line 740</a>
     </li></ul></dd>
     
 
@@ -6118,8 +6437,7 @@ MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityCon
 
 
 <div class="description">
-    Starts the lifecycle of the MAS processes. This will load the default JSON configuration rather than from the storage.If the SDK is already initialized, this method stops and restarts the SDK.
-The default JSON configuration file should be msso_config.json. This will ignore the JSON configuration in the keychain storage and replace it with the default configuration.
+    Starts the lifecycle of the MAS processes. This will load the default JSON configuration rather than from the storage.If the SDK is already initialized, this method stops and restarts the SDK.The default JSON configuration file should be msso_config.json. This will ignore the JSON configuration in the keychain storage and replace it with the default configuration.
 </div>
 
 
@@ -6217,12 +6535,7 @@ The default JSON configuration file should be msso_config.json. This will ignore
 
             
 
-            <td class="description last">The behaviour of SDK start would be
-<table>
-<tr bgcolor="#D3D3D3"><th>Value</th><th>Description</th>
-<tr><td>true</td><td>The SDK load the default JSON configuration from msso_config.json packed in the app</td>
-<tr><td>false</td><td>The SDK load the stored JSON configuration from local device storage from last run</td></tr>
-</table></td>
+            <td class="description last">The behaviour of SDK start would be<table><tr bgcolor="#D3D3D3"><th>Value</th><th>Description</th><tr><td>true</td><td>The SDK load the default JSON configuration from msso_config.json packed in the app</td><tr><td>false</td><td>The SDK load the stored JSON configuration from local device storage from last run</td></tr></table></td>
         </tr>
 
     
@@ -7166,13 +7479,13 @@ The default JSON configuration file should be msso_config.json. This will ignore
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASPlugin.html">MASPlugin</a></li><li><a href="MASPluginApplication.html">MASPluginApplication</a></li><li><a href="MASPluginAuthProviders.html">MASPluginAuthProviders</a></li><li><a href="MASPluginConstants.html">MASPluginConstants</a></li><li><a href="MASPluginDevice.html">MASPluginDevice</a></li><li><a href="MASPluginMAS.html">MASPluginMAS</a></li><li><a href="MASPluginSecurityConfiguration.html">MASPluginSecurityConfiguration</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li><li><a href="MASPluginUtils.html">MASPluginUtils</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASPlugin.html">MASPlugin</a></li><li><a href="MASPluginApplication.html">MASPluginApplication</a></li><li><a href="MASPluginAuthProviders.html">MASPluginAuthProviders</a></li><li><a href="MASPluginConstants.html">MASPluginConstants</a></li><li><a href="MASPluginDevice.html">MASPluginDevice</a></li><li><a href="MASPluginMAS.html">MASPluginMAS</a></li><li><a href="MASPluginMultipartForm.html">MASPluginMultipartForm</a></li><li><a href="MASPluginSecurityConfiguration.html">MASPluginSecurityConfiguration</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li><li><a href="MASPluginUtils.html">MASPluginUtils</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 29 2018 19:12:28 GMT+0530 (India Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Sep 11 2019 20:07:45 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -673,8 +673,18 @@
         securityConfiguration.trustPublicPKI = YES;
     if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
         securityConfiguration.publicKeyHashes = [securityConfig objectForKey:@"publicKeyHashes"];
-    if(![[[securityConfig objectForKey:@"certificates"] objectAtIndex:0] isEqualToString:@""])
+    
+    if([[securityConfig objectForKey:@"certificates"] count])
+    {
         securityConfiguration.certificates = [securityConfig objectForKey:@"certificates"];
+    }
+    
+    if([securityConfig objectForKey:@"pinningMode"])
+    {
+        int value = [[securityConfig objectForKey:@"pinningMode"] intValue];
+        [self setPinningModeForConfiguration:securityConfiguration withValue:value];
+    }
+    
     
     NSError *error = nil;
     [MASConfiguration setSecurityConfiguration:securityConfiguration error:&error];
@@ -682,6 +692,20 @@
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Security configuration set"];
     
     return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+//method that maps the javascript constant to appropriate pinning mode value
+- (void)setPinningModeForConfiguration:(MASSecurityConfiguration *)securityConfiguration withValue:(int)value
+{
+    if(value == 0){
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModePublicKeyHash;
+    }
+    else if(value == 2){
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModeIntermediateCertifcate;
+    }
+    else{
+        securityConfiguration.pinningMode = MASSecuritySSLPinningModeCertificate;
+    }
 }
 
     ///--------------------------------------
@@ -1323,7 +1347,194 @@
               }];
         }
     }
+
+
+///--------------------------------------
+/// @name HTTP File Requests
+///--------------------------------------
+
+# pragma mark - HTTP File Requests
+
+- (void)postMultiPartForm: (CDVInvokedUrlCommand *)command
+{
+    //
+    // Make a post multipart form data call with parameters, headers, request type and response type
+    //
     
+    [MAS setGatewayNetworkActivityLogging:YES];
+    
+    __block CDVPluginResult *result;
+    
+    NSString *path = @"";
+    NSMutableDictionary *parametersInfo;
+    NSDictionary *headersInfo;
+    MASRequestResponseType requestType = MASRequestResponseTypeFormData;
+    MASRequestResponseType responseType = MASRequestResponseTypeJson;
+    BOOL isPublic = NO;
+    NSDictionary* multiPartDict;
+    
+    if (command.arguments.count>0 && command.arguments.count== 7)
+    {
+        //
+        // Path
+        //
+        path = [command.arguments objectAtIndex:0];
+        
+        //
+        // parameters
+        //
+        if ([[command.arguments objectAtIndex:1] isKindOfClass:[NSDictionary class]])
+        {
+            parametersInfo = [command.arguments objectAtIndex:1];
+        }
+        
+        //
+        // headers
+        //
+        if ([[command.arguments objectAtIndex:2] isKindOfClass:[NSDictionary class]])
+        {
+            headersInfo = [command.arguments objectAtIndex:2];
+        }
+        
+        //
+        // request type
+        //
+        if ([command.arguments objectAtIndex:3] && [command.arguments objectAtIndex:3] != [NSNull null]) {
+            requestType = [[command.arguments objectAtIndex:3] intValue];
+        }
+        
+        //
+        // response type
+        //
+        if ([command.arguments objectAtIndex:4] && [command.arguments objectAtIndex:4] != [NSNull null]) {
+            responseType = [[command.arguments objectAtIndex:4] intValue];
+        }
+        
+        //
+        // is public server
+        //
+        if ([command.arguments objectAtIndex:5] && [command.arguments objectAtIndex:5] != [NSNull null]) {
+            isPublic = ([[command.arguments objectAtIndex:5] isEqualToString:@"true"])? YES : NO;
+        }
+        
+        if([command.arguments objectAtIndex:6] && [command.arguments objectAtIndex:6] != [NSNull null]) {
+             multiPartDict = [command.arguments objectAtIndex:6];
+        }
+        
+        NSMutableDictionary* formData = [multiPartDict objectForKey:@"formData"];
+        
+        if(parametersInfo == nil){
+            parametersInfo = [[NSMutableDictionary alloc] init];
+        }
+        for(NSString* key in formData.allKeys){
+            [parametersInfo setValue:[formData valueForKey:key] forKey:key];
+        }
+        
+        if(headersInfo == nil){
+            headersInfo = [NSDictionary dictionary];
+        }
+        
+        NSArray* fileData = [multiPartDict objectForKey:@"files"];
+        
+        MASRequestBuilder* requestBuilder = [[MASRequestBuilder alloc] initWithHTTPMethod:@"POST"];
+        [requestBuilder setEndPoint:path];
+        [requestBuilder setIsPublic:isPublic];
+        [requestBuilder setHeader:headersInfo];
+        [requestBuilder setBody:parametersInfo];
+        [requestBuilder setRequestType:MASRequestResponseTypeFormData];
+        [requestBuilder setResponseType:responseType];
+        
+        MASRequest* fileRequest = [requestBuilder build];
+        
+        [MAS postMultiPartForm:fileRequest constructingBodyWithBlock:^(id<MASMultiPartFormData> formData){
+            //adding multiple files if present
+            for(int i=0;i<fileData.count;i++)
+            {
+                NSDictionary* fileDict = [fileData objectAtIndex:0];
+                NSString* base64String = [fileDict objectForKey:@"fileData"];
+                NSString* name = [fileDict objectForKey:@"fileName"];
+                NSString* mimeType = [fileDict objectForKey:@"fileMimeType"];
+                NSString* fileName = [NSString stringWithFormat:@"%d%@",i,[fileDict objectForKey:@"fileFieldName"] ];
+                if(base64String && [base64String isKindOfClass:[NSString class]]){
+                    NSData* data = [[NSData alloc] initWithBase64EncodedString:[fileDict objectForKey:@"fileData"] options:0] ;
+                    [formData appendPartWithFileData:data name:name fileName:fileName mimeType:mimeType];
+                }
+                
+            }
+            
+        } progress:^(NSProgress* progress){
+            NSLog(@"progress is %f",progress.fractionCompleted);
+            NSDictionary *progressJSON = @{@"iAmProgress":@"true",
+                                        @"state":[NSNumber numberWithInt:0],
+                                        @"progress":[NSNumber numberWithFloat:progress.fractionCompleted] };
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:progressJSON];
+            [result setKeepCallback:[NSNumber numberWithBool:TRUE]];
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            
+        } completion:^(NSHTTPURLResponse* response, NSDictionary* responseInfo,NSError* error){
+            
+            //
+            // Error case
+            //
+            if (error) {
+                
+                //
+                // There is an issue when the error userInfo dictionary contains non-serializable data such as NSData for plain text response.
+                // As MASFoundation returns plain text response as NSData, in MASPlugin level, the data should be converted into NSString.
+                //
+                NSMutableDictionary *errorUserInfoCopy = [[error userInfo] mutableCopy];
+                
+                //
+                // Only for the case where userInfo object contains response body, and the data type is NSData
+                //
+                if ([[errorUserInfoCopy allKeys] containsObject:MASResponseInfoBodyInfoKey] && [errorUserInfoCopy[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
+                {
+                    errorUserInfoCopy[MASResponseInfoBodyInfoKey] = [[NSString alloc] initWithData:errorUserInfoCopy[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
+                }
+                
+                NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                            @"errorMessage":[error localizedDescription],
+                                            @"errorInfo":errorUserInfoCopy};
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+                
+                return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+            
+            
+            
+            NSMutableDictionary *newResult = [NSMutableDictionary dictionary];
+            
+            //
+            // For the same reason as Cordova Framework crashes when we pass non-serializable raw data as dictionary.
+            // Check if the response body is NSData type, and convert it into NSString.
+            //
+            if([responseInfo isKindOfClass:[NSData class]])
+            {
+                NSString *responseBody = [[NSString alloc] initWithData:responseInfo encoding:NSUTF8StringEncoding];
+                [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
+            }
+            else if ([responseInfo isKindOfClass:[NSDictionary class]] && [responseInfo[MASResponseInfoBodyInfoKey] isKindOfClass:[NSData class]])
+            {
+                NSString *responseBody = [[NSString alloc] initWithData:responseInfo[MASResponseInfoBodyInfoKey] encoding:NSUTF8StringEncoding];
+                
+                [newResult setObject:responseBody forKey:MASResponseInfoBodyInfoKey];
+                [newResult setObject:responseInfo[MASResponseInfoHeaderInfoKey] forKey:MASResponseInfoHeaderInfoKey];
+            }
+            else {
+                newResult = [responseInfo mutableCopy];
+                
+            }
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:newResult];
+            
+            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            
+        }];
+        
+        
+    }
+}
     
     ///--------------------------------------
     /// @name Proximity Login

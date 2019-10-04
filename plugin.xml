@@ -3,11 +3,11 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-mas-core"
-      version="1.9.10">
+      version="2.0.0">
     <name>MAS</name>
     <description>Cordova MAS Plugin</description>
-    <license>CA Technologies Ltd.</license>
-    <keywords>cordova, MAS, CA Technologies</keywords>
+    <license>Broadcom</license>
+    <keywords>cordova, MAS, Broadcom</keywords>
 
     <js-module src="www/MASPlugin.js" name="MASPlugin">
         <clobbers target="MASPlugin" />
@@ -49,6 +49,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginUtils" />
     </js-module>
 
+    <js-module src="www/MASPluginMultipartForm.js" name="MASPluginMultipartForm">
+        <clobbers target="MASPluginMultipartForm" />
+    </js-module>
+
     <js-module src="www/simple-popup.js" name="PopupUI">
         <clobbers target="PopupUI" />
     </js-module>
@@ -58,17 +62,16 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <hook type="before_prepare" src="scripts/MASBeforePrepare.js" />
     
-    
     <asset src="sample/html/mas-login.html" target="masui/mas-login.html"/>
     <asset src="sample/html/mas-otp.html" target="masui/mas-otp.html"/>
     <asset src="sample/html/mas-otpchannel.html" target="masui/mas-otpchannel.html"/>
     <asset src="sample/html/mas-enterpriseBrowser.html" target="masui/mas-enterpriseBrowser.html" />
     <asset src="sample/html/custom-login.html" target="custom-login.html" />
     <asset src="sample/img" target="masui/img"/>
+
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
-
             <preference name="deployment-target" value="9.0"/>
 
             <feature name="MASPluginMAS" >
@@ -109,8 +112,16 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/WebViewController.m" />
         <resource-file src="src/ios/EnterpriseBrowser.storyboard" />
 
-        <framework src="MASFoundation" type="podspec" spec="~> 1.9.10" />
-        <framework src="MASUI" type="podspec" spec="~> 1.9.10" />
+        <podspec> 
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true" >
+                <pod name="MASFoundation" spec="~> 2.0.00" />
+                <pod name="MASUI" spec="~> 2.0.00" />
+            </pods>
+        </podspec>
+    
         <hook type="before_plugin_uninstall" src="scripts/MASBeforePluginRemoveIos.js" />
 
     </platform>
@@ -143,8 +154,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
-        <framework src="com.ca:mas:1.9.10" />
-        <framework src="com.ca:masui:1.9.10" />
+        <framework src="com.ca:mas:2.0.00" />
+        <framework src="com.ca:masui:2.0.00" />
         
         <source-file src="src/android/MASPluginMAS.java" target-dir="src/com/ca/mas/cordova/core" />
 		<source-file src="src/android/MASPluginUser.java" target-dir="src/com/ca/mas/cordova/core" />

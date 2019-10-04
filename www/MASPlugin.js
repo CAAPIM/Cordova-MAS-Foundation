@@ -9,7 +9,8 @@ var MASPluginMAS = require("./MASPluginMAS"),
     MASPluginGroup = require("./MASPluginGroup"),
     MASPluginDevice = require("./MASPluginDevice"),
     MASPluginApplication = require("./MASPluginApplication"),
-    MASPluginAuthProviders = require("./MASPluginAuthProviders");
+    MASPluginAuthProviders = require("./MASPluginAuthProviders"),
+    MASPluginMultipartForm = require("./MASPluginMultipartForm");
 
 var MASPluginConstants = require("./MASPluginConstants");
 var MASPluginSecurityConfiguration = require("./MASPluginSecurityConfiguration");
@@ -37,6 +38,9 @@ var MASAuthenticationProviders = new MASPlugin.MASAuthenticationProviders();
 * @example
 * <caption>To get instance of {@link MASPluginSecurityConfiguration} : An interface that is mapped to MASSecurityConfiguration Model of Native</caption>
 var MASSecurityConfiguration = new MASPlugin.MASSecurityConfiguration();
+* @example
+* <caption>To get instance of {@link MASPluginMultipartForm} : An interface that is mapped to MASMultipartForm Model of Native</caption>
+var MASMultipartForm = new MASPlugin.MASPluginMultipartForm();
 */
 var MASPlugin = {
     MASGrantFlow: MASPluginConstants.MASGrantFlow,
@@ -48,7 +52,9 @@ var MASPlugin = {
     MASDevice: MASPluginDevice,
     MASApplication: MASPluginApplication,
     MASAuthenticationProviders: MASPluginAuthProviders,
-    MASSecurityConfiguration: MASPluginSecurityConfiguration
+    MASSecurityConfiguration: MASPluginSecurityConfiguration,
+    MASSecuritySSLPinningMode: MASPluginConstants.MASSecuritySSLPinningMode,
+    MASMultipartForm: MASPluginMultipartForm
 };
     
 /**
