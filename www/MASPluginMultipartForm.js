@@ -65,7 +65,7 @@ var MASPluginMultipartForm = function(){
     * @param {string} fileFieldName Field name in the multipart form request
     * @param {string} fileData Base64 Encoded bytes of the file. If not available,make sure that filePath is on a readable path on card.
 	*/
-	this.addFiles = function(fileName,filePath,fileMimeType,fileFieldName,fileData){
+	this.addFiles = function(fileName,fileMimeType,fileFieldName,fileData){
 		let uploadFile =
 		{
 		    "fileName":fileName,
