@@ -16,7 +16,7 @@
 #import <UIKit/UIKit.h>
 #import <MASFoundation/MASFoundation.h>
 @interface WebViewController : UIViewController
-@property (strong, nonatomic) IBOutlet UIWebView *webView;
+@property (strong, nonatomic) IBOutlet WKWebView *webView;
 @property (strong, nonatomic) NSURLRequest *urlRequest;
 @property (strong, nonatomic) NSData *data;
 @property (strong, nonatomic) MASApplication *app;
