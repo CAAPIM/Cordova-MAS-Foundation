@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <deployment version="4608" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,17 +19,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7RP-z3-wod">
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J2m-Nz-Qsy">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="7RP-z3-wod" firstAttribute="centerX" secondItem="F1X-dj-7FQ" secondAttribute="centerX" id="5xJ-ax-8JD"/>
-                            <constraint firstItem="7RP-z3-wod" firstAttribute="leading" secondItem="F1X-dj-7FQ" secondAttribute="leading" id="VGK-yZ-pdr"/>
-                            <constraint firstItem="7RP-z3-wod" firstAttribute="bottom" secondItem="7Ey-gK-OzJ" secondAttribute="top" id="r0Q-wC-HJX"/>
-                            <constraint firstItem="7RP-z3-wod" firstAttribute="centerY" secondItem="F1X-dj-7FQ" secondAttribute="centerY" id="v1d-VP-Fq2"/>
+                            <constraint firstItem="J2m-Nz-Qsy" firstAttribute="top" secondItem="LEf-fV-R4V" secondAttribute="bottom" id="R6N-dM-Va1"/>
+                            <constraint firstAttribute="trailing" secondItem="J2m-Nz-Qsy" secondAttribute="trailing" id="Z7B-yX-556"/>
+                            <constraint firstItem="7Ey-gK-OzJ" firstAttribute="top" secondItem="J2m-Nz-Qsy" secondAttribute="bottom" id="dsi-2z-L5e"/>
+                            <constraint firstItem="J2m-Nz-Qsy" firstAttribute="leading" secondItem="F1X-dj-7FQ" secondAttribute="leading" id="qAJ-Kv-mU5"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -58,7 +60,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="webView" destination="7RP-z3-wod" id="h1h-vu-ODA"/>
+                        <outlet property="webView" destination="J2m-Nz-Qsy" id="jfU-aI-t2H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oIn-v0-8i8" userLabel="First Responder" sceneMemberID="firstResponder"/>
