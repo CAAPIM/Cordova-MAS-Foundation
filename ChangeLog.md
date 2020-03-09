@@ -1,3 +1,23 @@
+# Version 2.1.00
+
+### Bug fixes
+- None
+
+### New features
+- None
+
+### Deprecated methods
+```
+MASMultipartForm#addFiles(fileName,filePath,fileMimeType,fileFieldName,fileData){...}
+```
+is now deprecated to remove file path and to just use fileData for upload. Please use -- 
+```
+MASMultipartForm#addFiles(fileName,fileMimeType,fileFieldName,fileData){...}
+```
+
+### Removed methods
+- None
+
 # Version 2.0.00
 
 ### Bug fixes
