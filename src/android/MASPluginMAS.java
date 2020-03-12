@@ -1232,7 +1232,10 @@ public class MASPluginMAS extends MASCordovaPlugin {
             Iterator<String> itr = formData.keys();
             while (itr.hasNext()) {
                 String key = itr.next();
-                multiPart.addFormField(key, formData.optString(key));
+                final String value = formData.optString(key);
+                if (!value.isEmpty()) {
+                    multiPart.addFormField(key, value);
+                }
             }
         }
 
@@ -1243,23 +1246,24 @@ public class MASPluginMAS extends MASCordovaPlugin {
                 if (file != null && file.length() > 0) {
                     try {
                         MASFileObject obj;
-                        String filePath = URLDecoder.decode(file.getString(NODE_FILE_PATH), "UTF-8");
                         String fileName = URLDecoder.decode(file.getString(NODE_FILE_NAME), "UTF-8");
                         String fileMimeType = URLDecoder.decode(file.getString(NODE_FILE_MIME_TYPE), "UTF-8");
                         String dataEncoded = file.optString(NODE_FILE_DATA);
-                        if (dataEncoded != null) {
+                        if (dataEncoded != null && !dataEncoded.isEmpty()) {
                             byte[] bytes = Base64.decode(dataEncoded, Base64.DEFAULT);
                             obj = new MASFileObject(fileName, fileMimeType, fileName, bytes);
-                        }else{
-                            obj = new MASFileObject(fileName,filePath,fileMimeType,fileName);
+                            multiPart.addFilePart(obj);
+                        } else {
+                            Log.w(TAG, "File data is empty");
                         }
-                        multiPart.addFilePart(obj);
                     } catch (Exception e) {
-                        Log.d(TAG, e.getMessage());
+                        Log.e(TAG, e.getMessage() + e.getLocalizedMessage());
                     }
+
                 }
             }
         }
         return multiPart;
     }
+
 }

@@ -33,6 +33,7 @@ var MASPluginMultipartForm = function(){
 	},
 	/**
 	* Adds a file object to the multipart form
+	* @deprecated
 	* @memberOf MASPluginMultipartForm
 	* @function addFiles
 	* @instance
@@ -47,6 +48,27 @@ var MASPluginMultipartForm = function(){
 		{
 		    "fileName":fileName,
 		    "filePath":filePath,
+		    "fileMimeType":fileMimeType,
+		    "fileFieldName":fileFieldName,
+		    "fileData":fileData
+		};
+		this.files.push(uploadFile);
+	},
+
+		/**
+	* Adds a file object to the multipart form
+	* @memberOf MASPluginMultipartForm
+	* @function addFiles
+	* @instance
+    * @param {string} fileName Name of the file to be uploaded
+	* @param {string} fileMimeType Type of the file ex. "text/plain" or "image/png" etc.
+    * @param {string} fileFieldName Field name in the multipart form request
+    * @param {string} fileData Base64 Encoded bytes of the file. If not available,make sure that filePath is on a readable path on card.
+	*/
+	this.addFiles = function(fileName,fileMimeType,fileFieldName,fileData){
+		let uploadFile =
+		{
+		    "fileName":fileName,
 		    "fileMimeType":fileMimeType,
 		    "fileFieldName":fileFieldName,
 		    "fileData":fileData
