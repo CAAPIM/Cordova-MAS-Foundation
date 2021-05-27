@@ -397,6 +397,22 @@
  */
 - (void)enablePKCE:(CDVInvokedUrlCommand *)command;
 
+# pragma mark - SSL Pinning
+
+/**
+ *  Checks if SSL Pinning is enabled
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isSSLPinningEnabled:(CDVInvokedUrlCommand *)command;
+
+/**
+ *  Enables SSL Pinning
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enableSSLPinning:(CDVInvokedUrlCommand *)command;
+
 ///--------------------------------------
 /// @name JWT Signing
 ///--------------------------------------

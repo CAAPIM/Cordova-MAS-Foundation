@@ -451,6 +451,42 @@
                                                                              displayError(thisElement, error);
                                                                              });
                                                            });
+
+                                  $("#enableSSLPinning").bind("click", function(event, ui) {
+                                                        if ($(event.target).context.tagName != 'A') return;
+                                                        
+                                                        $(this).find("textarea.error").hide();
+                                                        
+                                                        var thisElement = $(this);
+                                                        var enable = thisElement.find("select[name='enableSSLPinningBoolValue']").val();
+                                                        var MAS = new MASPlugin.MAS();
+                                                        MAS.enableSSLPinning(function(result) {
+                                                                       thisElement.removeClass("success").removeClass("failure").addClass("success");
+                                                                       displayResult(thisElement, result);
+                                                                       },
+                                                                       function(error) {
+                                                                       thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                                                                       displayError(thisElement, error);
+                                                                       }, enable);
+                                                        });
+                                  
+                                  
+                                  $("#isSSLPinningEnabled").bind("click", function(event, ui) {
+                                                           if ($(event.target).context.tagName != 'A') return;
+                                                           
+                                                           $(this).find("textarea.error").hide();
+                                                           
+                                                           var thisElement = $(this);
+                                                           var MAS = new MASPlugin.MAS();
+                                                           MAS.isSSLPinningEnabled(function(result) {
+                                                                             thisElement.removeClass("success").removeClass("failure").addClass("success");
+                                                                             displayResult(thisElement, result);
+                                                                             },
+                                                                             function(error) {
+                                                                             thisElement.removeClass("success").removeClass("failure").addClass("failure");
+                                                                             displayError(thisElement, error);
+                                                                             });
+                                                           });
                                   
                                   $("#getMASState").bind("click", function(event, ui) {
                                                          if ($(event.target).context.tagName != 'A') return;
@@ -2005,7 +2041,24 @@
                                 class='error' style="display:none;" readonly=""></textarea></a></li>
                         </ul>
                     </li>
-                    
+                    <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                        <h2>SSL Pinning Settings</h2>
+                        <ul data-role="listview" data-theme="b">
+                            <li data-icon="false">
+                                <a href="#" id="enableSSLPinning">
+                                    MAS enable SSL Pinning
+                                    <select id="enableSSLPinningBool" name="enableSSLPinningBoolValue">
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <textarea class='error' style="display:none;"
+                                        readonly=""></textarea>
+                                </a>
+                            </li>
+                            <li data-icon="false"><a href="#" id="isSSLPinningEnabled">MAS isSSLPinningEnabled <textarea
+                                class='error' style="display:none;" readonly=""></textarea></a></li>
+                        </ul>
+                    </li>
                     <li data-role="collapsible" data-iconpos="right" data-inset="false">
                         <h2>JWT Signing</h2>
                         <ul data-role="listview" data-theme="b">
