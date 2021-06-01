@@ -18,6 +18,7 @@ var MASPluginSecurityConfiguration = function(){
 	this.json = {
 	    host : null,
 	    isPublic : false,
+		allowSSLPinning : true,
 	    certificates : [],
 	    publicKeyHashes : [],
 	    trustPublicPKI : false,
@@ -45,6 +46,16 @@ var MASPluginSecurityConfiguration = function(){
 	this.setPublic = function(pPublic){
 		this.json.isPublic = pPublic;
 	},
+	/**
+	* Determines whether to allow SSL Pinning for the host server.
+	* @memberOf MASPluginSecurityConfiguration
+	* @function setAllowSSLPinning
+	* @instance
+	* @param {boolean} allowSSLPinning Boolean value to allow, or not to allow the SSL Pinning.
+	*/
+    this.setAllowSSLPinning = function(pAllowSSLPinning){
+        this.json.allowSSLPinning = pAllowSSLPinning;
+    },
 	/**
 	* Set the certificate of the host server
 	* @memberOf MASPluginSecurityConfiguration

@@ -590,6 +590,7 @@ function(result){
 	 * var publicKeyHash = publicKeyHash; 
 	 * config.setHost("mygw.ca.com");
 	 * config.setPublic("true");
+     * config.setAllowSSLPinning("false");
 	 * config.addPublicKeyHash("jjHshjkslsk....sjsjjsjs");//server’s public key hash
 	 * MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityConfiguration());
      */

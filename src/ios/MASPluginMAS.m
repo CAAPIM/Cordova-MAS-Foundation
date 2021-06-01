@@ -669,6 +669,8 @@
     
     if([[securityConfig objectForKey:@"isPublic"] isEqualToString:@"true"])
         securityConfiguration.isPublic = YES;
+    if([[securityConfig objectForKey:@"allowSSLPinning"] isEqualToString:@"false"])
+        securityConfiguration.allowSSLPinning = NO;
     if([[securityConfig objectForKey:@"trustPublicPKI"] isEqualToString:@"true"])
         securityConfiguration.trustPublicPKI = YES;
     if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
