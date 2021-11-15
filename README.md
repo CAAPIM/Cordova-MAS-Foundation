@@ -1,3 +1,6 @@
+:bangbang: | Please note that Cordova and Xamarin support for the SDK has been deprecated with release 2.1. The 2.1 release will be the last release with Cordova and Xamarin support. Please do not submit any new changes as they are no longer being accepted. Please contact Broadcom support [**https://support.broadcom.com/**](https://support.broadcom.com/) to report any defects or make a request for an update.
+:---: | :---
+
 Cordova-MAS-Foundation is the core Cordova framework for Layer7 Mobile API Gateway.
 *********************************************************
 
