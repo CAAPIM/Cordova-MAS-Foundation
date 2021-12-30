@@ -669,6 +669,8 @@
     
     if([[securityConfig objectForKey:@"isPublic"] isEqualToString:@"true"])
         securityConfiguration.isPublic = YES;
+    if([[securityConfig objectForKey:@"allowSSLPinning"] isEqualToString:@"false"])
+        securityConfiguration.allowSSLPinning = NO;
     if([[securityConfig objectForKey:@"trustPublicPKI"] isEqualToString:@"true"])
         securityConfiguration.trustPublicPKI = YES;
     if(![[[securityConfig objectForKey:@"publicKeyHashes"] objectAtIndex:0] isEqualToString:@""])
@@ -1730,6 +1732,47 @@
     else {
         [MAS enablePKCE:NO];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"PKCE Disabled"];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+    ///--------------------------------------
+    /// @name SSL Pinning
+    ///--------------------------------------
+
+/**
+ *  Checks if SSL Pinning is enabled
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)isSSLPinningEnabled:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    BOOL isSSLPinningEnabled = [MAS isSSLPinningEnabled];
+    
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isSSLPinningEnabled];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/**
+ *  Enables SSL Pinning
+ *
+ *  @param command CDInvokedUrlCommand object
+ */
+- (void)enableSSLPinning:(CDVInvokedUrlCommand *)command {
+    
+    CDVPluginResult *result;
+    
+    if([[command.arguments objectAtIndex:0] isEqualToString:@"true"]) {
+        [MAS enableSSLPinning:YES];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"SSL Pinning Enabled"];
+    }
+    else {
+        [MAS enableSSLPinning:NO];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"SSL Pinning Disabled"];
     }
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];

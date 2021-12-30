@@ -496,6 +496,36 @@ function(result){
         return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isPKCEEnabled", []);
     };
 
+    /**
+     * Enable SSL Pinning.
+	 * @memberOf MASPluginMAS
+	 * @function enableSSLPinning
+	 * @instance
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+     * @param {boolean} enable The behaviour of this flag would be
+	 * <table>
+	 * <tr bgcolor="#D3D3D3"><th>Value</th><th>Description</th>
+	 * <tr><td>true</td><td>Enable SSL Pinning i.e. Evaluate Server Trust with pinned Server Certificates.</td>
+	 * <tr><td>false</td><td>Disable SSL Pinning</td></tr>
+	 * </table>
+     */
+    this.enableSSLPinning = function(successHandler, errorHandler, enable) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "enableSSLPinning", [enable]);
+    };
+
+    /**
+     * Determines whether SSL Pinning is enabled.
+	 * @memberOf MASPluginMAS
+	 * @function isSSLPinningEnabled
+	 * @instance
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+     */
+    this.isSSLPinningEnabled = function(successHandler, errorHandler) {
+        return Cordova.exec(successHandler, errorHandler, "MASPluginMAS", "isSSLPinningEnabled", []);
+    };
+
      /**
      * Enable JWKS preloading.
      * @memberOf MASPluginMAS
@@ -560,6 +590,7 @@ function(result){
 	 * var publicKeyHash = publicKeyHash; 
 	 * config.setHost("mygw.ca.com");
 	 * config.setPublic("true");
+     * config.setAllowSSLPinning("false");
 	 * config.addPublicKeyHash("jjHshjkslsk....sjsjjsjs");//server’s public key hash
 	 * MAS.setSecurityConfiguration(successHandler, errorHandler, config.getSecurityConfiguration());
      */
